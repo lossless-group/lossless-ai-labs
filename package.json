@@ -1,5 +1,13 @@
 {
-	"dependencies": {
-		"openai": "^4.89.0"
-	}
+  "dependencies": {
+    "openai": "^4.94.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.17.30",
+    "dotenv": "^16.5.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }
