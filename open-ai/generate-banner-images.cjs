@@ -1,42 +1,41 @@
-// generate-banner-images.ts
-// Step 2 of the workflow: For each markdown file in /content/lost-in-public/prompts/code-style,
-// read the image_prompt from frontmatter, call OpenAI DALL·E 3 API, and insert/update banner_image URL.
-// This script is non-destructive, logs all changes, and preserves all other metadata.
-// It does NOT use gray-matter or any YAML parser that could alter formatting.
+/*
+ * generate-banner-images.js
+ * CommonJS (CJS) rewrite of the original TypeScript/ESM script
+ * Conversion date: 2025-04-14
+ * This script processes all markdown files in /content/lost-in-public/prompts/code-style,
+ * reads the image_prompt from frontmatter, calls OpenAI DALL·E 3 API, and inserts/updates banner_image URL.
+ * All logic, comments, and structure preserved. No TypeScript, no ESM imports/exports.
+ * Aggressive, comprehensive commenting style maintained.
+ */
 
-// --- BEGIN: ES Module __dirname workaround and dotenv config ---
-import { fileURLToPath } from 'url';
-import path from 'path';
-import dotenv from 'dotenv';
+// --- BEGIN: Required dependencies and environment setup ---
+const path = require('path');
+const dotenv = require('dotenv');
+const fs = require('fs');
+const OpenAI = require('openai');
 
-// ES module compatible __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+// __dirname is available natively in CJS
+// Load .env file from parent directory
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
-// --- END: ES Module __dirname workaround and dotenv config ---
+// --- END: Required dependencies and environment setup ---
 
-import fs from "fs";
-import OpenAI from "openai";
-
-const PROMPT_DIR = path.resolve(__dirname, "../../content/lost-in-public/prompts/code-style");
-const IMAGE_SIZE = "1024x1792" as
-  | "1024x1792"
-  | "256x256"
-  | "512x512"
-  | "1024x1024"
-  | "1792x1024";
+// --- BEGIN: Constants and OpenAI Client ---
+const PROMPT_DIR = path.resolve(__dirname, '../../content/lost-in-public/prompts/code-style');
+const IMAGE_SIZE = "1024x1792"; // Only valid DALL·E 3 sizes: "1024x1792", "256x256", "512x512", "1024x1024", "1792x1024"
 const MODEL = "dall-e-3";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+// --- END: Constants and OpenAI Client ---
 
 /**
  * Extracts frontmatter block and its indices from markdown content
  * Returns { frontmatterLines, start, end, restLines }
+ * @param {string} content - The full markdown file content
+ * @returns {{ frontmatterLines: string[], start: number, end: number, restLines: string[] }}
  */
-function extractFrontmatterLines(content: string) {
+function extractFrontmatterLines(content) {
   const lines = content.split("\n");
   let start = -1, end = -1;
   for (let i = 0; i < lines.length; i++) {
@@ -58,9 +57,11 @@ function extractFrontmatterLines(content: string) {
 
 /**
  * Parses frontmatter lines into a key-value map (only top-level keys, no nested objects)
+ * @param {string[]} frontmatterLines
+ * @returns {Object}
  */
-function parseFrontmatterMap(frontmatterLines: string[]): Record<string, string> {
-  const map: Record<string, string> = {};
+function parseFrontmatterMap(frontmatterLines) {
+  const map = {};
   for (const line of frontmatterLines) {
     // Only parse simple key: value pairs (skip lists, etc.)
     const match = line.match(/^([a-zA-Z0-9_\-]+):\s*(.*)$/);
@@ -73,8 +74,12 @@ function parseFrontmatterMap(frontmatterLines: string[]): Record<string, string>
 
 /**
  * Updates or inserts a key-value in the frontmatter lines (preserving formatting)
+ * @param {string[]} frontmatterLines
+ * @param {string} key
+ * @param {string} value
+ * @returns {string[]}
  */
-function updateFrontmatterLines(frontmatterLines: string[], key: string, value: string): string[] {
+function updateFrontmatterLines(frontmatterLines, key, value) {
   let found = false;
   const updated = frontmatterLines.map(line => {
     if (line.startsWith(`${key}:`)) {
@@ -92,25 +97,33 @@ function updateFrontmatterLines(frontmatterLines: string[], key: string, value: 
 
 // --- BEGIN: Defensive Prompt Validation and Logging Patch ---
 // This block aggressively validates and logs the prompt sent to OpenAI to prevent 400 errors.
-function cleanPrompt(rawPrompt: string): string {
-  // Remove leading/trailing whitespace and quotes, YAML block indicators, and normalize spaces
+/**
+ * Cleans and normalizes the prompt string for OpenAI
+ * @param {string} rawPrompt
+ * @returns {string}
+ */
+function cleanPrompt(rawPrompt) {
   return rawPrompt
     .replace(/^['"`]+|['"`]+$/g, "") // Remove all leading/trailing quotes
     .replace(/^\|\s*|^>\s*/gm, "")    // Remove YAML block indicators
     .replace(/\s+/g, " ")               // Collapse whitespace
     .trim();
 }
-
 // --- END: Defensive Prompt Validation and Logging Patch ---
 
-async function generateBannerImage(prompt: string): Promise<string> {
+/**
+ * Calls OpenAI DALL·E 3 API and returns image URL
+ * @param {string} prompt
+ * @returns {Promise<string>}
+ */
+async function generateBannerImage(prompt) {
   // Construct the request payload
   const requestPayload = {
     model: MODEL,
     prompt,
     n: 1,
     size: IMAGE_SIZE,
-    response_format: "url" as "url", // Type assertion to satisfy ImageGenerateParams
+    response_format: "url", // REQUIRED for DALL·E 3 API
     // quality: "standard", // Optional: uncomment if you want to specify
     // style: "vivid",      // Optional: uncomment if you want to specify
   };
@@ -120,8 +133,7 @@ async function generateBannerImage(prompt: string): Promise<string> {
   // Calls OpenAI DALL·E 3 API and returns image URL
   const response = await openai.images.generate(requestPayload);
   // TYPE GUARD: Ensure the response contains a valid URL string.
-  // This prevents the TypeScript error: 'Type string | undefined is not assignable to type string.'
-  const url = response.data[0]?.url;
+  const url = response.data[0] && response.data[0].url;
   if (typeof url !== 'string' || !url) {
     // Defensive: If no URL is returned, throw an explicit error to prevent downstream failures.
     throw new Error('OpenAI API did not return a valid image URL for the prompt: ' + prompt);
@@ -129,13 +141,22 @@ async function generateBannerImage(prompt: string): Promise<string> {
   return url;
 }
 
-function getMarkdownFiles(dir: string): string[] {
+/**
+ * Returns an array of absolute paths to markdown files in the given directory
+ * @param {string} dir
+ * @returns {string[]}
+ */
+function getMarkdownFiles(dir) {
   return fs.readdirSync(dir)
     .filter(file => file.endsWith(".md"))
     .map(file => path.join(dir, file));
 }
 
-async function processFile(filePath: string) {
+/**
+ * Processes a single markdown file: reads, updates frontmatter, writes back
+ * @param {string} filePath
+ */
+async function processFile(filePath) {
   // LOG: Start processing this file
   console.log(`[START] Processing file: ${path.basename(filePath)}`);
   const raw = fs.readFileSync(filePath, "utf-8");
@@ -179,6 +200,9 @@ async function processFile(filePath: string) {
   }
 }
 
+/**
+ * Main entry point: scans directory, processes all markdown files concurrently
+ */
 async function main() {
   // LOG: Start of main execution
   console.log(`[MAIN] Scanning directory for markdown files: ${PROMPT_DIR}`);
