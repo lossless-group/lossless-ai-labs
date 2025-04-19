@@ -43,7 +43,7 @@ if not RECRAFT_API_TOKEN:
 
 # --- CONSTANTS ---
 # Directory containing markdown prompt files (recursive search)
-PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts/workflow')
+PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts')
 # Regex for YAML frontmatter (--- ... ---)
 FRONTMATTER_REGEX = re.compile(r'^(---\s*\n.*?\n?)^(---\s*$)', re.DOTALL | re.MULTILINE)
 # Banner image field name
@@ -167,6 +167,10 @@ def main():
         frontmatter, rest = extract_frontmatter(md_text)
         if not frontmatter:
             print(f"[SKIP] No frontmatter in {md_path}")
+            continue
+        # --- ADDED: Skip if banner_image already present ---
+        if re.search(r'^banner_image:\s*\S+', frontmatter, re.MULTILINE):
+            print(f"[SKIP] banner_image already present in {md_path}")
             continue
         # Extract prompt
         prompt = extract_prompt_from_markdown(md_text)
