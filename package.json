@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "imagekit": "^6.0.0",
     "openai": "^4.94.0"
   },
   "type": "module",

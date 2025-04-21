@@ -43,7 +43,7 @@ if not RECRAFT_API_TOKEN:
 
 # --- CONSTANTS ---
 # Directory containing markdown prompt files (recursive search)
-PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts')
+PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts/render-logic')
 # Regex for YAML frontmatter (--- ... ---)
 FRONTMATTER_REGEX = re.compile(r'^(---\s*\n.*?\n?)^(---\s*$)', re.DOTALL | re.MULTILINE)
 # Banner image field name
