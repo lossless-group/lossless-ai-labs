@@ -43,7 +43,7 @@ if not RECRAFT_API_TOKEN:
 
 # --- CONSTANTS ---
 # Directory containing markdown prompt files (recursive search)
-PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts/render-logic')
+PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts')
 # Regex for YAML frontmatter (--- ... ---)
 FRONTMATTER_REGEX = re.compile(r'^(---\s*\n.*?\n?)^(---\s*$)', re.DOTALL | re.MULTILINE)
 # Banner image field name
@@ -133,10 +133,12 @@ def generate_recraft_image(prompt):
     NOTE: The correct payload key is 'style_id' (not 'style') as required by the Recraft API. See project documentation for details.
     """
     # Build the payload with the custom style ID
+    # Banner Image Size:  "size": "1024x2048"
+    # Portrait Image Size: "size": "1820x1024",
     payload = {
         "prompt": prompt,
         "style_id": CUSTOM_STYLE_ID,  # Use the custom style ID here (API expects 'style_id')
-        "size": "1024x1820",
+        "size": "2048x1024",
         "background_color": {"rgb": [227, 237, 245], "opacity": 0.1}
     }
     # Log the outgoing request for debugging
@@ -169,9 +171,14 @@ def main():
             print(f"[SKIP] No frontmatter in {md_path}")
             continue
         # --- ADDED: Skip if banner_image already present ---
-        if re.search(r'^banner_image:\s*\S+', frontmatter, re.MULTILINE):
-            print(f"[SKIP] banner_image already present in {md_path}")
-            continue
+        # Only skip if banner_image is present AND is a non-empty, non-quoted-empty value
+        m = re.search(r'^banner_image:\s*(.*)', frontmatter, re.MULTILINE)
+        if m:
+            val = m.group(1).strip()
+            # Skip if value is not empty, not just empty quotes, and not just ''
+            if val and val not in ['""', "''"]:
+                print(f"[SKIP] banner_image already present in {md_path}")
+                continue
         # Extract prompt
         prompt = extract_prompt_from_markdown(md_text)
         if not prompt:

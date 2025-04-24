@@ -32,3 +32,7 @@ Download:
 ### Mermaid Diagram AI Agent
 
 [Mermaid Diagram AI Agent](https://github.com/disler/mermaid-js-ai-agent?tab=readme-ov-file)
+
+# To Run Python Scripts
+`source .venv/bin/activate`
+`python3 ai-labs/apis/recraft/generate-banner-images-recraft.py`
