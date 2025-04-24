@@ -1,6 +1,4 @@
-
-
 [submodule "packages/mermaid-js-ai-agent"]
 	path = packages/mermaid-js-ai-agent
 	url = https://github.com/disler/mermaid-js-ai-agent
-	branch = master
+	branch = main
