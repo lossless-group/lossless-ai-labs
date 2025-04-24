@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "imagekit": "^6.0.0",
+    "openai": "^4.94.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.17.30",
+    "dotenv": "^16.5.0",
+    "tsx": "^4.19.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "banner-gen": "tsx open-ai/generate-banner-images.cjs"
+  }
+}
