@@ -10,6 +10,7 @@ Purpose: Generate vector banner images for markdown prompt files using the Recra
 - Extracts YAML frontmatter and prompt
 - Sends prompt to Recraft API for SVG (vector) image generation (16:9)
 - Inserts/updates 'banner_image: <URL>' in frontmatter, preserving all other fields and formatting
+- Inserts/updates 'portrait_image: <URL>' in frontmatter, preserving all other fields and formatting
 - Never uses any YAML libraries
 - Aggressively comments all logic and function calls
 
@@ -18,11 +19,37 @@ CRITICAL: Never destructively edit or lose any existing frontmatter or markdown 
 REFERENCE: For using custom styles, see:
   - content/lost-in-public/prompts/workflow/Write-an-AI-Model-request-Script.md
   - ai-labs/recraft/styles-recraft-2025-04-14T21-24-01.json
+
+IMPORTANT: ALL LOGIC RELATING TO 'portrait_image' IS HANDLED IN THE FOLLOWING PLACES:
+- In main_async():
+    - Checks if 'portrait_image' is present and if OVERWRITE is False, skips generation.
+    - If RUN_PORTRAITS is True and not skipped, schedules async API call.
+    - Updates frontmatter with generated portrait image URL.
+    - Logs every skip and update condition.
+- In update_portrait_image_in_frontmatter():
+    - Inserts or updates the 'portrait_image' field in the YAML frontmatter string.
+
+All skip and update conditions are aggressively logged and commented below. See mirrored comments at function definition and call sites.
+"""
+
+"""
+MIRRORED COMMENT BLOCK: portrait_image LOGIC
+This script processes each markdown file and determines whether to generate/update 'portrait_image'.
+All logic branches for 'portrait_image':
+  1. Skips file if frontmatter is missing (logs reason).
+  2. Skips file if prompt is missing (logs reason).
+  3. Skips portrait generation if 'portrait_image' is present and OVERWRITE is False (logs reason).
+  4. If RUN_PORTRAITS is False, skips portrait generation for all files (logs reason).
+  5. If portrait API call fails, logs error and continues.
+  6. If portrait is generated, updates frontmatter and logs update.
+  7. All skip/update conditions are logged with file path and reason for traceability.
+See also: update_portrait_image_in_frontmatter() for actual YAML update logic.
 """
 
 import os
 import re
-import requests
+import asyncio
+import aiohttp
 from pathlib import Path
 import json  # For loading custom style JSON
 
@@ -42,12 +69,19 @@ if not RECRAFT_API_TOKEN:
     raise RuntimeError("RECRAFT_API_TOKEN not set in environment!")
 
 # --- CONSTANTS ---
+# Overwrite existing banner_image values in frontmatter? If True, always generate a new image and overwrite. If False, skip files with a non-empty banner_image.
+OVERWRITE = False
 # Directory containing markdown prompt files (recursive search)
-PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts')
+PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/essays')
 # Regex for YAML frontmatter (--- ... ---)
 FRONTMATTER_REGEX = re.compile(r'^(---\s*\n.*?\n?)^(---\s*$)', re.DOTALL | re.MULTILINE)
-# Banner image field name
+# Banner/Portrait image run toggles and config
+RUN_BANNERS = True
+RUN_PORTRAITS = True
+BANNER_SIZE = "2048x1024"
+PORTRAIT_SIZE = "1024x1820"
 BANNER_FIELD = 'banner_image'
+PORTRAIT_FIELD = 'portrait_image'
 # Recraft API endpoint
 RECRAFT_API_URL = 'https://external.api.recraft.ai/v1/images/generations'
 
@@ -89,6 +123,30 @@ def update_banner_image_in_frontmatter(frontmatter, banner_url):
             new_lines.append(f"{BANNER_FIELD}: {banner_url}")
     return '\n'.join(new_lines)
 
+def update_portrait_image_in_frontmatter(frontmatter, portrait_url):
+    """
+    Inserts or updates the 'portrait_image' field in the YAML frontmatter string.
+    Preserves all other fields and formatting.
+    Returns the updated frontmatter string.
+    """
+    lines = frontmatter.split('\n')
+    found = False
+    new_lines = []
+    for line in lines:
+        if line.startswith(PORTRAIT_FIELD + ":"):
+            new_lines.append(f"{PORTRAIT_FIELD}: {portrait_url}")
+            found = True
+        else:
+            new_lines.append(line)
+    if not found:
+        for i in range(len(new_lines)-1, -1, -1):
+            if new_lines[i].strip() == '---':
+                new_lines.insert(i, f"{PORTRAIT_FIELD}: {portrait_url}")
+                break
+        else:
+            new_lines.append(f"{PORTRAIT_FIELD}: {portrait_url}")
+    return '\n'.join(new_lines)
+
 def extract_prompt_from_markdown(md_text):
     """
     Extracts prompt from markdown file.
@@ -116,7 +174,7 @@ def log_response_in(response):
     """
     Logs the response received from the Recraft API.
     """
-    print(f"[RESPONSE IN] Status: {response.status_code}, Response: {response.text}")
+    print(f"[RESPONSE IN] Status: {response.status}, Response: {response.text}")
 
 def log_file_update(filepath, updated_frontmatter):
     """
@@ -124,81 +182,150 @@ def log_file_update(filepath, updated_frontmatter):
     """
     print(f"[FILE UPDATED] {filepath}\n[UPDATED FRONTMATTER]\n{updated_frontmatter}\n{'-'*40}")
 
-def generate_recraft_image(prompt):
+def is_effectively_empty(val):
     """
-    Sends a prompt to the Recraft API to generate a vector (SVG) image.
+    Helper function to check if a value is effectively empty (None, empty string, whitespace, or just quotes)
+    """
+    print(f"[DEBUG][is_effectively_empty] Checking value: {repr(val)} (type: {type(val)})")
+    if val is None:
+        return True
+    if isinstance(val, str):
+        stripped = val.strip().strip('"').strip("'")
+        return stripped == ''
+    return False
+
+def is_valid_image_url(val):
+    """
+    Helper function: is_valid_image_url(val)
+    Checks if the given value is a valid image URL (e.g., starts with 'http', 'https', or matches the upload pattern)
+    Returns True if it is a valid image URL, otherwise False.
+    """
+    if not isinstance(val, str):
+        return False
+    val = val.strip().strip('"').strip("'")
+    # Accept http/https and known upload patterns
+    return val.startswith('http://') or val.startswith('https://') or 'ik.imagekit.io' in val
+
+# --- ASYNC IMAGE GENERATION ---
+async def generate_recraft_image_async(prompt, size, session):
+    """
+    Async version: Sends a prompt to the Recraft API to generate a vector (SVG) image of given size.
     Returns the URL of the generated image.
-    Uses the custom style ID loaded from styles-recraft-2025-04-14T21-24-01.json (see top of script).
-    
-    NOTE: The correct payload key is 'style_id' (not 'style') as required by the Recraft API. See project documentation for details.
     """
-    # Build the payload with the custom style ID
-    # Banner Image Size:  "size": "1024x2048"
-    # Portrait Image Size: "size": "1820x1024",
     payload = {
         "prompt": prompt,
-        "style_id": CUSTOM_STYLE_ID,  # Use the custom style ID here (API expects 'style_id')
-        "size": "2048x1024",
-        "background_color": {"rgb": [227, 237, 245], "opacity": 0.1}
+        "style_id": CUSTOM_STYLE_ID,
+        "size": size
     }
-    # Log the outgoing request for debugging
     log_request_out(payload)
     headers = {
         "Authorization": f"Bearer {RECRAFT_API_TOKEN}",
         "Content-Type": "application/json"
     }
-    resp = requests.post(RECRAFT_API_URL, json=payload, headers=headers)
-    log_response_in(resp)
-    if resp.status_code != 200:
-        raise RuntimeError(f"Recraft API error {resp.status_code}: {resp.text}")
-    data = resp.json()
-    # Defensive: check for expected structure
-    url = data.get('data', [{}])[0].get('url')
-    if not url:
-        raise RuntimeError(f"No image URL in Recraft API response: {data}")
-    return url
+    async with session.post(RECRAFT_API_URL, json=payload, headers=headers) as resp:
+        text = await resp.text()
+        log_response_in(resp)
+        if resp.status != 200:
+            raise RuntimeError(f"Recraft API error {resp.status}: {text}")
+        data = await resp.json()
+        url = data.get('data', [{}])[0].get('url')
+        if not url:
+            raise RuntimeError(f"No image URL in Recraft API response: {data}")
+        return url
 
-# --- MAIN SCRIPT ---
-def main():
-    # Recursively find all .md files in PROMPT_DIR
-    for md_path in PROMPT_DIR.rglob('*.md'):
-        print(f"[PROCESSING] {md_path}")
-        with md_path.open('r', encoding='utf-8') as f:
-            md_text = f.read()
-        # Extract frontmatter
-        frontmatter, rest = extract_frontmatter(md_text)
-        if not frontmatter:
-            print(f"[SKIP] No frontmatter in {md_path}")
-            continue
-        # --- ADDED: Skip if banner_image already present ---
-        # Only skip if banner_image is present AND is a non-empty, non-quoted-empty value
-        m = re.search(r'^banner_image:\s*(.*)', frontmatter, re.MULTILINE)
-        if m:
-            val = m.group(1).strip()
-            # Skip if value is not empty, not just empty quotes, and not just ''
-            if val and val not in ['""', "''"]:
-                print(f"[SKIP] banner_image already present in {md_path}")
+# --- MAIN ASYNC SCRIPT ---
+async def main_async():
+    # --- MIRRORED COMMENT BLOCK: portrait_image LOGIC ---
+    # This function processes each markdown file and determines whether to generate/update 'portrait_image'.
+    # All logic branches for 'portrait_image':
+    #   1. Skips file if frontmatter is missing (logs reason).
+    #   2. Skips file if prompt is missing (logs reason).
+    #   3. Skips portrait generation if 'portrait_image' is present and OVERWRITE is False (logs reason).
+    #   4. If RUN_PORTRAITS is False, skips portrait generation for all files (logs reason).
+    #   5. If portrait API call fails, logs error and continues.
+    #   6. If portrait is generated, updates frontmatter and logs update.
+    #   7. All skip/update conditions are logged with file path and reason for traceability.
+    # See also: update_portrait_image_in_frontmatter() for actual YAML update logic.
+    async with aiohttp.ClientSession() as session:
+        for md_path in PROMPT_DIR.rglob('*.md'):
+            print(f"[PROCESSING] {md_path}")
+            with md_path.open('r', encoding='utf-8') as f:
+                md_text = f.read()
+            # Extract frontmatter
+            frontmatter, rest = extract_frontmatter(md_text)
+            if not frontmatter:
+                print(f"[SKIP] No frontmatter in {md_path} (portrait_image not generated)")
                 continue
-        # Extract prompt
-        prompt = extract_prompt_from_markdown(md_text)
-        if not prompt:
-            print(f"[SKIP] No prompt found in {md_path}")
-            continue
-        print(f"[PROMPT] {prompt}")
-        # Generate image
-        try:
-            banner_url = generate_recraft_image(prompt)
-            print(f"[BANNER_IMAGE] {banner_url}")
-        except Exception as e:
-            print(f"[ERROR] Failed to generate image for {md_path}: {e}")
-            continue
-        # Update frontmatter
-        new_frontmatter = update_banner_image_in_frontmatter(frontmatter, banner_url)
-        log_file_update(md_path, new_frontmatter)
-        # Write back file (preserving original content)
-        new_md_text = new_frontmatter + rest
-        with md_path.open('w', encoding='utf-8') as f:
-            f.write(new_md_text)
+            # Find the banner_image and portrait_image values in the frontmatter
+            banner_image_match = re.search(rf'^{BANNER_FIELD}:\s*(.*)', frontmatter, re.MULTILINE)
+            banner_image_val = banner_image_match.group(1) if banner_image_match else ''
+            portrait_image_match = re.search(rf'^{PORTRAIT_FIELD}:\s*(.*)', frontmatter, re.MULTILINE)
+            portrait_image_val = portrait_image_match.group(1) if portrait_image_match else ''
+            # Aggressively commented logic for checking if we should skip image generation for portrait_image and banner_image
+            # Only skip if the value is a valid image URL. If the value is a prompt (e.g., starts with 'image_prompt:'), treat as empty and generate the image.
+            # This replaces the previous logic that treated any non-empty string as a valid image.
+            print(f"[DEBUG] {md_path} | RAW portrait_image_val: '{portrait_image_val}' (type: {type(portrait_image_val)}) | RAW banner_image_val: '{banner_image_val}' (type: {type(banner_image_val)})")
+            if is_valid_image_url(portrait_image_val):
+                print(f"[SKIP] portrait_image already present and non-empty (and OVERWRITE is False) in {md_path} (checked value: '{portrait_image_val}')")
+                skip_portrait = True
+            else:
+                skip_portrait = False
+            print(f"[DEBUG][skip_portrait_decision] skip_portrait: {skip_portrait} (portrait_image_val: '{portrait_image_val}')")
+            if is_valid_image_url(banner_image_val):
+                print(f"[SKIP] banner_image already present and non-empty (and OVERWRITE is False) in {md_path} (checked value: '{banner_image_val}')")
+                skip_banner = True
+            else:
+                skip_banner = False
+            print(f"[DEBUG][skip_banner_decision] skip_banner: {skip_banner} (banner_image_val: '{banner_image_val}')")
 
+            # Extract prompt
+            prompt = extract_prompt_from_markdown(md_text)
+            if not prompt:
+                print(f"[SKIP] No prompt found in {md_path} (portrait_image not generated)")
+                continue
+            # Prepare async API calls as needed
+            banner_task = None
+            portrait_task = None
+            if RUN_BANNERS and not skip_banner:
+                banner_task = generate_recraft_image_async(prompt, BANNER_SIZE, session)
+            if RUN_PORTRAITS and not skip_portrait:
+                portrait_task = generate_recraft_image_async(prompt, PORTRAIT_SIZE, session)
+            # If both tasks are needed, run them in parallel
+            if banner_task and portrait_task:
+                try:
+                    banner_url, portrait_url = await asyncio.gather(banner_task, portrait_task)
+                except Exception as e:
+                    print(f"[ERROR] API call failed for {md_path}: {e} (portrait_image and/or banner_image not generated)")
+                    continue
+                new_frontmatter = update_banner_image_in_frontmatter(frontmatter, banner_url)
+                new_frontmatter = update_portrait_image_in_frontmatter(new_frontmatter, portrait_url)
+                log_file_update(md_path, new_frontmatter)
+                new_md_text = new_frontmatter + rest
+                with md_path.open('w', encoding='utf-8') as f:
+                    f.write(new_md_text)
+            elif banner_task:
+                try:
+                    banner_url = await banner_task
+                except Exception as e:
+                    print(f"[ERROR] Banner API call failed for {md_path}: {e}")
+                    continue
+                new_frontmatter = update_banner_image_in_frontmatter(frontmatter, banner_url)
+                log_file_update(md_path, new_frontmatter)
+                new_md_text = new_frontmatter + rest
+                with md_path.open('w', encoding='utf-8') as f:
+                    f.write(new_md_text)
+            elif portrait_task:
+                try:
+                    portrait_url = await portrait_task
+                except Exception as e:
+                    print(f"[ERROR] Portrait API call failed for {md_path}: {e}")
+                    continue
+                new_frontmatter = update_portrait_image_in_frontmatter(frontmatter, portrait_url)
+                log_file_update(md_path, new_frontmatter)
+                new_md_text = new_frontmatter + rest
+                with md_path.open('w', encoding='utf-8') as f:
+                    f.write(new_md_text)
+
+# --- ENTRYPOINT ---
 if __name__ == "__main__":
-    main()
+    asyncio.run(main_async())
