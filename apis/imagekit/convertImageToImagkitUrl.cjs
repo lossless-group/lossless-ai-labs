@@ -38,13 +38,13 @@ const PROCESS_SINGLE_IMAGE = false;
 const SINGLE_IMAGE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/imageRep__North-Sea-of-Data.webp"; // <-- SET YOUR FILE OR DIRECTORY PATH HERE
 
 const PROCESS_DIRECTORY = true;
-const DIRECTORY_TO_PROCESS = "/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts/workflow";
+const DIRECTORY_TO_PROCESS = "/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/issue-resolution";
 const PROPERTIES_TO_SEND_TO_IMAGEKIT = [
   "portrait_image",
   "banner_image",
 ]
 
-const IMAGE_DOWNLOAD_BASE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/Recraft-Generated/Prompts/Workflow/";
+const IMAGE_DOWNLOAD_BASE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/Recraft-Generated/Issue-Resolutions";
 // ===============================
 // Config: Load endpoints and keys from environment
 // ===============================
@@ -154,34 +154,74 @@ function parseFrontmatter(filePath) {
 // ===============================
 // Helper: Write updated frontmatter back to file, preserving delimiters and formatting
 // ===============================
-function writeFrontmatter(filePath, newFrontmatter, body, originalYaml) {
-  // Build YAML string with original field order if possible
+function writeFrontmatter(filePath, newFrontmatter, body, originalYaml, options = {}) {
+  // ---
+  // If options.omitTags is true, do NOT write tags field to frontmatter
+  // ---
+  if (options.omitTags && newFrontmatter.tags !== undefined) {
+    delete newFrontmatter.tags;
+  }
+
+  // Normalize tags: always write as YAML array, never as both string and array
+  // ---
+  if (newFrontmatter.tags) {
+    let tagsArr = Array.isArray(newFrontmatter.tags)
+      ? newFrontmatter.tags
+      : (typeof newFrontmatter.tags === 'string'
+          ? newFrontmatter.tags.split(',').map(t => t.trim()).filter(Boolean)
+          : []);
+    // Remove duplicates
+    tagsArr = [...new Set(tagsArr)];
+    newFrontmatter.tags = tagsArr;
+  }
+
   let yaml = '';
   if (originalYaml) {
-    // Try to preserve original order and comments
     const lines = originalYaml.split('\n');
+    const seen = new Set();
     for (let line of lines) {
       const idx = line.indexOf(':');
       if (idx > -1) {
         const key = line.slice(0, idx).trim();
-        if (Object.prototype.hasOwnProperty.call(newFrontmatter, key)) {
-          yaml += `${key}: ${newFrontmatter[key]}\n`;
-        } else {
-          yaml += line + '\n';
+        if (key === 'tags' && !seen.has('tags')) {
+          // Only write tags if not omitted
+          seen.add('tags');
+          if (!options.omitTags && Array.isArray(newFrontmatter.tags) && newFrontmatter.tags.length > 0) {
+            yaml += 'tags:\n';
+            for (const tag of newFrontmatter.tags) {
+              yaml += `  - ${tag}\n`;
+            }
+          }
+          continue;
         }
-      } else {
-        yaml += line + '\n';
+        if (!seen.has(key) && key !== 'tags') {
+          yaml += `${key}: ${newFrontmatter[key]}\n`;
+          seen.add(key);
+        }
       }
     }
-    // Add any new keys that didn't exist in original YAML
+    // Add any new keys not in the original order
     for (const k in newFrontmatter) {
-      if (!originalYaml.includes(`${k}:`)) {
+      if (!seen.has(k) && k !== 'tags') {
         yaml += `${k}: ${newFrontmatter[k]}\n`;
+      }
+    }
+    if (!options.omitTags && !seen.has('tags') && Array.isArray(newFrontmatter.tags) && newFrontmatter.tags.length > 0) {
+      yaml += 'tags:\n';
+      for (const tag of newFrontmatter.tags) {
+        yaml += `  - ${tag}\n`;
       }
     }
   } else {
     for (const k in newFrontmatter) {
-      yaml += `${k}: ${newFrontmatter[k]}\n`;
+      if (k === 'tags' && Array.isArray(newFrontmatter.tags) && !options.omitTags) {
+        yaml += 'tags:\n';
+        for (const tag of newFrontmatter.tags) {
+          yaml += `  - ${tag}\n`;
+        }
+      } else if (k !== 'tags') {
+        yaml += `${k}: ${newFrontmatter[k]}\n`;
+      }
     }
   }
 
@@ -195,12 +235,51 @@ function writeFrontmatter(filePath, newFrontmatter, body, originalYaml) {
 }
 
 // ===============================
-// Helper: Update property in frontmatter and write back
+// Helper: Update ONLY a single property in frontmatter, in-place, preserving all other keys, formatting, comments, and whitespace
 // ===============================
-function updateFrontmatterProperty(filePath, property, newUrl) {
-  const { frontmatter, body, yaml } = parseFrontmatter(filePath);
-  frontmatter[property] = newUrl;
-  writeFrontmatter(filePath, frontmatter, body, yaml);
+function updateFrontmatterProperty(filePath, property, newValue) {
+  /*
+    This function updates ONLY the specified property in the YAML frontmatter of a markdown file.
+    - If the property exists, only its value is replaced (indentation, comments, and whitespace are preserved).
+    - If the property does not exist, it is inserted just before the closing --- delimiter.
+    - All other lines, order, blank lines, and comments are left untouched.
+    - No YAML library is used; this is a pure text manipulation for maximum safety and DRY compliance.
+  */
+  const content = fs.readFileSync(filePath, 'utf8');
+  // Match the first frontmatter block (from --- to ---)
+  const match = content.match(/^(---\n[\s\S]*?\n---\n?)/);
+  if (!match) return; // No frontmatter found
+  const frontmatterBlock = match[1];
+  const body = content.slice(frontmatterBlock.length);
+  const lines = frontmatterBlock.split('\n');
+
+  // Find start and end of frontmatter block
+  const startIdx = lines.findIndex(line => line.trim() === '---');
+  const endIdx = lines.findIndex((line, idx) => idx > startIdx && line.trim() === '---');
+  if (startIdx === -1 || endIdx === -1) return; // Malformed frontmatter
+
+  // Search for the property line
+  let found = false;
+  for (let i = startIdx + 1; i < endIdx; i++) {
+    // Match lines like 'property: ...' with optional whitespace and comments
+    const propMatch = lines[i].match(/^([ \t]*)([a-zA-Z0-9_\-]+):(.*)$/);
+    if (propMatch && propMatch[2] === property) {
+      // Preserve indentation and any trailing comment
+      const indent = propMatch[1] || '';
+      const trailing = propMatch[3].replace(/^(.*?)(\s+#.*)?$/, '$2') || '';
+      lines[i] = `${indent}${property}: ${newValue}${trailing}`;
+      found = true;
+      break;
+    }
+  }
+  if (!found) {
+    // Insert the property just before the closing ---
+    lines.splice(endIdx, 0, `${property}: ${newValue}`);
+  }
+  // Reconstruct the frontmatter block
+  const newFrontmatter = lines.join('\n');
+  // Write back the file, preserving everything else
+  fs.writeFileSync(filePath, `${newFrontmatter}\n${body.replace(/^\n+/, '')}`, 'utf8');
 }
 
 // ===============================
@@ -301,13 +380,28 @@ async function processDirectory() {
         const { frontmatter } = parseFrontmatter(file);
         let tags = [];
         if (frontmatter.tags) {
+          // Only use tags for upload, never write them back or modify the file!
           if (Array.isArray(frontmatter.tags)) {
             tags = frontmatter.tags;
           } else if (typeof frontmatter.tags === 'string') {
-            // Handle comma-separated string
-            tags = frontmatter.tags.split(',').map(s => s.trim()).filter(Boolean);
+            // Handle comma, hyphen, or JSON-like array string
+            try {
+              // Try parsing as JSON array first
+              const parsed = JSON.parse(frontmatter.tags);
+              if (Array.isArray(parsed)) {
+                tags = parsed;
+              } else {
+                // Fallback: split on comma or hyphen
+                tags = frontmatter.tags.split(/[,-]/).map(s => s.trim()).filter(Boolean);
+              }
+            } catch {
+              // Not JSON, fallback: split on comma or hyphen
+              tags = frontmatter.tags.split(/[,-]/).map(s => s.trim()).filter(Boolean);
+            }
           }
         }
+        // Remove duplicates for upload
+        tags = [...new Set(tags)];
         // --- END tags extraction ---
         // --- Determine the upload filename: always use .webp extension for ImageKit ---
         // We always set the fileName to .webp for ImageKit, even if the source is .jpg or .png,
@@ -331,7 +425,7 @@ async function processDirectory() {
         const uploadResult = await imagekit.upload({
           file: fs.readFileSync(downloadedPath),
           fileName: uploadFileName,
-          folder: '/uploads/lossless/prompts/workflow',
+          folder: '/uploads/lossless/issue-resolutions',
           tags: tags,
         });
         imagekitUrl = uploadResult.url;
