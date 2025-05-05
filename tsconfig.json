@@ -1,0 +1,24 @@
+{
+  "extends": "../site/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@ai-labs/*": ["./*"],
+      "@utils/*": ["./utils/*"],
+      "@observers/*": ["../tidyverse/observers/*"],
+      "@observer-utils/*": ["../tidyverse/observers/utils/*"],
+      "@observer-services/*": ["../tidyverse/observers/services/*"],
+      "@content-prompts/*": ["../content/lost-in-public/prompts/*"],
+      "@content-data/*": ["../content/data/*"],
+      "@changelog--code/*": ["../content/changelog--code/*"]
+    },
+    "types": ["node"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowJs": false,
+    "strict": false
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "dist"]
+}

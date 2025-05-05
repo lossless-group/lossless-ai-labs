@@ -70,9 +70,9 @@ if not RECRAFT_API_TOKEN:
 
 # --- CONSTANTS ---
 # Overwrite existing banner_image values in frontmatter? If True, always generate a new image and overwrite. If False, skip files with a non-empty banner_image.
-OVERWRITE = False
+OVERWRITE = True
 # Directory containing markdown prompt files (recursive search)
-PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/essays')
+PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts/workflow')
 # Regex for YAML frontmatter (--- ... ---)
 FRONTMATTER_REGEX = re.compile(r'^(---\s*\n.*?\n?)^(---\s*$)', re.DOTALL | re.MULTILINE)
 # Banner/Portrait image run toggles and config
@@ -265,19 +265,26 @@ async def main_async():
             # Only skip if the value is a valid image URL. If the value is a prompt (e.g., starts with 'image_prompt:'), treat as empty and generate the image.
             # This replaces the previous logic that treated any non-empty string as a valid image.
             print(f"[DEBUG] {md_path} | RAW portrait_image_val: '{portrait_image_val}' (type: {type(portrait_image_val)}) | RAW banner_image_val: '{banner_image_val}' (type: {type(banner_image_val)})")
-            if is_valid_image_url(portrait_image_val):
-                print(f"[SKIP] portrait_image already present and non-empty (and OVERWRITE is False) in {md_path} (checked value: '{portrait_image_val}')")
-                skip_portrait = True
-            else:
+            # --- BEGIN OVERWRITE LOGIC FIX ---
+            # If OVERWRITE is True, never skip; always regenerate images even if valid image URLs are present.
+            if OVERWRITE:
                 skip_portrait = False
-            print(f"[DEBUG][skip_portrait_decision] skip_portrait: {skip_portrait} (portrait_image_val: '{portrait_image_val}')")
-            if is_valid_image_url(banner_image_val):
-                print(f"[SKIP] banner_image already present and non-empty (and OVERWRITE is False) in {md_path} (checked value: '{banner_image_val}')")
-                skip_banner = True
-            else:
                 skip_banner = False
-            print(f"[DEBUG][skip_banner_decision] skip_banner: {skip_banner} (banner_image_val: '{banner_image_val}')")
-
+                print(f"[DEBUG][OVERWRITE] OVERWRITE is True: Forcing regeneration of both portrait and banner images for {md_path}")
+            else:
+                if is_valid_image_url(portrait_image_val):
+                    print(f"[SKIP] portrait_image already present and non-empty (and OVERWRITE is False) in {md_path} (checked value: '{portrait_image_val}')")
+                    skip_portrait = True
+                else:
+                    skip_portrait = False
+                print(f"[DEBUG][skip_portrait_decision] skip_portrait: {skip_portrait} (portrait_image_val: '{portrait_image_val}')")
+                if is_valid_image_url(banner_image_val):
+                    print(f"[SKIP] banner_image already present and non-empty (and OVERWRITE is False) in {md_path} (checked value: '{banner_image_val}')")
+                    skip_banner = True
+                else:
+                    skip_banner = False
+                print(f"[DEBUG][skip_banner_decision] skip_banner: {skip_banner} (banner_image_val: '{banner_image_val}')")
+            # --- END OVERWRITE LOGIC FIX ---
             # Extract prompt
             prompt = extract_prompt_from_markdown(md_text)
             if not prompt:

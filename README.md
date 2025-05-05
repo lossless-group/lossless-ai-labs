@@ -11,6 +11,7 @@ Make sure you have `uv` installed.
 python3 -m venv
 source .venv/bin/activate
 pipx install uv
+pip install -r python-requirements.txt
 ```
 
 # Default to Local AI

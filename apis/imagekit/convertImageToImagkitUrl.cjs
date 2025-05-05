@@ -1,7 +1,7 @@
 /**
  * convertImageToImagkitUrl.cjs
  *
- * A common Node.js script to upload a single image or all images in a directory to ImageKit.io.
+ * A Node.js script to upload a single image or all images in a directory to ImageKit.io.
  *
  * - Loads ImageKit public/private keys and endpoints from environment variables.
  * - Accepts a file or directory path as a CLI argument or hardcoded path.
@@ -19,6 +19,7 @@
 const path = require('path');
 const fs = require('fs');
 const ImageKit = require('imagekit');
+const fetch = require('node-fetch');
 
 // Load .env if present (optional, for local dev)
 try {
@@ -30,9 +31,20 @@ try {
 // ===============================
 // CONFIGURATION: Set path to file or directory here if you do NOT want to use CLI
 // ===============================
-// To use a hardcoded path, set HARDCODED_PATH below. Leave as null to use CLI argument.
-const HARDCODED_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/imageRep__North-Sea-of-Data.webp"; // <-- SET YOUR FILE OR DIRECTORY PATH HERE
 
+OVERWRITE_IMAGEKIT_URL = false;
+
+const PROCESS_SINGLE_IMAGE = false;
+const SINGLE_IMAGE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/imageRep__North-Sea-of-Data.webp"; // <-- SET YOUR FILE OR DIRECTORY PATH HERE
+
+const PROCESS_DIRECTORY = true;
+const DIRECTORY_TO_PROCESS = "/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/prompts/workflow";
+const PROPERTIES_TO_SEND_TO_IMAGEKIT = [
+  "portrait_image",
+  "banner_image",
+]
+
+const IMAGE_DOWNLOAD_BASE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/Recraft-Generated/Prompts/Workflow/";
 // ===============================
 // Config: Load endpoints and keys from environment
 // ===============================
@@ -56,75 +68,318 @@ const imagekit = new ImageKit({
 });
 
 // ===============================
-// Helper: Check if file is an image
+// Helper: Recursively walk directory and return all markdown files
 // ===============================
-function isImageFile(filename) {
-  return /\.(jpe?g|png|gif|webp|bmp|svg)$/i.test(filename);
+function walkDirectoryRecursive(dir, ext = '.md', fileList = []) {
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
+    if (stat.isDirectory()) {
+      walkDirectoryRecursive(filePath, ext, fileList);
+    } else if (filePath.endsWith(ext)) {
+      fileList.push(filePath);
+    }
+  }
+  return fileList;
 }
 
 // ===============================
-// Main: Upload logic (uses upload endpoint for clarity in comments)
+// Helper: Parse frontmatter from markdown file
 // ===============================
-async function uploadFileToImageKit(filepath) {
-  const fileName = path.basename(filepath);
-  const fileBuffer = fs.readFileSync(filepath);
-  const uploadFolder = "/uploads/lossless"; // Hardcoded, as no env var exists
-  try {
-    // The SDK internally uses the upload endpoint, but we clarify it for documentation
-    const result = await imagekit.upload({
-      file: fileBuffer,
-      fileName,
-      folder: uploadFolder,
-    });
-    console.log(`[SUCCESS] ${fileName} => ${result.url}`);
-    console.log(`  [INFO] Uploaded to folder: ${uploadFolder}`);
-    console.log(`  [INFO] CDN Endpoint: ${CDN_URL_ENDPOINT}`);
-    console.log(`  [INFO] Upload Endpoint: ${UPLOAD_ENDPOINT}`);
-  } catch (err) {
-    console.error(`[FAIL] ${fileName}:`, err && err.message ? err.message : err);
-  }
-}
-
-async function main() {
-  // Prefer HARDCODED_PATH if set, otherwise use CLI argument
-  let inputPath = HARDCODED_PATH || process.argv[2];
-
-  // If HARDCODED_PATH is set and not absolute, resolve relative to monorepo root
-  if (HARDCODED_PATH && !path.isAbsolute(HARDCODED_PATH)) {
-    // __dirname = .../ai-labs/apis/imagekit, so go up two levels to monorepo root
-    inputPath = path.resolve(__dirname, '../../', HARDCODED_PATH);
-  } else if (!HARDCODED_PATH) {
-    inputPath = path.resolve(process.cwd(), inputPath);
-  }
-
-  console.log(`[DEBUG] Using input path: ${inputPath}`);
-
-  if (!fs.existsSync(inputPath)) {
-    console.error('[ERROR] Path does not exist:', inputPath);
-    process.exit(1);
-  }
-  const stat = fs.statSync(inputPath);
-  if (stat.isDirectory()) {
-    // Upload all image files in directory
-    const files = fs.readdirSync(inputPath)
-      .filter(isImageFile)
-      .map(f => path.join(inputPath, f));
-    if (files.length === 0) {
-      console.log('[INFO] No image files found in directory:', inputPath);
+function parseFrontmatter(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8');
+  const match = content.match(/^---([\s\S]*?)---/);
+  if (!match) return { frontmatter: {}, body: content };
+  const yaml = match[1];
+  const body = content.slice(match[0].length);
+  const frontmatter = {};
+  let currentKey = null;
+  let isList = false;
+  let listBuffer = [];
+  yaml.split('\n').forEach(line => {
+    // Detect start of block list (e.g. tags:)
+    if (/^\s*([a-zA-Z0-9_\-]+):\s*$/.test(line)) {
+      if (currentKey && isList) {
+        frontmatter[currentKey] = listBuffer;
+        listBuffer = [];
+      }
+      const key = line.split(':')[0].trim();
+      currentKey = key;
+      isList = true;
       return;
     }
-    for (const file of files) {
-      await uploadFileToImageKit(file);
+    // Detect list item (e.g. - tag)
+    if (isList && /^\s*-\s+/.test(line)) {
+      const item = line.replace(/^\s*-\s+/, '').trim();
+      if (item) listBuffer.push(item);
+      return;
     }
-  } else if (stat.isFile()) {
-    if (!isImageFile(inputPath)) {
-      console.error('[ERROR] Not an image file:', inputPath);
-      process.exit(1);
+    // Detect inline array (e.g. tags: [foo, bar])
+    const idx = line.indexOf(':');
+    if (idx > -1) {
+      const key = line.slice(0, idx).trim();
+      let value = line.slice(idx + 1).trim();
+      // Inline array
+      if (/^\[.*\]$/.test(value)) {
+        value = value.replace(/\[|\]/g, '').split(',').map(s => s.trim()).filter(Boolean);
+        frontmatter[key] = value;
+        isList = false;
+        currentKey = null;
+        return;
+      }
+      // Regular key-value
+      frontmatter[key] = value;
+      isList = false;
+      currentKey = null;
+      return;
     }
-    await uploadFileToImageKit(inputPath);
+    // End of list
+    if (isList && line.trim() === '') {
+      if (currentKey) {
+        frontmatter[currentKey] = listBuffer;
+        listBuffer = [];
+        isList = false;
+        currentKey = null;
+      }
+    }
+  });
+  // Finalize any open list at EOF
+  if (currentKey && isList) {
+    frontmatter[currentKey] = listBuffer;
+  }
+  return { frontmatter, body, yaml, full: content };
+}
+
+// ===============================
+// Helper: Write updated frontmatter back to file, preserving delimiters and formatting
+// ===============================
+function writeFrontmatter(filePath, newFrontmatter, body, originalYaml) {
+  // Build YAML string with original field order if possible
+  let yaml = '';
+  if (originalYaml) {
+    // Try to preserve original order and comments
+    const lines = originalYaml.split('\n');
+    for (let line of lines) {
+      const idx = line.indexOf(':');
+      if (idx > -1) {
+        const key = line.slice(0, idx).trim();
+        if (Object.prototype.hasOwnProperty.call(newFrontmatter, key)) {
+          yaml += `${key}: ${newFrontmatter[key]}\n`;
+        } else {
+          yaml += line + '\n';
+        }
+      } else {
+        yaml += line + '\n';
+      }
+    }
+    // Add any new keys that didn't exist in original YAML
+    for (const k in newFrontmatter) {
+      if (!originalYaml.includes(`${k}:`)) {
+        yaml += `${k}: ${newFrontmatter[k]}\n`;
+      }
+    }
   } else {
-    console.error('[ERROR] Path is neither a file nor a directory:', inputPath);
-    process.exit(1);
+    for (const k in newFrontmatter) {
+      yaml += `${k}: ${newFrontmatter[k]}\n`;
+    }
+  }
+
+  // Remove leading/trailing blank lines from yaml
+  yaml = yaml.replace(/^\s+|\s+$/g, '');
+  // Remove any trailing blank lines inside the yaml/frontmatter block
+  yaml = yaml.replace(/\n+$/g, '');
+  // Write frontmatter with NO blank line after the first delimiter and NO blank line before the closing delimiter
+  const out = `---\n${yaml}\n---\n${body.replace(/^\n+/, '')}`;
+  fs.writeFileSync(filePath, out, 'utf8');
+}
+
+// ===============================
+// Helper: Update property in frontmatter and write back
+// ===============================
+function updateFrontmatterProperty(filePath, property, newUrl) {
+  const { frontmatter, body, yaml } = parseFrontmatter(filePath);
+  frontmatter[property] = newUrl;
+  writeFrontmatter(filePath, frontmatter, body, yaml);
+}
+
+// ===============================
+// Helper: Check if a URL is already an ImageKit URL
+// ===============================
+function isImageKitUrl(url) {
+  // Accept both your prod domain and public endpoint
+  return (
+    typeof url === 'string' &&
+    (url.startsWith('https://ik.imagekit.io/') || url.includes('imagekit.io/'))
+  );
+}
+
+// ===============================
+// Helper: Download image from URL and save with new name in new folder
+// ===============================
+/**
+ * Download an image from a URL and save it with a descriptive, collision-resistant name.
+ * Naming convention:
+ *   <YYYY-MM-DD>_<property>_<markdown-base-name>_<original-image-base>.<ext>
+ * Example:
+ *   2025-05-04_banner_image_A-New-API-Standard-for-chaining-AI-Model-Context-Protocol_bannerimg.jpg
+ *
+ * @param {string} imageUrl - The URL of the image to download
+ * @param {string} destDir - The directory to save the image in
+ * @param {string} baseName - The base name of the markdown file (without extension)
+ * @param {string} property - The property name (e.g., banner_image, portrait_image)
+ * @returns {Promise<string>} - The full path to the downloaded image
+ */
+async function downloadAndRenameImage(imageUrl, destDir, baseName, property) {
+  // Extract extension from image URL (default to jpg)
+  const extMatch = imageUrl.match(/\.([a-zA-Z0-9]+)(\?|$)/);
+  const ext = extMatch ? extMatch[1] : 'jpg';
+  const today = new Date().toISOString().slice(0, 10);
+
+  // Sanitize markdown base name (remove spaces, special chars)
+  const safeBase = baseName.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '');
+  // Sanitize property name
+  const safeProperty = property ? property.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '') : 'image';
+  // Extract original image base name (without extension)
+  let originalImageBase = '';
+  try {
+    const urlParts = imageUrl.split('/');
+    const lastPart = urlParts[urlParts.length - 1].split('?')[0];
+    originalImageBase = lastPart.replace(/\.[^.]+$/, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '');
+  } catch (e) {
+    originalImageBase = 'img';
+  }
+
+  // Compose new filename
+  const fileName = `${today}_${safeProperty}_${safeBase}_${originalImageBase}.${ext}`;
+  if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+  const destPath = path.join(destDir, fileName);
+  const res = await fetch(imageUrl);
+  if (!res.ok) throw new Error(`Failed to download ${imageUrl}`);
+  const buffer = await res.buffer();
+  fs.writeFileSync(destPath, buffer);
+  return destPath;
+}
+
+// ===============================
+// MAIN: Directory processing logic
+// ===============================
+async function processDirectory() {
+  const mdFiles = walkDirectoryRecursive(DIRECTORY_TO_PROCESS);
+  for (const file of mdFiles) {
+    const { frontmatter } = parseFrontmatter(file);
+    for (const property of PROPERTIES_TO_SEND_TO_IMAGEKIT) {
+      const imgUrl = frontmatter[property];
+      // ===============================
+      // If OVERWRITE_IMAGEKIT_URL is false and the field is already an ImageKit URL, skip processing this property
+      // ===============================
+      if (!imgUrl) continue;
+      if (!OVERWRITE_IMAGEKIT_URL && isImageKitUrl(imgUrl)) {
+        // Comment: Skipping update for this property because it is already an ImageKit URL and overwrite is disabled
+        // Where this logic is called:
+        //   - processDirectory > for (const property of PROPERTIES_TO_SEND_TO_IMAGEKIT)
+        //   - This ensures existing valid ImageKit URLs are preserved
+        continue;
+      }
+      // Download image
+      // Use markdown filename (with .md removed) as the unique, safe folder name for images
+      // This avoids using the title property, which may contain punctuation or unsafe characters
+      const baseName = path.basename(file, path.extname(file));
+      const destDir = path.join(IMAGE_DOWNLOAD_BASE_PATH, baseName.replace(/\s+/g, '-'));
+      let downloadedPath;
+      try {
+        downloadedPath = await downloadAndRenameImage(imgUrl, destDir, baseName, property);
+      } catch (e) {
+        console.error(`[ERROR] Failed to download image for ${file} (${property}):`, e.message);
+        continue;
+      }
+      // Upload to ImageKit
+      let imagekitUrl = null;
+      try {
+        // --- Extract tags from frontmatter for ImageKit upload ---
+        // Aggressively commented: tags are extracted from the markdown file's frontmatter
+        const { frontmatter } = parseFrontmatter(file);
+        let tags = [];
+        if (frontmatter.tags) {
+          if (Array.isArray(frontmatter.tags)) {
+            tags = frontmatter.tags;
+          } else if (typeof frontmatter.tags === 'string') {
+            // Handle comma-separated string
+            tags = frontmatter.tags.split(',').map(s => s.trim()).filter(Boolean);
+          }
+        }
+        // --- END tags extraction ---
+        // --- Determine the upload filename: always use .webp extension for ImageKit ---
+        // We always set the fileName to .webp for ImageKit, even if the source is .jpg or .png,
+        // because ImageKit auto-converts to WebP and serves the file as WebP.
+        // This keeps the extension and actual format aligned for clarity and correctness.
+        const localExt = path.extname(downloadedPath).toLowerCase();
+        let baseName = path.basename(downloadedPath, localExt);
+        // --- ENFORCE UNDERSCORE IN PROPERTY NAME IN FILENAME ---
+        // Aggressively ensure the property name is always _portrait_image_ or _banner_image_ in the filename
+        if (property === 'portrait_image') {
+          baseName = baseName.replace(/_portraitimage_/gi, '_portrait_image_');
+        } else if (property === 'banner_image') {
+          baseName = baseName.replace(/_bannerimage_/gi, '_banner_image_');
+        }
+        // If property is missing or not in the filename, append it for safety
+        if (!baseName.includes(`_${property}_`)) {
+          baseName = baseName + `_${property}_`;
+        }
+        let uploadFileName = baseName + '.webp'; // force .webp extension for clarity
+        // --- END upload filename logic ---
+        const uploadResult = await imagekit.upload({
+          file: fs.readFileSync(downloadedPath),
+          fileName: uploadFileName,
+          folder: '/uploads/lossless/prompts/workflow',
+          tags: tags,
+        });
+        imagekitUrl = uploadResult.url;
+        console.log(`[SUCCESS] Uploaded ${downloadedPath} to ImageKit: ${imagekitUrl}`);
+      } catch (e) {
+        console.error(`[ERROR] Failed to upload ${downloadedPath} to ImageKit:`, e.message);
+        // Write imagekit_error_time to frontmatter with timestamp, wrapped in single quotes and curly braces
+        try {
+          const now = new Date().toISOString();
+          const errorValue = `'{${now}}'`;
+          const { frontmatter, body, yaml } = parseFrontmatter(file);
+          frontmatter['imagekit_error_time'] = errorValue;
+          writeFrontmatter(file, frontmatter, body, yaml);
+          console.log(`[INFO] Wrote imagekit_error_time to ${file}`);
+        } catch (err) {
+          console.error(`[ERROR] Failed to write imagekit_error_time in ${file}:`, err.message);
+        }
+        continue;
+      }
+      // Overwrite frontmatter property
+      try {
+        updateFrontmatterProperty(file, property, imagekitUrl);
+        console.log(`[INFO] Updated ${property} in ${file}`);
+      } catch (e) {
+        console.error(`[ERROR] Failed to update frontmatter in ${file}:`, e.message);
+      }
+    }
+  }
+}
+
+// ===============================
+// MAIN: Single image processing logic (optional)
+// ===============================
+async function processSingleImage() {
+  // Not implemented here, but can be adapted from processDirectory if needed
+  // (download, upload, update logic is similar)
+}
+
+// ===============================
+// MAIN ENTRY
+// ===============================
+async function main() {
+  if (PROCESS_DIRECTORY) {
+    await processDirectory();
+  } else if (PROCESS_SINGLE_IMAGE) {
+    await processSingleImage();
+  } else {
+    console.error('[ERROR] Set PROCESS_DIRECTORY or PROCESS_SINGLE_IMAGE to true.');
   }
 }
 
