@@ -35,16 +35,16 @@ try {
 OVERWRITE_IMAGEKIT_URL = false;
 
 const PROCESS_SINGLE_IMAGE = false;
-const SINGLE_IMAGE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/imageRep__North-Sea-of-Data.webp"; // <-- SET YOUR FILE OR DIRECTORY PATH HERE
+const SINGLE_IMAGE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/repImage__Vibe-Coding-Tightrope.webp"; // <-- SET YOUR FILE OR DIRECTORY PATH HERE
 
 const PROCESS_DIRECTORY = true;
-const DIRECTORY_TO_PROCESS = "/Users/mpstaton/code/lossless-monorepo/content/lost-in-public/issue-resolution";
+const DIRECTORY_TO_PROCESS = "/Users/mpstaton/code/lossless-monorepo/content/essays";
 const PROPERTIES_TO_SEND_TO_IMAGEKIT = [
   "portrait_image",
   "banner_image",
 ]
 
-const IMAGE_DOWNLOAD_BASE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/Recraft-Generated/Issue-Resolutions";
+const IMAGE_DOWNLOAD_BASE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/Recraft-Generated/Essays";
 // ===============================
 // Config: Load endpoints and keys from environment
 // ===============================
@@ -425,7 +425,7 @@ async function processDirectory() {
         const uploadResult = await imagekit.upload({
           file: fs.readFileSync(downloadedPath),
           fileName: uploadFileName,
-          folder: '/uploads/lossless/issue-resolutions',
+          folder: '/uploads/lossless/essays',
           tags: tags,
         });
         imagekitUrl = uploadResult.url;
@@ -459,10 +459,62 @@ async function processDirectory() {
 // ===============================
 // MAIN: Single image processing logic (optional)
 // ===============================
+// ===============================
+// MAIN: Single image processing logic (for a single Markdown file)
+// ===============================
+/**
+ * Processes a single Markdown file:
+ *   - For each property in PROPERTIES_TO_SEND_TO_IMAGEKIT,
+ *     - Checks if property exists and if it's already an ImageKit URL
+ *     - Downloads the image, uploads to ImageKit, updates frontmatter
+ *     - Handles errors robustly and writes error timestamps
+ */
+// ===============================
+// MAIN: Single image upload logic (for a single image file, not markdown)
+// ===============================
+/**
+ * Uploads a single image file (not markdown) to ImageKit and prints the resulting CDN URL.
+ * No frontmatter, no markdown parsing—just a direct upload.
+ */
 async function processSingleImage() {
-  // Not implemented here, but can be adapted from processDirectory if needed
-  // (download, upload, update logic is similar)
+  const file = SINGLE_IMAGE_PATH;
+  if (!fs.existsSync(file)) {
+    console.error(`[ERROR] File does not exist: ${file}`);
+    return;
+  }
+  // Only allow image files
+  const allowedExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'];
+  const ext = path.extname(file).toLowerCase();
+  if (!allowedExtensions.includes(ext)) {
+    console.error(`[ERROR] File extension not supported for upload: ${ext}`);
+    return;
+  }
+  // ===============================
+  // Generate a sensible upload filename
+  // ===============================
+  // Use the local filename, but always upload as .webp for consistency (except .svg)
+  let baseName = path.basename(file, ext);
+  let uploadFileName = (ext === '.svg') ? baseName + '.svg' : baseName + '.webp';
+  // ===============================
+  // Upload to ImageKit
+  // ===============================
+  try {
+    const uploadResult = await imagekit.upload({
+      file: fs.readFileSync(file),
+      fileName: uploadFileName,
+      folder: '/uploads/lossless/repImages',
+      tags: [],
+    });
+    const imagekitUrl = uploadResult.url;
+    console.log(`[SUCCESS] Uploaded ${file} to ImageKit: ${imagekitUrl}`);
+    // Print just the URL for easy copy-paste
+    console.log(imagekitUrl);
+  } catch (e) {
+    console.error(`[ERROR] Failed to upload ${file} to ImageKit:`, e.message);
+  }
 }
+
+
 
 // ===============================
 // MAIN ENTRY
