@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import marimo
-__generated_with = "0.1.0"
-app = marimo.App()
+import marimo as mo
+
+__generated_with = "0.13.10"
+app = mo.App()
 
 
 @app.cell
 def _():
-    import marimo as marimo
-    return (marimo,)
-
-@app.cell
-def __():
     import pandas as pd
     import io
     return (pd, io)
@@ -21,27 +17,29 @@ def __():
 @app.cell
 def _():
     # Create a file upload component
-    upload = marimo.ui.file(label="Upload CSV")
-    upload
-    return
+    upload = mo.vstack([mo.ui.file(kind="button"), mo.ui.file(kind="area")])
+    upload_contents = upload.value[0].contents
+    return upload_contents
 
 
 @app.cell
-def _():
-    # Process the uploaded file
-    if upload.value is not None:
-        content = upload.value["content"]
-        filename = upload.value["name"]
-        df = pd.read_csv(io.BytesIO(content))
-        marimo.md(f"Loaded **{filename}** with {len(df)} rows and {len(df.columns)} columns")
+def _(pd, upload_contents):
+    # Process the uploaded file 
+    mo.md(f"Selected file: {upload.value[0].name}")
+    if upload_contents is not None:
+        # Get the file content as bytes
+        content = upload_contents
+        # Use BytesIO to create a file-like object
+        df = pd.read_csv(content)
+        mo.md(f"Loaded CSV with {len(df)} rows and {len(df.columns)} columns")
     else:
         df = pd.DataFrame()
-        marimo.md("Please upload a CSV file")
-    
+        mo.md("Please upload a CSV file")
+
     # Display the dataframe
     if not df.empty:
-        marimo.ui.table(df.head(10))
-    
+        mo.ui.table(df.head(10))
+
     return
 
 
