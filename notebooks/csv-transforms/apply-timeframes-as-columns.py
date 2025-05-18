@@ -17,21 +17,13 @@ def _(f, mo):
     mo.stop(len(f.value) == 0, mo.md("Please upload a CSV file."))
     import polars as pl
     df = pl.read_csv(f.value[0].contents, separator=",")
-    
-    # Display basic info about the dataframe
-    mo.md(f"**Loaded CSV with {df.shape[0]} rows and {df.shape[1]} columns**")
-    mo.md("### Original data:")
-    mo.ui.table(df)
+    df
     return df, pl
 
 
 @app.cell
 def _(df, pl):
-    # Add a month_count column that increments for each row
-    # Using the recommended with_row_index method instead of deprecated with_row_count
     df_with_count = df.with_row_index(name="month_count", offset=1)
-    
-    # Add quarter column based on month
     df_with_quarter = df_with_count.with_columns([
         pl.when(pl.col("month").is_in([1, 2, 3]))
         .then(pl.lit("Q1"))

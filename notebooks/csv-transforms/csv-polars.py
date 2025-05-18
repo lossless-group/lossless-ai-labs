@@ -52,15 +52,12 @@ def _(df, processed_columns):
     return df_clean
 
 @app.cell
-def _(df_clean):
-    # Get marimo for displaying message
-    import marimo as mo
-    
+def _(df_clean, mo):
     # Save the CSV file
-    df_clean.write_csv("transformed_output.csv")
+    df_clean.write_csv("private/data/transformed_output.csv")
     
     # Display a confirmation message
-    mo.md("**Success!** Transformed CSV saved as `transformed_output.csv`")
+    mo.md("**Success!** Transformed CSV saved as `private/data/transformed_output.csv`")
     return
 
 
