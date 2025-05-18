@@ -9,13 +9,13 @@ def cell1():
     # Create the file upload widget and display it
     f = mo.ui.file(kind="button", filetypes=[".csv"])
     f  # This line ensures the button is shown
-    return f, mo
+    return f
 
 @app.cell
-def cell2(f, mo):
+def cell2(f):
+    import marimo as mo
     mo.stop(len(f.value) == 0, mo.md("Please upload a CSV file."))
     import pandas as pd
-    import plotly.express as px
     
     # Read the CSV file
     df = pd.read_csv(f.value[0].contents)
@@ -23,23 +23,33 @@ def cell2(f, mo):
     # Display the dataframe
     mo.md("### Original Data:")
     df
-    return df, px
+    return df
 
 @app.cell
-def cell3(df, px):
+def cell3(df):
     import marimo as mo
-    # Let user select columns for plotting
-    x_column = mo.ui.dropdown(options=df.columns.tolist(), label="X-axis column")
-    y_column = mo.ui.dropdown(options=df.columns.tolist(), label="Y-axis column")
+    import plotly.express as px
+    
+    # Create dropdown elements for column selection
+    x_column = mo.ui.dropdown(
+        options=df.columns.tolist(), 
+        label="X-axis column"
+    )
+    y_column = mo.ui.dropdown(
+        options=df.columns.tolist(), 
+        label="Y-axis column"
+    )
     
     # Display the selection widgets
     mo.md("### Select columns for plotting:")
     mo.hstack([x_column, y_column])
-    return x_column, y_column, df, px
+    
+    return df, x_column, y_column, px
 
 @app.cell
-def cell4(x_column, y_column, df, px):
+def cell4(df, x_column, y_column, px):
     import marimo as mo
+    
     # Only create plot if both columns are selected
     if not x_column.value or not y_column.value:
         mo.md("Please select both X and Y columns to create a plot.")
