@@ -19,7 +19,7 @@ Download:
 1. [MSTY](https://github.com/mysty-ai/mysty)
 2. [Ollama](https://github.com/ollama/ollama)
 
-# YOU WILL NEED YOUR OWN API KEYS
+# YOU WILL NEED YOUR OWN API KEYS for remote LLM services, put in the .env file
 
 1. [Recraft](https://www.recraft.ai/) for **image generation**.
 2. [OpenAI](https://platform.openai.com/) for **text generation**.
@@ -29,11 +29,26 @@ Download:
 6. [Imagekit](https://imagekit.io/) for **image storage**.
 
 ## Optional Tooling
+Packages Include 
 
-### Mermaid Diagram AI Agent
+### Data Analysis Notebooks
+1. [Marimo](https://marimo.ai/) for **Data Analysis Notebooks**.
 
-[Mermaid Diagram AI Agent](https://github.com/disler/mermaid-js-ai-agent?tab=readme-ov-file)
+#### On Data Privacy and NDA/FrienDA.  
+If you're doing data analysis with Marimo or any other tool, make sure you create a `private-data` directory, which is already listed in the `.gitignore` file. This is to ensure that you don't commit any private data to the repository, which we want to default to build-in-public philsophy and practice.
+
+### AI Search with Local LLMs
+1. [Perplexica](https://github.com/ItzCrazyKns/Perplexica) for **AI Search**.
+
+### Diagram AI Agent
+2. [Mermaid Diagram AI Agent](https://github.com/disler/mermaid-js-ai-agent?tab=readme-ov-file)
+
+## On Open Graph Images
+I use [OpenGraph.io](https://opengraph.io/) to generate Open Graph images for the tooling dir. I have been in the process of moving it from script based to Observer/Watcher based, which is in the `tidyverse` submdoule.
 
 # To Run Python Scripts
 `source .venv/bin/activate`
 `python3 ai-labs/apis/recraft/generate-banner-images-recraft.py`
+
+# To Run Node Scripts
+`node ai-labs/apis/imagekit/convertImageToImageKitUrl.js`
