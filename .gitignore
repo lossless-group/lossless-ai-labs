@@ -1,4 +1,6 @@
 
+packages/marimo
+
 node_modules
 
 .venv
