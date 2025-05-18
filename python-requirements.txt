@@ -11,3 +11,4 @@ httpx>=0.25.0
 pandas==2.2.3
 polars==1.29.0
 marimo>=0.13.10
+plotly>=6.1.0
