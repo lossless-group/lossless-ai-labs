@@ -1,5 +1,4 @@
 import marimo
-from typing import Union, Tuple
 
 __generated_with = "0.13.10"
 app = marimo.App(width="medium")
@@ -55,6 +54,8 @@ def _(df, mo, pl):
     # Select and display the results
     display_df = df_final.select([
         "month_count", 
+        "timeframe_id",
+        "month",
         "Total Member", 
         "MoM Growth (%)", 
         "YoY Growth (%)"
@@ -69,7 +70,7 @@ def _(df, mo, pl):
         pagination=True,
     )
 
-    return table
+    return df_final, table
 
 
 @app.cell
@@ -88,24 +89,82 @@ def _(mo, table):
 
 @app.cell
 def _(df):
-    import plotly.graph_objects as pogo
+    import plotly.graph_objects as go
 
     # Hardcode the columns you want to plot
+    x_col_label="timeframe_id"
     x_col = "month_count"  # Make sure these column names exist in your CSV
     y_col = "Total Member"        # Adjust these to match your actual column names
 
     # Create the plot
-    fig = pogo.Figure()
-    fig.add_trace(pogo.Scatter(x=df[x_col], y=df[y_col], name=y_col))
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df[x_col], y=df[y_col], name=y_col))
 
     # Update layout
     fig.update_layout(
-        title=f"{y_col} over {x_col}",
-        xaxis_title=x_col,
+        title=f"{y_col} over {x_col_label}",
+        xaxis_title=x_col_label,
         yaxis_title=y_col
     )
 
     # Display the plot
+    return (go,)
+
+
+@app.cell
+def _(df_final, go, pl):
+    from plotly.subplots import make_subplots
+    import math
+
+    # Filter August data
+    august_data = df_final.filter(
+        (pl.col("timeframe_id").str.ends_with("-8")) |
+        (pl.col("month") == 8)
+    ).sort("month_count")
+
+    # Create subplots with indicator specs
+    n_cols = 4
+    n_rows = math.ceil(len(august_data) / n_cols)
+
+    # Create subplot grid with indicator specs
+    specs = [[{'type': 'indicator'} for _ in range(n_cols)] for _ in range(n_rows)]
+
+    figure2 = make_subplots(
+        rows=n_rows, 
+        cols=n_cols,
+        specs=specs,
+        subplot_titles=[f"Aug {row['month_count']}" for row in august_data.rows(named=True)]
+    )
+
+    # Add indicators
+    for i, row in enumerate(august_data.rows(named=True), 1):
+        row_num = (i - 1) // n_cols + 1
+        col_num = (i - 1) % n_cols + 1
+
+        figure2.add_trace(
+            go.Indicator(
+                mode="number+delta",
+                value=row["Total Member"],
+                delta={
+                    "reference": row["Total Member"] - (row["Total Member"] * (row["MoM Growth (%)"] / 100)),
+                    "valueformat": ".1f",
+                    "suffix": "%",
+                    "increasing": {"color": "green"},
+                    "decreasing": {"color": "red"},
+                },
+                title={"text": f"Aug {row['month_count']}"}
+            ),
+            row=row_num,
+            col=col_num
+        )
+
+    # Update layout
+    figure2.update_layout(
+        title="August Growth Metrics by Year",
+        height=200 * n_rows,  # Adjust height based on number of rows
+        showlegend=False
+    )
+
     return
 
 
