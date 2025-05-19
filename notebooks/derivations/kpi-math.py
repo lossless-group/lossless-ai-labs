@@ -56,6 +56,7 @@ def _(df, mo, pl):
         "month_count", 
         "timeframe_id",
         "month",
+        "year",
         "Total Member", 
         "MoM Growth (%)", 
         "YoY Growth (%)"
@@ -116,56 +117,99 @@ def _(df_final, go, pl):
     from plotly.subplots import make_subplots
     import math
 
-    # Filter August data
+    # Filter August data and remove null values
     august_data = df_final.filter(
-        (pl.col("timeframe_id").str.ends_with("-8")) |
-        (pl.col("month") == 8)
+        ((pl.col("timeframe_id").str.ends_with("-8")) | (pl.col("month") == 8)) &
+        pl.col("Total Member").is_not_null() &
+        pl.col("YoY Growth (%)").is_not_null()
     ).sort("month_count")
 
-    # Create subplots with indicator specs
-    n_cols = 4
-    n_rows = math.ceil(len(august_data) / n_cols)
+    # Calculate grid dimensions
+    n_indicators = len(august_data)
+    n_cols = min(4, n_indicators)  # Max 4 columns
+    n_rows = math.ceil(n_indicators / n_cols)
 
-    # Create subplot grid with indicator specs
-    specs = [[{'type': 'indicator'} for _ in range(n_cols)] for _ in range(n_rows)]
+    # Sort data by year
+    august_data_by_year = august_data.sort("year")
 
+
+    # Create subplot grid
     figure2 = make_subplots(
         rows=n_rows, 
         cols=n_cols,
-        specs=specs,
-        subplot_titles=[f"Aug {row['month_count']}" for row in august_data.rows(named=True)]
+        specs=[[{'type': 'indicator'} for _ in range(n_cols)] for _ in range(n_rows)],
+        vertical_spacing=0.2,
+        horizontal_spacing=0.1
     )
 
+    # Initialize previous values dictionary
+    prev_values = {}
+
     # Add indicators
-    for i, row in enumerate(august_data.rows(named=True), 1):
-        row_num = (i - 1) // n_cols + 1
-        col_num = (i - 1) % n_cols + 1
+    for i, row in enumerate(august_data_by_year.rows(named=True), 1):
+        row_idx = (i - 1) // n_cols + 1
+        col_idx = (i - 1) % n_cols + 1
+
+        current_year = row["year"]
+        current_value = row["Total Member"]
+
+        # Get previous year's value if it exists
+        prev_value = prev_values.get(current_year - 1)
+        
+        # Debug prints
+        print(f"\n--- Year: {current_year} ---")
+        print(f"Current value: {current_value}")
+        print(f"Previous year's value: {prev_value}")
+
+        # Calculate delta if we have a previous value
+        if prev_value is not None and prev_value != 0:
+            growth_rate = (current_value - prev_value) / prev_value
+            print(f"Growth rate: {growth_rate:.2%}")
+            
+            delta_config = {
+                "reference": prev_value,
+                "valueformat": ".1%",
+                "suffix": "",
+                "increasing": {"color": "green"},
+                "decreasing": {"color": "red"},
+                "relative": True  # This will show the relative change as a percentage
+            }
+            mode = "number+delta"
+        else:
+            delta_config = None
+            mode = "number"
 
         figure2.add_trace(
             go.Indicator(
-                mode="number+delta",
-                value=row["Total Member"],
-                delta={
-                    "reference": row["Total Member"] - (row["Total Member"] * (row["MoM Growth (%)"] / 100)),
-                    "valueformat": ".1f",
-                    "suffix": "%",
-                    "increasing": {"color": "green"},
-                    "decreasing": {"color": "red"},
-                },
-                title={"text": f"Aug {row['month_count']}"}
+                mode=mode,
+                value=current_value,
+                delta=delta_config,
+                title={"text": f"Aug {current_year}", "font": {"size": 14}},
+                number={"font": {"size": 16}},
+                domain={
+                    "row": row_idx,
+                    "column": col_idx,
+                    "x": [0, 1],
+                    "y": [0, 1]
+                }
             ),
-            row=row_num,
-            col=col_num
+            row=row_idx,
+            col=col_idx
         )
+
+        # Store current value for next iteration
+        prev_values[current_year] = current_value
 
     # Update layout
     figure2.update_layout(
         title="August Growth Metrics by Year",
-        height=200 * n_rows,  # Adjust height based on number of rows
-        showlegend=False
+        height=250 * n_rows,
+        showlegend=False,
+        margin=dict(l=50, r=50, t=80, b=50),
+        grid=dict(columns=n_cols, pattern="independent")
     )
 
-    return
+    return figure2
 
 
 if __name__ == "__main__":
