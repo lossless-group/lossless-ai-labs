@@ -99,7 +99,13 @@ def _(df):
 
     # Create the plot
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df[x_col], y=df[y_col], name=y_col))
+    fig.add_trace(go.Scatter(
+        x=df[x_col], 
+        y=df[y_col],
+        line=dict(color="#af312e"),
+        name=y_col
+        )
+    )
 
     # Update layout
     fig.update_layout(
@@ -108,12 +114,14 @@ def _(df):
         yaxis_title=y_col
     )
 
+    figure1 = fig
+
     # Display the plot
-    return (go,)
+    return figure1, go
 
 
 @app.cell
-def _(df_final, go, pl):
+def _(df_final, figure1, go, pl):
     from plotly.subplots import make_subplots
     import math
 
@@ -124,23 +132,23 @@ def _(df_final, go, pl):
         pl.col("YoY Growth (%)").is_not_null()
     ).sort("month_count")
 
-    # Calculate grid dimensions
+    # Set up single row layout with all indicators in one row
     n_indicators = len(august_data)
-    n_cols = min(4, n_indicators)  # Max 4 columns
-    n_rows = math.ceil(n_indicators / n_cols)
+    n_cols = n_indicators  # One column per indicator
+    n_rows = 1  # Single row
 
     # Sort data by year
     august_data_by_year = august_data.sort("year")
 
 
-    # Create subplot grid
-    figure2 = make_subplots(
-        rows=n_rows, 
-        cols=n_cols,
-        specs=[[{'type': 'indicator'} for _ in range(n_cols)] for _ in range(n_rows)],
-        vertical_spacing=0.2,
-        horizontal_spacing=0.1
-    )
+    # Create a single figure that will contain both plots
+    combined_figure = go.Figure()
+
+    # Add the main plot (stored in figure1) to our combined figure
+    # We'll add the indicators on top of this plot
+
+    # Calculate positions for indicators (evenly spaced along the top)
+    x_positions = [i/(n_indicators+1) for i in range(1, n_indicators+1)]
 
     # Initialize previous values dictionary
     prev_values = {}
@@ -155,7 +163,7 @@ def _(df_final, go, pl):
 
         # Get previous year's value if it exists
         prev_value = prev_values.get(current_year - 1)
-        
+
         # Debug prints
         print(f"\n--- Year: {current_year} ---")
         print(f"Current value: {current_value}")
@@ -165,7 +173,7 @@ def _(df_final, go, pl):
         if prev_value is not None and prev_value != 0:
             growth_rate = (current_value - prev_value) / prev_value
             print(f"Growth rate: {growth_rate:.2%}")
-            
+
             delta_config = {
                 "reference": prev_value,
                 "valueformat": ".1%",
@@ -179,37 +187,55 @@ def _(df_final, go, pl):
             delta_config = None
             mode = "number"
 
-        figure2.add_trace(
+        # Add indicator on top of the main plot
+        combined_figure.add_trace(
             go.Indicator(
                 mode=mode,
                 value=current_value,
                 delta=delta_config,
                 title={"text": f"Aug {current_year}", "font": {"size": 14}},
-                number={"font": {"size": 16}},
+                number={"font": {"size": 22}},
                 domain={
-                    "row": row_idx,
-                    "column": col_idx,
-                    "x": [0, 1],
-                    "y": [0, 1]
+                    'x': [x_positions[i-1] - 0.4/n_indicators, x_positions[i-1] + 0.4/n_indicators],
+                    'y': [0.8, 1]  # Position at the top of the plot
                 }
-            ),
-            row=row_idx,
-            col=col_idx
+            )
         )
 
         # Store current value for next iteration
         prev_values[current_year] = current_value
-
-    # Update layout
-    figure2.update_layout(
-        title="August Growth Metrics by Year",
-        height=250 * n_rows,
-        showlegend=False,
-        margin=dict(l=50, r=50, t=80, b=50),
-        grid=dict(columns=n_cols, pattern="independent")
+    # Update layout for the combined figure
+    combined_figure.update_layout(
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        showlegend=True,
+        margin=dict(t=100, b=50),
+        title={
+            'text': "Membership Growth with Year-over-Year Comparison",
+            'x': 0.5,
+            'xanchor': 'center',
+            'font': {'size': 20, 'color': '#2c3e50'}
+        },
+        xaxis=dict(
+            showgrid=False,
+            showline=True,
+            linecolor='#bdc3c7',
+            linewidth=2
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor='#ecf0f1',
+            showline=True,
+            linecolor='#bdc3c7',
+            linewidth=2
+        )
     )
 
-    return figure2
+    # Add the main plot (from figure1) to our combined figure
+    # This needs to be done after the indicators to ensure they appear on top
+    combined_figure.add_traces(figure1.data)
+
+    return
 
 
 if __name__ == "__main__":
