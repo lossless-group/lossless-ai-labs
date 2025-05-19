@@ -17,15 +17,16 @@ def _():
 def _(f, mo):
     mo.stop(len(f.value) == 0, mo.md("Please upload a CSV file."))
     import polars as pl
-    df = pl.read_csv(f.value[0].contents, separator=";")
+    df = pl.read_csv(f.value[0].contents, separator=",")
     df
     return df, pl
+
 
 @app.cell
 def _(df, pl):
     # Process each column individually to handle nulls properly
     processed_columns = []
-    
+
     for col in df.columns:
         # Apply string replacement only to non-null values, keep as strings
         processed_col = (
@@ -40,24 +41,26 @@ def _(df, pl):
             .alias(col)
         )
         processed_columns.append(processed_col)
-    return processed_columns
+    return (processed_columns,)
+
 
 @app.cell
 def _(df, processed_columns):
     # Apply all the column transformations
     df_clean = df.with_columns(processed_columns)
-    
+
     # Display the cleaned dataframe
     df_clean
-    return df_clean
+    return (df_clean,)
+
 
 @app.cell
 def _(df_clean, mo):
     # Save the CSV file
-    df_clean.write_csv("private/data/transformed_output.csv")
-    
+    df_clean.write_csv("private-data/transformed_output.csv")
+
     # Display a confirmation message
-    mo.md("**Success!** Transformed CSV saved as `private/data/transformed_output.csv`")
+    mo.md("**Success!** Transformed CSV saved as `private-data/transformed_output.csv`")
     return
 
 
