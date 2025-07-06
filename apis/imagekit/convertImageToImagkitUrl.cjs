@@ -38,9 +38,9 @@ const PROCESS_SINGLE_IMAGE = false;
 const SINGLE_IMAGE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/repImage__Vibe-Coding-Tightrope.webp"; // <-- SET YOUR FILE OR DIRECTORY PATH HERE
 
 const PROCESS_DIRECTORY = true;
-const IMAGE_DOWNLOAD_BASE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/Recraft-Generated/Specs";
-const DIRECTORY_TO_PROCESS = "/Users/mpstaton/code/lossless-monorepo/content/specs";
-const IMAGEKIT_FOLDER = "/uploads/lossless/specs";
+const IMAGE_DOWNLOAD_BASE_PATH = "/Users/mpstaton/code/lossless-monorepo/content/visuals/For/Recraft-Generated/Essays";
+const DIRECTORY_TO_PROCESS = "/Users/mpstaton/code/lossless-monorepo/content/essays";
+const IMAGEKIT_FOLDER = "/uploads/lossless/essays";
 const PROPERTIES_TO_SEND_TO_IMAGEKIT = [
   "portrait_image",
   "banner_image",

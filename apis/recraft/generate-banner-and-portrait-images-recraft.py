@@ -72,7 +72,7 @@ if not RECRAFT_API_TOKEN:
 # Overwrite existing banner_image values in frontmatter? If True, always generate a new image and overwrite. If False, skip files with a non-empty banner_image.
 OVERWRITE = False
 # Directory containing markdown prompt files (recursive search)
-PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/specs')
+PROMPT_DIR = Path('/Users/mpstaton/code/lossless-monorepo/content/essays')
 # Regex for YAML frontmatter (--- ... ---)
 FRONTMATTER_REGEX = re.compile(r'^(---\s*\n.*?\n?)^(---\s*$)', re.DOTALL | re.MULTILINE)
 # Banner/Portrait image run toggles and config
