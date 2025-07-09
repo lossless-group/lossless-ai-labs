@@ -4,4 +4,4 @@
 	branch = main
 [submodule "packages/Perplexica"]
 	path = packages/Perplexica
-	url = https://github.com/ItzCrazyKns/Perplexica.git
+	url = https://github.com/lossless-group/Perplexica--lossless.git
