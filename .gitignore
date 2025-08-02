@@ -1,4 +1,11 @@
 
+__marimo__
+
+private-data
+
+packages/marimo
+packages/Perplexica/docker-compose.yaml
+
 node_modules
 
 config.toml
