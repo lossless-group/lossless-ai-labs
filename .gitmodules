@@ -2,3 +2,6 @@
 	path = packages/mermaid-js-ai-agent
 	url = https://github.com/disler/mermaid-js-ai-agent.git
 	branch = main
+[submodule "packages/perplexica"]
+	path = packages/perplexica
+	url = https://github.com/ItzCrazyKns/Perplexica.git
