@@ -5,3 +5,9 @@
 [submodule "packages/Perplexica"]
 	path = packages/Perplexica
 	url = https://github.com/lossless-group/Perplexica--lossless.git
+[submodule "investment-memo-orchestrator"]
+	path = investment-memo-orchestrator
+	url = https://github.com/lossless-group/investment-memo-orchestrator.git
+[submodule "memopop-ai"]
+	path = memopop-ai
+	url = https://github.com/lossless-group/memopop-ai.git
