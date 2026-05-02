@@ -11,3 +11,6 @@
 [submodule "memopop-ai"]
 	path = memopop-ai
 	url = https://github.com/lossless-group/memopop-ai.git
+[submodule "studies/open-specs-and-standards"]
+	path = studies/open-specs-and-standards
+	url = https://github.com/lossless-group/study-open-specs-and-standards.git

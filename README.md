@@ -38,6 +38,19 @@ Submodule: `investment-memo-orchestrator/` → [lossless-group/investment-memo-o
 AI-powered investment memo generation platform. A Bun monorepo with an Astro marketing site, SvelteKit web app, and Python agent orchestrator.
 Submodule: `memopop-ai/` → [lossless-group/memopop-ai](https://github.com/lossless-group/memopop-ai)
 
+## Studies
+
+### Open Specs & Standards
+A reading collection of open specifications and conventions for human + AI agent cooperation through files — `AGENTS.md`, `SKILL.md`, `llms.txt`, `DESIGN.md`, MCP, A2A, OpenSpec, Spec Kit, 12-Factor Agents, and Frictionless Data. Each upstream is pinned as a nested submodule so we can study real implementations side by side.
+
+**Why:** every one of our agentic workflows ends up needing a file convention — for context, design tokens, skills, or data shape. Rather than reinvent, we want to learn what's already converging.
+
+**Why it's cool:** it's a single repo where the "specs" are the actual upstream code, not paraphrased summaries. You can `cd` into any of them and grep their build pipeline, parsers, or schema generators.
+
+Submodule: `studies/open-specs-and-standards/` → [lossless-group/study-open-specs-and-standards](https://github.com/lossless-group/study-open-specs-and-standards)
+
+> Note: this submodule has its own nested submodules. To pull all the way through, clone with `git clone --recurse-submodules` or run `git submodule update --init --recursive` after cloning.
+
 ## Optional Tooling
 Packages Include
 
