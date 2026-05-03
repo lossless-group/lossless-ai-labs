@@ -14,3 +14,6 @@
 [submodule "studies/open-specs-and-standards"]
 	path = studies/open-specs-and-standards
 	url = https://github.com/lossless-group/study-open-specs-and-standards.git
+[submodule "studies/memory-layers-for-agents"]
+	path = studies/memory-layers-for-agents
+	url = https://github.com/lossless-group/study-memory-layers-for-agents.git
