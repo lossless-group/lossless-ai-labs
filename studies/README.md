@@ -92,3 +92,10 @@ re-derived. The study is the project's institutional memory for that domain.
 - [open-specs-and-standards](./open-specs-and-standards) — what conventions
   have converged for human + AI agent cooperation through files
   (`AGENTS.md`, `SKILL.md`, `llms.txt`, `DESIGN.md`, MCP, A2A, etc).
+- [memory-layers-for-agents](./memory-layers-for-agents) — how production
+  memory systems for AI agents structure recall across vector / graph / KV
+  stores, scopes, and serialization (Mem0, Neo, StateBench, …).
+- [data-analytics-specifications-and-standards](./data-analytics-specifications-and-standards)
+  — open, machine-validatable specs across the analytics stack: dataset
+  descriptors, columnar storage, in-memory formats, and grammars of
+  graphics (Data Package, Parquet, Arrow, Vega-Lite, Plot, ggsql).
