@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "chroma": {
+      "command": "uvx",
+      "args": [
+        "chroma-mcp",
+        "--client-type",
+        "persistent",
+        "--data-dir",
+        "/Users/mpstaton/code/lossless-monorepo/ai-labs/context-vigilance-kit/.chroma"
+      ]
+    }
+  }
+}

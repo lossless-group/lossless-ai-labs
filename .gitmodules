@@ -4,4 +4,20 @@
 	branch = main
 [submodule "packages/Perplexica"]
 	path = packages/Perplexica
-	url = https://github.com/ItzCrazyKns/Perplexica.git
+	url = https://github.com/lossless-group/Perplexica--lossless.git
+[submodule "memopop-ai"]
+	path = memopop-ai
+	url = https://github.com/lossless-group/memopop-ai.git
+[submodule "studies/open-specs-and-standards"]
+	path = studies/open-specs-and-standards
+	url = https://github.com/lossless-group/study-open-specs-and-standards.git
+[submodule "studies/memory-layers-for-agents"]
+	path = studies/memory-layers-for-agents
+	url = https://github.com/lossless-group/study-memory-layers-for-agents.git
+[submodule "studies/data-analytics-specifications-and-standards"]
+	path = studies/data-analytics-specifications-and-standards
+	url = https://github.com/lossless-group/study-data-analytics-specifications-and-standards.git
+[submodule "context-vigilance-kit"]
+	path = context-vigilance-kit
+	url = https://github.com/lossless-group/context-vigilance-kit.git
+	branch = development
