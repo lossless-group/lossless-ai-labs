@@ -21,3 +21,7 @@
 	path = context-vigilance-kit
 	url = https://github.com/lossless-group/context-vigilance-kit.git
 	branch = development
+[submodule "dididecks-ai"]
+	path = dididecks-ai
+	url = https://github.com/lossless-group/dididecks-ai.git
+	branch = development
