@@ -36,28 +36,54 @@ export interface OgImage {
   type: 'image/jpeg' | 'image/png';
   /** One-sentence descriptive alt text — required for OG + accessibility. */
   alt: string;
-  /** Aspect-key from DESIGN.md's imagery.aspect_ratios enum. */
-  aspect: 'banner' | 'banner_tall' | 'banner_tall_max' | 'portrait' | 'portrait_tall' | 'square';
+  /** Aspect-key from DESIGN.md's imagery.aspect_ratios enum. The `messages`
+   *  key is for the chat-preview-first share image (square-ish landscape
+   *  sized for how iMessage and WhatsApp crop unfurl cards). */
+  aspect: 'banner' | 'banner_tall' | 'banner_tall_max' | 'portrait' | 'portrait_tall' | 'square' | 'messages';
 }
+
+/**
+ * The Messages-format share card. 890×760 — a square-ish landscape sized
+ * for how iMessage and WhatsApp crop unfurl previews. Real JPEG bytes
+ * (verified: magic FF D8 FF) so the bytes/MIME/URL agreement holds even
+ * with ImageKit in front (no WebP content-negotiation surprise here).
+ *
+ * This is the canonical share image — set as DEFAULT_OG_IMAGE so every
+ * page emits it in the og:image sextet. Per-page overrides for other
+ * aspects can still pull from OG_IMAGES below.
+ */
+export const MESSAGES_OG_IMAGE: OgImage = {
+  file: 'ogimage__Lossless-AI-Labs--Messages.jpg',
+  width: 890,
+  height: 760,
+  type: 'image/jpeg',
+  alt: 'Lossless AI-Labs share card sized for chat-preview unfurls (iMessage, WhatsApp, Slack, Discord).',
+  aspect: 'messages',
+};
 
 /**
  * The canonical share image. One og:image sextet is what most unfurlers
  * actually read; additional formats below are available for per-page
- * overrides (e.g., a tall image when the share target is chat-preview-first).
+ * overrides (e.g., a portrait image when the share target is feed-first).
+ *
+ * Primary is the Messages-format card because chat-preview is the actual
+ * surface most readers will see the splash through first — iMessage,
+ * WhatsApp, Slack, Discord all do well with square-ish landscape.
  */
-export const DEFAULT_OG_IMAGE: OgImage = {
-  file: 'ogimage__AI-Labs--Default.png',
-  width: 1312,
-  height: 736,
-  type: 'image/jpeg',
-  alt: 'Three small isometric instrument modules in a row on a dark matte bench surface — Lossless AI-Labs share image.',
-  aspect: 'banner',
-};
+export const DEFAULT_OG_IMAGE: OgImage = MESSAGES_OG_IMAGE;
 
 /** Full set of generated formats, indexed by aspect-key. Per-page overrides
- *  (e.g., a chat-preview-first share) can pull from here. */
+ *  (e.g., a portrait share for LinkedIn feed) can pull from here. */
 export const OG_IMAGES: Record<OgImage['aspect'], OgImage> = {
-  banner: DEFAULT_OG_IMAGE,
+  messages: MESSAGES_OG_IMAGE,
+  banner: {
+    file: 'ogimage__AI-Labs--Banner.jpg',
+    width: 1312,
+    height: 736,
+    type: 'image/jpeg',
+    alt: 'Three small isometric instrument modules in a row on a dark matte bench surface — Lossless AI-Labs share image.',
+    aspect: 'banner',
+  },
   banner_tall: {
     file: 'ogimage__AI-Labs--BannerTall.jpg',
     width: 864,
