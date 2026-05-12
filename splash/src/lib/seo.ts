@@ -21,8 +21,9 @@ export const SITE_NAME = 'Lossless AI-Labs';
 
 /** Override to point share imagery at a CDN. When this is empty, image URLs
  *  are built from Astro.site + BASE_URL (i.e., served from the splash's own
- *  /public/). Example value when migrating: 'https://ik.imagekit.io/lossless'. */
-export const OG_IMAGE_HOST = '';
+ *  /public/). ImageKit content-negotiates format, so the URL extension may
+ *  not match the bytes — `type` on each OgImage must match what's served. */
+export const OG_IMAGE_HOST = 'https://ik.imagekit.io/xvpgfijuw/Lossless-AI-Labs';
 
 export interface OgImage {
   /** Filename inside public/ (no leading slash). */
@@ -45,7 +46,7 @@ export interface OgImage {
  * overrides (e.g., a tall image when the share target is chat-preview-first).
  */
 export const DEFAULT_OG_IMAGE: OgImage = {
-  file: 'ogimage__AI-Labs--Banner.jpg',
+  file: 'ogimage__AI-Labs--Default.png',
   width: 1312,
   height: 736,
   type: 'image/jpeg',

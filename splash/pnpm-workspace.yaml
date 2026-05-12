@@ -1,0 +1,25 @@
+# Splash is its own self-contained Astro app — it isn't a workspace root
+# with member packages. The empty `packages` list is required by pnpm 10's
+# schema whenever this file exists; without it, `pnpm <script>` errors with
+# "packages field missing or empty" because pnpm tries to read workspace
+# config and fails.
+#
+# Why keep the file at all (vs. deleting it):
+#   1. Its presence stops pnpm from ascending into the parent ai-labs/
+#      pnpm-workspace.yaml — the splash is intentionally NOT a member of
+#      the parent workspace. This is the "splash deploys from GitHub Pages
+#      on its own" discipline: the build runs in isolation, with its own
+#      pnpm-lock.yaml, against this file.
+#   2. The `onlyBuiltDependencies` allowlist below approves esbuild and
+#      sharp install scripts so CI runs them non-interactively (pnpm 10
+#      otherwise prompts).
+#
+# Matches the canonical lfm/splash pattern. See `maintain-splash-pages` skill
+# for the Locked conventions ("Splash installs deps independently" + the
+# `pnpm install --ignore-workspace` requirement in CI and local dev).
+
+packages: []
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
