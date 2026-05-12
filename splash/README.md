@@ -77,8 +77,11 @@ the three-mode tokens via CSS-variable overrides. Search index only
 exists after `pnpm build` — `pnpm dev` shows the box with a missing-state
 message (run `pnpm build && pnpm preview` to exercise search locally).
 
-The `/llms.txt` + `/llms-full.txt` endpoints remain a gap versus the
-full convention — mechanical port from the children when prioritized.
-Sort controls on list pages are the third gap. Neither is a deploy
-blocker. The build target ("pnpm build succeeds from a clean clone") is
-met.
+`/llms.txt` + `/llms-full.txt` endpoints are wired — `src/pages/*.txt.ts`
+are dumb assemblers that read prose templates from `src/llms/*.md` and
+substitute `{{TOKEN}}` placeholders for counts, URLs, and the rolled-up
+corpus. Edit the markdown templates (not the TypeScript) to tweak voice.
+SortControls landed earlier — Modified / Created / Published / Title
+chips with per-page localStorage persistence. The build target
+("pnpm build succeeds from a clean clone") is met and the full
+maintain-splash-pages skill convention is now satisfied.

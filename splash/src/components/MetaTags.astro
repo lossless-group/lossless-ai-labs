@@ -34,6 +34,15 @@ const imageUrl = ogImageUrl(image, Astro.site, base);
 {/* Sitemap discovery — per @astrojs/sitemap + open-graph-share-seo-geo SM-3 */}
 <link rel="sitemap" type="application/xml" href={`${base}sitemap-index.xml`} />
 
+{/* llms.txt discovery — rel="alternate" type="text/markdown" lets tools
+    that look in <head> find the LLM-facing corpus without parsing robots. */}
+<link
+  rel="alternate"
+  type="text/markdown"
+  href={`${base}llms.txt`}
+  title="llms.txt for this site"
+/>
+
 {/* OpenGraph — the full image-meta sextet per open-graph-share-seo-geo Rule #5.
     Width/height/type match the actual bytes the unfurler downloads (Rule #3). */}
 <meta property="og:type" content="website" />
