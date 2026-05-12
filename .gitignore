@@ -17,5 +17,9 @@ venv
 .env
 
 pnpm-lock.yaml
+# The splash needs a committed lockfile for reproducible CI builds — the
+# Pages workflow caches by splash/pnpm-lock.yaml. Override the global
+# ignore so this one file rides along.
+!splash/pnpm-lock.yaml
 
 .chroma/
