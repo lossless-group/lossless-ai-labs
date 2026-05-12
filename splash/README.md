@@ -1,7 +1,7 @@
 # ai-labs splash
 
 GitHub Pages splash for the `ai-labs` pseudomonorepo.
-Live target: `https://lossless-group.github.io/ai-labs/`.
+Live target: `https://lossless-group.github.io/lossless-ai-labs/`.
 
 ## Local dev
 
@@ -9,7 +9,7 @@ Live target: `https://lossless-group.github.io/ai-labs/`.
 pnpm install --ignore-workspace
 pnpm rollup:sync                  # one-shot — reads from sibling submodules
 pnpm dev
-# visit http://localhost:4321/ai-labs/
+# visit http://localhost:4321/lossless-ai-labs/
 ```
 
 `--ignore-workspace` is required because the parent (`ai-labs/`) workspace
@@ -63,6 +63,13 @@ See `src/styles/theme.css` for the full token surface.
 
 ## Status
 
-First-pass scaffold. Pagefind search and a `.github/workflows/pages.yml`
-will follow in the next iteration; the build target ("pnpm build succeeds
-from a clean clone") is met.
+Pages deploy is wired (`.github/workflows/pages.yml` at the repo root) —
+push to `master`/`main`/`development` triggers a build of `splash/` and a
+deploy to `https://lossless-group.github.io/lossless-ai-labs/`. The
+`actions/configure-pages@v5` step uses `enablement: true` so the workflow
+bootstraps Pages on first run.
+
+Pagefind search and `/llms.txt` + `/llms-full.txt` endpoints are the
+remaining gaps versus the `maintain-splash-pages` skill's full convention
+— follow-ups, not deploy blockers. The build target ("pnpm build
+succeeds from a clean clone") is met.

@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://lossless-group.github.io',
-  base: '/ai-labs/',
+  base: '/lossless-ai-labs/',
   trailingSlash: 'ignore',
 
   integrations: [

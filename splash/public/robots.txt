@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lossless-group.github.io/ai-labs/sitemap-index.xml
+Sitemap: https://lossless-group.github.io/lossless-ai-labs/sitemap-index.xml

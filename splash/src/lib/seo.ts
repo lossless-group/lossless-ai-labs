@@ -15,8 +15,8 @@
 export const SITE_TITLE = 'Lossless AI-Labs · applied AI testbed';
 export const SITE_DESCRIPTION =
   'Applied AI testbed becoming home to core products. Currently housing Context Vigilance, MemoPop AI, and DidiDecks AI inside The Lossless Group\'s ai-labs pseudomonorepo.';
-export const SITE_URL = 'https://lossless-group.github.io/ai-labs/';
-export const SITE_REPO = 'https://github.com/lossless-group/ai-labs';
+export const SITE_URL = 'https://lossless-group.github.io/lossless-ai-labs/';
+export const SITE_REPO = 'https://github.com/lossless-group/lossless-ai-labs';
 export const SITE_NAME = 'Lossless AI-Labs';
 
 /** Override to point share imagery at a CDN. When this is empty, image URLs
