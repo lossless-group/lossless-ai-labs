@@ -1,0 +1,189 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { toDate, formatDate, isoDate } from '@lib/date';
+
+const base = import.meta.env.BASE_URL;
+
+const all = await getCollection('context-v');
+
+/** Bucket each entry by its subdirectory (specs / explorations / plans / …).
+ *  Use the `from_path` if present (provides the leading segment), else parse
+ *  it out of the entry id itself. */
+function sectionOf(entry: { id: string; data: any }): string {
+  const path = (entry.data.from_path as string | undefined) ?? entry.id;
+  const segs = path.split('/').filter(Boolean);
+  // For rolled-up entries the layout is `<child>/<section>/...`
+  // For parent-authored entries the id is `<section>/<filename>` directly.
+  // Heuristic: pick the first segment that's a known section, else the first.
+  const known = new Set(['specs', 'explorations', 'plans', 'prompts', 'blueprints', 'reminders', 'issues', 'issue-resolution', 'strategy', 'sitemap', 'changelogs']);
+  for (const s of segs) if (known.has(s)) return s;
+  return segs[0] ?? 'misc';
+}
+
+const grouped = new Map<string, typeof all>();
+for (const entry of all) {
+  const sec = sectionOf(entry);
+  if (!grouped.has(sec)) grouped.set(sec, []);
+  grouped.get(sec)!.push(entry);
+}
+
+// Sort sections in a familiar order.
+const SECTION_ORDER = ['specs', 'explorations', 'plans', 'prompts', 'blueprints', 'reminders', 'issues', 'issue-resolution', 'strategy', 'sitemap', 'changelogs'];
+const sections = [...grouped.entries()].sort(([a], [b]) => {
+  const ai = SECTION_ORDER.indexOf(a);
+  const bi = SECTION_ORDER.indexOf(b);
+  if (ai === -1 && bi === -1) return a.localeCompare(b);
+  if (ai === -1) return 1;
+  if (bi === -1) return -1;
+  return ai - bi;
+});
+
+// Within each section, sort by modified date desc.
+for (const [, items] of sections) {
+  items.sort((a, b) => {
+    const at = toDate(a.data.date_modified ?? a.data.date_created)?.getTime() ?? 0;
+    const bt = toDate(b.data.date_modified ?? b.data.date_created)?.getTime() ?? 0;
+    return bt - at;
+  });
+}
+---
+<BaseLayout title="Context-V">
+  <section>
+    <div class="container">
+      <p class="eyebrow">ch · context-v</p>
+      <h1>Context-V</h1>
+      <p class="lede">Specs, explorations, plans, prompts, and reminders across the ai-labs tree. Parent-authored docs live alongside the rolled-up child docs; provenance is on every card.</p>
+
+      <p class="counts">
+        {sections.map(([sec, items], i) => (
+          <span class="counts__item">
+            <span class="counts__name">{sec}</span>
+            <span class="counts__n">{items.length}</span>
+          </span>
+        ))}
+      </p>
+
+      {sections.map(([sec, items]) => (
+        <div class="section-block">
+          <h2 id={sec} class="section-block__head">
+            <span class="section-block__name">{sec}</span>
+            <span class="section-block__count">{items.length}</span>
+          </h2>
+          <ul class="entry-list" aria-label={`${sec} entries`}>
+            {items.map((entry) => {
+              const from = entry.data.from ?? 'ai-labs';
+              const when = toDate(entry.data.date_modified ?? entry.data.date_created);
+              return (
+                <li class="entry-list__item">
+                  <a class="entry-list__link" href={`${base}context-v/${entry.id}/`}>
+                    <header class="entry-list__head">
+                      <span class="pill pill--accent">{from}</span>
+                      {when && <time class="entry-list__time" datetime={isoDate(when)}>{formatDate(when)}</time>}
+                    </header>
+                    <h3 class="entry-list__title">{entry.data.title ?? entry.id}</h3>
+                    {entry.data.lede && <p class="entry-list__lede">{entry.data.lede}</p>}
+                    {entry.data.tags && entry.data.tags.length > 0 && (
+                      <ul class="tags" aria-label="Tags">
+                        {entry.data.tags.map((t) => <li class="chip">{t}</li>)}
+                      </ul>
+                    )}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .counts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: var(--space-6) 0 var(--space-12);
+    font-family: var(--font__mono);
+    font-size: 0.78rem;
+  }
+  .counts__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 4px 10px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+  .counts__name { color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+  .counts__n { color: var(--color-accent); }
+
+  .section-block { margin-bottom: var(--space-12); }
+  .section-block__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-3);
+  }
+  .section-block__name {
+    font-family: var(--font__display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 1rem;
+    color: var(--color-text);
+  }
+  .section-block__count {
+    font-family: var(--font__mono);
+    font-size: 0.78rem;
+    color: var(--color-text-faint);
+  }
+
+  .entry-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-3);
+  }
+  .entry-list__link {
+    display: block;
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    transition: border-color var(--transition-fast);
+  }
+  .entry-list__link:hover { border-color: var(--color-border-strong); }
+  .entry-list__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .entry-list__time {
+    font-family: var(--font__mono);
+    font-size: 0.72rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.06em;
+  }
+  .entry-list__title {
+    font-family: var(--font__display);
+    font-size: 1.05rem;
+    margin: 0 0 var(--space-2);
+    color: var(--color-text);
+  }
+  .entry-list__lede {
+    color: var(--color-text-soft);
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

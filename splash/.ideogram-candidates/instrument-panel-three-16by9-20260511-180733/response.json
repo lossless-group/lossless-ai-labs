@@ -1,0 +1,14 @@
+{
+  "created": "2026-05-11T23:07:33.771376+00:00",
+  "data": [
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty negative space, dark gradient sky. Bottom 2/3 contains an isometric instrument panel with three labelled module faces aligned in a row on a bench surface.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "REALISTIC",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/S0K1wQxXXP-SpO1khC5IbA.png?exp=1778627262&sig=010ee88d81aab8bb56643ceb65d4a8cd17f3c38eb9a19a67a97f11b30f34793d"
+    }
+  ]
+}

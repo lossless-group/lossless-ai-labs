@@ -1,0 +1,344 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { toDate } from '@lib/date';
+
+const base = import.meta.env.BASE_URL;
+
+// Product roster — curated cards.
+const products = (await getCollection('product-highlights'))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+// Activity counts — drive the meta-strip.
+const changelogAll = await getCollection('changelog');
+const contextVAll = await getCollection('context-v');
+
+const childSlugs = ['context-vigilance-kit', 'memopop-ai', 'dididecks-ai'] as const;
+const activeCount = childSlugs.length;
+
+// Latest 3 changelog entries across the whole tree — for the hero side.
+const latestEntries = [...changelogAll]
+  .map((e) => ({ ...e, _t: toDate(e.data.date_modified ?? e.data.date_created ?? e.data.date)?.getTime() ?? 0 }))
+  .sort((a, b) => b._t - a._t)
+  .slice(0, 3);
+
+const graduated = [
+  { name: 'Content Farm',                 href: 'https://github.com/lossless-group/content-farm',      note: 'Obsidian multi-plugin suite' },
+  { name: 'image-gin',                    href: 'https://github.com/lossless-group/image-gin',         note: 'AI image-gen plugin' },
+  { name: 'lossless-skills',              href: 'https://github.com/lossless-group/lossless-skills',   note: 'agent-skills home' },
+  { name: 'investment-memo-orchestrator', href: 'https://github.com/lossless-group/investment-memo-orchestrator', note: 'now MemoPop backend' },
+];
+---
+<BaseLayout>
+  <section class="hero">
+    <div class="container split split--hero">
+      <div class="hero__pitch">
+        <p class="eyebrow">ch.01 · ai-labs</p>
+        <h1>
+          Applied AI <span class="gradient-text">testbed</span><br/>
+          becoming home to core products.
+        </h1>
+        <p class="lede">
+          The Lossless Group's pseudomonorepo for AI experiments graduating into real
+          products. Currently housing three active builds; earlier strands have already
+          shipped elsewhere.
+        </p>
+        <ul class="meta-strip" role="list">
+          <li><strong>{activeCount}</strong>&nbsp;active</li>
+          <li><strong>{graduated.length}</strong>&nbsp;graduated</li>
+          <li><strong>{changelogAll.length}</strong>&nbsp;changelog entries</li>
+          <li><strong>{contextVAll.length}</strong>&nbsp;context-v docs</li>
+        </ul>
+      </div>
+
+      <aside class="hero__readout" aria-label="Recent activity">
+        <header class="hero__readout-head">
+          <span class="eyebrow">recent · rolled up</span>
+          <a class="hero__readout-link" href={`${base}changelog/`}>full feed →</a>
+        </header>
+        <ul class="hero__readout-list">
+          {latestEntries.map((entry) => {
+            const from = entry.data.from ?? 'ai-labs';
+            const when = toDate(entry.data.date_modified ?? entry.data.date_created ?? entry.data.date);
+            const stamp = when ? when.toISOString().slice(0, 10) : '';
+            return (
+              <li class="hero__readout-row">
+                <a href={`${base}changelog/${entry.id}/`}>
+                  <span class="hero__readout-from">{from}</span>
+                  <span class="hero__readout-title">{entry.data.title ?? entry.id}</span>
+                  <span class="hero__readout-stamp">{stamp}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section id="products">
+    <div class="container">
+      <p class="eyebrow">ch.02 · active builds</p>
+      <h2>Currently housing.</h2>
+      <p class="lede">Three children. Each on its own three-tier branches; each rolls
+      its <code>changelog/</code> and <code>context-v/</code> up to this surface.</p>
+      <div class="grid grid--products">
+        {products.map((p) => (
+          <article class="bench-card">
+            <span class="bench-card__label">{p.data.label ?? 'project'}</span>
+            <span class="bench-card__status">
+              <span class="pill pill--accent">{p.data.status ?? 'active'}</span>
+            </span>
+            <div class="bench-card__body">
+              <h3>{p.data.title}</h3>
+              <p>{p.data.lede}</p>
+              {p.data.tags && p.data.tags.length > 0 && (
+                <ul class="tags" aria-label="Tags">
+                  {p.data.tags.map((t) => <li class="chip">{t}</li>)}
+                </ul>
+              )}
+              <p class="bench-card__links">
+                {p.data.repo && <a href={p.data.repo}>repo →</a>}
+                {p.data.slug && (
+                  <a href={`${base}context-v/?from=${p.data.slug}`} class="bench-card__links-sep">context-v</a>
+                )}
+                {p.data.slug && (
+                  <a href={`${base}changelog/?from=${p.data.slug}`} class="bench-card__links-sep">changelog</a>
+                )}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="eyebrow">ch.03 · graduated</p>
+      <h2>Earlier work, in its own home.</h2>
+      <p class="lede">Strands that started in this tree and now live elsewhere.</p>
+      <ul class="graduated-strip">
+        {graduated.map((g) => (
+          <li>
+            <a href={g.href} class="graduated-strip__item">
+              <span class="graduated-strip__name">{g.name}</span>
+              <span class="graduated-strip__note">{g.note}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="eyebrow">ch.04 · discipline</p>
+      <h2>How children talk to the parent.</h2>
+      <div class="grid grid--discipline">
+        <article class="bench-card">
+          <span class="bench-card__label">context-v</span>
+          <div class="bench-card__body">
+            <h3>Specs · explorations · plans · reminders</h3>
+            <p>Every child carries the same six-folder shape. The parent owns cross-cutting documents that span more than one child.</p>
+          </div>
+        </article>
+        <article class="bench-card">
+          <span class="bench-card__label">changelog</span>
+          <div class="bench-card__body">
+            <h3>Narrative ship notes</h3>
+            <p>Structural changes — submodule moves, monorepo corrections, new children — land as parent-level entries. Feature ships live in each child's own changelog.</p>
+          </div>
+        </article>
+        <article class="bench-card">
+          <span class="bench-card__label">branches</span>
+          <div class="bench-card__body">
+            <h3>development → main → master</h3>
+            <p>Three tiers at parity per the pseudomonorepos discipline. <code>branch =</code> on every <code>.gitmodules</code> entry. Parent gitlinks tidied deliberately, not auto-bumped.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="eyebrow">ch.05 · studies</p>
+      <h2>Pinned reading, not paraphrase.</h2>
+      <p class="lede">Each study scopes one domain question and pins upstream code as nested submodules. We read from the pinned source, not from training data.</p>
+      <div class="grid grid--studies">
+        <article class="bench-card">
+          <span class="bench-card__label">study · 01</span>
+          <div class="bench-card__body">
+            <h3>Open Specs &amp; Standards</h3>
+            <p>Which file conventions have converged for human + agent cooperation?</p>
+            <p class="bench-card__refs"><code>AGENTS.md</code> · <code>SKILL.md</code> · <code>llms.txt</code> · MCP · A2A · OpenSpec · Spec Kit</p>
+          </div>
+        </article>
+        <article class="bench-card">
+          <span class="bench-card__label">study · 02</span>
+          <div class="bench-card__body">
+            <h3>Memory Layers for Agents</h3>
+            <p>How do production memory systems decide what to remember, when to update, and at what scope?</p>
+            <p class="bench-card__refs">Mem0 · neo · StateBench</p>
+          </div>
+        </article>
+        <article class="bench-card">
+          <span class="bench-card__label">study · 03</span>
+          <div class="bench-card__body">
+            <h3>Data-Analytics Specs &amp; Standards</h3>
+            <p>Which machine-validatable specs converge across the analytics stack?</p>
+            <p class="bench-card__refs">Data Package · Parquet · Arrow · Vega-Lite · Plot · ggsql</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: var(--space-20) 0 var(--space-16);
+  }
+  .hero__pitch h1 {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .hero__pitch .lede {
+    margin-bottom: var(--space-8);
+  }
+  .meta-strip { list-style: none; }
+  .meta-strip li { margin: 0; }
+
+  /* Hero readout — a roster-style aside on the right. */
+  .hero__readout {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    align-self: start;
+  }
+  .hero__readout-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .hero__readout-link {
+    font-family: var(--font__mono);
+    font-size: 0.74rem;
+    color: var(--color-text-dim);
+    border-bottom: none;
+  }
+  .hero__readout-link:hover { color: var(--color-accent); }
+
+  .hero__readout-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero__readout-row a {
+    display: grid;
+    grid-template-columns: 7rem 1fr auto;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding: var(--space-3) var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-soft);
+    border-bottom-color: var(--color-border);
+  }
+  .hero__readout-row:last-child a { border-bottom: 0; }
+  .hero__readout-row a:hover {
+    background: var(--color-bg-elevated);
+    color: var(--color-text);
+    border-bottom-color: var(--color-border);
+  }
+  .hero__readout-from {
+    font-family: var(--font__mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .hero__readout-title {
+    font-size: 0.92rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .hero__readout-stamp {
+    font-family: var(--font__mono);
+    font-size: 0.7rem;
+    color: var(--color-text-faint);
+  }
+
+  /* Product roster */
+  .grid--products  { grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+  .grid--discipline { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .grid--studies   { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+
+  .bench-card__links {
+    margin-top: var(--space-4);
+    font-family: var(--font__mono);
+    font-size: 0.78rem;
+    color: var(--color-text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .bench-card__links a { color: var(--color-thread); border-bottom: none; }
+  .bench-card__links a:hover { color: var(--color-accent); }
+  .bench-card__links-sep { position: relative; padding-left: calc(var(--space-3) + 6px); }
+  .bench-card__links-sep::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--color-text-faint);
+  }
+  .bench-card__refs {
+    font-family: var(--font__mono);
+    font-size: 0.78rem;
+    color: var(--color-text-dim);
+    margin-top: var(--space-3);
+  }
+
+  /* Graduated strip — single-line cards */
+  .graduated-strip {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  .graduated-strip__item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-card);
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .graduated-strip__item:hover {
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+  }
+  .graduated-strip__name {
+    font-family: var(--font__display);
+    font-size: 1rem;
+    color: var(--color-text);
+  }
+  .graduated-strip__note {
+    font-family: var(--font__mono);
+    font-size: 0.74rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.04em;
+  }
+</style>

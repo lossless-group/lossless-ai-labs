@@ -1,0 +1,85 @@
+---
+import ModeToggle from './ModeToggle.astro';
+
+const base = import.meta.env.BASE_URL;
+const links = [
+  { href: `${base}#products`,   label: 'Products' },
+  { href: `${base}changelog/`,  label: 'Changelog' },
+  { href: `${base}context-v/`,  label: 'Context-V' },
+];
+---
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href={base} aria-label="ai-labs home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22">
+          <rect x="1.5" y="1.5" width="21" height="21" rx="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+          <circle cx="7"  cy="7"  r="2" fill="var(--color-accent)"/>
+          <circle cx="17" cy="12" r="2" fill="var(--color-thread)"/>
+          <circle cx="12" cy="17" r="2" fill="var(--color-signal)"/>
+          <line x1="7"  y1="7"  x2="17" y2="12" stroke="var(--color-accent)" stroke-width="1" opacity="0.5"/>
+          <line x1="17" y1="12" x2="12" y2="17" stroke="var(--color-thread)" stroke-width="1" opacity="0.5"/>
+        </svg>
+      </span>
+      <span class="brand-name">
+        <span class="brand-name__lossless">Lossless</span><span class="brand-name__sep">/</span><span class="brand-name__labs">ai-labs</span>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <div class="site-header__actions">
+      <ModeToggle />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(10px);
+    background: color-mix(in oklab, var(--color-bg) 80%, transparent);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    height: 64px;
+  }
+  .site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text);
+    font-family: var(--font__mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    border-bottom: none;
+  }
+  .site-header__brand:hover { color: var(--color-accent); border-bottom: none; }
+  .brand-mark { display: inline-flex; color: var(--color-text-dim); }
+  .brand-name__lossless { color: var(--color-text-soft); }
+  .brand-name__sep { color: var(--color-text-faint); margin: 0 2px; }
+  .brand-name__labs { color: var(--color-accent); }
+
+  .site-nav {
+    display: none;
+    gap: var(--space-6);
+    font-family: var(--font__mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+  }
+  @media (min-width: 44rem) { .site-nav { display: inline-flex; } }
+  .site-nav a {
+    color: var(--color-text-dim);
+    border-bottom: none;
+    text-transform: lowercase;
+  }
+  .site-nav a:hover { color: var(--color-text); }
+
+  .site-header__actions { display: inline-flex; align-items: center; gap: var(--space-3); }
+</style>

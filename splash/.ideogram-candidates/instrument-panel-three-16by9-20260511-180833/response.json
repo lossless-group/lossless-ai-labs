@@ -1,0 +1,41 @@
+{
+  "created": "2026-05-11T23:08:33.248973+00:00",
+  "data": [
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty negative space, dark gradient sky. Bottom 2/3 contains three small isometric instrument modules with control faces aligned in a row on a dark matte bench surface with subtle hairline grid.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "REALISTIC",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/Lk5JihjCX8moUga9N8THiw.png?exp=1778627323&sig=b226bb6f4c7c0eb7051c6f56ea6885440ba81ff3bcdce5a463f58a843ff5e750"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty negative space, dark gradient sky. Bottom 2/3 contains three small isometric instrument modules with control faces aligned in a row on a dark matte bench surface with subtle hairline grid.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "GENERAL",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/WZ2RLfpyW-6wnaVZTBdCjA.png?exp=1778627323&sig=08d290fd801b3dcbcc4d976288920d125600adbe564247d5e79802db87ca49d3"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty negative space, dark gradient sky. Bottom 2/3 contains three small isometric instrument modules with control faces aligned in a row on a dark matte bench surface with subtle hairline grid.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "GENERAL",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/YSJVGytOWS-BJ15-L2AVJA.png?exp=1778627323&sig=25802c48158dd288388c9a4f58b3fd8802a206de5ce73776ba532891b2dcff12"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty negative space, dark gradient sky. Bottom 2/3 contains three small isometric instrument modules with control faces aligned in a row on a dark matte bench surface with subtle hairline grid.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "REALISTIC",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/zKYZo4m8VFaUzz_rYs5Y1Q.png?exp=1778627323&sig=54ac3967d06c1b127e10bda9d160aa69de32834f26d26e6bb45eaf69c6cade3d"
+    }
+  ]
+}

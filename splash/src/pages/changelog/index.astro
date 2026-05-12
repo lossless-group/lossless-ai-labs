@@ -1,0 +1,93 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { toDate, formatDate, isoDate } from '@lib/date';
+
+const base = import.meta.env.BASE_URL;
+
+const entries = (await getCollection('changelog'))
+  .map((e) => {
+    const when = toDate(e.data.date_modified ?? e.data.date_created ?? e.data.date);
+    return { entry: e, when };
+  })
+  .sort((a, b) => (b.when?.getTime() ?? 0) - (a.when?.getTime() ?? 0));
+---
+<BaseLayout title="Changelog">
+  <section>
+    <div class="container">
+      <p class="eyebrow">ch · changelog</p>
+      <h1>Changelog</h1>
+      <p class="lede">Narrative ship notes across the ai-labs tree. Entries authored at the parent level cover structural changes; child entries roll up from each submodule.</p>
+
+      <ul class="entry-list" aria-label="Changelog entries">
+        {entries.map(({ entry, when }) => {
+          const from = entry.data.from ?? 'ai-labs';
+          return (
+            <li class="entry-list__item">
+              <a class="entry-list__link" href={`${base}changelog/${entry.id}/`}>
+                <header class="entry-list__head">
+                  <span class="pill pill--accent">{from}</span>
+                  <time class="entry-list__time" datetime={isoDate(when)}>{formatDate(when)}</time>
+                </header>
+                <h2 class="entry-list__title">{entry.data.title ?? entry.id}</h2>
+                {entry.data.lede && <p class="entry-list__lede">{entry.data.lede}</p>}
+                {entry.data.tags && entry.data.tags.length > 0 && (
+                  <ul class="tags" aria-label="Tags">
+                    {entry.data.tags.map((t) => <li class="chip">{t}</li>)}
+                  </ul>
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .entry-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+  .entry-list__link {
+    display: block;
+    padding: var(--space-5) var(--space-6);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .entry-list__link:hover {
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+  }
+  .entry-list__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .entry-list__time {
+    font-family: var(--font__mono);
+    font-size: 0.74rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.06em;
+  }
+  .entry-list__title {
+    font-family: var(--font__display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 var(--space-2);
+    color: var(--color-text);
+  }
+  .entry-list__lede {
+    color: var(--color-text-soft);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+</style>

@@ -1,0 +1,41 @@
+{
+  "created": "2026-05-11T23:13:07.908206+00:00",
+  "data": [
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty near-black backdrop with subtle dark vignette. Bottom 2/3 contains three identical small isometric instrument modules with control faces aligned in a single row on a dark matte bench surface, faint hairline grid texture, soft warm and cool LED dot accents on module faces.",
+      "resolution": "736x1312",
+      "seed": 4096,
+      "style_type": "GENERAL",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/2a5yrXLNWl6UXsWjoqQgZQ.png?exp=1778627597&sig=12ecb902b8b0996a7b36a0adf1db69dc1514207466b8dedec408a4f92b8178ca"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty near-black backdrop with subtle dark vignette. Bottom 2/3 contains three identical small isometric instrument modules with control faces aligned in a single row on a dark matte bench surface, faint hairline grid texture, soft warm and cool LED dot accents on module faces.",
+      "resolution": "736x1312",
+      "seed": 4096,
+      "style_type": "GENERAL",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/AdnyLd7fXxKWHEzXvlutRA.png?exp=1778627597&sig=53ed4e43be3858dec54feb19735d00574f25995260f60c6d46a69ae275dd3107"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty near-black backdrop with subtle dark vignette. Bottom 2/3 contains three identical small isometric instrument modules with control faces aligned in a single row on a dark matte bench surface, faint hairline grid texture, soft warm and cool LED dot accents on module faces.",
+      "resolution": "736x1312",
+      "seed": 4096,
+      "style_type": "GENERAL",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/jzpLeDNaUMi2iN0CB96_rg.png?exp=1778627597&sig=81ed4230acd9455c7dd9994d2d8de7897bbb674f0d7d77c1ccb2a0d6bb7a5358"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is empty near-black backdrop with subtle dark vignette. Bottom 2/3 contains three identical small isometric instrument modules with control faces aligned in a single row on a dark matte bench surface, faint hairline grid texture, soft warm and cool LED dot accents on module faces.",
+      "resolution": "736x1312",
+      "seed": 4096,
+      "style_type": "GENERAL",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/zqdCFJTvVHeBv-XTCezfcQ.png?exp=1778627597&sig=4a6c0dcd8b56bc90a8db859a8e2ecb953df9942a4daee908e25051c3869a88b8"
+    }
+  ]
+}

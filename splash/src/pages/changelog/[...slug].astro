@@ -1,0 +1,160 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { toDate, formatDate, isoDate } from '@lib/date';
+
+const base = import.meta.env.BASE_URL;
+
+export async function getStaticPaths() {
+  const entries = await getCollection('changelog');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const when = toDate(entry.data.date_modified ?? entry.data.date_created ?? entry.data.date);
+const from = entry.data.from ?? 'ai-labs';
+const title = entry.data.title ?? entry.id;
+---
+<BaseLayout title={title} description={entry.data.lede}>
+  <section>
+    <div class="container">
+      <p>
+        <a href={`${base}changelog/`} class="back-link">← changelog</a>
+      </p>
+      <header class="entry-head">
+        <div class="entry-head__meta">
+          <span class="pill pill--accent">{from}</span>
+          {when && <time class="entry-head__time" datetime={isoDate(when)}>{formatDate(when)}</time>}
+          {entry.data.from_path && <code class="entry-head__path">{entry.data.from_path}</code>}
+        </div>
+        <h1>{title}</h1>
+        {entry.data.lede && <p class="lede">{entry.data.lede}</p>}
+        {entry.data.tags && entry.data.tags.length > 0 && (
+          <ul class="tags" aria-label="Tags">
+            {entry.data.tags.map((t) => <li class="chip">{t}</li>)}
+          </ul>
+        )}
+      </header>
+
+      <article class="prose">
+        <Content />
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .back-link {
+    font-family: var(--font__mono);
+    font-size: 0.78rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.04em;
+    border-bottom: none;
+  }
+  .back-link:hover { color: var(--color-accent); }
+
+  .entry-head { margin: var(--space-6) 0 var(--space-10); }
+  .entry-head__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .entry-head__time {
+    font-family: var(--font__mono);
+    font-size: 0.78rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.06em;
+  }
+  .entry-head__path {
+    font-size: 0.74rem;
+    color: var(--color-text-faint);
+    background: var(--color-bg-elevated);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+  }
+  .entry-head h1 { margin-bottom: var(--space-3); }
+  .entry-head .tags { margin-top: var(--space-4); }
+
+  .prose {
+    max-width: 64ch;
+    color: var(--color-text-soft);
+    line-height: 1.7;
+    font-family: var(--font__sans);
+  }
+  .prose :global(h2) {
+    font-family: var(--font__display);
+    font-size: 1.5rem;
+    margin: var(--space-10) 0 var(--space-4);
+    color: var(--color-text);
+  }
+  .prose :global(h3) {
+    font-family: var(--font__display);
+    font-size: 1.2rem;
+    margin: var(--space-6) 0 var(--space-3);
+    color: var(--color-text);
+  }
+  .prose :global(p) { margin: 0 0 1em; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 1em 1.2em; }
+  .prose :global(li) { margin: 0.25em 0; }
+  .prose :global(a) { color: var(--color-thread); }
+  .prose :global(a):hover { color: var(--color-accent); }
+  .prose :global(code) {
+    font-family: var(--font__mono);
+    font-size: 0.9em;
+    background: var(--color-bg-code);
+    padding: 1px 5px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+  }
+  .prose :global(pre) {
+    background: var(--color-bg-code);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    overflow-x: auto;
+    font-size: 0.86rem;
+  }
+  .prose :global(pre code) {
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+  .prose :global(blockquote) {
+    border-left: 2px solid var(--color-thread);
+    padding-left: var(--space-4);
+    margin: var(--space-4) 0;
+    color: var(--color-text-dim);
+  }
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-4) 0;
+    font-size: 0.92rem;
+  }
+  .prose :global(th), .prose :global(td) {
+    border: 1px solid var(--color-border);
+    padding: var(--space-2) var(--space-3);
+    text-align: left;
+  }
+  .prose :global(th) {
+    background: var(--color-bg-elevated);
+    font-family: var(--font__mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-dim);
+    font-weight: 500;
+  }
+  .prose :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    margin: var(--space-8) 0;
+  }
+</style>

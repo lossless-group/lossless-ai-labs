@@ -1,0 +1,41 @@
+{
+  "created": "2026-05-11T23:09:16.999093+00:00",
+  "data": [
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is near-black monochrome backdrop with subtle vignette, no color. Bottom 2/3 contains three small isometric instrument modules with control faces aligned in a row on a dark matte bench surface with hairline grid.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "GENERAL",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/2bEktXt7XM2STf4yK7BsQQ.png?exp=1778627367&sig=e3cd3804dd0e85e713fc79837ffd0394216330dc6a197c6fdc9929ad1853f1db"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is near-black monochrome backdrop with subtle vignette, no color. Bottom 2/3 contains three small isometric instrument modules with control faces aligned in a row on a dark matte bench surface with hairline grid.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "REALISTIC",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/LWvrg1yiXwS-CAScJRbpzw.png?exp=1778627367&sig=b5e026fb2eef3b3df8467722bd1bf4f1d7bec69b37252212a16162afc768f1b9"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is near-black monochrome backdrop with subtle vignette, no color. Bottom 2/3 contains three small isometric instrument modules with control faces aligned in a row on a dark matte bench surface with hairline grid.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "REALISTIC",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/nBWFivTbUO62VG8E8byKPA.png?exp=1778627367&sig=ed30baee0a949816c7218203a1c1fd456cb07a8a03676e6847a5ea19821a4b17"
+    },
+    {
+      "is_image_safe": true,
+      "prompt": "Top 1/3 of frame is near-black monochrome backdrop with subtle vignette, no color. Bottom 2/3 contains three small isometric instrument modules with control faces aligned in a row on a dark matte bench surface with hairline grid.",
+      "resolution": "1312x736",
+      "seed": 4096,
+      "style_type": "GENERAL",
+      "upscaled_resolution": null,
+      "url": "https://ideogram.ai/api/images/ephemeral/usY8vfBvXZeeFUAj07FMWA.png?exp=1778627367&sig=5257705e922e0c153c0797b39282abdc8de0c16833f334e170e71fe470110fdf"
+    }
+  ]
+}
