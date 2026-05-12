@@ -336,15 +336,13 @@ imagery:
     mime: image/png
 
   # ── Aspect ratio enum — pick one per request ────────────────────────
-  # Lossless ships WhatsApp / iMessage first — banner_tall is a first-class
-  # deliverable, not a secondary variant. Format keys are cross-project canon.
+  # Lossless ships WhatsApp / iMessage first — banner_image_tall is the
+  # most important deliverable. Four canonical formats; no variants.
   aspect_ratios:
-    banner: 16x9                  # OG / Twitter / Slack / generalized share
-    portrait: 4x5                 # LinkedIn portrait, Instagram feed
-    portrait_tall: 9x16           # Stories, Reels, TikTok
-    square: 1x1                   # avatars, square unfurls, fallbacks
-    banner_tall: 3x4              # WhatsApp / iMessage previews (Lossless default tall)
-    banner_tall_max: 2x3          # dramatic-tall variant
+    banner_image: 16x9            # OG / Twitter / Slack / generalized share
+    banner_image_tall: 4x5        # WhatsApp / iMessage chat-preview (close to 1x1 but slightly taller — 1x1 too short for chat-preview crop)
+    portrait_image: 9x16          # Stories, Reels, TikTok, vertical feed
+    square_image: 1x1             # Avatars, square unfurls, Discord embeds
 
   # ── Prompt convention — the ONLY free-text per request ──────────────
   # Two clauses: (1) empty region declared as first-class subject with
@@ -355,6 +353,10 @@ imagery:
   prompt:
     pattern: "Top 1/3 of frame is empty negative space, {empty_region_content}. Bottom 2/3 contains {subject}."
     max_chars_recommended: 220
+    # Locked sky — the same backdrop across every aspect ratio in a single
+    # run, so the four images read as one bench under one sky, not four
+    # separate scenes. Pick ONE per generation round; don't rotate this.
+    empty_region_content: dark gradient sky with faint sodium glint at the horizon
     subject_themes:
       # Canonical subjects for the ai-labs family. Each must read as
       # bench/instrument, not as marketing illustration.
@@ -377,13 +379,13 @@ imagery:
     public_dir: public
     naming: "ogimage__AI-Labs--{Format}.jpg"
     formats:
-      - Default                   # alias of Banner; the canonical share image
-      - Banner
-      - BannerTall                # WhatsApp / iMessage default tall
-      - BannerTallMax
-      - Portrait
-      - PortraitTall
-      - Square
+      - BannerImage               # 16x9 — OG / Twitter / Slack
+      - BannerImageTall           # 4x5 — WhatsApp / iMessage (primary)
+      - PortraitImage             # 9x16 — Stories / Reels / TikTok
+      - SquareImage               # 1x1 — Avatars / square unfurls
+    # The .png style reference keeps its existing name (Default.png) — that's
+    # the canonical aesthetic anchor uploaded on every request, not a JPEG
+    # deliverable, so it stays separate from the four-format set above.
     archive_dir: .ogimage-archive       # dot-prefixed; outside public/
     candidates_dir: .ideogram-candidates # dot-prefixed; outside public/
 
@@ -702,29 +704,26 @@ identical request-to-request.
 
   | Format key | Ideogram value | Use for |
   |---|---|---|
-  | `banner` | `16x9` | OG / Twitter / Slack |
-  | `portrait` | `4x5` | LinkedIn portrait, IG feed |
-  | `portrait_tall` | `9x16` | Stories, Reels, TikTok |
-  | `square` | `1x1` | Avatars, square unfurls |
-  | `banner_tall` | `3x4` | **WhatsApp / iMessage default** |
-  | `banner_tall_max` | `2x3` | Dramatic-tall variant |
+  | `banner_image` | `16x9` | OG / Twitter / Slack / generalized share |
+  | `banner_image_tall` | `4x5` | **WhatsApp / iMessage (primary)** — close to 1x1, slightly taller |
+  | `portrait_image` | `9x16` | Stories, Reels, TikTok, vertical feed |
+  | `square_image` | `1x1` | Avatars, square unfurls, Discord embeds |
 
 ### Naming + preservation
 
 Save canonical deliverables to `public/` as:
 
 ```
-public/ogimage__AI-Labs--Default.jpg          # alias of Banner; canonical share
-public/ogimage__AI-Labs--Banner.jpg
-public/ogimage__AI-Labs--BannerTall.jpg       # WhatsApp / iMessage default
-public/ogimage__AI-Labs--BannerTallMax.jpg
-public/ogimage__AI-Labs--Portrait.jpg
-public/ogimage__AI-Labs--PortraitTall.jpg
-public/ogimage__AI-Labs--Square.jpg
+public/ogimage__AI-Labs--BannerImage.jpg       # 16x9 — OG / Twitter / Slack
+public/ogimage__AI-Labs--BannerImageTall.jpg   # 4x5 — WhatsApp / iMessage (primary)
+public/ogimage__AI-Labs--PortraitImage.jpg     # 9x16 — Stories / Reels / TikTok
+public/ogimage__AI-Labs--SquareImage.jpg       # 1x1 — Avatars / square unfurls
 ```
 
 Plus the `.png` style reference at
-`public/ogimage__AI-Labs--Default.png` (re-uploaded on every request).
+`public/ogimage__AI-Labs--Default.png` (re-uploaded on every request as
+`style_reference_images`). The reference is not a deliverable — it's the
+aesthetic anchor that keeps the four JPEGs above looking like family.
 
 Per the `generate-consistent-og-images` skill's **preservation discipline**:
 
