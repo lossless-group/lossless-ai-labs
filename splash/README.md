@@ -69,7 +69,16 @@ deploy to `https://lossless-group.github.io/lossless-ai-labs/`. The
 `actions/configure-pages@v5` step uses `enablement: true` so the workflow
 bootstraps Pages on first run.
 
-Pagefind search and `/llms.txt` + `/llms-full.txt` endpoints are the
-remaining gaps versus the `maintain-splash-pages` skill's full convention
-— follow-ups, not deploy blockers. The build target ("pnpm build
-succeeds from a clean clone") is met.
+Pagefind search is now wired — header popover + `/search/` page +
+keyboard shortcut (`/`), with `data-pagefind-body` on the changelog and
+context-v detail pages and `data-pagefind-ignore="all"` on the list
+pages. Filter facets: `kind:`, `from:<peer>`, `tag:<value>`. UI inherits
+the three-mode tokens via CSS-variable overrides. Search index only
+exists after `pnpm build` — `pnpm dev` shows the box with a missing-state
+message (run `pnpm build && pnpm preview` to exercise search locally).
+
+The `/llms.txt` + `/llms-full.txt` endpoints remain a gap versus the
+full convention — mechanical port from the children when prioritized.
+Sort controls on list pages are the third gap. Neither is a deploy
+blocker. The build target ("pnpm build succeeds from a clean clone") is
+met.

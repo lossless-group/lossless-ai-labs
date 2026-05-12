@@ -70,7 +70,7 @@ for (const [, items] of sections) {
             <span class="section-block__name">{sec}</span>
             <span class="section-block__count">{items.length}</span>
           </h2>
-          <ul class="entry-list" aria-label={`${sec} entries`}>
+          <ul class="entry-list" aria-label={`${sec} entries`} data-pagefind-ignore="all">
             {items.map((entry) => {
               const from = entry.data.from ?? 'ai-labs';
               const when = toDate(entry.data.date_modified ?? entry.data.date_created);

@@ -1,11 +1,13 @@
 ---
 import ModeToggle from './ModeToggle.astro';
+import SearchBox from './SearchBox.astro';
 
 const base = import.meta.env.BASE_URL;
 const links = [
   { href: `${base}#products`,   label: 'Products' },
   { href: `${base}changelog/`,  label: 'Changelog' },
   { href: `${base}context-v/`,  label: 'Context-V' },
+  { href: `${base}search/`,     label: 'Search' },
 ];
 ---
 <header class="site-header">
@@ -29,6 +31,7 @@ const links = [
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
     <div class="site-header__actions">
+      <SearchBox compact />
       <ModeToggle />
     </div>
   </div>

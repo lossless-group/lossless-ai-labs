@@ -20,13 +20,21 @@ const from = entry.data.from ?? 'ai-labs';
 const title = entry.data.title ?? entry.id;
 ---
 <BaseLayout title={title} description={entry.data.lede}>
-  <section>
+  <section
+    data-pagefind-body
+    data-pagefind-meta={`title:${title}`}
+  >
+    <span data-pagefind-filter="kind:Changelog" hidden></span>
+    <span data-pagefind-meta="kind:Changelog" hidden></span>
+    <span data-pagefind-filter={`from:${from}`} hidden></span>
+    <span data-pagefind-meta={`from:${from}`} hidden></span>
+    {entry.data.tags?.map((t: string) => <span data-pagefind-filter={`tag:${t}`} hidden></span>)}
     <div class="container">
-      <p>
+      <p data-pagefind-ignore>
         <a href={`${base}changelog/`} class="back-link">← changelog</a>
       </p>
       <header class="entry-head">
-        <div class="entry-head__meta">
+        <div class="entry-head__meta" data-pagefind-ignore>
           <span class="pill pill--accent">{from}</span>
           {when && <time class="entry-head__time" datetime={isoDate(when)}>{formatDate(when)}</time>}
           {entry.data.from_path && <code class="entry-head__path">{entry.data.from_path}</code>}
@@ -34,8 +42,8 @@ const title = entry.data.title ?? entry.id;
         <h1>{title}</h1>
         {entry.data.lede && <p class="lede">{entry.data.lede}</p>}
         {entry.data.tags && entry.data.tags.length > 0 && (
-          <ul class="tags" aria-label="Tags">
-            {entry.data.tags.map((t) => <li class="chip">{t}</li>)}
+          <ul class="tags" aria-label="Tags" data-pagefind-ignore>
+            {entry.data.tags.map((t: string) => <li class="chip">{t}</li>)}
           </ul>
         )}
       </header>

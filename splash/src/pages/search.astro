@@ -1,0 +1,63 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SearchBox from '@components/SearchBox.astro';
+
+const description = 'Search across the ai-labs changelog and context-v notes rolled up from context-vigilance-kit, memopop-ai, and dididecks-ai. Static Pagefind index built at deploy time, runs entirely client-side.';
+---
+
+<BaseLayout title="Search" description={description}>
+  <section class="search-page">
+    <div class="container">
+      <p class="eyebrow">ch · search</p>
+      <h1>Search</h1>
+      <p class="lede">
+        Indexed across the changelog and context-v notes from every child rolled
+        into ai-labs. Filter by <code>kind</code>, <code>from</code>, or
+        <code>tag</code> once you have results. Press <kbd class="mono">/</kbd>
+        from anywhere to focus the search box in the header.
+      </p>
+
+      <SearchBox autoFocus />
+
+      <p class="search-page__hint mono">
+        Search runs on a static index built at deploy time. In <code>astro dev</code>
+        the index isn't generated — run <code>pnpm build &amp;&amp; pnpm preview</code>
+        to test locally.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .search-page { padding: var(--space-12) 0 var(--space-24); }
+  .lede {
+    max-width: 60ch;
+    margin-bottom: var(--space-8);
+  }
+  .lede code {
+    font-family: var(--font__mono);
+    font-size: 0.86em;
+    background: color-mix(in oklab, var(--color-text) 6%, transparent);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+  }
+  .lede kbd {
+    font-size: 0.78rem;
+    padding: 1px 7px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-bg-soft);
+    color: var(--color-text);
+  }
+  .search-page__hint {
+    margin-top: var(--space-8);
+    color: var(--color-text-faint);
+    font-size: 0.78rem;
+  }
+  .search-page__hint code {
+    font-family: var(--font__mono);
+    background: color-mix(in oklab, var(--color-text) 5%, transparent);
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+  }
+</style>
