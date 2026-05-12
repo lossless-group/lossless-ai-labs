@@ -1,16 +1,28 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import SortControls from '@components/SortControls.astro';
 import { getCollection } from 'astro:content';
 import { toDate, formatDate, isoDate } from '@lib/date';
 
 const base = import.meta.env.BASE_URL;
 
+// Each entry decorated with the four sort keys the SortControls component
+// reads via data-sort-{key} on each <li>. ISO date strings sort
+// lexicographically (same as time-order); title is lowercased for stable
+// alpha sort. Empty values sink to the bottom regardless of direction.
 const entries = (await getCollection('changelog'))
   .map((e) => {
-    const when = toDate(e.data.date_modified ?? e.data.date_created ?? e.data.date);
-    return { entry: e, when };
+    const modified = toDate(e.data.date_modified ?? e.data.date_created ?? e.data.date);
+    const created = toDate(e.data.date_created ?? e.data.date);
+    const published = toDate(
+      e.data.date_first_published ?? e.data.date_published ?? e.data.published_at,
+    );
+    const title = String(e.data.title ?? e.id);
+    return { entry: e, modified, created, published, title };
   })
-  .sort((a, b) => (b.when?.getTime() ?? 0) - (a.when?.getTime() ?? 0));
+  // Pre-sort to match the SortControls default (Modified desc) so the static
+  // HTML reads correctly even before JS hydrates.
+  .sort((a, b) => (b.modified?.getTime() ?? 0) - (a.modified?.getTime() ?? 0));
 ---
 <BaseLayout title="Changelog">
   <section>
@@ -19,21 +31,44 @@ const entries = (await getCollection('changelog'))
       <h1>Changelog</h1>
       <p class="lede">Narrative ship notes across the ai-labs tree. Entries authored at the parent level cover structural changes; child entries roll up from each submodule.</p>
 
-      <ul class="entry-list" aria-label="Changelog entries" data-pagefind-ignore="all">
-        {entries.map(({ entry, when }) => {
+      <SortControls
+        name="changelog"
+        options={[
+          { key: 'modified', label: 'Modified' },
+          { key: 'created', label: 'Created' },
+          { key: 'published', label: 'Published' },
+          { key: 'title', label: 'Title' },
+        ]}
+        defaultKey="modified"
+        defaultDirection="desc"
+      />
+
+      <ul
+        class="entry-list"
+        aria-label="Changelog entries"
+        data-pagefind-ignore="all"
+        data-sort-target="changelog"
+      >
+        {entries.map(({ entry, modified, created, published, title }) => {
           const from = entry.data.from ?? 'ai-labs';
           return (
-            <li class="entry-list__item">
+            <li
+              class="entry-list__item"
+              data-sort-modified={modified ? isoDate(modified) : ''}
+              data-sort-created={created ? isoDate(created) : ''}
+              data-sort-published={published ? isoDate(published) : ''}
+              data-sort-title={title.toLowerCase()}
+            >
               <a class="entry-list__link" href={`${base}changelog/${entry.id}/`}>
                 <header class="entry-list__head">
                   <span class="pill pill--accent">{from}</span>
-                  <time class="entry-list__time" datetime={isoDate(when)}>{formatDate(when)}</time>
+                  {modified && <time class="entry-list__time" datetime={isoDate(modified)}>{formatDate(modified)}</time>}
                 </header>
-                <h2 class="entry-list__title">{entry.data.title ?? entry.id}</h2>
+                <h2 class="entry-list__title">{title}</h2>
                 {entry.data.lede && <p class="entry-list__lede">{entry.data.lede}</p>}
                 {entry.data.tags && entry.data.tags.length > 0 && (
                   <ul class="tags" aria-label="Tags">
-                    {entry.data.tags.map((t) => <li class="chip">{t}</li>)}
+                    {entry.data.tags.map((t: string) => <li class="chip">{t}</li>)}
                   </ul>
                 )}
               </a>

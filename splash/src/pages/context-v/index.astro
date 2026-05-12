@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import SortControls from '@components/SortControls.astro';
 import { getCollection } from 'astro:content';
 import { toDate, formatDate, isoDate } from '@lib/date';
 
@@ -64,28 +65,56 @@ for (const [, items] of sections) {
         ))}
       </p>
 
+      <SortControls
+        name="context-v"
+        options={[
+          { key: 'modified', label: 'Modified' },
+          { key: 'created', label: 'Created' },
+          { key: 'published', label: 'Published' },
+          { key: 'title', label: 'Title' },
+        ]}
+        defaultKey="modified"
+        defaultDirection="desc"
+      />
+
       {sections.map(([sec, items]) => (
         <div class="section-block">
           <h2 id={sec} class="section-block__head">
             <span class="section-block__name">{sec}</span>
             <span class="section-block__count">{items.length}</span>
           </h2>
-          <ul class="entry-list" aria-label={`${sec} entries`} data-pagefind-ignore="all">
+          <ul
+            class="entry-list"
+            aria-label={`${sec} entries`}
+            data-pagefind-ignore="all"
+            data-sort-target="context-v"
+          >
             {items.map((entry) => {
               const from = entry.data.from ?? 'ai-labs';
-              const when = toDate(entry.data.date_modified ?? entry.data.date_created);
+              const modified = toDate(entry.data.date_modified ?? entry.data.date_created);
+              const created = toDate(entry.data.date_created);
+              const published = toDate(
+                entry.data.date_first_published ?? entry.data.date_published ?? entry.data.published_at,
+              );
+              const title = String(entry.data.title ?? entry.id);
               return (
-                <li class="entry-list__item">
+                <li
+                  class="entry-list__item"
+                  data-sort-modified={modified ? isoDate(modified) : ''}
+                  data-sort-created={created ? isoDate(created) : ''}
+                  data-sort-published={published ? isoDate(published) : ''}
+                  data-sort-title={title.toLowerCase()}
+                >
                   <a class="entry-list__link" href={`${base}context-v/${entry.id}/`}>
                     <header class="entry-list__head">
                       <span class="pill pill--accent">{from}</span>
-                      {when && <time class="entry-list__time" datetime={isoDate(when)}>{formatDate(when)}</time>}
+                      {modified && <time class="entry-list__time" datetime={isoDate(modified)}>{formatDate(modified)}</time>}
                     </header>
-                    <h3 class="entry-list__title">{entry.data.title ?? entry.id}</h3>
+                    <h3 class="entry-list__title">{title}</h3>
                     {entry.data.lede && <p class="entry-list__lede">{entry.data.lede}</p>}
                     {entry.data.tags && entry.data.tags.length > 0 && (
                       <ul class="tags" aria-label="Tags">
-                        {entry.data.tags.map((t) => <li class="chip">{t}</li>)}
+                        {entry.data.tags.map((t: string) => <li class="chip">{t}</li>)}
                       </ul>
                     )}
                   </a>
