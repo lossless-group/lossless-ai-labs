@@ -6,3 +6,6 @@ dist
 *.log
 .env
 .env.*.local
+
+# Claude Code per-machine local settings (enabled MCP servers, etc.)
+.claude/
