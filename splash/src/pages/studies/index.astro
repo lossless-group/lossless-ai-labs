@@ -1,0 +1,340 @@
+---
+/**
+ * /studies/ — landing page for the three pinned reading collections.
+ *
+ * Data flow: at build time we read each study's `.gitmodules` (for the
+ * authoritative pinned-repo list) and its `README.md` (for the question
+ * being studied, lifted from the first blockquote). Nothing here is
+ * hand-maintained — bump a study's submodules and the next splash build
+ * shows the change without touching this page.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { readFile } from 'node:fs/promises';
+import { resolve, join } from 'node:path';
+
+const base = import.meta.env.BASE_URL;
+
+const SPLASH_DIR = process.cwd();
+const PARENT_DIR = resolve(SPLASH_DIR, '..');
+const STUDIES_DIR = resolve(PARENT_DIR, 'studies');
+
+interface PinnedRepo {
+  /** Local slug = the submodule path inside the study dir. */
+  slug: string;
+  /** Canonical web URL (https://github.com/owner/name — no .git). */
+  url: string;
+  owner: string;
+  name: string;
+}
+
+interface Study {
+  number: string;
+  slug: string;
+  title: string;
+  /** The question this study scopes — pulled from the README's first blockquote. */
+  question: string;
+  studyRepoUrl: string;
+  pinned: PinnedRepo[];
+}
+
+/** Presentation order. Matches the eyebrow numbering used on the index page. */
+const STUDY_ORDER: { dir: string; title: string; number: string }[] = [
+  { dir: 'open-specs-and-standards',                    title: 'Open Specs & Standards',         number: '01' },
+  { dir: 'memory-layers-for-agents',                    title: 'Memory Layers for Agents',       number: '02' },
+  { dir: 'data-analytics-specifications-and-standards', title: 'Data-Analytics Specs & Standards', number: '03' },
+];
+
+function parseGitmodules(text: string): { path: string; url: string }[] {
+  const blocks = text.split(/\[submodule /).slice(1);
+  return blocks
+    .map((b) => {
+      const path = b.match(/path\s*=\s*(.+)/)?.[1]?.trim() ?? '';
+      const url = b.match(/url\s*=\s*(.+)/)?.[1]?.trim() ?? '';
+      return { path, url };
+    })
+    .filter((m) => m.path && m.url);
+}
+
+function ownerNameFromUrl(url: string): { owner: string; name: string } {
+  const m = url.match(/github\.com[/:]([\w.-]+)\/([\w.-]+?)(?:\.git)?$/);
+  if (!m) return { owner: '', name: url };
+  return { owner: m[1], name: m[2] };
+}
+
+/** Pull the first blockquote (or first paragraph) after the H1 as the lede.
+ *  Each study's README follows the same shape — H1, then "## The question"
+ *  with a `> …` blockquote — so the first `>` line is the working question.
+ *  Falls back to the first paragraph if no blockquote exists. */
+function extractQuestion(readme: string): string {
+  const lines = readme.split(/\r?\n/);
+  let pastH1 = false;
+  const bq: string[] = [];
+  const para: string[] = [];
+  for (const line of lines) {
+    if (!pastH1) {
+      if (/^#\s/.test(line)) pastH1 = true;
+      continue;
+    }
+    if (line.startsWith('>')) {
+      bq.push(line.replace(/^>\s?/, ''));
+      continue;
+    }
+    if (bq.length > 0) break;
+    if (line.startsWith('#')) {
+      if (para.length > 0) break;
+      continue;
+    }
+    if (line.trim() === '') {
+      if (para.length > 0) break;
+      continue;
+    }
+    para.push(line);
+  }
+  const out = (bq.length > 0 ? bq : para).join(' ').replace(/\s+/g, ' ').trim();
+  return out;
+}
+
+const studies: Study[] = await Promise.all(
+  STUDY_ORDER.map(async (s) => {
+    const studyDir = resolve(STUDIES_DIR, s.dir);
+    const gm = await readFile(join(studyDir, '.gitmodules'), 'utf8').catch(() => '');
+    const readme = await readFile(join(studyDir, 'README.md'), 'utf8').catch(() => '');
+    const pinned: PinnedRepo[] = parseGitmodules(gm)
+      .map((m) => {
+        const { owner, name } = ownerNameFromUrl(m.url);
+        return { slug: m.path, url: m.url.replace(/\.git$/, ''), owner, name };
+      })
+      .sort((a, b) => a.slug.localeCompare(b.slug));
+    return {
+      number: s.number,
+      slug: s.dir,
+      title: s.title,
+      question: extractQuestion(readme),
+      studyRepoUrl: `https://github.com/lossless-group/study-${s.dir}`,
+      pinned,
+    };
+  }),
+);
+
+const totalPinned = studies.reduce((acc, s) => acc + s.pinned.length, 0);
+---
+
+<BaseLayout title="Studies">
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">ch · studies</p>
+      <h1>Pinned reading,<br /><span class="gradient-text">not paraphrase.</span></h1>
+      <p class="lede">
+        Each study scopes one domain question and pins upstream code as nested
+        git submodules. We read from the pinned source — not from training data,
+        not from a paraphrase, not from a blog post that aged out a year ago.
+      </p>
+      <ul class="meta-strip" role="list">
+        <li><strong>{studies.length}</strong>&nbsp;studies</li>
+        <li><strong>{totalPinned}</strong>&nbsp;pinned repos</li>
+        <li><strong>read</strong>&nbsp;from source</li>
+      </ul>
+    </div>
+  </section>
+
+  {studies.map((study) => (
+    <section class="study" id={study.slug}>
+      <div class="container">
+        <header class="study__head">
+          <p class="eyebrow">study · {study.number}</p>
+          <h2 class="study__title">{study.title}</h2>
+          {study.question && (
+            <blockquote class="study__question">{study.question}</blockquote>
+          )}
+        </header>
+
+        <div class="study__meta">
+          <span class="pill pill--accent">{study.pinned.length} pinned</span>
+          <a class="study__repo-link" href={study.studyRepoUrl} target="_blank" rel="noopener">
+            study repo&nbsp;→
+          </a>
+          <a class="study__anchor" href={`${base}studies/#${study.slug}`} aria-label="Permalink to this study">
+            #{study.slug}
+          </a>
+        </div>
+
+        <ul class="pinned-grid" aria-label={`Pinned repositories for ${study.title}`}>
+          {study.pinned.map((r) => (
+            <li class="pinned-card">
+              <a href={r.url} class="pinned-card__link" target="_blank" rel="noopener">
+                <span class="pinned-card__slug">{r.slug}</span>
+                <span class="pinned-card__source">
+                  <span class="pinned-card__owner">{r.owner}</span><span class="pinned-card__sep">/</span><span class="pinned-card__name">{r.name}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <section class="outro">
+    <div class="container">
+      <p class="eyebrow">ch · why pin</p>
+      <h2>Why pin upstream code instead of bookmarking it?</h2>
+      <div class="grid grid--why">
+        <article class="bench-card">
+          <span class="bench-card__label">grounded</span>
+          <div class="bench-card__body">
+            <h3>The agent reads source, not training-data folklore.</h3>
+            <p>When a decision touches a convention someone else already worked out, the answer comes from the pinned repo — not from whatever the model half-remembers.</p>
+          </div>
+        </article>
+        <article class="bench-card">
+          <span class="bench-card__label">stable</span>
+          <div class="bench-card__body">
+            <h3>SHA-pinned. Doesn't rot under us.</h3>
+            <p>A study's submodule points at a specific commit. When we revisit a study six months later, the same source is still there. Upgrades are explicit, not silent.</p>
+          </div>
+        </article>
+        <article class="bench-card">
+          <span class="bench-card__label">scoped</span>
+          <div class="bench-card__body">
+            <h3>One study, one question.</h3>
+            <p>Studies are not a general reading list. Each one scopes a single domain question and pins only what helps answer it. New questions get new studies, not pile-ons.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: var(--space-16) 0 var(--space-12);
+  }
+  .hero h1 {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+  .hero .lede {
+    margin-bottom: var(--space-6);
+    max-width: 60ch;
+  }
+
+  .study {
+    padding: var(--space-12) 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .study__head {
+    margin-bottom: var(--space-6);
+  }
+  .study__title {
+    margin: var(--space-2) 0 var(--space-4);
+  }
+  .study__question {
+    margin: 0;
+    padding: var(--space-3) var(--space-5);
+    border-left: 2px solid var(--color-accent);
+    background: var(--color-bg-soft);
+    color: var(--color-text-soft);
+    font-family: var(--font__display);
+    font-size: 1.05rem;
+    font-style: italic;
+    line-height: 1.5;
+    max-width: 70ch;
+  }
+
+  .study__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-6);
+    font-family: var(--font__mono);
+    font-size: 0.78rem;
+    color: var(--color-text-dim);
+  }
+  .study__repo-link {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .study__repo-link:hover {
+    text-decoration: underline;
+  }
+  .study__anchor {
+    color: var(--color-text-dimmer);
+    text-decoration: none;
+    margin-left: auto;
+  }
+  .study__anchor:hover {
+    color: var(--color-text-dim);
+  }
+
+  .pinned-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .pinned-card {
+    margin: 0;
+  }
+
+  .pinned-card__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+  }
+  .pinned-card__link:hover {
+    border-color: var(--color-border-accent);
+    background: var(--color-bg-elevated);
+    transform: translateY(-1px);
+  }
+
+  .pinned-card__slug {
+    font-family: var(--font__mono);
+    font-size: 0.88rem;
+    color: var(--color-text);
+    word-break: break-word;
+  }
+
+  .pinned-card__source {
+    font-family: var(--font__mono);
+    font-size: 0.72rem;
+    color: var(--color-text-dim);
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .pinned-card__sep {
+    opacity: 0.4;
+    padding: 0 0.2em;
+  }
+  .pinned-card__owner {
+    opacity: 0.75;
+  }
+  .pinned-card__name {
+    color: var(--color-text-soft);
+  }
+
+  .outro {
+    padding: var(--space-12) 0 var(--space-16);
+    border-top: 1px solid var(--color-border);
+  }
+  .outro h2 {
+    margin: var(--space-2) 0 var(--space-6);
+  }
+  .grid--why {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-4);
+  }
+</style>

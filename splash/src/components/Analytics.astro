@@ -1,0 +1,27 @@
+---
+// Analytics — OpenPanel, production-only.
+// Rollout plan: /Users/mpstaton/code/lossless-monorepo/context-v/prompts/Setup-Analytics-Across-Sites.md
+// ai-labs/splash had no Pass-1 instrumentation — OpenPanel is the first tracker here.
+//
+// Two gates before this renders anything: (1) prod build only, so localhost
+// doesn't pollute the dashboard; (2) clientId must be present, so a
+// misconfigured CI doesn't ship a broken <script> tag. The `op` shim is the
+// canonical OpenPanel queue-then-flush pattern from openpanel.dev/op1.js.
+const isProd = import.meta.env.PROD;
+const openPanelClientId = import.meta.env.OPENPANEL_CLIENT_ID;
+---
+
+{isProd && openPanelClientId && (
+  <>
+    <script is:inline define:vars={{ openPanelClientId }}>
+      window.op=window.op||function(){var n=[];return new Proxy(function(){arguments.length&&n.push([].slice.call(arguments))},{get:function(t,r){return"q"===r?n:function(){n.push([r].concat([].slice.call(arguments)))}} ,has:function(t,r){return"q"===r}}) }();
+      window.op('init', {
+        clientId: openPanelClientId,
+        trackScreenViews: true,
+        trackOutgoingLinks: true,
+        trackAttributes: true,
+      });
+    </script>
+    <script is:inline src="https://openpanel.dev/op1.js" defer async></script>
+  </>
+)}

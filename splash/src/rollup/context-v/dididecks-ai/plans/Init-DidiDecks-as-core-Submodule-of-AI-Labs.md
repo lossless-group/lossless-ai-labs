@@ -2,7 +2,8 @@
 title: "Init DidiDecks as Core Submodule of AI-Labs"
 lede: "Carve out dididecks-ai as its own repo and re-attach it to ai-labs as a git submodule, following Lossless pseudomonorepo discipline — branch-aligned tiers, rollup-friendly context-v, splash-page on day one, and the parent's gitlink as the single point of truth."
 date_created: 2026-05-11
-date_modified: 2026-05-11
+date_modified: 2026-05-16
+date_first_published: 2026-05-11
 authors:
   - Michael Staton
 augmented_with:
@@ -16,7 +17,7 @@ tags:
   - AI-Labs
   - Repo-Init
   - Branch-Alignment
-status: Draft
+status: Shipped
 from: "dididecks-ai"
 from_path: "context-v/plans/Init-DidiDecks-as-core-Submodule-of-AI-Labs.md"
 ---

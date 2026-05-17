@@ -2,6 +2,7 @@
 import '@styles/theme.css';
 import MetaTags from '@components/MetaTags.astro';
 import Header from '@components/Header.astro';
+import Analytics from '@components/Analytics.astro';
 import { SITE_REPO } from '@lib/seo';
 
 interface Props {
@@ -41,6 +42,8 @@ const year = new Date().getFullYear();
         } catch {}
       })();
     </script>
+
+    <Analytics />
   </head>
   <body class={bodyClass}>
     <Header />

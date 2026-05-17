@@ -25,3 +25,6 @@
 	path = dididecks-ai
 	url = https://github.com/lossless-group/dididecks-ai.git
 	branch = development
+[submodule "augment-it"]
+	path = augment-it
+	url = https://github.com/lossless-group/augment-it.git
