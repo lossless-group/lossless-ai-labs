@@ -355,9 +355,43 @@ These need follow-up — either further exploration, or a spec, or both. Listed 
 - `[[ChromaDB-as-Context-Improvement-Across-Everything-Everyone.md]]` — the roll-up ingester pattern proposed here borrows directly from the `context-vigilance-kit` ingest pipeline already running for the corpus
 - `[[Moving-an-Agent-Orchestrator-to-an-API.md]]` — directly relevant: as memopop's orchestrator moves toward an API, that API is the first place a real auth boundary needs to land
 
-## Recommended next move
+## Decisions captured in-flight 2026-05-17
 
-Open a spec — `context-v/specs/Shared-Auth-Core-Package.md` — that pins:
+The exploration originally recommended "open a spec next." After in-browser review and reflection on **calmstorm-decks' already-running auth system** (which implements ~70% of the v1 hard requirements — see [[../../dididecks-ai/client-sites/calmstorm-decks/src/middleware.ts]] and siblings), the path shifted from spec-first to code-first via extraction. Three decisions resolved before the first session:
+
+1. **Order of work: code-first via calmstorm extraction.** Audit calmstorm's existing auth → add the four missing pieces (OAuth, Organizations, lossless_id, app_slug) in calmstorm itself → THEN extract to a shared package. The spec emerges from the working code rather than the working code conforming to a premature spec.
+2. **`lossless_id` shape: opaque UUIDv7.** Random ID, no information leak. Email is the join key separately. Re-stitchable on email change. Natural time-ordering from UUIDv7's timestamp prefix.
+3. **Package location: standalone repo destined for JSR.** Eventually `lossless-auth-core` published to JSR. Forces good API discipline (no peeking into private internals across consumer apps). Higher overhead than `ai-labs/packages/auth-core/` colocation, but commits to the package as a first-class shared artifact from the start.
+
+### The three sessions
+
+#### Session 1 — Audit + record-keeping
+- Walk `calmstorm-decks/src/{lib/auth, middleware.ts, pages/access, pages/api/access}` end to end. Catalog file inventory + line counts + dependencies + env vars + DB tables.
+- Identify what's calmstorm-specific (env passcodes, hardcoded firm_slug, `cs_` cookie prefix) vs. what's package-ready (MintedToken redemption flow, session cookie + middleware skeleton, AuthEvent log shape, DB-unavailable graceful degradation).
+- Map each existing file to its future location in the extracted package.
+- **Deliverable**: [[../../dididecks-ai/context-v/specs/Calmstorm-Auth-Inventory.md]] — itemized inventory + future-package map. The detail lives at the dididecks-ai tier where the code physically lives. This exploration links to it.
+
+#### Session 2 — Four additions in calmstorm-decks
+1. **OAuth via `arctic`** — GitHub provider first. `Identity` gains an `OAuthAccount` 1-to-many child. New `/access/oauth/github/{start,callback}` routes. `cs_session` issuance unified across all credential pathways.
+2. **`Organization` + `Membership` tables** — minimal v1 columns. Migrate the hardcoded `firm_slug: calm-storm-ventures` to a real Organization row. `firm_profile` 1-to-1 nullable extension holds firm-specific fields (portfolio path, AUM tier, brand assets).
+3. **`lossless_id` (UUIDv7)** on `Identity` — mint on first sign-in, lookup by `primary_email` thereafter.
+4. **`app_slug` column** on `AuthEvent` — set to `"calmstorm-decks"`. Trivial.
+
+Each addition independently testable. Calmstorm becomes the validated reference implementation.
+
+#### Session 3 — Stand up the repo + extract
+- Create `github.com/lossless-group/lossless-auth-core`. License + README + tsconfig + JSR `jsr.json` config.
+- Move the validated code from calmstorm into the package. Calmstorm switches to consuming from the local clone via pnpm workspace, eventually from JSR-published.
+- Wire **chroma-decks** (sub-submodule of dididecks-ai, currently zero auth) as the second consumer. The friction of consuming from a different site surfaces every leaky abstraction.
+- memopop-ai (Tauri + Python sidecar) is harder — handle as Session 4 or later once the package is twice-proven on web.
+
+### What gets specced later (not now)
+
+A spec doc `context-v/specs/Shared-Auth-Core-Package.md` becomes worth writing *after* Session 3, when the package's API surface is empirically validated by two-consumer use. The spec then documents the locked contract for memopop-ai's Tauri integration and any future consumer to build against. Writing it before would risk pinning shapes calmstorm's actual code would have informed.
+
+## Original recommended next move (now superseded by the three-session plan above)
+
+> Open a spec — `context-v/specs/Shared-Auth-Core-Package.md` — that pins:
 
 - Exact schema (DDL for the seven core tables, written against libSQL's SQLite-compatible dialect)
 - libSQL client choice per app (Tauri/Rust: embedded `libsql` crate; web apps: `@libsql/client` for SvelteKit/Astro server endpoints; Python sidecar: `libsql-experimental` or the Turso HTTP client)
