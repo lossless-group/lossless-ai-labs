@@ -152,6 +152,38 @@ Implementation: **one `organizations` table** is the auth primitive. A `firm_pro
 
 This avoids the trap of having two near-identical tables (`firms` and `orgs`) drifting apart over time.
 
+#### Organization naming convention — domain-as-id
+
+Locked 2026-05-17 during chroma-decks Phase 6 implementation: **the `Organization.id` is the org's canonical email domain.** `Organization.slug` carries the human-readable handle.
+
+| Org type | `id` (canonical domain) | `slug` (handle) | `name` (display) | `firm_profile` |
+|---|---|---|---|---|
+| Lossless Group (consulting parent) | `lossless.group` | `lossless-group` | `Lossless Group` | absent |
+| Chroma (portco, fundraising) | `trychroma.com` | `chroma` | `Chroma` | absent (operating company, not a VC firm) |
+| Calm/Storm Ventures (VC firm) | `calmstormvc.com` | `calm-storm-ventures` | `Calm/Storm Ventures` | present (`firm_kind: vc`) |
+| Personal-email bucket | `personal` | `personal` | `Personal email signups` | absent |
+
+**Why domain-as-id:**
+
+1. **OAuth-natural.** A Google Workspace OAuth callback gives you `user@trychroma.com`; `email.split('@')[1]` is the org_id. Zero translation table.
+2. **Globally unique.** Two companies can both want the slug "studio"; nobody else gets your domain.
+3. **Self-documenting.** Reading `organization_id = "trychroma.com"` tells the reader what they need to know. `"chroma"` requires a mapping.
+4. **Cross-app rollup keys naturally.** When memopop, chroma-decks, and dididecks all stamp memberships against `trychroma.com`, the future rollup ingester joins on the same id without any client-side coordination.
+
+**Default seeding pattern.** Every app in `ai-labs/` seeds two Organization rows on first boot:
+
+1. **`lossless.group`** — the operating-team org. Lossless team members eventually attach here with role `superuser`.
+2. **`{client-domain}`** — the deck / app's primary client (for chroma-decks this is `trychroma.com`; for memopop's per-engagement instances it's the firm's domain).
+
+Apps with multiple clients in one deployment (a future "platform" mode) seed `lossless.group` plus one row per client domain.
+
+**Edge cases:**
+- **Personal emails** (`mpstaton@gmail.com`, `someone@hotmail.com`) — not real orgs. Bucket them as `id = "personal"` or `id = "personal:gmail.com"` (the second form lets analytics distinguish gmail vs proton vs outlook). Identity carries the actual person.
+- **Acquired / multi-domain firms** — handle when first encountered. Either an `aliases` column on Organization or a separate `OrganizationDomain` join table. Not v1.
+- **Subdomains** — strip to apex. `memos.acmevc.com` resolves to `acmevc.com`. Same org.
+
+**Future-proofing the @lossless.group fast-path.** When OAuth (or magic-link) yields `primary_email.endsWith("@lossless.group")`, attach to `lossless.group` with role `superuser` automatically. Saves admin work for the operating team. Named here as an explicit follow-up, not v1.
+
 ### 6. Roles inside an organization
 
 Initial roles, deliberately few:
