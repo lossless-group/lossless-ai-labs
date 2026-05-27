@@ -28,3 +28,9 @@
 [submodule "augment-it"]
 	path = augment-it
 	url = https://github.com/lossless-group/augment-it.git
+[submodule "studies/markdown-parse-serve-render"]
+	path = studies/markdown-parse-serve-render
+	url = https://github.com/lossless-group/study-markdown-parse-serve-render.git
+[submodule "studies/vector-databases"]
+	path = studies/vector-databases
+	url = https://github.com/lossless-group/study-vector-databases.git

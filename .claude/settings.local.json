@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python3.11 -m src.main:*)"
+      "Bash(python3.11 -m src.main:*)",
+      "Bash(gh repo create:*)"
     ],
     "deny": [],
     "ask": []
