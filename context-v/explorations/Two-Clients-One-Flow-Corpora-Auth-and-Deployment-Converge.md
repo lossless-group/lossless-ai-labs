@@ -7,7 +7,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.0.1
+semantic_version: 0.0.1.0
 status: Draft
 tags:
   - Exploration
@@ -158,6 +158,14 @@ fast-follow.
 Auth also can't be specced apart from Thread 3: a login is only meaningful on
 a hosted URL.
 
+> **Update 2026-07-06:** the implementation-site fork is resolved by a domain
+> purchase — **`didi.sh`** — and the decision to converge memos (memopop-ai),
+> decks (dididecks-ai), and augment-it on one shared identity service (one
+> account, SSO via a `.didi.sh` session cookie). The first implementation is
+> the identity service itself, with **augment-it as its first consumer** for
+> the reach-edu + humain-vc logins. See
+> [[Didi-sh-One-Login-One-Agent-Three-Services]].
+
 ## Thread 3 — deployment: augment-it goes first, the others fast-follow
 
 augment-it is ai-labs' first true container/microservice/microfrontend
@@ -273,11 +281,11 @@ deploy plan gets real.
 
 ## Open questions
 
-1. **First auth implementation site** — augment-it's workspace service (then
-   extract, calmstorm becomes consumer #2) vs resuming the calmstorm plan as
-   written? The exploration leans augment-it-first since it's the deploy
-   target with live client demand; the calmstorm inventory remains the
-   reference either way.
+1. **First auth implementation site** — *resolved 2026-07-06 by
+   [[Didi-sh-One-Login-One-Agent-Three-Services]]*: neither option as posed.
+   The first implementation is the **didi.sh identity service** itself;
+   augment-it wires in as its first consumer, calmstorm's audited code is the
+   quarry, and decks/memos follow as consumers two and three.
 2. **Hosting target.** Railway vs a Hetzner/DO box vs other. Narrows Thread 4
    (a persistent host volume makes option A trivial; ephemeral/managed pushes
    toward B).

@@ -2,12 +2,13 @@
 title: "Shared Auth for Applied AI Labs"
 lede: "We're about to need a real auth story across three sibling apps in ai-labs — memopop-ai, dididecks-ai, and the just-arriving augment-it. None of them is at the scale that justifies Auth0/Clerk pricing or robustness. We want a small, owned auth system that handles OAuth (GitHub + Google Workspace), pre-shared invites delivered by WhatsApp or 1Password, organization-scoped permissions, and a viewer-tier for memos and decks published on client subdomains — with a roll-up seam stubbed from day one so we can wire cross-app dashboards later without rewriting clients."
 date_created: 2026-05-17
-date_modified: 2026-05-17
+date_modified: 2026-07-06
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 4.7
-semantic_version: 0.0.0.3
+  - Claude Code on Claude Fable 5
+semantic_version: 0.0.1.0
 tags:
   - Auth
   - Multi-Tenant
@@ -386,6 +387,22 @@ These need follow-up — either further exploration, or a spec, or both. Listed 
 - `[[Separating-Retrieval-from-Generation-in-Agent-Pipelines.md]]` — sibling exploration; same
 - `[[ChromaDB-as-Context-Improvement-Across-Everything-Everyone.md]]` — the roll-up ingester pattern proposed here borrows directly from the `context-vigilance-kit` ingest pipeline already running for the corpus
 - `[[Moving-an-Agent-Orchestrator-to-an-API.md]]` — directly relevant: as memopop's orchestrator moves toward an API, that API is the first place a real auth boundary needs to land
+
+## Decision captured 2026-07-06 — didi.sh flips Fork 1 to a central identity service
+
+We bought **`didi.sh`** and committed to one common login across the three
+services. That is precisely the condition Fork 1 named as the trigger for
+Option B ("we want true SSO where signing into memopop signs you into
+dididecks"): with all three services under one apex domain, a single
+`.didi.sh` session cookie *is* the SSO mechanism, so the central service is
+now cheap where it used to be heavy. Everything below Fork 1 — the credential
+pathways, the domain-as-id org model, the roles, `lossless_id`, the scale
+posture — carries into the service intact. The three-session
+calmstorm-extraction plan below is superseded in *destination* (extract into
+the identity service, not into a vendored package; only Session 1 ever ran),
+while [[../../dididecks-ai/context-v/specs/Calmstorm-Auth-Inventory.md]]
+remains the reference implementation. Full framing and the didi-agent
+companion plane: [[Didi-sh-One-Login-One-Agent-Three-Services]].
 
 ## Decisions captured in-flight 2026-05-17
 
