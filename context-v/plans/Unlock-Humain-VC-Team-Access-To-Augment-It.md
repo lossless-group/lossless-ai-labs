@@ -7,7 +7,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.0.1
+semantic_version: 0.0.1.0
 status: Draft
 tags:
   - Plan
@@ -33,22 +33,44 @@ soon, so every build decision gets tested against "does the flow need
 it?"** Anything the flow doesn't need is named in the deferred list, not
 built.
 
-## The flow (the whole spec, as a story)
+## Flows
 
-> Linda (humain-vc) opens **augment.didi.sh** in her browser. She's not
-> signed in, so the shell shows the sign-in panel. She enters
-> **linda@humain.vc**, gets a real email, clicks the link, and lands back
-> in augment-it — signed in, in the **humain-vc workspace**, with the
-> strategy-curator surface showing the thesis corpus (consumer-immunology
-> and whatever else exists). She curates: adds sources, fetches content,
-> edits bibliography, tags. Her colleague does the same with his own
-> email. **Neither of them can see, switch to, or infer the existence of
-> reach-edu.** Michael signs in with any of his three addresses and gets
-> the same workspace (superuser powers come later; presence works now).
-> Nothing anyone does on the hosted instance is lost, and Michael can
-> pull the corpus down locally.
+### Flow 1 — side-by-side thesis corpus building (Michael + Aniel)
 
-Acceptance is this story working end to end, told by Linda without help.
+The concrete session this plan exists to unlock. **Michael** (sysadmin /
+superuser) and **Aniel** (client — Humain VC founder) are sitting next to
+each other, each on their own laptop, both signed into the hosted
+instance:
+
+1. **Sign in.** Aniel opens **augment.didi.sh**, enters **his humain.vc
+   email**, clicks the real magic-link email, lands in the humain-vc
+   workspace. Michael signs in with any of his three addresses. Neither
+   can see, switch to, or infer the existence of reach-edu.
+2. **Create theses.** Both can generate **`domain:type{thesis}`** entries —
+   the curator speaks "Thesis" on this instance, not "Strategy" (the
+   domain-type vocabulary item from the convergence doc, now
+   flow-critical in its minimal form: a per-instance/workspace default
+   type; the full type-picker can follow).
+3. **Build the corpus per thesis.** Both enter links (`source.add` →
+   metadata-first, fetch on demand) and **upload files** (`source.attach`
+   — already built: base64 over WS, Ghostscript compression) against
+   whichever thesis they're working.
+4. **The UI is live for both.** Aniel adds a link → **Michael's screen
+   updates without a refresh**, and vice versa. (This is multi-USER
+   liveness within ONE tenant — the single-tenant posture makes it
+   cheap: the WS layer already broadcasts NATS events to every connected
+   session; the curator's domain/source mutations need to emit events and
+   the curator surface needs to react to them.)
+5. **DiDi assists.** The chat rail — named **didi** — helps curate the
+   inbox (triage captured sources into theses) and talks them through
+   glitches. It carries the necessary agent-skills and can invoke the
+   curator's capabilities as verbs.
+6. **The other microfrontends stay reachable, untouched.** No extra work
+   to make them shine, no work to isolate them either — they're wanted
+   soon, so nothing in this flow may make them harder.
+
+Acceptance: this session happening for real, Aniel driving his own laptop
+without help.
 
 ## The triangulation, honestly assessed (2026-07-06)
 
@@ -92,10 +114,10 @@ one decision deletes the three biggest work items the flow does not need:
    magic-link email round-trip. *The flow's only unavoidable new
    integration.*
 2. **Seed the org + memberships** (id-didi-sh, interim path). `mix` task or
-   `fly ssh console` eval: org `humain.vc` (domain-as-id), memberships for
-   Linda + colleague (`editor`) and Michael (`superuser`). The admin
-   console (increment 3) replaces this; the flow doesn't wait for it.
-   `/api/me` already returns memberships.
+   `fly ssh console` eval: org `humain.vc` (domain-as-id), membership for
+   Aniel (`editor` — or `org_owner`, he's the founder) and Michael
+   (`superuser`). The admin console (increment 3) replaces this; the flow
+   doesn't wait for it. `/api/me` already returns memberships.
 3. **The membership gate** (augment-it workspace-service). Extend the didi
    adapter: on WS upgrade (with `DIDI_AUTH=required` on the instance),
    fetch `/api/me`, admit only didi_ids holding a membership in the
@@ -118,6 +140,27 @@ one decision deletes the three biggest work items the flow does not need:
 6. **Instance posture flags**: `DIDI_AUTH=required`, switcher hidden when
    the instance is pinned, sign-in panel as the pre-auth wall (today the
    shell renders regardless — one conditional).
+7. **Thesis vocabulary, minimal form** (augment-it curator). A
+   per-workspace/instance default domain type (`thesis` for humain-vc) +
+   the copy rendering that noun. The backend is already generic
+   (`DOMAIN_FOLDERS` knows `theses`); the UI constant is the gap. The
+   full type-picker stays in the curator spec's queue — the flow needs
+   only the default. Includes the `domain.retype` of the mis-filed
+   `consumer-immunology`.
+8. **Curator liveness** (augment-it). Emit NATS events from the
+   domain/source capability handlers (`domain.created`, `source.added`,
+   `source.updated`, `source.removed`, …), add them to the WS broadcast
+   list, and make the curator surface react — both users are in the same
+   tenant, so broadcast-to-all-sessions IS the multi-user model here. No
+   presence, no cursors, no CRDTs: event → refetch is enough for two
+   people.
+9. **didi chat v0** (augment-it). The existing chat rail, given the didi
+   name and pointed at this flow: able to invoke the curator's
+   capabilities as verbs (inbox triage into theses, source fixes) and
+   loaded with the necessary agent-skills (the `context-v/agent-skills/`
+   pattern — an inbox-curation skill alongside the decile precedent).
+   This is the didi persona's first mount, deliberately scoped to what
+   the flow needs — not the cross-service agent, not BYOK.
 
 ## Deliberately NOT built for this flow
 
@@ -125,10 +168,17 @@ one decision deletes the three biggest work items the flow does not need:
 - Org/membership admin UI (increment 3's LiveView console does it right)
 - Workspace-level ACLs beyond the one org gate
 - Invites UI — seeded memberships + magic links suffice for two people
-- The didi agent, BYOK, anything chat-adjacent
+- The cross-service didi agent, BYOK, shared agent runtime — didi v0
+  above is this instance's chat rail with skills, nothing didi-wide
+- Presence indicators, cursors, CRDTs — event-driven refetch is the
+  liveness model for two people in one tenant
+- The full domain-type picker UI — the per-instance default noun is the
+  flow's whole need
 - R2-native corpus reads, JuiceFS, Litestream for augment-it's stores
   (Fly volume snapshots are the interim recovery story, same as id)
 - Deployment of memos / decks — different flows, different docs
+- Making the other microfrontends flow-ready OR isolating them — they
+  stay mounted as-is; the only rule is this flow must not break them
 
 ## Decisions needed before building (small, name them now)
 
@@ -138,8 +188,11 @@ one decision deletes the three biggest work items the flow does not need:
    sender. Platform sender is the v0 lean.
 3. **Instance URL** — `augment.didi.sh` (the platform subdomain, cookie
    works) — or a humain-specific alias later. Lean: `augment.didi.sh`.
-4. **The two humain-vc emails** — confirm Linda's and the colleague's
-   actual addresses before seeding.
+4. **Aniel's actual address** (and any second humain-vc seat) — confirm
+   before seeding memberships.
+5. **didi's skill list for this flow** — which agent-skills the chat
+   carries on the instance (inbox curation is named; what else earns a
+   slot?).
 
 ## Related
 
