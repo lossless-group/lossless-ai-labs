@@ -332,6 +332,13 @@ package — consumers copy it in, per the no-shared-code property.
 5. **Deploy.** id.didi.sh live per the deploy plan; augment-it flips from dev
    id to prod id; **fullstack-vc identities imported (email → `didi_id`)**;
    first real client invites go out.
+   > **Update 2026-07-06 — the hosting half landed early.** id-didi-sh runs
+   > on Fly.io (`lax`, volume-mounted libSQL, migrate-at-boot, auto_stop
+   > off), secrets set without exposure, JWKS live at `id-didi-sh.fly.dev`;
+   > TLS cert issued for `id.didi.sh` pending two DNS records in Vercel
+   > (the didi.sh registrar). The import + invite halves stay with
+   > increments 3–4. Litestream→R2 is the named follow-up before real
+   > client accounts exist. See the repo changelog `2026-07-06_04`.
 6. **Consumers two and three.** decks middleware port (calmstorm retires its
    own gate), memos web, then the Tauri device-exchange flow.
 
