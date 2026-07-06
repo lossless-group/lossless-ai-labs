@@ -312,12 +312,12 @@ package — consumers copy it in, per the no-shared-code property.
    > optional — legacy continuity tokens keep working). Local-dev
    > topology mirrors prod: host-only localhost cookies ignore ports, so
    > the dev id at `:4000` plays the role of `.didi.sh`; the container
-   > fetches JWKS via `host.docker.internal`. **Remaining in this
-   > increment:** the shell's access panel (browser sign-in calling the
-   > magic-link endpoints — needs the id service's dev CORS for
-   > `localhost:3100`), and the per-capability `didi_id` → org-role →
-   > workspace mapping. `required` mode flips after increment 3's
-   > invites.
+   > fetches JWKS via `host.docker.internal`. **Update, same day: the shell half is DONE too**
+   > (`augment-it@ebf1339` + id CORS plug): header DidiBadge with
+   > server-verified state and the in-app magic-link sign-in popover,
+   > over config-driven exact-origin CORS. **Remaining in this
+   > increment:** the per-capability `didi_id` → org-role → workspace
+   > mapping. `required` mode flips after increment 3's invites.
 
    Concretely, picking up from increment 1:
    - **Replace the flat token map** in
