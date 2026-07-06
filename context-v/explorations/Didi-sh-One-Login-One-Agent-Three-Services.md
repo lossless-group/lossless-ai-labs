@@ -7,7 +7,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.1.0
+semantic_version: 0.0.1.1
 status: Draft
 tags:
   - Exploration
@@ -110,6 +110,37 @@ hard part mostly dissolves:
   dashboard the outbox was stubbed for becomes a query. (Per-app
   `auth_events_outbox` remains the right pattern for *app* events; it's no
   longer needed for *auth* events.)
+
+### What the domain does — and does not — constrain (clarified 2026-07-06)
+
+Three distinctions that came out of discussion, pinned so nobody re-derives
+them:
+
+- **Shared session ≠ federated login.** The `.didi.sh` cookie gives *one
+  actual session*: sign in at decks, open memos, you're simply already in —
+  no click, no redirect, one logout. "Log in with GitHub"-style federation is
+  a different mechanism: each site runs a redirect + code-exchange dance and
+  then issues its *own* separate session on its own domain (which is why
+  logging out of GitHub logs you out of nothing else). If an app ever moves
+  off `.didi.sh`, SSO doesn't die — it *downgrades* from shared-session to
+  federated login, and we inherit the provider-side OAuth machinery
+  (registered redirect URIs, code exchange, per-domain sessions). The
+  identity service can grow into provider mode if GTM ever forces it; the
+  point is to not stumble into that cost by parking an app on a marketing
+  domain.
+- **Domain topology ≠ repo or deploy topology.** DNS is a pointer layer.
+  `decks.didi.sh`, `memos.didi.sh`, and `augment.didi.sh` can each CNAME to
+  completely different infrastructure — three repos, three hosts, three
+  independent deploy pipelines, exactly as they're built today. The
+  pseudomonorepo stays what it is (independent repos aggregated for context,
+  never a deployment unit). Per consumer repo, the didi.sh integration is a
+  thin session-verification adapter plus env vars — no rearchitecture.
+- **One cookie = one trust boundary.** Every `*.didi.sh` subdomain can read —
+  and technically *set* — a `Domain=.didi.sh` cookie. Signed cookie values
+  make forged cookies inert, but the operating rule stands regardless:
+  **never host untrusted or client-controlled content on a `*.didi.sh`
+  subdomain.** Client-published surfaces (`memos.acmevc.com`, GitHub-Pages
+  client decks) already live off-domain; that stays a rule, not an accident.
 
 ### What survives from the prior architecture unchanged
 
@@ -341,14 +372,15 @@ survives with its auth thread re-targeted:
 
 ## What forks from this
 
-- **ai-labs spec: `Didi-Identity-Service.md`** — supersedes the
-  package-extraction plan in [[Shared-Auth-for-Applied-AI-Labs]] §Decisions:
-  schema (carried over nearly verbatim), the **headless-first API contract**
-  (services own the signup pixels; the GTM section above is a hard
+- **ai-labs spec: [[Id-Didi-Sh-Identity-Service]]** (written 2026-07-06) —
+  supersedes the package-extraction plan in [[Shared-Auth-for-Applied-AI-Labs]]
+  §Decisions: schema (carried over nearly verbatim), the **headless-first API
+  contract** (services own the signup pixels; the GTM section above is a hard
   requirement, not a preference), the `.didi.sh` session contract,
   signed-token verification for services, the consumer wiring order
   (augment-it → decks → memos incl. Tauri), and what calmstorm's code
-  contributes.
+  contributes (behavioral reference, not extracted code — the spec picks a
+  non-TS stack).
 - **ai-labs blueprint: `Didi-Agent-Skills-Convention.md`** — the skill
   format, the library layout, service-scoped exposure, loading mechanics,
   and the relationship to `context-v/skills/` and `context-v/agent-skills/`
