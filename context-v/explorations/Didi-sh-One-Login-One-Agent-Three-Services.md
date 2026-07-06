@@ -7,7 +7,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.0.1
+semantic_version: 0.0.1.0
 status: Draft
 tags:
   - Exploration
@@ -168,6 +168,41 @@ augment-it's capability gate. calmstorm's code is the quarry to extract *into
 the service* rather than into a vendored package; memos and decks wire in as
 consumers two and three.
 
+## The GTM constraint — every service is its own front door
+
+Added 2026-07-06, same day, after the naming sketch above: **nobody searches
+for a one-source-fits-all platform.** They search for a deck designer, a memo
+generator, a research tool — point solutions whose names match the query. So
+the platform posture inverts the usual suite pattern, and the inversion is a
+hard requirement on the identity service's shape:
+
+- **The apex is not the front door.** `didi.sh` (and any account console on
+  it) is connective tissue, not a landing page users get routed through. Each
+  service owns its marketing surface, its positioning, and its signup moment.
+- **Accounts are created FROM the app the user is in.** A user who arrives at
+  decks signs up *in decks* — the service renders its own branded signup/login
+  UI (its theme, its copy), and the didi.sh account is created underneath,
+  with no visible "now leaving for the platform" hop. Invites land the same
+  way: an invite link opens the service's own access page, not `id.didi.sh`.
+- **Therefore the identity service is headless-first.** Its primary interface
+  is an API the services call — create-account, start-oauth, redeem-invite,
+  redeem-magic-link, session issue/verify — not a hosted login page the
+  services redirect to. A hosted fallback page can exist, but the contract is:
+  **the service owns the pixels; the identity service owns the record and the
+  session.** The OAuth dance still round-trips through the identity host
+  (provider callbacks need one stable redirect URI), styled thin enough to
+  read as a blink, landing back in the app that started it.
+- **Marketing domain ≠ app domain — and only the app domain must be didi.sh.**
+  The `.didi.sh` cookie is what makes SSO free, so the *running apps* live on
+  `*.didi.sh`. Each service's discoverable marketing site can live wherever
+  its GTM wants (a product-named domain, SEO'd for its query), funneling into
+  its app subdomain at signup. Point-solution GTM and cheap SSO don't
+  conflict — as long as nobody puts an app itself on a non-didi.sh domain.
+- **The family is discovered later, from inside.** "Your account also works on
+  memos" is an in-product moment — and a natural line for didi to deliver —
+  *after* the point solution has proven its value. Cross-service is expansion,
+  not acquisition.
+
 ## Plane 2 — didi, the agent
 
 The agent architecture is already specced and the didi decision keeps all of
@@ -279,14 +314,19 @@ survives with its auth thread re-targeted:
 1. **Subdomain names.** `id.didi.sh` vs `auth.didi.sh` vs `login.didi.sh`;
    `augment.didi.sh` vs `it.didi.sh` (the pun) vs renaming the service to
    match `memos`/`decks` vocabulary (`corpus.didi.sh`? `research.didi.sh`?).
-   And does the apex host a landing + account console (the natural home for
-   "your account, your orgs, your services")?
+   The apex-as-front-door half of this question is answered by the GTM
+   section — the apex is never the acquisition path; at most it hosts a
+   secondary account console ("your account, your orgs, your services")
+   reached from inside the apps.
 2. **`lossless_id` → `didi_id`?** The stable person id is about to be minted
    by the didi.sh service; naming it after the platform reads better in every
    downstream schema. Decide before the first row exists, not after.
 3. **Is didi the platform brand or just the agent?** "didi.sh services" vs
    "the didi platform, with didi the agent as its face." Affects marketing
-   copy, the apex page, and whether `dididecks` reads as redundant.
+   copy, the apex page, and whether `dididecks` reads as redundant. The GTM
+   section tilts this: the *services* carry the searchable product brands;
+   didi.sh is connective tissue plus the agent's name — so didi is probably
+   the agent (and the quiet account footer), not the headline.
 4. **Skill loading mechanism** — retrieval-scored triggers, surface-declared
    packs, or both (lean: both — declare by surface, retrieve within).
 5. **Agent runtime placement** — per-app v1 with shared persona/skill
@@ -303,7 +343,9 @@ survives with its auth thread re-targeted:
 
 - **ai-labs spec: `Didi-Identity-Service.md`** — supersedes the
   package-extraction plan in [[Shared-Auth-for-Applied-AI-Labs]] §Decisions:
-  schema (carried over nearly verbatim), the `.didi.sh` session contract,
+  schema (carried over nearly verbatim), the **headless-first API contract**
+  (services own the signup pixels; the GTM section above is a hard
+  requirement, not a preference), the `.didi.sh` session contract,
   signed-token verification for services, the consumer wiring order
   (augment-it → decks → memos incl. Tauri), and what calmstorm's code
   contributes.
