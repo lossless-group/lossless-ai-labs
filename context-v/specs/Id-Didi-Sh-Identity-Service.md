@@ -7,8 +7,8 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.1.0
-status: Draft
+semantic_version: 0.0.1.1
+status: Implementing
 category: Specification
 tags:
   - Spec
@@ -291,14 +291,36 @@ package — consumers copy it in, per the no-shared-code property.
 
 ## Implementation increments
 
-1. **Walking skeleton.** `mix phx.new` (API-first + LiveView), schema
-   migrations, keypair generation, magic-link issue/redeem end-to-end, cookie
-   mint, JWKS + `/api/me`. Verified by a curl script: redeem → cookie →
-   verify signature offline → `/api/me`.
-2. **First consumer: augment-it.** The TS verify adapter on the workspace WS
-   gate + capability check; the shell's access panel calling
-   magic-link/invite endpoints; org↔workspace mapping. Dev-mode against
-   `localhost` id.
+1. **Walking skeleton. ✅ DONE 2026-07-06** (`id-didi-sh@3e9f90e`). Full
+   schema in one migration, Ed25519 keypair + JWKS, magic-link issue →
+   redeem → `didi_session` cookie → `/api/me` → refresh → logout. 19 tests
+   green; proven live by `scripts/prove-skeleton.sh` (including
+   reuse-rejected and post-logout-rejected). Deviation from the plan as
+   written: `phx.gen.auth` was NOT used — its generated code assumes
+   browser-session flows (Phoenix signed sessions, LiveView forms), not our
+   JWT-cookie + JSON-API contract, so the contexts are hand-rolled while
+   mirroring its token-hashing discipline. Gotchas logged in the repo's
+   changelog `2026-07-06_02`: config appended below `import_config`
+   silently overrides every per-env file; schemaless `insert_all` needs
+   maps JSON-encoded by hand on SQLite.
+2. **First consumer: augment-it. ← NEXT.** Concretely, picking up from
+   increment 1:
+   - **Replace the flat token map** in
+     `augment-it/services/workspace/src/auth.ts` (a `sessions.json`
+     token→created_at map today) with a verify adapter: parse the
+     `didi_session` cookie on the workspace **WS upgrade**, verify locally
+     via `jose` (npm) against a cached JWKS fetch from the id service
+     (re-fetch on unknown `kid`), and attach `{ didi_id, sid }` to the
+     socket session.
+   - **Per-capability check**: map `didi_id` → org memberships (cached
+     `GET /api/me`, ETag) → workspace access, per
+     [[../../augment-it/context-v/specs/Workspaces-as-Tenant-Primitive|Workspaces-as-Tenant-Primitive]].
+   - **The shell's access panel** calls `POST /api/magic-links` +
+     `/api/magic-links/redeem` directly (headless contract; the panel owns
+     the pixels). Dev-mode: id at `http://localhost:4000`, augment-it
+     pointing at it via env (`ID_ISSUER_URL`, `ID_JWKS_URL`), host-only
+     cookie on localhost.
+   - Dev users come from `mix id.seed` until increment 3's invites.
 3. **Invites + admin console.** `login_tokens(kind=invite)`, the LiveView
    admin (invites, orgs, memberships, sessions), auth events. This is the
    increment that makes reach-edu + humain-vc onboarding real: mint invites,
