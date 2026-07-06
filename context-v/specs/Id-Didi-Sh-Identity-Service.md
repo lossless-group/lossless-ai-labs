@@ -7,7 +7,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.0.1
+semantic_version: 0.0.1.0
 status: Draft
 category: Specification
 tags:
@@ -42,6 +42,24 @@ pathways, domain-as-id orgs, roles, the stable person id, the scale posture
 `dididecks-ai/context-v/specs/Calmstorm-Auth-Inventory.md` is the behavioral
 reference for token/session/invite mechanics; because this spec picks a
 non-TS stack, calmstorm contributes **semantics, not code**.
+
+### Second prior-art site: fullstack-vc (audited 2026-07-06)
+
+`astro-knots/sites/fullstack-vc` runs a working Turso-backed identity today —
+Astro DB (Drizzle over libSQL), **three live OAuth providers (GitHub,
+LinkedIn, Google)** with a battle-tested multi-provider account-linking flow
+(`src/lib/user-record.ts`: provider-sub lookups + email-array union merges),
+stateless HS256 JWT sessions (`src/lib/session.ts`), and authorization via a
+roster JSON. The decision on reuse: **import, don't share.** Its schema is
+shaped for a roster-gated community site (row `id` is the lowercased roster
+email — the mutable-key problem `didi_id` exists to avoid) and its symmetric
+HS256 session model can't serve a multi-consumer platform (any verifier could
+mint). What it contributes: its **user rows are imported by email → `didi_id`
+when id.didi.sh goes live**, its **account-linking semantics** port as
+reference behavior alongside calmstorm's, **LinkedIn** joins the OAuth
+roadmap (already proven, and the right provider for a VC audience), and
+fullstack-vc itself becomes a future *federated* consumer (own domain — no
+`.didi.sh` cookie; provider-mode, per the exploration's clarification).
 
 ## The contract — all a consumer ever sees
 
@@ -83,14 +101,20 @@ container. Concretely:
 - **Assent** for the OAuth *client* flows (GitHub, Google Workspace) — the
   `arctic` equivalent: minimal provider plumbing, we own sessions and storage.
 - **JOSE (erlang-jose)** for token signing (see Session model).
-- **Ecto + SQLite (`ecto_sqlite3`) + Litestream replicating to R2** — one
-  file on the host volume, continuously backed up to the R2 bucket we already
-  stood up (credentials recipe in
+- **Ecto + a libSQL file** (decided 2026-07-06) — `ecto_sqlite3`/`exqlite`
+  compiled against the **libSQL** amalgamation instead of vanilla SQLite.
+  libSQL is a compliant fork (same file format, same C API), so the full
+  Ecto + `phx.gen.auth` story works unchanged on a libSQL file — and the
+  Turso door stays open by construction. **Litestream replicating to R2** is
+  the backup layer (bucket + credentials recipe already verified in
   [[../../augment-it/context-v/explorations/JuiceFS-Pinned-Path-Off-Local-Substrate|JuiceFS-Pinned-Path-Off-Local-Substrate]]).
-  No new database vendor. Postgres is the config-swap alternative if the
-  hosting target ships managed PG. (The original libSQL/Turso pick was
-  motivated by *per-app embedded* databases; with one central service that
-  rationale evaporates, and Elixir's Turso story is weak anyway.)
+  The nuance that shaped the decision, pinned: **libSQL's compliance is in
+  the file and the C API; the remote conveniences (embedded replicas with
+  sync, Hrana-over-HTTP) live in Turso's client SDKs, which have no official
+  Elixir member** — so libSQL-local is cheap and real today, and flipping the
+  file to a Turso-synced replica is the *named upgrade path* for when an
+  Elixir client matures, not a v1 dependency. Postgres remains the
+  config-swap fallback if the hosting target makes it compelling.
 - **Swoosh** for transactional email (magic links) with a Resend or Postmark
   adapter — provider decision open below.
 - **Phoenix LiveView for the admin console** — invites, orgs, memberships,
@@ -280,9 +304,12 @@ package — consumers copy it in, per the no-shared-code property.
    increment that makes reach-edu + humain-vc onboarding real: mint invites,
    deliver by WhatsApp/1Password/email.
 4. **OAuth.** GitHub (team fast-path), then Google Workspace with the per-org
-   domain allowlist. Assent wiring + account-linking rules.
+   domain allowlist; LinkedIn follows (fullstack-vc's wiring as reference).
+   Assent wiring + account-linking rules ported from the fullstack-vc merge
+   chain.
 5. **Deploy.** id.didi.sh live per the deploy plan; augment-it flips from dev
-   id to prod id; first real client invites go out.
+   id to prod id; **fullstack-vc identities imported (email → `didi_id`)**;
+   first real client invites go out.
 6. **Consumers two and three.** decks middleware port (calmstorm retires its
    own gate), memos web, then the Tauri device-exchange flow.
 
@@ -315,8 +342,9 @@ package — consumers copy it in, per the no-shared-code property.
 ## Open questions
 
 1. **Hosting target** — inherited from the deploy plan (Railway vs
-   Hetzner/DO box). Decides SQLite+Litestream vs managed Postgres; both are
-   spec-conformant.
+   Hetzner/DO box). The store is decided (libSQL file + Litestream→R2);
+   the host just needs a persistent volume. Managed Postgres is the fallback
+   only if the chosen host makes volumes painful.
 2. **Email provider** for magic links (Resend vs Postmark; Swoosh supports
    both). Needed by increment 1's end.
 3. **EdDSA vs ES256** — confirm EdDSA verifies cleanly in the exact `jose`
@@ -335,6 +363,7 @@ package — consumers copy it in, per the no-shared-code property.
 - [[../explorations/Didi-sh-One-Login-One-Agent-Three-Services|Didi-sh-One-Login-One-Agent-Three-Services]] — the platform frame; the GTM headless requirement; the trust-boundary and deploy-independence clarifications this spec operationalizes.
 - [[../explorations/Shared-Auth-for-Applied-AI-Labs|Shared-Auth-for-Applied-AI-Labs]] — the architecture source (pathways, org model, roles, scale posture); Fork 1 flipped 2026-07-06.
 - `dididecks-ai/context-v/specs/Calmstorm-Auth-Inventory.md` — behavioral reference for token/session mechanics; ported, not extracted.
+- `astro-knots/sites/fullstack-vc/src/lib/{user-record,session,oauth-roster}.ts` — the second prior-art implementation: three-provider OAuth + account-linking merge chain (imported + ported, not shared — see §Second prior-art site).
 - [[../explorations/Two-Clients-One-Flow-Corpora-Auth-and-Deployment-Converge|Two-Clients-One-Flow-Corpora-Auth-and-Deployment-Converge]] — the deploy plan this rides; reach-edu + humain-vc are the first invited users.
 - [[../../augment-it/context-v/blueprints/Auth-Patterns-following-Astro-Knots-Patterns|Auth-Patterns-following-Astro-Knots-Patterns]] — the augment-it gate this adapter lands in.
 - [[../../augment-it/context-v/specs/Workspaces-as-Tenant-Primitive|Workspaces-as-Tenant-Primitive]] — the org↔workspace mapping on the consumer side.
