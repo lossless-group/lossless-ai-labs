@@ -208,6 +208,7 @@ with the central-service simplifications applied:
 | `firm_profiles` | 1:1 nullable extension on organizations (firm_kind, brand fields). Same firm==org dual-vocabulary. |
 | `memberships` | `(didi_id, org_id, role)`; role ∈ `superuser` / `org_owner` / `org_admin` / `editor` / `viewer`. Org-wide roles, no per-resource ACLs (v1 posture unchanged). |
 | `oauth_accounts` | 1:N under users — provider, provider_uid, raw profile snapshot. |
+| `user_emails` | Alt emails (added 2026-07-06): `(didi_id, email)`, unique on lowered email across all aliases; magic links to any alias authenticate the same `didi_id`. One person, many addresses — the fullstack-vc lesson normalized preemptively. |
 | `login_tokens` | The unified single-use table: `kind` ∈ `magic_link` / `invite`, hashed token, `expires_at`, `claimed_at`, `issued_by`, `org_id` + `role` (for invites), delivery-channel metadata. Magic-link and invite are the same code path with different delivery — the Fork 4 insight, kept. |
 | `sessions` | `sid`, `didi_id`, created/last_seen/expires, user-agent + IP snapshot, revoked_at. The refresh/revocation authority. |
 | `auth_events` | Born central (the outbox collapse): `occurred_at`, `didi_id`, `app_slug`, `org_id`, `event_type`, payload. `app_slug` comes from the calling service's registered app record. |
