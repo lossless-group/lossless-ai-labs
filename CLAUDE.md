@@ -22,6 +22,7 @@ list — this is a snapshot):
 | Child | Purpose |
 |---|---|
 | `augment-it/` | newly added; check its own README |
+| `id-didi-sh/` | the didi.sh identity service — one account across memos/decks/augment-it; **the tree's polyglot exception (Elixir/Phoenix)**; spec of record at `context-v/specs/Id-Didi-Sh-Identity-Service.md` |
 | `dididecks-ai/` | slide-deck operating system for due-diligence-grade content |
 | `memopop-ai/` | multi-agent investment-memo orchestration (LangGraph) |
 | `context-vigilance-kit/` | operationalizes the context-vigilance practice across the whole Lossless tree; **the only place the local Chroma corpus and MCP server live** |

@@ -34,3 +34,6 @@
 [submodule "studies/vector-databases"]
 	path = studies/vector-databases
 	url = https://github.com/lossless-group/study-vector-databases.git
+[submodule "id-didi-sh"]
+	path = id-didi-sh
+	url = https://github.com/lossless-group/id-didi-sh.git
