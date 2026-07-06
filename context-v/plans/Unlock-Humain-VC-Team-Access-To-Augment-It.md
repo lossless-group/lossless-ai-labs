@@ -161,6 +161,18 @@ one decision deletes the three biggest work items the flow does not need:
    pattern — an inbox-curation skill alongside the decile precedent).
    This is the didi persona's first mount, deliberately scoped to what
    the flow needs — not the cross-service agent, not BYOK.
+10. **Actor attribution on every mutation** (augment-it). The WS session
+    already carries the verified `didi_id`; thread it into the capability
+    dispatch envelope — the same envelope that carries tenant context per
+    [[../../augment-it/context-v/specs/Workspaces-as-Tenant-Primitive|Workspaces-as-Tenant-Primitive]]
+    — so every domain/source/extract mutation stamps
+    `created_by`/`updated_by` (didi_id) into corpus frontmatter, DB rows,
+    and the NATS events (which also gives item 8's live updates their
+    "who did that" for free, and didi's actions stamp as the acting
+    user + an agent marker). **Data-shape only: no filtering, no per-user
+    views, no audit UI** — same discipline as `client_id` stamping before
+    multi-tenancy was real. The field is cheap now; unattributed history
+    is unrecoverable later.
 
 ## Deliberately NOT built for this flow
 
@@ -172,6 +184,9 @@ one decision deletes the three biggest work items the flow does not need:
   above is this instance's chat rail with skills, nothing didi-wide
 - Presence indicators, cursors, CRDTs — event-driven refetch is the
   liveness model for two people in one tenant
+- User-based filtering, per-user views, audit surfaces — the
+  `created_by` stamps (item 10) make them buildable later; none ships
+  in this flow
 - The full domain-type picker UI — the per-instance default noun is the
   flow's whole need
 - R2-native corpus reads, JuiceFS, Litestream for augment-it's stores
