@@ -303,8 +303,23 @@ package — consumers copy it in, per the no-shared-code property.
    changelog `2026-07-06_02`: config appended below `import_config`
    silently overrides every per-env file; schemaless `insert_all` needs
    maps JSON-encoded by hand on SQLite.
-2. **First consumer: augment-it. ← NEXT.** Concretely, picking up from
-   increment 1:
+2. **First consumer: augment-it.**
+   > **Update 2026-07-06 — the WS-gate half is DONE, dev mode**
+   > (`augment-it@b642fba`, proven by `scripts/prove-didi-auth.mjs`):
+   > the workspace upgrade verifies `didi_session` locally (jose + JWKS,
+   > EdDSA-only), attaches `didi_id` to the session, with a
+   > `DIDI_AUTH=off|optional|required` posture flag (dev default:
+   > optional — legacy continuity tokens keep working). Local-dev
+   > topology mirrors prod: host-only localhost cookies ignore ports, so
+   > the dev id at `:4000` plays the role of `.didi.sh`; the container
+   > fetches JWKS via `host.docker.internal`. **Remaining in this
+   > increment:** the shell's access panel (browser sign-in calling the
+   > magic-link endpoints — needs the id service's dev CORS for
+   > `localhost:3100`), and the per-capability `didi_id` → org-role →
+   > workspace mapping. `required` mode flips after increment 3's
+   > invites.
+
+   Concretely, picking up from increment 1:
    - **Replace the flat token map** in
      `augment-it/services/workspace/src/auth.ts` (a `sessions.json`
      token→created_at map today) with a verify adapter: parse the
