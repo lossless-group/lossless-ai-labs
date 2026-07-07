@@ -355,6 +355,10 @@ package — consumers copy it in, per the no-shared-code property.
    > (the didi.sh registrar). The import + invite halves stay with
    > increments 3–4. Litestream→R2 is the named follow-up before real
    > client accounts exist. See the repo changelog `2026-07-06_04`.
+   > **Same day, later: `https://id.didi.sh` is LIVE** — DNS + TLS
+   > validated, Resend domain-verified (`no-reply@didi.sh`, unrestricted
+   > recipients), the scanner-proof `/access` landing deployed, and the
+   > full loop operator-clicked in production. Changelog `2026-07-06_07`.
 6. **Consumers two and three.** decks middleware port (calmstorm retires its
    own gate), memos web, then the Tauri device-exchange flow.
 
