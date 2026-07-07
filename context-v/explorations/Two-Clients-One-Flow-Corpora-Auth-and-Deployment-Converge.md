@@ -331,3 +331,4 @@ deploy plan gets real.
 - [[../../augment-it/context-v/specs/Workspaces-as-Tenant-Primitive|Workspaces-as-Tenant-Primitive]] — the tenant model auth will enforce against.
 - [[../../augment-it/context-v/blueprints/Auth-Patterns-following-Astro-Knots-Patterns|Auth-Patterns-following-Astro-Knots-Patterns]] — the augment-it translation layer for the auth gate.
 - `dididecks-ai/context-v/specs/Calmstorm-Auth-Inventory.md` — the audited reference implementation.
+- [[../../augment-it/context-v/explorations/Augment-It-Has-Outgrown-One-Flow-The-Choose-A-Flow-Front-Door|Augment-It-Has-Outgrown-One-Flow]] — the shell-navigation-level version of this doc's "one flow" framing: argues `ROTATION` is CSV-row-augmentation's shape specifically, and Thread 1's domain-type work (strategy-curator, now thesis-curator) needs its own header-level "Build Corpora" entry point rather than a splice onto that array's head.
