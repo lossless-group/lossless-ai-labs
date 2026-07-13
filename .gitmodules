@@ -2,9 +2,6 @@
 	path = packages/mermaid-js-ai-agent
 	url = https://github.com/disler/mermaid-js-ai-agent.git
 	branch = main
-[submodule "packages/Perplexica"]
-	path = packages/Perplexica
-	url = https://github.com/lossless-group/Perplexica--lossless.git
 [submodule "memopop-ai"]
 	path = memopop-ai
 	url = https://github.com/lossless-group/memopop-ai.git
@@ -37,3 +34,6 @@
 [submodule "id-didi-sh"]
 	path = id-didi-sh
 	url = https://github.com/lossless-group/id-didi-sh.git
+[submodule "packages/odysseus"]
+	path = packages/odysseus
+	url = https://github.com/pewdiepie-archdaemon/odysseus.git

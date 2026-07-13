@@ -14,12 +14,22 @@ A true monorepo: Tauri 2 desktop app, Astro marketing site, eventual SvelteKit h
 → `memopop-ai/` · [lossless-group/memopop-ai](https://github.com/lossless-group/memopop-ai)
 
 ### DidiDecks AI — code-first slide-deck OS for Due Diligence
-A code-first slide-deck operating system for receiving-side Due-Diligence-grade content. Specs + splash + two driving client engagements (`calmstorm-decks`, `reach-edu-hub`) carried as nested submodules under `dididecks-ai/client-sites/`. Early architecture; no core implementation yet.
+A code-first slide-deck operating system for receiving-side Due-Diligence-grade content. Specs + splash + five driving client engagements (`calmstorm-decks`, `chroma-decks`, `humain-vc-decks`, `lossless-decks`, `reach-edu-hub`) carried as nested submodules under `dididecks-ai/client-sites/`.
 
 → `dididecks-ai/` · [lossless-group/dididecks-ai](https://github.com/lossless-group/dididecks-ai)
 
+### Augment It — multi-tenant AI data augmentation
+Upload a CSV or spreadsheet, fire enrichment passes against it (custom LLM prompts or source-bound packs like LinkedIn / X / Bluesky / Wikipedia), triage the responses, and promote enhanced rows into new canonical record sets. Federated Svelte 5 microfrontends over stateless TypeScript microservices talking NATS; every column on every row is tenant-defined, no hardcoded schema.
+
+→ `augment-it/` · [lossless-group/augment-it](https://github.com/lossless-group/augment-it)
+
+### id-didi-sh — the didi.sh identity plane
+One small, owned auth service behind `id.didi.sh`. Create an account once from inside whichever app invited you, and you're signed in across memos (`memopop-ai`), decks (`dididecks-ai`), and `augment-it` via a single `.didi.sh` session cookie. The tree's deliberate polyglot exception (Elixir/Phoenix). Spec of record at [`context-v/specs/Id-Didi-Sh-Identity-Service.md`](./context-v/specs/Id-Didi-Sh-Identity-Service.md).
+
+→ `id-didi-sh/` · [lossless-group/id-didi-sh](https://github.com/lossless-group/id-didi-sh)
+
 ### Context Vigilance Kit — the corpus tooling
-Walks every `context-v/` directory across the Lossless tree (and beyond), buckets files by depth-of-completion, and prepares them for ingestion into a ChromaDB-backed corpus. 583 files inventoried in v0; brand site at [contextvigilance.com](https://contextvigilance.com) (forthcoming). Will graduate to its own top-level repo when v0.1 is ready to leave the nest.
+Walks every `context-v/` directory across the Lossless tree (and beyond), buckets files by depth-of-completion, and prepares them for ingestion into a ChromaDB-backed corpus. Now backs a local Chroma MCP server (four collections: context-vigilance corpus, changelog, Claude Code sessions, tool traces) queryable from any session under `ai-labs/`. Brand site at [contextvigilance.com](https://contextvigilance.com) (forthcoming). Will graduate to its own top-level repo when v0.1 is ready to leave the nest.
 
 → `context-vigilance-kit/` · [lossless-group/context-vigilance-kit](https://github.com/lossless-group/context-vigilance-kit)
 
@@ -32,6 +42,8 @@ A *study* is a curated reference collection — a directory of upstream specs, p
 | [`open-specs-and-standards`](./studies/open-specs-and-standards) | Which file conventions have converged for human + agent cooperation? (`AGENTS.md`, `SKILL.md`, `llms.txt`, `DESIGN.md`, MCP, A2A, OpenSpec, Spec Kit, 12-Factor Agents, Frictionless Data, …) |
 | [`memory-layers-for-agents`](./studies/memory-layers-for-agents) | How do production memory systems decide what to remember, when to update, and at what scope? (Mem0, neo, StateBench, …) |
 | [`data-analytics-specifications-and-standards`](./studies/data-analytics-specifications-and-standards) | Which open, machine-validatable specs converge across the analytics stack? (Data Package, Parquet, Arrow, Vega-Lite, Plot, ggsql) |
+| [`markdown-parse-serve-render`](./studies/markdown-parse-serve-render) | How do mature projects parse, serve, and render Markdown across CommonMark, GFM, Pandoc-extended, and directive/wikilink dialects — and which conventions converge at each stage? |
+| [`vector-databases`](./studies/vector-databases) | How do open-source vector/context databases structure embedding storage, recall ranking, payload schemas, filter expressivity, persistence, and ANN-algorithm choice — and what are the trade-offs migrating between them? |
 
 Full concept and add-a-new-study workflow: [`studies/README.md`](./studies/README.md) · [`studies/CLAUDE.md`](./studies/CLAUDE.md).
 
@@ -49,15 +61,20 @@ Earlier strands of work that started in this tree and now live in their own home
 ```
 ai-labs/                              # this repo — the pseudomonorepo
 ├── memopop-ai/                       # submodule · active product
-├── dididecks-ai/                     # submodule · active product (early)
+├── dididecks-ai/                     # submodule · active product
+├── augment-it/                       # submodule · active product
+├── id-didi-sh/                       # submodule · active product (Elixir/Phoenix, the polyglot exception)
 ├── context-vigilance-kit/            # submodule · experiment becoming a product
 ├── studies/                          # pinned reading lists
-│   ├── open-specs-and-standards/     #   submodule
-│   ├── memory-layers-for-agents/     #   submodule
-│   └── data-analytics-specifications-and-standards/   # submodule
+│   ├── open-specs-and-standards/                     #   submodule
+│   ├── memory-layers-for-agents/                     #   submodule
+│   ├── data-analytics-specifications-and-standards/  #   submodule
+│   ├── markdown-parse-serve-render/                  #   submodule
+│   └── vector-databases/                             #   submodule
 ├── packages/                         # vendored / upstream AI tooling
-│   ├── Perplexica/                   #   submodule · AI search
-│   └── mermaid-js-ai-agent/          #   submodule · diagram agent
+│   ├── mermaid-js-ai-agent/          #   submodule · diagram agent
+│   └── odysseus/                     #   submodule · self-hosted AI workspace (chat/agents/research/docs)
+├── splash/                           # GitHub-Pages showcase for the tree
 ├── apis/                             # scratch surface — API examples per provider
 ├── scripts/                          # one-shot CLI helpers
 ├── utils/                            # tiny shared TS/Python utilities
@@ -72,8 +89,10 @@ Every submodule above carries its own `README.md`, its own `context-v/`, its own
 
 Forks or pins of upstream tools we use directly:
 
-- **[Perplexica](./packages/Perplexica)** — local-first AI search ([lossless-group/Perplexica--lossless](https://github.com/lossless-group/Perplexica--lossless), fork of [ItzCrazyKns/Perplexica](https://github.com/ItzCrazyKns/Perplexica)).
 - **[mermaid-js-ai-agent](./packages/mermaid-js-ai-agent)** — agentic Mermaid diagram generation ([disler/mermaid-js-ai-agent](https://github.com/disler/mermaid-js-ai-agent)).
+- **[odysseus](./packages/odysseus)** — self-hosted AI workspace for chat, agents, research, documents, email, notes, calendar, and local model workflows ([pewdiepie-archdaemon/odysseus](https://github.com/pewdiepie-archdaemon/odysseus)).
+
+Perplexica (formerly pinned here as `packages/Perplexica`) was removed — the upstream project has moved to [ItzCrazyKns/Vane](https://github.com/ItzCrazyKns/Vane).
 
 ## Sandbox — `apis/`, `scripts/`, `utils/`
 
