@@ -37,3 +37,57 @@
 [submodule "packages/odysseus"]
 	path = packages/odysseus
 	url = https://github.com/pewdiepie-archdaemon/odysseus.git
+[submodule "studies/agent-harnesses/opencode"]
+	path = studies/agent-harnesses/opencode
+	url = https://github.com/anomalyco/opencode.git
+[submodule "studies/agent-harnesses/goose"]
+	path = studies/agent-harnesses/goose
+	url = https://github.com/aaif-goose/goose.git
+[submodule "studies/agent-harnesses/aider"]
+	path = studies/agent-harnesses/aider
+	url = https://github.com/Aider-AI/aider.git
+[submodule "studies/agent-harnesses/OpenHands"]
+	path = studies/agent-harnesses/OpenHands
+	url = https://github.com/OpenHands/OpenHands.git
+[submodule "studies/agent-harnesses/mcp-python-sdk"]
+	path = studies/agent-harnesses/mcp-python-sdk
+	url = https://github.com/modelcontextprotocol/python-sdk.git
+[submodule "studies/agent-harnesses/continue"]
+	path = studies/agent-harnesses/continue
+	url = https://github.com/continuedev/continue.git
+[submodule "studies/agent-harnesses/autogen"]
+	path = studies/agent-harnesses/autogen
+	url = https://github.com/microsoft/autogen.git
+[submodule "studies/conversational-ui-and-native-shells/kaas"]
+	path = studies/conversational-ui-and-native-shells/kaas
+	url = https://github.com/0xfrankz/Kaas.git
+[submodule "studies/conversational-ui-and-native-shells/openagent"]
+	path = studies/conversational-ui-and-native-shells/openagent
+	url = https://github.com/BANG404/openagent.git
+[submodule "studies/conversational-ui-and-native-shells/dive"]
+	path = studies/conversational-ui-and-native-shells/dive
+	url = https://github.com/OpenAgentPlatform/Dive.git
+[submodule "studies/conversational-ui-and-native-shells/5ire"]
+	path = studies/conversational-ui-and-native-shells/5ire
+	url = https://github.com/nanbingxyz/5ire.git
+[submodule "studies/conversational-ui-and-native-shells/anything-llm"]
+	path = studies/conversational-ui-and-native-shells/anything-llm
+	url = https://github.com/mintplex-labs/anything-llm.git
+[submodule "studies/agent-harnesses/cline"]
+	path = studies/agent-harnesses/cline
+	url = https://github.com/cline/cline.git
+[submodule "studies/agent-harnesses/codex"]
+	path = studies/agent-harnesses/codex
+	url = https://github.com/openai/codex.git
+[submodule "studies/conversational-ui-and-native-shells/routa"]
+	path = studies/conversational-ui-and-native-shells/routa
+	url = https://github.com/phodal/routa.git
+[submodule "studies/conversational-ui-and-native-shells/open-vibe"]
+	path = studies/conversational-ui-and-native-shells/open-vibe
+	url = https://github.com/open-vibe/open-vibe.git
+[submodule "studies/conversational-ui-and-native-shells/librechat"]
+	path = studies/conversational-ui-and-native-shells/librechat
+	url = https://github.com/danny-avila/LibreChat.git
+[submodule "studies/agent-harnesses/pi"]
+	path = studies/agent-harnesses/pi
+	url = https://github.com/earendil-works/pi.git
