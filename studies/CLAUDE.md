@@ -59,13 +59,20 @@ If the user asks to start a new study:
 
 1. Get the **question** in writing first. A study without a question is a
    junk drawer.
-2. Create `studies/<topic-slug>/` and follow the setup steps in the parent
+2. **Before adding a single reference, decide in-place vs. promoted.**
+   Every existing study in this directory (`open-specs-and-standards`,
+   `memory-layers-for-agents`) is a **single submodule** pointing at its
+   own `lossless-group/study-<topic-slug>` repo — reference repos are
+   nested *inside that repo*, never registered directly in
+   `ai-labs/.gitmodules`. If you already expect (or the candidate-repo
+   research turns up) more than ~4-5 references, **create and populate the
+   standalone repo first**, then register it as ai-labs's single
+   submodule. Registering references flat in `ai-labs/.gitmodules` and
+   promoting afterward means unwinding every gitlink and re-adding them
+   one level deeper — real, avoidable rework (this happened once already,
+   2026-07-13, with `agent-harnesses` and `conversational-ui-and-native-shells`).
+3. Create `studies/<topic-slug>/` and follow the setup steps in the parent
    `README.md`.
-3. For anything beyond a couple of references, default to the
-   "promote to its own repo" pattern (see `open-specs-and-standards/` as
-   the worked example): a separate repo at
-   `lossless-group/study-<topic-slug>`, registered as a single submodule
-   of ai-labs.
 
 ## What not to do
 

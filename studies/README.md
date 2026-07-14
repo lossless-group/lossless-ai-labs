@@ -92,10 +92,35 @@ re-derived. The study is the project's institutional memory for that domain.
 - [open-specs-and-standards](./open-specs-and-standards) — what conventions
   have converged for human + AI agent cooperation through files
   (`AGENTS.md`, `SKILL.md`, `llms.txt`, `DESIGN.md`, MCP, A2A, etc).
+  Promoted to `lossless-group/study-open-specs-and-standards`.
 - [memory-layers-for-agents](./memory-layers-for-agents) — how production
   memory systems for AI agents structure recall across vector / graph / KV
-  stores, scopes, and serialization (Mem0, Neo, StateBench, …).
+  stores, scopes, and serialization (Mem0, Neo, StateBench, …). Promoted to
+  `lossless-group/study-memory-layers-for-agents`.
 - [data-analytics-specifications-and-standards](./data-analytics-specifications-and-standards)
   — open, machine-validatable specs across the analytics stack: dataset
   descriptors, columnar storage, in-memory formats, and grammars of
   graphics (Data Package, Parquet, Arrow, Vega-Lite, Plot, ggsql).
+  Promoted to `lossless-group/study-data-analytics-specifications-and-standards`.
+- [vector-databases](./vector-databases) — how open-source vector/context
+  databases structure embedding storage, recall ranking, payload schemas,
+  filter expressivity, persistence, and ANN-algorithm choice (Chroma,
+  LanceDB, Milvus, pgvector, Qdrant, Weaviate). Promoted to
+  `lossless-group/study-vector-databases`.
+- [markdown-parse-serve-render](./markdown-parse-serve-render) — how mature
+  projects parse, serve, and render Markdown across CommonMark/GFM/Pandoc/
+  directive dialects; foundation for the `lossless-flavored-markdown` (LFM)
+  work and the `astro-knots` family (Markdoc, markdown-rs, Marksman,
+  Panache, remark). Promoted to
+  `lossless-group/study-markdown-parse-serve-render`.
+- [agent-harnesses](./agent-harnesses) — how coding/conversational-agent
+  runtimes organize files, persist memory, trace tool calls, scope
+  MCP/tools, and load skills (opencode, goose, aider, OpenHands,
+  mcp-python-sdk, continue, autogen, cline, codex, pi). Promoted to
+  `lossless-group/study-agent-harnesses`.
+- [conversational-ui-and-native-shells](./conversational-ui-and-native-shells)
+  — how native, especially Tauri-based, chat apps structure state,
+  multi-context switching, local persistence, and MCP-client integration
+  (Kaas, openagent, Dive, 5ire, anything-llm, routa, open-vibe,
+  librechat). Promoted to
+  `lossless-group/study-conversational-ui-and-native-shells`.
