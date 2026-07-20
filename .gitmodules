@@ -43,3 +43,7 @@
 [submodule "studies/conversational-ui-and-native-shells"]
 	path = studies/conversational-ui-and-native-shells
 	url = https://github.com/lossless-group/study-conversational-ui-and-native-shells.git
+[submodule "corpora-builder"]
+	path = corpora-builder
+	url = https://github.com/lossless-group/corpora-builder.git
+	branch = main
