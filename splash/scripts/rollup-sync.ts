@@ -35,15 +35,20 @@ const CONTEXT_V_OUT = resolve(ROLLUP_ROOT, 'context-v');
 /** Children of ai-labs to roll up. Order is presentation-meaningful — first
  *  listed is shown first when entries are otherwise tied.
  *
- *  Some children are themselves pseudomonorepos with their own `apps/*` —
- *  each app gets auto-discovered at sync time and rolled up as a sub-child
- *  with slug `<child>/<app>`. The `apps/` subdir is inspected; any directory
- *  inside it that has `changelog/` or `context-v/` becomes a sub-child. */
-const CHILDREN: { slug: string; dir: string }[] = [
+ *  Some children are themselves pseudomonorepos with their own containers of
+ *  sub-projects — each sub-project gets auto-discovered at sync time and
+ *  rolled up as a sub-child with slug `<child>/<name>`. `containers` names
+ *  the subdirs to inspect (default: `['apps']`); `'.'` scans the child's own
+ *  direct children (the studies shape). Any directory found that has
+ *  `changelog/` or `context-v/` becomes a sub-child. */
+const CHILDREN: { slug: string; dir: string; containers?: string[] }[] = [
   { slug: 'context-vigilance-kit', dir: 'context-vigilance-kit' },
   { slug: 'memopop-ai',            dir: 'memopop-ai' },
-  { slug: 'dididecks-ai',          dir: 'dididecks-ai' },
+  { slug: 'dididecks-ai',          dir: 'dididecks-ai', containers: ['apps', 'client-sites'] },
   { slug: 'augment-it',            dir: 'augment-it' },
+  { slug: 'corpora-builder',       dir: 'corpora-builder' },
+  { slug: 'id-didi-sh',            dir: 'id-didi-sh' },
+  { slug: 'studies',               dir: 'studies', containers: ['.'] },
 ];
 
 interface Source {
@@ -54,26 +59,36 @@ interface Source {
   dir: string;
 }
 
-async function discoverSubChildren(child: { slug: string; dir: string }): Promise<Source[]> {
-  const appsDir = resolve(PARENT_DIR, child.dir, 'apps');
-  let entries;
-  try {
-    entries = await readdir(appsDir, { withFileTypes: true });
-  } catch (err) {
-    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return [];
-    throw err;
-  }
+async function discoverSubChildren(child: {
+  slug: string;
+  dir: string;
+  containers?: string[];
+}): Promise<Source[]> {
   const out: Source[] = [];
-  for (const e of entries) {
-    if (!e.isDirectory() || e.name.startsWith('.') || e.name === 'node_modules') continue;
-    const appDir = resolve(appsDir, e.name);
-    const hasChangelog = await pathExists(resolve(appDir, 'changelog'));
-    const hasContextV = await pathExists(resolve(appDir, 'context-v'));
-    if (!hasChangelog && !hasContextV) continue;
-    out.push({
-      slug: `${child.slug}/${e.name}`,
-      dir: `${child.dir}/apps/${e.name}`,
-    });
+  for (const container of child.containers ?? ['apps']) {
+    const containerDir =
+      container === '.'
+        ? resolve(PARENT_DIR, child.dir)
+        : resolve(PARENT_DIR, child.dir, container);
+    let entries;
+    try {
+      entries = await readdir(containerDir, { withFileTypes: true });
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') continue;
+      throw err;
+    }
+    for (const e of entries) {
+      if (!e.isDirectory() || e.name.startsWith('.') || e.name === 'node_modules') continue;
+      const subDir = resolve(containerDir, e.name);
+      const hasChangelog = await pathExists(resolve(subDir, 'changelog'));
+      const hasContextV = await pathExists(resolve(subDir, 'context-v'));
+      if (!hasChangelog && !hasContextV) continue;
+      const relContainer = container === '.' ? '' : `${container}/`;
+      out.push({
+        slug: `${child.slug}/${e.name}`,
+        dir: `${child.dir}/${relContainer}${e.name}`,
+      });
+    }
   }
   return out;
 }

@@ -2,10 +2,10 @@
 title: "Sitemap — Living Map of the DidiDecks Universal-Frontend-over-Client-Decks Architecture"
 lede: "A living mini-spec per artifact (route, component, per-slide component) across the dididecks-ai shell and its client-site consumers. Splits across two levels: this directory describes the *universal* shell artifacts inherited by every client deck; per-client overrides and consumer-authored artifacts live in each `client-sites/<client>/context-v/sitemap/`. Each entry is short, kept up-to-date with the running code, and cross-linked so an agent reading any one file can trace composition, theming inheritance, and the plan-of-record that produced it."
 date_authored_initial_draft: 2026-05-15
-date_authored_current_draft: 2026-05-15
-date_last_updated: 2026-05-15
-at_semantic_version: 0.0.1.0
-status: Draft
+date_authored_current_draft: 2026-06-07
+date_last_updated: 2026-06-07
+at_semantic_version: 0.0.2.0
+status: Draft-Updated
 augmented_with: Claude Code (Opus 4.7, 1M context)
 category: Sitemap-Index
 tags:
@@ -51,21 +51,39 @@ Glossary:
 context-v/sitemap/
 ├── README.md                  ← this file
 ├── routes/                    ← shell-injected routes
-│   ├── toc.md
+│   ├── toc.md                 ← /toc/[deckSlug]/[variantSlug]/
+│   ├── toc-deck.md            ← /toc/[deckSlug]/ — deck-level matrix wrapper
 │   ├── play-index.md
 │   ├── play-slot.md
+│   ├── play-print.md          ← /play/[deckSlug]/[variantSlug]/print/
+│   ├── data-assets-people.md      ← reviewer audit of people frontmatter + headshots
+│   ├── data-assets-companies.md   ← reviewer audit of portfolio companies + brand assets
 │   ├── api-slide-rank.md
 │   ├── api-slide-decompose.md
 │   └── dev-icons.md           ← design-review workbench (kept by deliberate discipline)
-└── components/                ← shell-exported components
-    ├── DeckOverlay--Scroll-UI.md
-    ├── DeckOverlay--Play-UI.md
-    ├── DeckChrome.md
-    ├── SlideRankPill.md       ← rename pending → SlideClassifierPill
-    ├── SlideCanvas.md
-    ├── DididecksNav.md
-    └── DecomposeFirstPlaceholder.md
+├── components/                ← shell-exported components
+│   ├── ScrollDeckPage.md      ← THE single shell overlay for scroll-deck variant pages (NEW)
+│   ├── DeckOverlay--Scroll-UI.md
+│   ├── DeckOverlay--Play-UI.md
+│   ├── PageAsDeckWrapper.md   ← scroll-snap + keyboard primitive (lifted from chroma)
+│   ├── DeckFrame--Play-UI.md  ← Play-UI chrome wrapper + keyboard contract
+│   ├── DeckChrome.md
+│   ├── PlayChrome.md          ← DEPRECATED — re-exports DeckChrome
+│   ├── ModeToggle.md          ← three-mode color toggle (lifted from chroma)
+│   ├── SlideRankPill.md       ← rename pending → SlideClassifierPill
+│   ├── SlideCanvas.md
+│   ├── SlideShell.md          ← per-slide chrome with pluggable mark slot (lifted from chroma)
+│   ├── DididecksNav.md
+│   ├── DeckMatrix.md          ← rich audit-rated dual-surface matrix
+│   ├── DeckStatsPanel.md      ← 4-tile landing row (Variants · Slide Files · People · Companies)
+│   └── DecomposeFirstPlaceholder.md
+├── runtime/                   ← shell-exported runtime modules (browser-side TS)
+│   └── mode-switcher.md       ← createModeSwitcher factory; per-client localStorage namespace
+└── lib/                       ← shell-exported lib modules (build-time TS)
+    └── deck-overview.md       ← loadDeckOverview(deckSlug) → DeckOverview
 ```
+
+The two new categories `runtime/` and `lib/` were added during the 2026-06-06 chroma-to-shell promotion pass that lifted five primitives plus split `mode-switcher` into a runtime concern + `deck-overview` into a lib concern.
 
 ## Frontmatter conventions (mini-spec entries)
 
@@ -110,9 +128,21 @@ When a new client deck is spun up, the new client's sitemap starts empty except 
 
 ## Related
 
+### Plans of record (shell-side)
+
 - [[../plans/Stand-Up-Dididecks-Shell-and-Ship-Chroma-TOC-Ranking]] — Phase A.
 - [[../plans/Phase-A-Plus-In-Deck-Ranking-Shared-Nav-and-Play-Runtime]] — Phase A+.
 - [[../plans/Phase-A-Plus-Plus-Play-Fidelity-In-Play-Ranking-and-Variant-URL-Safety]] — Phase A++.
 - [[../plans/Restore-Calmstorm-Nav-Elegance-as-Themable-Shell-Primitives]] — themable chrome.
+- [[../plans/Redesign-TOC-as-Deck-Level-Dual-Surface-Review-Matrix]] — origin of DeckMatrix.
+- [[../plans/Refactor-Data-Assets-Audit-for-Brand-Quality-Ratings-and-Render-Guards]] — origin of /data-assets/* routes.
+- [[../plans/Lift-Chroma-Decks-Generic-Code-into-Shared-Shell]] — the 2026-06-06 promotion pass that brought PageAsDeckWrapper, SlideShell, ModeToggle, mode-switcher, deck-overview into the shell, and motivated ScrollDeckPage's authoring.
+
+### Explorations
+
 - [[../explorations/Chroma-Parity-and-the-Path-to-a-Shared-Deck-UI-Module]] — architecture exploration.
 - [[../explorations/Plans-Inventory-and-Phase-A-Outcome]] — phase-A retrospective.
+
+### Data models
+
+- [[../models/README]] — index of data-model docs covering the filesystem-as-data-store discipline (Person, Company, Firm, Deck-Variant-Slot, Audit, Auth, Telemetry, Corpus). Several sitemap entries above link to specific model docs in their `related_models` frontmatter field.

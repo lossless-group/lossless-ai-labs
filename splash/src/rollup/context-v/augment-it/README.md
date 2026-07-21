@@ -2,7 +2,7 @@
 title: context-v for augment-it
 lede: Living documentation for augment-it — specs, habits, prompts, reminders, explorations, issues.
 date_created: 2026-05-12
-date_modified: 2026-05-12
+date_modified: 2026-05-25
 status: Active
 tags:
   - Context-Vigilance

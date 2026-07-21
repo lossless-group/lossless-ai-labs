@@ -1,12 +1,12 @@
 ---
 title: "Curating Only Valid Sources Across Runs"
-lede: "The memo pipeline ran ChromaDB seven times and emitted seven source catalogs. Merging them produced 392 'unique' entries that were mostly the same dozen URLs recycled across sections, half of them dead pages returning HTTP 200. Here's what's broken and how curation has to handle it."
+lede: "The memo pipeline recycled the same sources as unique sources across sections, half of them dead pages returning HTTP 200.  Downstream curation cannot fix what `citation_enrichment.py` invents upstream. Verdict: Perplexity completely hallucinates sources — cannot be trusted at all.*"
 date_authored_initial_draft: 2026-05-14
-date_authored_current_draft: 2026-05-14
+date_authored_current_draft: 2026-06-08
 date_authored_final_draft:
 date_first_published:
-date_last_updated: 2026-05-14
-at_semantic_version: 0.0.0.1
+date_last_updated: 2026-06-08
+at_semantic_version: 0.0.0.2
 status: Draft
 augmented_with: Claude Code (Opus 4.7)
 category: Exploration
@@ -20,6 +20,36 @@ from: "memopop-ai"
 from_path: "context-v/explorations/Curating-only-valid-Sources-across-Runs.md"
 ---
 # Curating Only Valid Sources Across Runs
+
+## Update 2026-06-08 — Curation cannot save us from upstream invention
+
+The May 14 draft framed curation as the safety net that compensates for whatever the pipeline produces upstream. We then ran the test that disproved that framing.
+
+On 2026-06-07 we ran Alpha JWC's Panthalassa Series C memo with `inputs/Sources.md` set to `mode: codified` and seven analyst-curated institutional sources (IEA, IRENA, OES, Springer Nature). Codified mode is supposed to confine the research-phase agents to those URLs and forbid broad search. The downstream `citation_enrichment.py` step then runs Perplexity Sonar Pro on each `1-research/*.md` file to "enrich" it with additional citations.
+
+Result: **65 fabricated `example.com` URLs across the v0.0.2 output.** Not "URLs that returned 404." Not "soft-404s that need Pass B's body sniff." Literal `example.com` placeholder URLs — the textbook example domain that exists only as IANA's reserved illustrative namespace. Perplexity invented these whole. The verdicts from the May 14 draft (`soft-404`, `paywall`, `title-swapped`, `thin`, `fetch-failed`, `hallucinated-pattern`) don't have a category for "domain that should never appear in any production URL"; they don't need to, because no reasonable upstream pipeline should be capable of emitting one. Ours was.
+
+### Operator verdict, 2026-06-07
+
+> "Perplexity completely hallucinates sources — cannot be trusted at all."
+
+### What this means for curation specifically
+
+1. **Pass B's heuristic list is necessary but not sufficient.** Soft-404 sniffing, title-swap detection, body-length thresholds — all the May 14 checks would catch `example.com` URLs trivially (the body is IANA's static page; the title doesn't match any claimed publication). But running curation *after* an LLM has already fabricated 65 such URLs is treating the symptom. Curation should never need to filter URLs whose top-level domain is `example.com`. The fact that it does is an indictment of the agent that produced them, not a curation bug.
+
+2. **The 30-day cache (Pass B decision point #2) makes the problem worse, not better, when the upstream is hallucinatory.** If a fabricated URL passes a body-sniff once (the `example.com` static page returns 200 and a non-empty body), the cache will mark it `verified` for 30 days. Curation hardens the lie. The cache assumes upstream URLs are *real-but-possibly-dead*; it has no theory for *real-domain-but-never-existed-page* and no theory at all for *placeholder-URL-the-model-typed*.
+
+3. **The right division of labor was named in the sister exploration but not yet built.** See [[Separating-Retrieval-from-Generation-in-Agent-Pipelines]] — every URL in every output must originate from a tool call that the Source Harvester actually executed, not from prose generation. Curation then has a meaningful job: validate the harvester's catalog. With that split in place, `example.com` URLs cannot enter the pipeline because no search tool ever returns them. Without that split, curation is the janitor cleaning up after the agent that invents URLs every run.
+
+### Implication for the build order in this doc
+
+Pass A (global dedupe + cross-section view) is still worth shipping — it's cheap, instant, and improves the analyst experience regardless of how upstream is fixed. Pass B (real validity check) is still worth building — but its priority has changed. **The harvester/writer split documented in [[Separating-Retrieval-from-Generation-in-Agent-Pipelines]] now takes precedence over Pass B in any prioritization conversation.** Pass B as a standalone fix is treating downstream symptoms; the architectural split addresses the root cause. Build Pass B as a defense-in-depth layer, not as the primary fix.
+
+### If Perplexity is retained (tactical mitigation only)
+
+[Unlocking Perplexity's Power — Proven](https://natesnewsletter.substack.com/p/unlocking-perplexitys-power-proven) (Nate's Newsletter). Practitioner guide to constraining Perplexity output through prompt structure, model selection (Sonar vs. Sonar Pro vs. Sonar Reasoning), and tool-mode discipline. Useful as a stopgap while the harvester/writer split is built, or as a baseline for evaluating whether constrained Perplexity is salvageable for a discovery-only role. **Not a substitute for the architectural fix.**
+
+---
 
 ## The trigger
 

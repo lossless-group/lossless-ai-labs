@@ -14,6 +14,19 @@ Sources rolled up:
 - `memopop-ai/memopop-orchestrator`
 - `memopop-ai/memopop-site`
 - `dididecks-ai`
+- `dididecks-ai/calmstorm-decks`
+- `dididecks-ai/chroma-decks`
+- `dididecks-ai/humain-vc-decks`
+- `dididecks-ai/lossless-decks`
+- `dididecks-ai/reach-edu-hub`
 - `augment-it`
+- `corpora-builder`
+- `id-didi-sh`
+- `studies`
+- `studies/agent-harnesses`
+- `studies/conversational-ui-and-native-shells`
+- `studies/memory-layers-for-agents`
+- `studies/open-specs-and-standards`
+- `studies/vector-databases`
 
 To refresh: `pnpm rollup:sync`
