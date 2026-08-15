@@ -21,6 +21,7 @@ authors:
   - Michael Staton
 date_created: 2026-06-01
 date_modified: 2026-06-01
+publish: true
 from: "context-vigilance-kit"
 from_path: "context-v/specs/Commands-and-Agent-Skills-for-Context-V.md"
 ---

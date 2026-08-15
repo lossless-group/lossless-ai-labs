@@ -31,6 +31,9 @@ status_tags:
   - SSR-gated
 related_models:
   - "[[../../models/Person-Data-Model]]"
+date_created: 2026-05-17
+date_modified: 2026-06-07
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/data-assets-people.md"
 ---

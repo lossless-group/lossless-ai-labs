@@ -28,6 +28,9 @@ related:
   - "[[Stand-Up-Dididecks-Shell-and-Ship-Chroma-TOC-Ranking]]"
   - "[[Init-Chroma-Decks-Client-Site]]"
   - "../../client-sites/humain-vc-decks/context-v/plans/Install-Auth-Surface-from-Calmstorm-Pattern.md"
+date_created: 2026-06-29
+date_modified: 2026-06-29
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/plans/Integrate-Reach-Edu-Hub-into-Dididecks-Shell.md"
 ---

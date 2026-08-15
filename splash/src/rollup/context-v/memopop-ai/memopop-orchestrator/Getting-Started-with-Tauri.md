@@ -1,12 +1,12 @@
 ---
+title: Getting Started with Tauri
+date_created: 2026-05-01
+date_modified: 2026-05-03
+publish: false
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/Getting-Started-with-Tauri.md"
 ---
-
-
-
-
-  Tauri Setup Plan (6 Phases)
+Tauri Setup Plan (6 Phases)
 
   ┌───────┬───────────────────────────────────────────────────┬────────┐
   │ Phase │                       What                        │  Time  │

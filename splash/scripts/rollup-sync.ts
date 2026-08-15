@@ -48,6 +48,7 @@ const CHILDREN: { slug: string; dir: string; containers?: string[] }[] = [
   { slug: 'augment-it',            dir: 'augment-it' },
   { slug: 'corpora-builder',       dir: 'corpora-builder' },
   { slug: 'id-didi-sh',            dir: 'id-didi-sh' },
+  { slug: 'flave',                 dir: 'flave-ai' },
   { slug: 'studies',               dir: 'studies', containers: ['.'] },
 ];
 

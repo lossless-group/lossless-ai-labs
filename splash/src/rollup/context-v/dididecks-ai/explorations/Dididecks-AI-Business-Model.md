@@ -22,6 +22,7 @@ authors:
 image_prompt: "A craftsman's tool wall in a workshop, where some tools are unlocked and free for any visitor to take, others are chained to brass placards reading 'service contract,' and a small table near the door has two coffee chairs labeled 'Forward Deployed.' Warm gaslight, sawdust, restrained palette."
 date_created: 2026-05-11
 date_modified: 2026-05-11
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/explorations/Dididecks-AI-Business-Model.md"
 ---

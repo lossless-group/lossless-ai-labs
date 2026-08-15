@@ -17,6 +17,7 @@ authors:
 image_prompt: A VC investment scorecard with multiple dimensions being evaluated by AI agents, showing radar charts, scoring rubrics, and contextual explanations flowing into a professional investment memo.
 date_created: 2025-11-27
 date_modified: 2025-11-27
+publish: false
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/blueprints/Model-Scorecard-Agent-and-Template-System.md"
 ---

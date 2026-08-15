@@ -17,6 +17,7 @@ tags:
   - AST-Extraction
   - Build-Time-Tooling
   - Drift
+publish: true
 from: "context-vigilance-kit"
 from_path: "context-v/explorations/Code-Comments-Sections-as-Context-V.md"
 ---

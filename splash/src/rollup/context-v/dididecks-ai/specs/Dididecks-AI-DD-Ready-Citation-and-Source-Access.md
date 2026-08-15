@@ -23,6 +23,7 @@ authors:
 image_prompt: "A library reading-room desk overlaid with translucent dashboards — bar charts, KPI cards, a stacked area graph — each chart with a fine ink line trailing down to a stamped, numbered citation card stacked at the desk's edge. Brass magnifying glass on top. Warm parchment, restrained palette, archival mood."
 date_created: 2026-05-11
 date_modified: 2026-05-11
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/specs/Dididecks-AI-DD-Ready-Citation-and-Source-Access.md"
 ---

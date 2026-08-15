@@ -13,6 +13,9 @@ schema_authority:
   - client-sites/chroma-decks/db/config.ts (PageView + Action tables)
 runtime_mutability: high
 storage: "astro:db (same DB as auth surface — auth.db locally, Turso remote)"
+date_created: 2026-06-07
+date_modified: 2026-06-07
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/models/Engagement-Telemetry-Data-Model.md"
 ---

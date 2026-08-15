@@ -16,6 +16,7 @@ tags:
   - Pre-Scaffold
   - Light-Mode-Only
 status: Draft
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/explorations/Chroma-Brand-and-Deck-Notes.md"
 ---

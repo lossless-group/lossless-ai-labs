@@ -30,6 +30,7 @@ tags:
   - Powabase-Drop
 date_created: 2026-06-07
 date_modified: 2026-06-07
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/explorations/Bridging-PLG-Self-Serve-with-Previous-Approach.md"
 ---

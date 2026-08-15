@@ -30,6 +30,7 @@ deferral_note: |
   follow that pattern — paired --Scroll-UI / --Play-UI suffix discipline
   where the UI mode matters, mode-agnostic naming where it doesn't.
   The substance of this plan remains valid; only its execution venue moved.
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/plans/Componentize-Slides-and-Establish-Component-Library.md"
 ---

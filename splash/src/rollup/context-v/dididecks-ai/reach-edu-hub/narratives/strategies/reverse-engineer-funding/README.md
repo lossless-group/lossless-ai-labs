@@ -2,11 +2,11 @@
 title: "Reverse Engineer Available Funding"
 lede: "Grant funding follows a power law: a small number of mega-foundations move most of the dollars, and a fast-growing population of ultra-wealthy individuals — especially 'new money' — hold enormous discretionary giving capacity. So don't spray small applications across a long tail. Concentrate where the money is: study the biggest, most-aligned funders' public footprint, get an intro call to learn their actual strategy, pattern-match across their giving, and design the ask to hit the sweet spot for the largest plausible amount."
 date_authored_initial_draft: 2026-06-29
-date_authored_current_draft: 2026-06-29
-date_last_updated: 2026-06-29
-at_semantic_version: 0.0.1.0
+date_authored_current_draft: 2026-07-28
+date_last_updated: 2026-07-28
+at_semantic_version: 0.0.2.0
 status: Draft
-augmented_with: Claude Code on Claude Opus 4.8 (1M context) + web search
+augmented_with: Claude Code on Claude Opus 4.8 (initial draft) + Fable 5 (hex-code citation pass)
 category: Strategy Narrative
 tags:
   - Strategy
@@ -22,7 +22,7 @@ tags:
 authors:
   - Michael Staton
 date_created: 2026-06-29
-date_modified: 2026-06-29
+date_modified: 2026-07-28
 from: "dididecks-ai/reach-edu-hub"
 from_path: "context-v/narratives/strategies/reverse-engineer-funding/README.md"
 ---
@@ -32,17 +32,21 @@ from_path: "context-v/narratives/strategies/reverse-engineer-funding/README.md"
 > *operating* doctrine for the grants/partnerships team. Audience: Reach/NCAD
 > leadership and the development team. Grant-seeking framing throughout. **Figures
 > are from wealth/philanthropy reports and flagged `⚠ VERIFY`** — confirm against
-> primary sources before presenting.
+> primary sources before presenting. Citations use stable hex codes per the LFM
+> convention; definitions in `## Citations` below and in the per-client registry
+> (`../../citations/registry.csv`). *Note: this narrative has no corpus strategy
+> slug yet (nearest corpus home: `topics/grant-prospecting-tools`) — decide
+> whether it becomes a corpus strategy or stays operating doctrine.*
 
 ## The through-line
 
 Most fundraising effort is distributed roughly evenly across many prospects.
 Available funding is not — it follows a **power law**. A small number of
-foundations give out vastly more than the rest, and a growing population of
-ultra-high-net-worth individuals — especially the newly, self-made wealthy — sit
-on enormous *discretionary* giving capacity. The implication is simple and
-uncomfortable: **stop spreading effort evenly; concentrate it where the dollars
-actually are.**
+foundations give out vastly more than the rest, [^6fced1] [^b3229d] and a growing
+population of ultra-high-net-worth individuals — especially the newly, self-made
+wealthy — sit on enormous *discretionary* giving capacity. [^552e9e] The
+implication is simple and uncomfortable: **stop spreading effort evenly;
+concentrate it where the dollars actually are.**
 
 The method is to *reverse engineer* the few funders who can write the biggest,
 most-aligned checks: study what they already fund, talk to them to learn the
@@ -52,18 +56,26 @@ generic request.
 
 ## The shape of the money
 
-- **The pool is huge.** ⚠ VERIFY — U.S. charitable giving reached ~$592.5B in
-  2024 (Giving USA 2025), up ~6.3%.
-- **Foundations are concentrated.** ⚠ VERIFY — of ~120,000+ U.S. foundations, a
-  few hundred of the largest move a hugely disproportionate share of grant
-  dollars (e.g. Gates is the largest; top annual grantmakers like Mellon ~$302M
-  and RWJ ~$293M dwarf the median). The distribution is a power law, not a
-  bell curve.
-- **A wave of new wealth is arriving.** ⚠ VERIFY — Cerulli projects an **$84.4T**
-  "great wealth transfer" through 2045, of which **~$11.9T flows to charity**.
-- **The ultra-wealthy population is large and growing.** ⚠ VERIFY — ~426,330
-  UHNW individuals (net worth >$30M) as of 2025 (Altrata), within ~41.3M HNW
-  individuals (>$1M); HNWI wealth ~$98.3T. Counts differ by source/threshold.
+*(All figures verified against primary sources 2026-07-28; the June draft's
+Mellon/RWJ figures were ~2015-era aggregator data and are replaced below.)*
+
+- **The pool is at a record.** U.S. charitable giving hit **$617.2B in 2025**
+  — crossing $600B for the first time (+5.7% current dollars, +3.0% after
+  inflation). [^4c940e]
+- **Foundations are radically concentrated.** Of ~120,000 U.S. foundations,
+  grantmakers giving $50M+ are just **0.1% of funders yet supply 40% of all
+  grant dollars**; [^6fced1] the largest 1,000 (~1%) account for roughly half
+  to 60% of tracked foundation giving. [^b3229d] Gates — the largest U.S.
+  private foundation — paid out $8.0B in 2024; [^1a2cb7] Mellon (~$540M,
+  2024) [^f4fc11] and RWJF (~$550M/yr) [^5c3e27] each move over half a
+  billion annually. The distribution is a power law, not a bell curve.
+- **A wave of new wealth is arriving.** Cerulli now projects **$124T**
+  transferring through 2048, of which **~$18T flows to charity**. [^f4987b]
+- **The ultra-wealthy population is large and growing.** 556,850 UHNW
+  individuals (net worth >$30M) globally in 2025, holding $63.8T; the U.S. is
+  home to ~37% (~206,000); [^552e9e] global HNWI wealth reached a record
+  $98.3T (Capgemini — investable-assets basis, do not mix with Altrata
+  headcounts). [^56142e]
 
 ## Why "new money" specifically
 
@@ -78,10 +90,10 @@ driven, and you have to find them before they've formalized their giving.
 ## The method — reverse engineering a funder
 
 1. **Study the public footprint.** IRS Form 990s reveal a foundation's actual
-   grantmaking history (who, how much, how often); Candid/GuideStar profiles,
-   websites, press, and the principals' public statements fill in strategy and
-   values. (For individuals: their wealth source, prior gifts, boards, public
-   causes.)
+   grantmaking history (who, how much, how often); [^a7d443] Candid/GuideStar
+   profiles, websites, press, and the principals' public statements fill in
+   strategy and values. [^4b538e] (For individuals: their wealth source, prior
+   gifts, boards, public causes.)
 2. **Get the intro call.** The 990 tells you *what* they funded; a conversation
    tells you *why* — the thesis behind the checks, what they're trying to buy,
    what they're tired of seeing. This is the highest-leverage step.
@@ -107,8 +119,10 @@ funders, hundreds of documents); the [[agent-workflow-maxxing]] grants front
 describes the agent-assisted research, corpus, and brand-voice tooling. Reverse-
 engineering is the *strategy*; that corpus + those agents are the *engine* —
 they make studying many funders' footprints and pattern-matching tractable for a
-small team. (Cross-links: [[Agent-Workflow-Maxxing]], augment-it's reach-edu
-corpus + the First-Pass Corpus Quality Scan plan.)
+small team. The 2026-07-28 mega-gifts-by-topic research (84 verified gifts across
+six topic lanes, per-strategy CSVs in the corpus) is the first worked product of
+exactly this method. (Cross-links: [[Agent-Workflow-Maxxing]], augment-it's
+reach-edu corpus + the First-Pass Corpus Quality Scan plan.)
 
 ## Proposed slide outline (Scroll-UI first, ~9 slots)
 
@@ -134,26 +148,30 @@ corpus + the First-Pass Corpus Quality Scan plan.)
 
 ## Open questions / decide before deck build
 
-- Verify every figure (giving total, transfer, UHNWI counts, foundation
-  concentration) and pick 2–3 hero numbers.
-- Find a clean, citable **foundation-concentration** statistic (top N% of
-  foundations = X% of grant dollars) — the snippets imply it but don't quantify it.
+- ~~Verify every figure~~ **Done 2026-07-28** (primary sources fetched;
+  stale Mellon/RWJ figures replaced; Giving USA/Cerulli/Altrata updated to
+  current editions; $98.3T re-attributed to Capgemini). Hero numbers chosen:
+  **$617.2B (2025 record)**, [^4c940e] **0.1% of grantmakers = 40% of grant
+  dollars**, [^6fced1] **$124T transfer / ~$18T to charity**. [^f4987b]
+- ~~Find a clean, citable foundation-concentration statistic~~ **Found**:
+  Candid FY2022 — grantmakers giving $50M+ are 0.1% of funders and 40% of
+  grant dollars; [^6fced1] Foundation 1000 (~1% of funders) ≈ 50–60% of
+  tracked giving. [^b3229d]
 - How explicit to be about the UHNWI / individual-donor play in a version that
   might be funder-facing (it's candid operating doctrine).
 - Tie-in depth to augment-it's funder corpus — reference, or show it.
+- Whether this narrative gets a corpus strategy slug of its own.
 
-## Sources (web search 2026-06-29 — deep-read before relying)
+## Citations
 
-- Giving USA 2025 — U.S. charitable giving $592.5B in 2024:
-  https://givingusa.org/giving-usa-2025-u-s-charitable-giving-grew-to-592-50-billion-in-2024-lifted-by-stock-market-gains/
-- Foundation Source, "From Foundations to DAFs: Key Takeaways From Giving USA's 2025 Report":
-  https://foundationsource.com/blog/from-foundations-to-dafs-key-takeaways-from-giving-usas-2025-report-on-philanthropy/
-- Arco Lab, "World's 100 largest philanthropic foundations list":
-  https://www.arcolab.org/en/worlds-100-largest-philanthropic-foundations-list/
-- The Grantsmanship Center, "Top Giving Foundations": https://www.tgci.com/funding-sources/all/top
-- Altrata, World Ultra Wealth Report 2025 (UHNWI counts): https://altrata.com/reports/world-ultra-wealth-report-2025
-- Cerulli, "Anticipates $84 Trillion in Wealth Transfers Through 2045":
-  https://www.cerulli.com/press-releases/cerulli-anticipates-84-trillion-in-wealth-transfers-through-2045
-- NPTrust, Charitable Giving Statistics: https://www.nptrust.org/philanthropic-resources/charitable-giving-statistics/
-- Instrumentl, "A Nonprofit's Guide To Grant Prospect Research": https://www.instrumentl.com/blog/grant-prospect-research
-- Grant Ready KY, "How to Use IRS Form 990s for Grant Prospecting": https://www.grantreadyky.org/learn/resources/990s-for-grant-prospecting
+[^4c940e]: 2026, Jun 01. [Giving USA 2026: U.S. charitable giving rose to $617.20 billion in 2025, surpassing $600B for the first time](https://givingusa.org/giving-usa-charitable-giving-rose-to-617-20-billion-in-2025-surpassing-the-600-billion-mark-for-the-first-time/)
+[^6fced1]: [Candid, "US social sector: Money" (grantmakers giving $50M+ are 0.1% of funders but 40% of grant dollars, FY2022)](https://candid.org/impact-insights/us-social-sector/money/)
+[^b3229d]: 2023, Sep 21. [Candid, Foundation 1000 trends analysis (largest 1,000 foundations ~1% of funders, ~50–60% of tracked grant dollars)](https://candid.org/blogs/a-crash-course-trends-analysis-using-candids-foundation-1000-data-set/)
+[^1a2cb7]: [Gates Foundation Annual Report 2024 (total charitable support $8.015B)](https://www.gatesfoundation.org/about/financials/annual-reports/annual-report-2024)
+[^f4fc11]: [Mellon Foundation Annual Report 2024 (~650 grants, ~$540M grantmaking)](https://www.mellon.org/annual-report/2024)
+[^5c3e27]: [RWJF Financials (annual grantmaking ~$550M; Form 990-PF)](https://www.rwjf.org/en/about-rwjf/financials.html)
+[^f4987b]: 2024, Dec 05. [Cerulli: $124 trillion in wealth will transfer through 2048; ~$18T to charity](https://www.cerulli.com/press-releases/cerulli-anticipates-124-trillion-in-wealth-will-transfer-through-2048)
+[^552e9e]: 2026, Jun 23. [Altrata World Ultra Wealth Report 2026: 556,850 global UHNW ($30M+) holding $63.8T in 2025; U.S. home to ~37%](https://www.prnewswire.com/news-releases/altratas-world-ultra-wealth-report-2026-finds-the-global-ultra-wealthy-population-reaches-all-time-high-of-556-850-individuals-302806898.html)
+[^56142e]: [Capgemini World Wealth Report 2026: global HNWI wealth reached a record $98.3T in 2025 (via Family Wealth Report)](https://www.familywealthreport.com/article.php/Rise-In-High-Net-Worth-Individuals%27-Global-Wealth-In-2025%3B-US-Adds-Most-Millionaires-%E2%80%93-Capgemini-?id=207881)
+[^4b538e]: [Instrumentl, "A Nonprofit's Guide To Grant Prospect Research"](https://www.instrumentl.com/blog/grant-prospect-research)
+[^a7d443]: [Grant Ready KY, "How to Use IRS Form 990s for Grant Prospecting"](https://www.grantreadyky.org/learn/resources/990s-for-grant-prospecting)

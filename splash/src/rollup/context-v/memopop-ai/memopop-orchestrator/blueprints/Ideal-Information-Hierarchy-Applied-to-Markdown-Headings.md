@@ -1,8 +1,11 @@
 ---
+title: Ideal Information Hierarchy Applied to Markdown Headings
+date_created: 2026-03-24
+date_modified: 2026-05-03
+publish: false
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/blueprints/Ideal-Information-Hierarchy-Applied-to-Markdown-Headings.md"
 ---
-
 # Ideal Information Hierarchy Applied to Markdown Headings
 
 ## Purpose

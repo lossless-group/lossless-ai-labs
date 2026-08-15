@@ -28,6 +28,11 @@ One small, owned auth service behind `id.didi.sh`. Create an account once from i
 
 → `id-didi-sh/` · [lossless-group/id-didi-sh](https://github.com/lossless-group/id-didi-sh)
 
+### flave — an agent-native document format and editor
+A document that keeps its workings. Publish a `.flave` and people see the conclusion; send the file itself and they get the evidence, the data and its sources, the reasoning, and the design vocabulary that produced it. Content, data, and assets each carry a *clearance* — private → team → LP → public — so one document yields your private notes, the team version, and a punchy public one-pager, and none of them drift. Built on [`lfm`](https://jsr.io/@lossless-group/lfm) as a direct dependency, never a fork; v0 is an editor where you define your own syntax triggers and watch them render as you type. **Pre-implementation** — spec of record at [`flave-ai/context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md`](https://github.com/lossless-group/flave/blob/main/context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md).
+
+→ `flave-ai/` · [lossless-group/flave](https://github.com/lossless-group/flave)
+
 ### Context Vigilance Kit — the corpus tooling
 Walks every `context-v/` directory across the Lossless tree (and beyond), buckets files by depth-of-completion, and prepares them for ingestion into a ChromaDB-backed corpus. Now backs a local Chroma MCP server (four collections: context-vigilance corpus, changelog, Claude Code sessions, tool traces) queryable from any session under `ai-labs/`. Brand site at [contextvigilance.com](https://contextvigilance.com) (forthcoming). Will graduate to its own top-level repo when v0.1 is ready to leave the nest.
 
@@ -64,6 +69,7 @@ ai-labs/                              # this repo — the pseudomonorepo
 ├── dididecks-ai/                     # submodule · active product
 ├── augment-it/                       # submodule · active product
 ├── id-didi-sh/                       # submodule · active product (Elixir/Phoenix, the polyglot exception)
+├── flave-ai/                         # submodule · spec of record, pre-implementation (repo: lossless-group/flave)
 ├── context-vigilance-kit/            # submodule · experiment becoming a product
 ├── studies/                          # pinned reading lists
 │   ├── open-specs-and-standards/                     #   submodule

@@ -15,6 +15,7 @@ tags:
   - Token-Derivation
   - Dramatic-Lean
 status: Draft
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/blueprints/Three-Modes-Derivation.md"
 ---

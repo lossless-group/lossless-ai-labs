@@ -22,6 +22,7 @@ authors:
   - Michael Staton
 date_created: 2026-06-01
 date_modified: 2026-06-01
+publish: true
 from: "context-vigilance-kit"
 from_path: "context-v/specs/Systematizing-Chroma-as-Loading-Mechanism-for-Context-v.md"
 ---

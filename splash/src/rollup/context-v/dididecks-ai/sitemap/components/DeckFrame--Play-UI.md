@@ -26,6 +26,9 @@ date_last_updated: 2026-06-07
 at_semantic_version: 0.2.0
 status_tags:
   - Shipped
+date_created: 2026-05-13
+date_modified: 2026-06-07
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckFrame--Play-UI.md"
 ---

@@ -5,8 +5,8 @@ date_authored_initial_draft: 2026-05-14
 date_authored_current_draft: 2026-06-08
 date_authored_final_draft:
 date_first_published:
-date_last_updated: 2026-06-08
-at_semantic_version: 0.0.0.2
+date_last_updated: 2026-08-06
+at_semantic_version: 0.0.0.3
 status: Draft
 augmented_with: Claude Code (Opus 4.7)
 category: Exploration
@@ -15,7 +15,7 @@ authors:
   - Michael Staton
 image_prompt: A pile of paper clippings stamped "HTTP 200" being run through a sieve, with most clippings falling through into a discard bin and only a few landing on a clean evidence shelf labeled "verified"; a magnifying glass over one clipping reveals a "Page Not Found" body underneath the green-stamped header; deep-violet background, library-card aesthetic, technical annotation labels in a monospaced font.
 date_created: 2026-05-14
-date_modified: 2026-05-14
+date_modified: 2026-08-06
 from: "memopop-ai"
 from_path: "context-v/explorations/Curating-only-valid-Sources-across-Runs.md"
 ---
@@ -44,6 +44,14 @@ Result: **65 fabricated `example.com` URLs across the v0.0.2 output.** Not "URLs
 ### Implication for the build order in this doc
 
 Pass A (global dedupe + cross-section view) is still worth shipping — it's cheap, instant, and improves the analyst experience regardless of how upstream is fixed. Pass B (real validity check) is still worth building — but its priority has changed. **The harvester/writer split documented in [[Separating-Retrieval-from-Generation-in-Agent-Pipelines]] now takes precedence over Pass B in any prioritization conversation.** Pass B as a standalone fix is treating downstream symptoms; the architectural split addresses the root cause. Build Pass B as a defense-in-depth layer, not as the primary fix.
+
+### Update 2026-08-06 — the missing predicate, and a cheaper down-payment
+
+A graph trace of the orchestrator found the mechanical reason this document's diagnosis is correct: **every check in Pass B — and every check in the shipped `remove_invalid_sources.validate_url()` — tests whether a URL *resolves*. None tests whether it was *approved*.** Only four files in the orchestrator import the curation module at all; the writer, all eight post-gate enrichers, both cleanup gates, and the fact-corrector have no reference to `Sources.md`.
+
+That asymmetry is why the "back-and-forth war" between researcher, enricher, and validator never resolves: the producers can always win by inventing a URL that happens to be live, and a live-but-wrong URL is invisible to a reachability check. It also explains why the 30-day cache "hardens the lie" (point 2 above) — a cache keyed on fetchability can only ever memoize the wrong question.
+
+[[Constraining-Memo-Writing-to-an-Approved-Source-Set]] adds membership as a fourth verdict (`unapproved`) to the existing ladder. It does **not** displace the harvester/writer split this document prioritizes — it's the two-day down-payment on it: instead of rebuilding retrieval so bad URLs can't be *produced*, make the gate reject anything not on the analyst's list, so invention becomes *ineffective* rather than *impossible*. Pass A's `canonical_url()` normalization is a direct dependency of that work.
 
 ### If Perplexity is retained (tactical mitigation only)
 

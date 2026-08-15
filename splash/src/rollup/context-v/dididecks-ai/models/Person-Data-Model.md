@@ -10,6 +10,9 @@ applies_to:
   - client-sites/chroma-decks
   - client-sites/humain-vc-decks
 schema_authority: apps/deck-shell/src/routes/data-assets/people.astro (the route that reads the frontmatter — its reader is the de facto schema enforcer)
+date_created: 2026-06-07
+date_modified: 2026-06-07
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/models/Person-Data-Model.md"
 ---

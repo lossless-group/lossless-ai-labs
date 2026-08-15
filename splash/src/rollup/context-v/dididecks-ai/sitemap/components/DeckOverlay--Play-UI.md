@@ -22,6 +22,9 @@ status_tags:
   - Shipped
   - New-In-This-Pass
   - Closes-A-Plus-Plus-Gap-2
+date_created: 2026-05-15
+date_modified: 2026-05-15
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckOverlay--Play-UI.md"
 ---

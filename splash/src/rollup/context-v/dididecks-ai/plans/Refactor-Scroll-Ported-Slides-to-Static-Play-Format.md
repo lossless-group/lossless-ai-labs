@@ -28,6 +28,9 @@ tags:
   - Phase-1-To-Phase-2-Bridge
 authors:
   - Michael Staton
+date_created: 2026-05-14
+date_modified: 2026-05-16
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/plans/Refactor-Scroll-Ported-Slides-to-Static-Play-Format.md"
 ---

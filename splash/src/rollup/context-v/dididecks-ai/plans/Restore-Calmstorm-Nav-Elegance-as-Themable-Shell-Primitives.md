@@ -28,6 +28,9 @@ tags:
   - Phase-B-Foundation
 authors:
   - Michael Staton
+date_created: 2026-05-14
+date_modified: 2026-05-16
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/plans/Restore-Calmstorm-Nav-Elegance-as-Themable-Shell-Primitives.md"
 ---

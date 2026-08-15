@@ -2,10 +2,10 @@
 title: "Sources Curation UI — A Local Tool for Converging a Sources.md"
 lede: "A small, disposable, single-file local web tool that binds a curation UI to one Sources-aggregated.md: page through each source, edit its metadata, delete/reorder, preview its content via Jina, type a new search term and fire SearXNG, and pull relevant results back into the list. Reuses the orchestrator's existing src/curation parsing + fetch; adds no dependencies. Saves a converged inputs/Sources.md (backed up, never clobbering the worksheet). Built for the immediate ImmuneCo curation, refactor-friendly later."
 date_authored_initial_draft: 2026-06-27
-date_last_updated: 2026-06-27
+date_last_updated: 2026-08-06
 date_created: 2026-06-27
-date_modified: 2026-06-27
-at_semantic_version: 0.0.0.1
+date_modified: 2026-08-06
+at_semantic_version: 0.0.0.2
 status: Draft
 category: Plan
 augmented_with: Claude Code on Claude Opus 4.8 (1M context)
@@ -92,6 +92,7 @@ python tools/curate_sources.py \
 - Per-source content + LFM extracts → the per-source-with-extracts file ([[source-with-extracts-md]] / the gate).
 - Multi-search capture folders + dedup pool (the `_search.md` design).
 - Graduation into the [[In-App-Chat-Surface-for-Memopop-Native]] surface as `source.*` verbs, rather than a standalone tool.
+- **Taken up by [[Constraining-Memo-Writing-to-an-Approved-Source-Set]] (2026-08-06), Phase 4** — graduates these four endpoints into `memopop-native` as a dedicated review surface (approve / deny / re-search / add), and gives `source_aggregator`'s existing headless `🛑 HALTING PIPELINE` a UI. That plan argues for a **list surface first, chat verbs later**: approve/deny over 57 sources is list-shaped work a transcript would make worse. It also supplies the missing counterpart to this tool — nothing downstream currently *enforces* the `Sources.md` this tool produces.
 
 ## Acceptance
 

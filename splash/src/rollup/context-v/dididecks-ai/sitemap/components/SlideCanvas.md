@@ -21,6 +21,9 @@ status_tags:
   - Shipped
   - Pure-CSS
   - No-ContentFit-Yet
+date_created: 2026-05-13
+date_modified: 2026-05-15
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/SlideCanvas.md"
 ---

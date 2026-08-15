@@ -2,12 +2,14 @@
 title: "NCAD Agentic Product Development Lab"
 lede: "Apprenticeship Degrees need a different technology stack than traditional or even online universities — one that integrates work and learning, gives employers visibility, and delivers chunked, assessable learning to busy working adults while still meeting credit-bearing accreditation. Historically that stack could only be built by expensive software-engineering teams. As of 2026, agentic 'vibe coding' tools let designers and domain experts prototype working software themselves. So the people closest to the problem — apprenticeship, industry-skills, and adult-education experts across NCAD's member network — can now prototype and build momentum on new pieces of that stack. This is the proposal to stand up that capability as a shared lab."
 date_authored_initial_draft: 2026-06-29
-date_authored_current_draft: 2026-06-29
-date_last_updated: 2026-06-29
-at_semantic_version: 0.0.1.0
+date_authored_current_draft: 2026-07-28
+date_last_updated: 2026-07-28
+at_semantic_version: 0.0.2.0
 status: Draft
-augmented_with: Claude Code on Claude Opus 4.8 (1M context) + web search
+augmented_with: Claude Code on Claude Opus 4.8 (initial draft) + Fable 5 (hex-code citation pass)
 category: Strategy Narrative
+strategy_slugs:
+  - ncad-forge
 tags:
   - Strategy
   - NCAD
@@ -23,7 +25,7 @@ tags:
 authors:
   - Michael Staton
 date_created: 2026-06-29
-date_modified: 2026-06-29
+date_modified: 2026-07-28
 from: "dididecks-ai/reach-edu-hub"
 from_path: "context-v/narratives/strategies/agentic-product-lab/README.md"
 ---
@@ -35,7 +37,10 @@ from_path: "context-v/narratives/strategies/agentic-product-lab/README.md"
 > Reach leadership, and prospective funders of the lab. Fast-moving facts (tool
 > names, the "vibe coding" timeline, accreditation hours) are flagged `⚠ VERIFY`.
 > **Working title is the descriptive name; catchier options are listed at the
-> bottom — pick one before deck build.**
+> bottom — pick one before deck build.** (The corpus strategy slug is already
+> `ncad-forge`.) Citations use stable hex codes per the LFM convention;
+> definitions in `## Citations` below and in the per-client registry
+> (`../../citations/registry.csv`).
 
 ## The through-line
 
@@ -44,8 +49,8 @@ Three things are true at once, and together they make a new capability obvious.
 1. **The Apprenticeship Degree runs on a different stack.** It is not a
    traditional campus, and not even an online program. It needs software that few
    incumbents built for: it has to *integrate work and learning* (day-to-day
-   application is the curriculum), give *employers visibility and a way to
-   encourage* their apprentices, and deliver *chunked, convenient learning and
+   application is the curriculum), [^4847ba] give *employers visibility and a way
+   to encourage* their apprentices, and deliver *chunked, convenient learning and
    assessment* to busy working adults — all while still satisfying credit-bearing
    accreditation. Legacy LMSs, university SISs, and online-program platforms each
    solve part of this, none solve the whole.
@@ -55,30 +60,36 @@ Three things are true at once, and together they make a new capability obvious.
    "Vibe coding" — building software by describing intent to an AI — was named in
    early 2025, but the tools only matured into something a *non-engineer* can ship
    real prototypes with by 2026 (Cursor, v0, Lovable, Bolt, Replit Agent, Claude
-   Code, and peers). Engineers still matter — for hardening, scale, security,
-   integration — but they are **no longer the gate on prototyping.** ⚠ VERIFY the
-   "vibe coding" attribution/date and tool landscape before citing.
+   Code, and peers). [^b71a46] [^8cb194] [^e76b45] Engineers still matter — for
+   hardening, scale, security, integration — but they are **no longer the gate on
+   prototyping.** [^3675cf] ⚠ VERIFY the "vibe coding" attribution/date and tool
+   landscape before citing.
 
 3. **The right people are now the builders.** The expertise that actually knows
    what the apprenticeship stack needs lives in apprenticeship, industry-skills,
    and adult-education practitioners — not in a generic software shop. For the
    first time, those domain experts can prototype the thing they understand,
-   instead of writing a spec and waiting on a backlog.
+   instead of writing a spec and waiting on a backlog. The payoff is fivefold:
+   more accurate product definition, closer understanding of the problem and
+   use case, faster speed into the end-user's hands, a higher likelihood of
+   rich stakeholder feedback — and authentic motivation: not an engineer doing
+   their job, but a visionary realizing a vision.
 
 **= The NCAD Agentic Product Development Lab.** A shared capability, hosted by
-the National Center for the Apprenticeship Degree, where domain experts from
-across NCAD's member network use agentic tools to prototype, test, and circulate
-new pieces of the Apprenticeship Degree technology stack — with software
-engineers brought in to harden what proves out.
+the National Center for the Apprenticeship Degree, [^97559d] where domain experts
+from across NCAD's member network use agentic tools to prototype, test, and
+circulate new pieces of the Apprenticeship Degree technology stack — with
+software engineers brought in to harden what proves out.
 
 ## Why this belongs at NCAD specifically
 
 NCAD (launched by Reach University in 2024) exists to **launch and scale**
 Apprenticeship Degrees, and already runs partnership development and employer
-engagement across a **member network**. ⚠ VERIFY current member count/roster.
-That network is exactly the asset a lab needs: a shared problem, many institutions
-hitting the same stack gaps independently, and a neutral center to pool the
-prototypes so no single member rebuilds what another already proved.
+engagement across a **member network**. [^a42a6b] [^ef66be] ⚠ VERIFY current
+member count/roster. That network is exactly the asset a lab needs: a shared
+problem, many institutions hitting the same stack gaps independently, and a
+neutral center to pool the prototypes so no single member rebuilds what another
+already proved.
 
 ## How the lab works (proposed)
 
@@ -100,7 +111,8 @@ Drawn from the "different stack" requirements — to be prioritized with members
 - **Work ↔ credit mapping** — capture day-to-day on-the-job work and map it to
   competencies / credit hours in an accreditation-legible way. ⚠ time-based
   Registered Apprenticeship requires a minimum of ~144 hours of related
-  instruction per year; competency-based pathways exist — VERIFY and design to both.
+  instruction per year; competency-based pathways exist — VERIFY and design to
+  both. [^36c77b]
 - **Employer visibility & encouragement** — a lightweight dashboard so a
   supervisor can see and nudge an apprentice's progress.
 - **Chunked delivery + assessment** — microlearning and stackable assessment
@@ -159,7 +171,8 @@ grant-seeking — this is shared infrastructure for the field, not a commercial 
 
 - **The name.** Working title is descriptive. Catchier candidates:
   - **The Apprenticeship Stack Lab** (says exactly what it builds)
-  - **NCAD Forge** (a forge = where things get made; short, memorable)
+  - **NCAD Forge** (a forge = where things get made; short, memorable — and
+    already the corpus strategy slug, `ncad-forge`)
   - **NCAD Build Lab** / **The Workbench** (the work-based pun)
   - **NCAD Agentic Lab**
   Recommendation: lead with a catchy name + the descriptive line as subtitle
@@ -170,18 +183,14 @@ grant-seeking — this is shared infrastructure for the field, not a commercial 
 - **Scope guardrails** — what the lab does NOT do (not a replacement for members'
   own systems; not production engineering on day one).
 
-## Sources (web search 2026-06-29 — deep-read before relying)
+## Citations
 
-- NCAD — National Center for the Apprenticeship Degree: https://www.ncad.org/
-- NCAD Executive Overview (OADN, 2024) — functions incl. employer engagement:
-  https://oadn.org/wp-content/uploads/2024/10/NCAD-Executive-Overview.pdf
-- NCAD membership / Apprenticeship Degree Network: https://www.ncad.org/membership-community
-- JFF Work-Based Learning Glossary (competency- vs time-based RA; ~144 hrs related
-  instruction): https://www.jff.org/idea/work-based-learning-glossary/
-- Ithaka S+R, "Understanding Work-Based Learning": https://sr.ithaka.org/blog/understanding-work-based-learning/
-- "The Vibe Coding Bakeoff" (Bolt / Lovable / Replit / v0 for non-engineers):
-  https://medium.com/@usabilitycounts/the-vibe-coding-bakeoff-for-generative-ai-prototyping-tools-bolt-lovable-replit-and-v0-876bfc13fd2f
-- "An Opinionated Guide on the Best AI Coding Tools in 2025" (Bolt/v0/Lovable/Replit/Cursor/Windsurf):
-  https://creatoreconomy.so/p/opinionated-guide-on-the-best-ai-coding-prototyping-tools-in-2025
-- "Best Vibe Coding Tools 2026" (Cursor, Claude Code, Copilot, Devin, ...): https://www.taskade.com/blog/best-vibe-coding-tools
-- "Low-Code, High Impact: Why 2026 Belongs to Citizen Developers": https://aufaittechnologies.com/blog/citizen-and-professional-developers-low-code-trend/
+[^97559d]: [NCAD — National Center for the Apprenticeship Degree](https://www.ncad.org/)
+[^a42a6b]: [NCAD Executive Overview (OADN, 2024) — functions incl. employer engagement](https://oadn.org/wp-content/uploads/2024/10/NCAD-Executive-Overview.pdf)
+[^ef66be]: [NCAD membership / Apprenticeship Degree Network](https://www.ncad.org/membership-community)
+[^36c77b]: [JFF, "Work-Based Learning Glossary" (competency- vs time-based RA; ~144 hrs related instruction)](https://www.jff.org/idea/work-based-learning-glossary/)
+[^4847ba]: [Ithaka S+R, "Understanding Work-Based Learning"](https://sr.ithaka.org/blog/understanding-work-based-learning/)
+[^b71a46]: ["The Vibe Coding Bakeoff" (Bolt / Lovable / Replit / v0 for non-engineers)](https://medium.com/@usabilitycounts/the-vibe-coding-bakeoff-for-generative-ai-prototyping-tools-bolt-lovable-replit-and-v0-876bfc13fd2f)
+[^8cb194]: ["An Opinionated Guide on the Best AI Coding Tools in 2025" (Bolt/v0/Lovable/Replit/Cursor/Windsurf)](https://creatoreconomy.so/p/opinionated-guide-on-the-best-ai-coding-prototyping-tools-in-2025)
+[^e76b45]: ["Best Vibe Coding Tools 2026" (Cursor, Claude Code, Copilot, Devin, …)](https://www.taskade.com/blog/best-vibe-coding-tools)
+[^3675cf]: ["Low-Code, High Impact: Why 2026 Belongs to Citizen Developers"](https://aufaittechnologies.com/blog/citizen-and-professional-developers-low-code-trend/)

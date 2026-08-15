@@ -16,12 +16,15 @@ Sources rolled up:
 - `dididecks-ai`
 - `dididecks-ai/calmstorm-decks`
 - `dididecks-ai/chroma-decks`
+- `dididecks-ai/eventcut-ai`
 - `dididecks-ai/humain-vc-decks`
 - `dididecks-ai/lossless-decks`
 - `dididecks-ai/reach-edu-hub`
+- `dididecks-ai/the-water-foundation`
 - `augment-it`
 - `corpora-builder`
 - `id-didi-sh`
+- `flave`
 - `studies`
 - `studies/agent-harnesses`
 - `studies/conversational-ui-and-native-shells`

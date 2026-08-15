@@ -14,6 +14,9 @@ schema_authority:
   - client-sites/calmstorm-decks/db/config.ts
 runtime_mutability: high
 storage: "astro:db (libSQL local — auth.db, Turso remote — see Vercel env)"
+date_created: 2026-06-07
+date_modified: 2026-06-07
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/models/Auth-Surface-Data-Model.md"
 ---

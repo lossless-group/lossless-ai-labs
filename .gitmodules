@@ -47,3 +47,7 @@
 	path = corpora-builder
 	url = https://github.com/lossless-group/corpora-builder.git
 	branch = main
+[submodule "flave-ai"]
+	path = flave-ai
+	url = https://github.com/lossless-group/flave.git
+	branch = main

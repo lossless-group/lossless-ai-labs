@@ -18,6 +18,7 @@ tags:
   - Repo-Init
   - Branch-Alignment
 status: Shipped
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/plans/Init-DidiDecks-as-core-Submodule-of-AI-Labs.md"
 ---

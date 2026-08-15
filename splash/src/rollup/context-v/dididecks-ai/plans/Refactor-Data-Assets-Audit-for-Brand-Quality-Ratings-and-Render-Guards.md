@@ -18,6 +18,9 @@ tags:
   - Companies-Audit
 authors:
   - Michael Staton
+date_created: 2026-05-17
+date_modified: 2026-05-17
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/plans/Refactor-Data-Assets-Audit-for-Brand-Quality-Ratings-and-Render-Guards.md"
 ---

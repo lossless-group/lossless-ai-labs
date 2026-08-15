@@ -29,6 +29,9 @@ status_tags:
   - Shipped
 related_models:
   - "[[../../models/Slide-Audit-Registry-Data-Model]]"
+date_created: 2026-05-15
+date_modified: 2026-06-07
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/toc-deck.md"
 ---

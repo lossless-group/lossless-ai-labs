@@ -15,6 +15,7 @@ authors:
   - Michael Staton
 date_created: 2026-05-03
 date_modified: 2026-05-03
+publish: false
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/plans/Generic-Scorecard-Generation.md"
 ---

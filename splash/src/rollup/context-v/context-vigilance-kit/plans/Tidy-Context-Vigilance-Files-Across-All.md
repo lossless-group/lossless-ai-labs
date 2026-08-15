@@ -17,6 +17,7 @@ tags:
   - Splash-Page
   - ChromaDB
 status: Draft
+publish: true
 from: "context-vigilance-kit"
 from_path: "context-v/plans/Tidy-Context-Vigilance-Files-Across-All.md"
 ---

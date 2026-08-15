@@ -1,9 +1,12 @@
 ---
+title: The Voice and Purpose of Changelogs
+date_created: 2026-05-03
+date_modified: 2026-05-03
+publish: false
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/reminders/The-Voice-and-Purpose-of-Changelogs.md"
 ---
-
- We like to think our changelogs audience is myriad, but in this order:  
+We like to think our changelogs audience is myriad, but in this order:  
  
 Lead with impact — punchy synopsis, story-shaped Why, structured What Changed with
 

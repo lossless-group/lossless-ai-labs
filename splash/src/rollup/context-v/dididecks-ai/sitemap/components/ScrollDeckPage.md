@@ -33,6 +33,9 @@ at_semantic_version: 0.2.0
 status_tags:
   - Shipped
   - Canonical-Entry-Point
+date_created: 2026-06-07
+date_modified: 2026-06-07
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/ScrollDeckPage.md"
 ---

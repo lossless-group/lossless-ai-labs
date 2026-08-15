@@ -6,15 +6,17 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 4.7
-semantic_version: 0.0.0.5
-date_modified: 2026-06-02
+semantic_version: 0.0.0.6
+date_modified: 2026-07-21
+date_first_published: 2026-06-02
 revisions:
-  - 2026-06-01 — Initial draft (0.0.0.1).
-  - 2026-06-02 — SerpApi added as a peer provider; news pack stays on the free path. Lock: Google News RSS as the v1 default for `news-mentions-pack` (with GDELT immediate peer); SerpApi `engine: 'google_news'` is available behind `provider_override` but never default. `official-site-updates-pack` provider section split into find-index vs extract-posts stages — SerpApi (`engine: 'google'` with `site:`-restrict) is the strongest find-index option; Firecrawl stays for extract-posts. Provider-override shape grows from a single string to `{ find?, extract? }` to match the two-stage economy. New open question: per-bundle cost budget (surfaces in Decision §10's adaptive RR as a candidate pre-fire estimate line). Resolved open question: news provider priority.
-  - 2026-06-02 — Engineering-handoff sharpening, two pieces locked: (a) every returned item carries two independent 0-100 scores — `confidence` (Profile-Builder-style: link valid + informative) and `relevance` (LLM-scored against a `relevance_context` brief). Each has a 90-100 / 51-89 / 0-50 tier with semantics tied to triage default-accept / human-review / default-skip behaviour. Worked example (Reach University's apprenticeship-degrees fundraise) shows how a 3-year-old article can score higher on relevance than yesterday's news. (b) No hard cap on returned items — structured response wraps `all` (master, sorted by combined score), `most_recent` and `most_relevant` (each soft cap 20). Sort and tie-break rules locked; per-fire `provider_override.score: 'llm' | 'keywords-only' | 'none'` escape hatch added. Cost discipline section names the batching + cheap-model + pre-filter pattern that keeps LLM scoring viable at fan-out scale.
-  - 2026-06-02 — Added top-level **Philosophy** section locking Augment-It's stance on LLM web research: leverage LLM speed/breadth/randomness AND keep quality-gating + relevance-sorting with the human in the loop. Frames the two-score + no-hard-cap + provider-override choices as instances of one principle — *LLMs fan out, humans filter in*. Candidate cross-cutting principle for the Packs-and-Bundles-Pattern blueprint.
-  - 2026-06-02 — Major restructure to v0.0.0.4: **two-pass orchestration across three categories**. Pass 1 grows from three packs to seven, decomposed into OfficialUpdates (blog + press_release + own-social), MediaMentions (news_coverage + thematic_inclusion + deep_analysis), and SocialsMentions (third-party mentions across platforms with `row.socials` filter-out). Pass 2 adds three agent-bound rollup-agents that synthesize per-category Rollup records. The Rollup shape is "true rollup" — carries every constituent item plus indexed views (`by_content_type`, `most_recent`, `most_relevant`) referencing items by index rather than copying. Target columns become `official_updates_pulse / media_mentions_pulse / socials_mentions_pulse`. Each rollup lands in a `PulseCategoryState<Rollup>` wrapper with the three-layer curation model from the NEW sibling spec [[Pulse-Curation-Layer-and-UI]] — immutable `raw_output`, live `curated_output`, immutable `finalized_output` snapshot when the human marks the category done. Three triage actions (accept-canonical / accept-additional-context / discard) plus bulk variants. Migration plan re-sequenced across multiple PRs given the larger scope; first concrete step is now `media-news-coverage-pack` standalone against Google News RSS, with no LLM scoring, no curation layer, just the pack-runner ergonomics smoke. Legacy per-pack detail sections removed (note left in place explaining the decomposition).
-  - 2026-06-02 — Foundation-first sequencing locked (v0.0.0.5). User framing: *"the first thing is to identify and pull in their own blog/press-releases, so that is first order of operations. Once that is true, run the different packs."* The bundle goes from two-pass to **four-phase DAG**: Phase 1 = OfficialUpdates source packs; Phase 2 = OfficialUpdates rollup-agent (gating; foundation); Phase 3 = MediaMentions + SocialsMentions source packs (with the OfficialUpdatesRollup as `prior_context` for relevance scoring + cross-category dedup); Phase 4 = MediaMentions + SocialsMentions rollup-agents. Bundle config gains per-member `depends_on` (for DAG edges) and `prior_context` (for carry-forward to scoring). Phase 2 errors block Phases 3 + 4 (with diagnostic); Phase 2 sparse/empty results are graceful — Phases 3 + 4 proceed with empty prior context, scoring falls back to `relevance_context` only. Migration plan re-sequenced as **officials-first**: ship `official-blog-pack` standalone → add the other two OfficialUpdates packs → add OfficialUpdates rollup-agent → add Pulse Curation Layer → THEN add MediaMentions Phase 3 + 4 (which exercises the four-phase orchestrator's gating + carry-forward for the first time) → add remaining MediaMentions packs → add SocialsMentions Phase 3 + 4. Connector palette spec ([[Connector-Inventory-and-Per-Record-Palette]]) lands in parallel.
+  - "2026-07-21 — Status sweep, promoted to Partially-Shipped (0.0.0.6). The OfficialUpdates foundation shipped starting 2026-06-02: official-blog-pack, official-pressrelease-pack, official-social-posts-pack, the google-news-rss connector, and the entity-officials bundle all live under services/social-search/src/entity-pulse/ with fire scripts. The four-phase DAG gating, two-score (confidence + relevance) LLM scoring, three-layer curation wiring, and the MediaMentions/SocialsMentions phases are not confirmed in code. See ## Remaining work below."
+  - "2026-06-01 — Initial draft (0.0.0.1)."
+  - "2026-06-02 — SerpApi added as a peer provider; news pack stays on the free path. Lock: Google News RSS as the v1 default for `news-mentions-pack` (with GDELT immediate peer); SerpApi `engine: 'google_news'` is available behind `provider_override` but never default. `official-site-updates-pack` provider section split into find-index vs extract-posts stages — SerpApi (`engine: 'google'` with `site:`-restrict) is the strongest find-index option; Firecrawl stays for extract-posts. Provider-override shape grows from a single string to `{ find?, extract? }` to match the two-stage economy. New open question: per-bundle cost budget (surfaces in Decision §10's adaptive RR as a candidate pre-fire estimate line). Resolved open question: news provider priority."
+  - "2026-06-02 — Engineering-handoff sharpening, two pieces locked: (a) every returned item carries two independent 0-100 scores — `confidence` (Profile-Builder-style: link valid + informative) and `relevance` (LLM-scored against a `relevance_context` brief). Each has a 90-100 / 51-89 / 0-50 tier with semantics tied to triage default-accept / human-review / default-skip behaviour. Worked example (Reach University's apprenticeship-degrees fundraise) shows how a 3-year-old article can score higher on relevance than yesterday's news. (b) No hard cap on returned items — structured response wraps `all` (master, sorted by combined score), `most_recent` and `most_relevant` (each soft cap 20). Sort and tie-break rules locked; per-fire `provider_override.score: 'llm' | 'keywords-only' | 'none'` escape hatch added. Cost discipline section names the batching + cheap-model + pre-filter pattern that keeps LLM scoring viable at fan-out scale."
+  - "2026-06-02 — Added top-level **Philosophy** section locking Augment-It's stance on LLM web research: leverage LLM speed/breadth/randomness AND keep quality-gating + relevance-sorting with the human in the loop. Frames the two-score + no-hard-cap + provider-override choices as instances of one principle — *LLMs fan out, humans filter in*. Candidate cross-cutting principle for the Packs-and-Bundles-Pattern blueprint."
+  - "2026-06-02 — Major restructure to v0.0.0.4: **two-pass orchestration across three categories**. Pass 1 grows from three packs to seven, decomposed into OfficialUpdates (blog + press_release + own-social), MediaMentions (news_coverage + thematic_inclusion + deep_analysis), and SocialsMentions (third-party mentions across platforms with `row.socials` filter-out). Pass 2 adds three agent-bound rollup-agents that synthesize per-category Rollup records. The Rollup shape is \"true rollup\" — carries every constituent item plus indexed views (`by_content_type`, `most_recent`, `most_relevant`) referencing items by index rather than copying. Target columns become `official_updates_pulse / media_mentions_pulse / socials_mentions_pulse`. Each rollup lands in a `PulseCategoryState<Rollup>` wrapper with the three-layer curation model from the NEW sibling spec [[Pulse-Curation-Layer-and-UI]] — immutable `raw_output`, live `curated_output`, immutable `finalized_output` snapshot when the human marks the category done. Three triage actions (accept-canonical / accept-additional-context / discard) plus bulk variants. Migration plan re-sequenced across multiple PRs given the larger scope; first concrete step is now `media-news-coverage-pack` standalone against Google News RSS, with no LLM scoring, no curation layer, just the pack-runner ergonomics smoke. Legacy per-pack detail sections removed (note left in place explaining the decomposition)."
+  - "2026-06-02 — Foundation-first sequencing locked (v0.0.0.5). User framing: *\"the first thing is to identify and pull in their own blog/press-releases, so that is first order of operations. Once that is true, run the different packs.\"* The bundle goes from two-pass to **four-phase DAG**: Phase 1 = OfficialUpdates source packs; Phase 2 = OfficialUpdates rollup-agent (gating; foundation); Phase 3 = MediaMentions + SocialsMentions source packs (with the OfficialUpdatesRollup as `prior_context` for relevance scoring + cross-category dedup); Phase 4 = MediaMentions + SocialsMentions rollup-agents. Bundle config gains per-member `depends_on` (for DAG edges) and `prior_context` (for carry-forward to scoring). Phase 2 errors block Phases 3 + 4 (with diagnostic); Phase 2 sparse/empty results are graceful — Phases 3 + 4 proceed with empty prior context, scoring falls back to `relevance_context` only. Migration plan re-sequenced as **officials-first**: ship `official-blog-pack` standalone → add the other two OfficialUpdates packs → add OfficialUpdates rollup-agent → add Pulse Curation Layer → THEN add MediaMentions Phase 3 + 4 (which exercises the four-phase orchestrator's gating + carry-forward for the first time) → add remaining MediaMentions packs → add SocialsMentions Phase 3 + 4. Connector palette spec ([[Connector-Inventory-and-Per-Record-Palette]]) lands in parallel."
 tags:
   - Spec
   - Augment-It
@@ -25,7 +27,7 @@ tags:
   - Agent-Pack
   - Social-Aggregation
   - Profile-Continuation
-status: Draft
+status: Partially-Shipped
 from: "augment-it"
 from_path: "context-v/specs/Entity-Pulse-Bundle.md"
 ---
@@ -979,3 +981,39 @@ palette (parallel step 8) are unambiguously branch-shaped.
 - [[In-App-Chat-v0-0-1-for-Augment-It]] — the chat verb registry
   that may eventually carry `/voice-of-entity` or
   `/entity-pulse` as a one-shot verb.
+
+## Remaining work (as of 2026-07-21)
+
+Assessed against a code scan on 2026-07-21 (branch
+`rebuild/turbo-rsbuild`) — flag-don't-fix; correct this list if the
+scan missed something.
+
+**Shipped** (per changelog `2026-06-02_01_Official-Blog-Pack-Step-1`
+and commits `7065da8`/`ceb3f27`, maintained through the 2026-07-01
+NATS v3 migration):
+
+- `official-blog-pack`, `official-pressrelease-pack`,
+  `official-social-posts-pack` under
+  `services/social-search/src/entity-pulse/packs/`
+- `google-news-rss` connector + `entity-officials` bundle +
+  `dispatch.ts`
+- Fire scripts (`scripts/fire-official-blog.ts` and siblings)
+- The 8MB NATS `max_payload` bump this bundle's fan-out forced
+
+**Not confirmed in code** (the migration plan's later steps):
+
+- Phase 2 OfficialUpdates rollup-agent, and the four-phase DAG with
+  `depends_on` gating + `prior_context` carry-forward
+- Two-score item scoring (confidence + relevance vs a
+  `relevance_context` brief) and the tiered triage defaults
+- Three-layer `PulseCategoryState` curation wiring
+  ([[Pulse-Curation-Layer-and-UI]] remains Draft; the
+  OfficialPulse junk-URL issue log shows triage happened
+  *post-promotion* instead, with a 99.7% reject rate — see
+  [[../issues/OfficialPulse-URLs-Appear-as-Junk-in-Promoted-Versions]])
+- MediaMentions Phases 3 + 4, remaining MediaMentions packs, and
+  SocialsMentions entirely
+
+The "Augment from DB" flow's step 8 (pulse-stream scanning) is the
+next likely consumer of this spec — see
+[[../explorations/Augment-From-DB-Flow-Two-New-Microfrontends]].

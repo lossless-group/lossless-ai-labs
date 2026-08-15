@@ -12,6 +12,9 @@ applies_to:
   - dididecks-ai/corpus (new — dddecks-corpus submodule mounted 2026-06-07)
 runtime_mutability: low (mostly authored at ingest time; appended as new substantiation lands)
 storage: "Local filesystem only — gitignored at the per-client level; tracked at the parent corpus/ submodule level"
+date_created: 2026-06-07
+date_modified: 2026-06-07
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/models/Substantiation-Corpus-Data-Model.md"
 ---

@@ -23,6 +23,7 @@ authors:
 image_prompt: "An apothecary's cabinet of curiosities reimagined for ideas — each drawer pulled open reveals a single diagram on parchment: a 2x2 matrix, a value-chain flow, a layered stack, a Venn, a sankey, an org-tree. Brass labels in fine engraving. Warm gaslight, deep wood, archival mood, restrained palette."
 date_created: 2026-05-11
 date_modified: 2026-05-11
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/specs/Dididecks-AI-Visual-and-Diagram-Component-Library.md"
 ---

@@ -14,6 +14,9 @@ schema_authority:
   - apps/deck-shell/src/routes/api/slide-rank.ts
   - apps/deck-shell/src/types/index.ts → AuditRegistry / RankEntryV2 / SurfaceRankEntry
 runtime_mutability: high
+date_created: 2026-06-07
+date_modified: 2026-06-07
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/models/Slide-Audit-Registry-Data-Model.md"
 ---

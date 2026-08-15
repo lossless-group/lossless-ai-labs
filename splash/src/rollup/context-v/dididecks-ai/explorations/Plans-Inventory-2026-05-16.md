@@ -22,6 +22,7 @@ authors:
   - Michael Staton
 date_created: 2026-05-16
 date_modified: 2026-05-16
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/explorations/Plans-Inventory-2026-05-16.md"
 ---

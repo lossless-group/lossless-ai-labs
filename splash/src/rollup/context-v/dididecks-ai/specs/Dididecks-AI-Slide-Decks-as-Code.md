@@ -22,6 +22,7 @@ authors:
 image_prompt: "A draftsman's workbench in a steam-punk study, where slide carousels and projector reels have been replaced by stacks of typeset code on parchment. A brass pantograph copies a single slide into many variants. Behind it, a wall of indexed file drawers labeled by deck, by scene, by audience. Warm gaslight, ink and gear motif."
 date_created: 2026-05-11
 date_modified: 2026-05-11
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/specs/Dididecks-AI-Slide-Decks-as-Code.md"
 ---

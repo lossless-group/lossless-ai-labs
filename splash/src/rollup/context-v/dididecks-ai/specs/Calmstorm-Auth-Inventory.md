@@ -22,6 +22,7 @@ authors:
 date_created: 2026-05-17
 date_modified: 2026-05-17
 parent_exploration: "[[../../../context-v/explorations/Shared-Auth-for-Applied-AI-Labs]]"
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/specs/Calmstorm-Auth-Inventory.md"
 ---

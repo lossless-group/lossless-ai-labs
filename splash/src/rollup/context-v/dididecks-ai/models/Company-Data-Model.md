@@ -10,6 +10,9 @@ applies_to:
   - client-sites/chroma-decks
   - client-sites/humain-vc-decks
 schema_authority: apps/deck-shell/src/routes/data-assets/companies.astro
+date_created: 2026-06-07
+date_modified: 2026-06-07
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/models/Company-Data-Model.md"
 ---

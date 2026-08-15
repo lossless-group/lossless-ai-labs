@@ -12,6 +12,9 @@ applies_to:
 schema_authority:
   - apps/deck-shell/src/registry-loader.ts (the evaluator)
   - apps/deck-shell/src/types/index.ts (the shared types)
+date_created: 2026-06-07
+date_modified: 2026-06-07
+publish: false
 from: "dididecks-ai"
 from_path: "context-v/models/Deck-Variant-Slot-Registry-Data-Model.md"
 ---

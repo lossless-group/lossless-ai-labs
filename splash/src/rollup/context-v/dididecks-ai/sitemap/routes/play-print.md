@@ -24,6 +24,9 @@ at_semantic_version: 0.1.0
 status_tags:
   - Shipped
   - Calmstorm-Pattern
+date_created: 2026-05-15
+date_modified: 2026-06-07
+publish: true
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/play-print.md"
 ---
