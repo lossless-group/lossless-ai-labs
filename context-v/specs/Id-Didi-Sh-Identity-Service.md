@@ -214,11 +214,70 @@ with the central-service simplifications applied:
 | `auth_events` | Born central (the outbox collapse): `occurred_at`, `didi_id`, `app_slug`, `org_id`, `event_type`, payload. `app_slug` comes from the calling service's registered app record. |
 | `apps` | The registered consumers: `slug` (`augment-it`, `decks`, `memos`), display name, allowed `next` redirect prefixes, enabled flag. Small but load-bearing — it's what stops an open-redirect via the `next` param and what stamps `app_slug` on events. |
 
-Per-service authorization state (augment-it's workspaces, decks' deck
-ownership) stays **in the services**. id.didi.sh answers *who you are and
-what org-roles you hold*; each service maps that onto its own resources
-(for augment-it: org ↔ workspace per
-[[../../augment-it/context-v/specs/Workspaces-as-Tenant-Primitive|Workspaces-as-Tenant-Primitive]]).
+### Amendment 2026-08-09 — workspaces become first-class; domain is demoted
+
+**Superseded:** this section previously read *"Per-service authorization state
+(augment-it's workspaces, decks' deck ownership) stays in the services. id.didi.sh
+answers who you are and what org-roles you hold."* That held while orgs were the
+only tenancy notion and every consumer mapped org-roles onto its own resources.
+It does not survive contact with how the operator actually works.
+
+> *"While org emails are a good way to allow new user registrations, I live in a
+> world where it's anything but strict. For instance, I created accounts for
+> palmer-ai with a human.vc email. I'm supporting many organizations with
+> sometimes their email and sometimes not. But I'm often even setting them up as
+> an admin."*
+>
+> *"This happens all the time. Every startup I've been at you end up with service
+> providers, advisors, investors, etc."*
+
+The people who most need access to a client's workspace are precisely the ones
+whose address will never match its domain: fractional operators, advisors,
+investors, agencies, and the person administering the whole thing from another
+company's address. **Derive membership from an email domain and you have built a
+system that structurally cannot express an advisor.**
+
+Four rulings follow.
+
+**1. The workspace is the tenancy boundary, and the boundary secrets attach to.**
+Not the org. A workspace has a parent org, a slug, a display name.
+
+**2. Membership is explicit and email-domain-independent.** Anyone may be granted
+any role in any workspace, whatever address they hold. This is an **invariant**,
+stated here so a later reader does not "simplify" it back into a domain check.
+
+**3. A domain is a self-signup convenience on the workspace, never an identity.**
+`workspaces.default_domain` means *"an address at this domain may self-join at
+`default_role` without an invite"* — a way to avoid hand-inviting forty people at
+one company. It is **never consulted when deciding whether an existing member has
+access.** Auto-join writes an ordinary membership row; from that moment the row,
+not the domain, is the authority. Changing or clearing a domain therefore cannot
+revoke anyone.
+
+**4. Organizations survive, demoted.** Still domain-as-id, still useful for
+grouping, billing, and firm profiles. They stop being the access boundary.
+
+This is the shape Slack, Notion and Linear each converged on, for the same
+reason: optional domain-based auto-join plus explicit invitations that ignore it
+entirely.
+
+**What stays in the services.** Per-resource state — which deck, which memo,
+which corpus domain — remains theirs. What moves here is the *tenant* and its
+membership, because that is what secrets and configuration must attach to.
+augment-it's [[../../augment-it/context-v/specs/Workspaces-as-Tenant-Primitive|Workspaces-as-Tenant-Primitive]]
+is the closest existing definition and should be reconciled toward this one
+rather than a parallel notion invented here.
+
+### Schema added by this amendment
+
+| Table | Notes |
+|---|---|
+| `workspaces` | `id` (UUIDv7), `slug` (unique), `name`, `org_id` (parent, nullable — a workspace may outlive or precede an org), `default_domain` (nullable; self-signup hint only), `default_role` (role granted on auto-join), timestamps. |
+| `workspace_memberships` | `(didi_id, workspace_id, role)`, unique on the pair. Role vocabulary shared with `memberships`. `granted_by` (didi_id, nullable) and `via` ∈ `invite` / `auto_join` / `seed` — so an audit can answer *how* someone got in, which is the question that matters when an advisor still has access a year later. |
+
+`memberships` (org-level) is retained. Existing rows migrate to memberships of
+their org's default workspace; the org-level table stays for org-wide roles like
+`superuser`.
 
 ## API surface
 
