@@ -30,7 +30,7 @@ User says something like:
 - "go get teams and portfolios for {Firm A}, {Firm B}, {Firm C}"
 - "{operating company} is raising — give us context on the investors"
 
-The user typically supplies a **list of firm names** (Quiet Capital, Bloomberg Beta, Air Street Capital, AIX Ventures) along with the **context company** they all back (e.g., Chroma). The context company is metadata — we don't crawl it here; the parent skill's `team/` flow already handles the operating company's own people.
+The user typically supplies a **list of firm names** (the Lead plus the other firms in the round) along with the **context company** they all back (e.g., Chroma). The context company is metadata — we don't crawl it here; the parent skill's `team/` flow already handles the operating company's own people.
 
 ## Inputs
 

@@ -1,4 +1,8 @@
 ---
+site_uuid: 80cfe547-3f76-487a-976d-9b94cc772e52
+hex_code: gkpkk1
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 date_created: 2026-07-06
 date_modified: 2026-07-06
 title: "Walking skeleton — magic link to signed cookie, proven live"

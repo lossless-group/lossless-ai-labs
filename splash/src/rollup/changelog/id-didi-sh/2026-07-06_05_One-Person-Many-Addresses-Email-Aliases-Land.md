@@ -1,4 +1,8 @@
 ---
+site_uuid: 520d75b2-ac56-4301-8921-fbbea75d7ee8
+hex_code: g9fne2
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 date_created: 2026-07-06
 date_modified: 2026-07-06
 title: "One person, many addresses — email aliases land"

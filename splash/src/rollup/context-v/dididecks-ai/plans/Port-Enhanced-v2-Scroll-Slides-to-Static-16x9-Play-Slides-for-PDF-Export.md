@@ -214,7 +214,7 @@ Goal: 05, 06, 11, 14 done. These are the ones whose scroll versions got the most
 
 1. **Slot 05 — Bottleneck → Solution.** Two-column flow diagram with cobalt beam. Risks: SVG arrow positioning, orb clipping. Port at 1920×1080.
 2. **Slot 06 — Difficult problems.** Two lists (system + data). Largely typographic. Easy port — bake the clamp() values and go.
-3. **Slot 11 — Backed by.** Quiet Capital hero + operators grid. Risks: the operator-grid flex-wrap behavior at 1920px width may need a column-count adjustment to look balanced.
+3. **Slot 11 — Backed by.** Lead hero + operators grid. Risks: the operator-grid flex-wrap behavior at 1920px width may need a column-count adjustment to look balanced.
 4. **Slot 14 — Use of funds.** Already done in Phase 0.
 
 Validation: visit each `/play/.../{slot}/` in dev, eyeball against the scroll counterpart, confirm visual register holds. Print preview each.

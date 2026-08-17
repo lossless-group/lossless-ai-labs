@@ -1,4 +1,8 @@
 ---
+site_uuid: f1c42f31-6581-4e87-9908-a1d258bbe35c
+hex_code: mo1q5y
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 date_created: 2026-07-06
 date_modified: 2026-07-06
 title: "Repo scaffold — the identity plane gets its home"

@@ -1,4 +1,8 @@
 ---
+site_uuid: 5749d77c-781c-4db3-85fc-da10aa9340af
+hex_code: fs9ync
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 date_created: 2026-07-06
 date_modified: 2026-07-06
 title: "id.didi.sh is live — the full loop, clicked"

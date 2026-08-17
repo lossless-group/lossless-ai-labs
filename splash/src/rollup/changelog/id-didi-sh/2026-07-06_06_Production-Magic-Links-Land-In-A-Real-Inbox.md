@@ -1,4 +1,8 @@
 ---
+site_uuid: b1df40db-1681-4c2f-93e0-68d0ac5745e8
+hex_code: ji5u0n
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 date_created: 2026-07-06
 date_modified: 2026-07-06
 title: "Production magic links land in a real inbox"

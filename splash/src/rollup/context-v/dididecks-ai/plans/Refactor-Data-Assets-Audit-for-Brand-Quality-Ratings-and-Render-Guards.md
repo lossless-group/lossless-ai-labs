@@ -246,7 +246,7 @@ Includes the override semantics ("when to use `--allow-flagged`"), the "Star" pr
 ## Out of scope for this plan (named so they don't drift in)
 
 - **Automated asset-quality detection.** Computer-vision approaches that could auto-flag low-DPI, off-aspect, transparent-on-light, etc. Possibly worth a follow-up exploration; the human-rating + flag workflow is sufficient v1.
-- **Per-firm asset-quality SLAs.** "Air Street's portfolio must be ≥ P across the board before we ship a deck to them." Conceivable; not v1.
+- **Per-firm asset-quality SLAs.** "the Lead's portfolio must be ≥ P across the board before we ship a deck to them." Conceivable; not v1.
 - **Asset variants** (light-mode vs dark-mode logos, square vs landscape OG). The schema can grow to per-mode `quality:` but the v1 plan treats one canonical asset per slot.
 - **CEO photo as a separate asset.** People audit covers it under `photo:`. Companies could carry a per-row `ceo_photo:` block but that's a Phase 7 if it earns its keep.
 - **Auto-fetching missing assets** from third-party APIs (Clearbit, Logo.dev). Out of v1; the audit's job is to surface, not to remediate.
@@ -255,7 +255,7 @@ Includes the override semantics ("when to use `--allow-flagged`"), the "Star" pr
 
 - **Migration burden.** Every existing portfolio .md needs the `logo_file` → `trademark` or `wordmark` decision made by hand. ~5 min × N companies. Chroma alone has 345 entries across 4 firms; that's a focused day of work. Worth it for the deck-credibility downstream, but real.
 - **Rating subjectivity.** "P vs Star" is judgment. Two reviewers may disagree. Phase 6 workflow doc needs to give criteria so the rating doesn't drift.
-- **Per-firm vs per-asset rating.** If Air Street's portfolio is mostly C-rated assets and Chroma's is mostly Star, the firm-section header could carry an aggregate rating. Phase 4 could extend the rollup to firm-level. Defer until the per-row pattern proves out.
+- **Per-firm vs per-asset rating.** If the Lead's portfolio is mostly C-rated assets and the client's is mostly Star, the firm-section header could carry an aggregate rating. Phase 4 could extend the rollup to firm-level. Defer until the per-row pattern proves out.
 - **Star promotion semantics.** What earns Star? Is Star "this is the official press-kit asset from the company's own brand-asset folder" or "this looks great in our specific deck context"? Phase 0 resolves this.
 - **Status column collision.** Today's audit has a `Status` column ("complete" | "incomplete" etc.). The new per-asset model essentially makes the row-level `Status` a derived field. Drop the per-row `status` from .md frontmatter? Or keep it for backwards-compat? Probably derive.
 

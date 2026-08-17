@@ -1,4 +1,8 @@
 ---
+site_uuid: 27b5c16e-e93d-43ca-a128-8bdbdb255e5d
+hex_code: 47v0u9
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 date_created: 2026-07-06
 date_modified: 2026-07-06
 title: "Deployed — the identity service goes live on Fly"

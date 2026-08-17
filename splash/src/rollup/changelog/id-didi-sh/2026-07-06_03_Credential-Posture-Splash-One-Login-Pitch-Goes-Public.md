@@ -1,4 +1,8 @@
 ---
+site_uuid: 44b39a1c-96e3-4098-abd5-a972590fbf74
+hex_code: o4totw
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 date_created: 2026-07-06
 date_modified: 2026-07-06
 title: "Credential-posture splash — the one-login pitch goes public"
