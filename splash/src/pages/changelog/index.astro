@@ -12,8 +12,8 @@ const base = import.meta.env.BASE_URL;
 // alpha sort. Empty values sink to the bottom regardless of direction.
 const entries = (await getCollection('changelog'))
   .map((e) => {
-    const modified = toDate(e.data.date_modified ?? e.data.date_created ?? e.data.date);
-    const created = toDate(e.data.date_created ?? e.data.date);
+    const modified = toDate(e.data.date_modified ?? e.data.date_created ?? e.data.date ?? e.data.date_authored_current_draft ?? e.data.date_authored_initial_draft);
+    const created = toDate(e.data.date_created ?? e.data.date ?? e.data.date_authored_current_draft ?? e.data.date_authored_initial_draft);
     const published = toDate(
       e.data.date_first_published ?? e.data.date_published ?? e.data.published_at,
     );

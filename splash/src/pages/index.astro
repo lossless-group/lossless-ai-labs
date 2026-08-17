@@ -18,7 +18,7 @@ const activeCount = childSlugs.length;
 
 // Latest 3 changelog entries across the whole tree — for the hero side.
 const latestEntries = [...changelogAll]
-  .map((e) => ({ ...e, _t: toDate(e.data.date_modified ?? e.data.date_created ?? e.data.date)?.getTime() ?? 0 }))
+  .map((e) => ({ ...e, _t: toDate(e.data.date_modified ?? e.data.date_created ?? e.data.date ?? e.data.date_authored_current_draft ?? e.data.date_authored_initial_draft)?.getTime() ?? 0 }))
   .sort((a, b) => b._t - a._t)
   .slice(0, 3);
 
@@ -58,7 +58,7 @@ const graduated = [
         <ul class="hero__readout-list">
           {latestEntries.map((entry) => {
             const from = entry.data.from ?? 'ai-labs';
-            const when = toDate(entry.data.date_modified ?? entry.data.date_created ?? entry.data.date);
+            const when = toDate(entry.data.date_modified ?? entry.data.date_created ?? entry.data.date ?? entry.data.date_authored_current_draft ?? entry.data.date_authored_initial_draft);
             const stamp = when ? when.toISOString().slice(0, 10) : '';
             return (
               <li class="hero__readout-row">
