@@ -23,3 +23,6 @@ pnpm-lock.yaml
 !splash/pnpm-lock.yaml
 
 .chroma/
+
+# context-vigilance: scratch/out-of-band material, never committed
+context-v/extra/
