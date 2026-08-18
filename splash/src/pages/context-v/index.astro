@@ -43,8 +43,8 @@ const sections = [...grouped.entries()].sort(([a], [b]) => {
 // Within each section, sort by modified date desc.
 for (const [, items] of sections) {
   items.sort((a, b) => {
-    const at = toDate(a.data.date_modified ?? a.data.date_created)?.getTime() ?? 0;
-    const bt = toDate(b.data.date_modified ?? b.data.date_created)?.getTime() ?? 0;
+    const at = toDate(a.data.date_modified ?? a.data.date_created ?? a.data.date_authored_current_draft ?? a.data.date_authored_initial_draft)?.getTime() ?? 0;
+    const bt = toDate(b.data.date_modified ?? b.data.date_created ?? b.data.date_authored_current_draft ?? b.data.date_authored_initial_draft)?.getTime() ?? 0;
     return bt - at;
   });
 }
@@ -91,8 +91,8 @@ for (const [, items] of sections) {
           >
             {items.map((entry) => {
               const from = entry.data.from ?? 'ai-labs';
-              const modified = toDate(entry.data.date_modified ?? entry.data.date_created);
-              const created = toDate(entry.data.date_created);
+              const modified = toDate(entry.data.date_modified ?? entry.data.date_created ?? entry.data.date_authored_current_draft ?? entry.data.date_authored_initial_draft);
+              const created = toDate(entry.data.date_created ?? entry.data.date_authored_initial_draft);
               const published = toDate(
                 entry.data.date_first_published ?? entry.data.date_published ?? entry.data.published_at,
               );

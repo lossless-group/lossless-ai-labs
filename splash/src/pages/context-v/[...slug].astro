@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const when = toDate(entry.data.date_modified ?? entry.data.date_created);
+const when = toDate(entry.data.date_modified ?? entry.data.date_created ?? entry.data.date_authored_current_draft ?? entry.data.date_authored_initial_draft);
 const from = entry.data.from ?? 'ai-labs';
 const title = entry.data.title ?? entry.id;
 const semver = entry.data.at_semantic_version ?? entry.data.semantic_version;
