@@ -4,6 +4,8 @@ status: pre-draft, working discussion
 date: 2026-05-02
 slug-candidate: content-authoring-tools
 remote-candidate: lossless-group/study-content-authoring-tools
+site_uuid: 97f63f26-9992-4777-ac0a-54517231d5a2
+hex_code: bpsrgd
 ---
 
 # Content Authoring Tools — Study Kickoff

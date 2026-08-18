@@ -2,6 +2,9 @@
 title: Create a New Study
 purpose: A step-by-step checklist for spinning up a new study from scratch
 audience: future Claude sessions taking over this work
+site_uuid: 4e3efad6-1025-4c5c-a8c4-b45555a638ab
+hex_code: e3v5qg
+date_created: 2026-05-02
 ---
 
 # Create a New Study
