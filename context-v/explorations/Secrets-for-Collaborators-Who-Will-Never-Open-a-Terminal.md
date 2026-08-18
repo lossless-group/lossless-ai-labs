@@ -1,6 +1,6 @@
 ---
 title: "Secrets for Collaborators Who Will Never Open a Terminal"
-lede: "Every ai-labs project of note has the same conundrum: smart, awesome collaborators who are simply never going to open a terminal, much less futz with code — yet often carry a company card and their own API keys. The rabbit hole ends somewhere unexpected: serve capabilities from a remote MCP plane with secrets held server-side, and manage whose key it is through didi.sh admin dashboards."
+lede: "Collaborators who will never open a terminal still carry API keys — so serve capabilities from a remote MCP plane, secrets held server-side."
 date_created: 2026-07-24
 date_modified: 2026-07-25
 authors:
@@ -18,6 +18,10 @@ tags:
   - Id-Didi-Sh
   - Collaborator-Experience
   - Capability-Plane
+site_uuid: d33ff596-1f7d-4d5d-813c-d7a6d299cb4b
+hex_code: wzzb9e
+date_authored_initial_draft: 2026-07-25
+date_authored_current_draft: 2026-07-25
 ---
 
 # Secrets for Collaborators Who Will Never Open a Terminal

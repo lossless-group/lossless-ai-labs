@@ -1,6 +1,6 @@
 ---
 title: "The Drag in AI-Assisted Web Research — Diagnosis, Prior Art, and the Open Forks for a Source Curation Gate"
-lede: "AI-assisted web research and research-driven content generation produce so many hallucinated sources and so much noise-over-signal that going through it all creates a drag heavy enough that manual Google + Google Docs starts to look time-competitive. This issue records the diagnosis (the drag is structural, not a prompt problem — and our own corpus diagnosed it twice), reveals the prior art already scattered across dididecks-ai / augment-it / memopop-ai, and captures the open forks being grilled before we converge a reusable Source Curation Gate pattern."
+lede: "AI research yields enough hallucinated sources that manual Google + Docs looks time-competitive. The drag is structural, not a prompt bug."
 date_created: 2026-06-27
 date_modified: 2026-06-27
 authors:
@@ -29,6 +29,10 @@ related_skills:
   - search-lossless-corpus
   - context-vigilance
   - crawl-fetch-ingest
+site_uuid: ef87f4c1-59d9-40bf-9873-787093ec2abc
+hex_code: ix7t1b
+date_authored_initial_draft: 2026-06-27
+date_authored_current_draft: 2026-06-27
 ---
 
 # The Drag in AI-Assisted Web Research

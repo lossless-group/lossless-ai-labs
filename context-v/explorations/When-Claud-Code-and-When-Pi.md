@@ -1,3 +1,17 @@
+---
+site_uuid: 8cc893df-ea14-45a6-84bb-dcf2e13eaa6a
+hex_code: 4flpvt
+title: When Claud Code and When Pi
+date_created: 2026-05-08
+date_authored_initial_draft: 2026-05-08
+date_authored_current_draft: 2026-05-08
+authors:
+  - Michael Staton
+at_semantic_version: 0.0.1.0
+tags:
+  - Exploration
+---
+
 # Pi vs. Claude Code
 
 Pi (`@mariozechner/pi-coding-agent`) is a minimal, aggressively-extensible terminal coding harness — an alternative to Claude Code. Here's how they relate.

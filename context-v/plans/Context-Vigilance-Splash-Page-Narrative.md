@@ -16,6 +16,10 @@ tags:
   - Context-Vigilance
   - Marketing-Copy
 status: Draft
+site_uuid: c0e854c8-90de-4a70-bac3-a3de7ac49e1c
+hex_code: xddw9n
+date_authored_initial_draft: 2026-05-08
+date_authored_current_draft: 2026-05-08
 ---
 
 # Context Vigilance Splash Page — Narrative Brief

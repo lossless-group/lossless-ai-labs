@@ -1,6 +1,6 @@
 ---
 title: "Per-App Workspaces and the Chat as Optional Surface — The Architecture We Walked To"
-lede: "The corrected architecture for the Applied AI Labs apps in three sentences. State of truth lives per-app in @augment-it/workspace, @memopop-ai/workspace, @dididecks-ai/workspace — packages each app owns, no universal data model package. The chat surface (@lossless/in-app-agent) is UI-only and consumes whichever app it's mounted in through a typed WorkspaceAdapter; it has zero domain knowledge. Both Window microfrontends and the Chat panel subscribe to the same workspace singleton through Module Federation, so realtime mirror is automatic. This deck captures the journey to that architecture — what we tried, what broke, what survived."
+lede: "State of truth lives per app in `@<app>/workspace`. The chat package is UI-only, reaching it through a typed WorkspaceAdapter."
 date_created: 2026-05-18
 date_modified: 2026-05-18
 authors:
@@ -18,6 +18,10 @@ tags:
   - WorkspaceAdapter
   - Per-App-Packages
 status: Draft
+site_uuid: 0bce7fa2-c87e-4439-8f4b-1f12dc64c198
+hex_code: fpme7z
+date_authored_initial_draft: 2026-05-18
+date_authored_current_draft: 2026-05-18
 ---
 
 # Per-App Workspaces and the Chat as Optional Surface

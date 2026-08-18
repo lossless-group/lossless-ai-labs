@@ -1,6 +1,6 @@
 ---
 title: "Chat-As-Verb-Surface Patterns — How the In-App Chat Calls Skills, MCP Tools, and Scripts; How it Reads State and Anticipates Lightly"
-lede: "The recyclable patterns that let augment-it, memopop-ai, and dididecks-ai share a chat surface without sharing a package. Five conventions: capability adapters (skill / MCP / script) that all return the same envelope, a lifecycle event stream every capability emits so the chat can narrate and quality-check execution, a state-aware anticipation map keyed on activeView, three explicit response modes (answer / propose / invoke) for loose alignment, and a fourth cache-eligible system-prompt slab for active skills. Grounded in agentskills.io, MCP 2025-11-25, 12-factor-agents F4/F5/F7/F8, and the Frictionless TableSchema. Each pattern names the upstream prior art so future-you can re-read source instead of trusting the summary."
+lede: "Five conventions that let three apps share a chat surface without sharing a package, starting with capability adapters and one envelope."
 date_created: 2026-05-22
 date_modified: 2026-05-22
 authors:
@@ -21,6 +21,10 @@ tags:
   - Prompt-Cache-Slabs
   - Applied-AI-Labs
 status: Draft
+site_uuid: d5bc378e-7990-47d0-8676-55860e86ab8c
+hex_code: ciqqws
+date_authored_initial_draft: 2026-05-22
+date_authored_current_draft: 2026-05-22
 ---
 
 # Chat-As-Verb-Surface Patterns

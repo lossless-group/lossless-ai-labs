@@ -1,6 +1,6 @@
 ---
 title: "The Anatomy of the In-App Agent Shell — Shell, Workspace, Window, Chat"
-lede: "When we said 'shell' we kept meaning four different things at once. Drawing the distinction explicitly: a thin layout frame, a per-app workspace package that owns business state, a visual workspace microfrontend (the 'Window'), and the conversational surface. The workspace is the source of truth — not the chat. Federation 2.0's singleton-module idiom guarantees one workspace instance across host + remotes; both Window and Chat subscribe to it and stay in realtime mirror automatically. Two configurations of the same contract, one for chat-primary apps (augment-it) and one for window-primary apps (memopop)."
+lede: "\"Shell\" meant four things at once: layout frame, workspace package, Window, chat. The workspace is the source of truth — not the chat."
 date_created: 2026-05-18
 date_modified: 2026-05-18
 authors:
@@ -19,6 +19,10 @@ tags:
   - Augment-It
   - Memopop
 status: Draft
+site_uuid: 3a6d4903-07bc-41c4-90e8-336b4e61fc97
+hex_code: adbf9x
+date_authored_initial_draft: 2026-05-18
+date_authored_current_draft: 2026-05-18
 ---
 
 # The Anatomy of the In-App Agent Shell

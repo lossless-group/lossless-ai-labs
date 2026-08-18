@@ -1,6 +1,6 @@
 ---
 title: "State-Inspector as a universal need — every ai-labs app hides its state from the people running it"
-lede: "Flagged up from augment-it but true everywhere: augment-it's rune singletons + localStorage + WS frames, dididecks' deck/variant/theme state, memopop's LangGraph FlowState — none of them inspectable from inside their apps. The pattern (a read-only 'what does the app currently believe' surface) is universal; per the no-shared-dependency rule, it travels as a blueprint each app implements natively."
+lede: "No ai-labs app can answer \"what does it currently believe?\" — rune singletons, deck state, LangGraph FlowState, none inspectable."
 date_created: 2026-07-24
 date_modified: 2026-07-24
 authors:
@@ -18,6 +18,10 @@ tags:
   - Observability
   - Cross-App-Pattern
 status: Open · Jotted
+site_uuid: 3bf9227d-f5d3-44e3-b961-ea619a04b052
+hex_code: 9ep3mv
+date_authored_initial_draft: 2026-07-24
+date_authored_current_draft: 2026-07-24
 ---
 
 # State-Inspector — a universal need across the ai-labs apps

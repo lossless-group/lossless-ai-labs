@@ -1,6 +1,6 @@
 ---
 title: "didi.sh Login and Workspace-Delivered Config — the plan across three repos"
-lede: "corpora-builder should log in through id.didi.sh and get its configuration — including R2 credentials — from the workspace rather than a local .env. The identity half is already live. The config half is a new contract, and the operator's field correction settles its shape: the workspace holds the secrets, membership is explicit and email-domain-independent, and a domain is only a self-signup convenience. R2 temporary credentials are what keep a durable secret off every laptop."
+lede: "corpora-builder should get its config — R2 credentials included — from the didi.sh workspace, not a local `.env`."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -22,6 +22,10 @@ tags:
   - Workspaces
   - SecretSpec
   - Cloudflare-R2
+site_uuid: 2b616039-8200-48c0-8e80-74d03dc51f90
+hex_code: 1t2ade
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
 ---
 
 # didi.sh Login and Workspace-Delivered Config for Corpora

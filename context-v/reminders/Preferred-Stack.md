@@ -13,6 +13,10 @@ tags:
   - Tooling
   - Stack-Preferences
 status: Active
+site_uuid: 620ecee4-366f-4895-aed9-e8de28709b75
+hex_code: kdjar6
+date_authored_initial_draft: 2026-05-07
+date_authored_current_draft: 2026-05-07
 ---
 
 # Preferred Stack — uv over pip, and other defaults

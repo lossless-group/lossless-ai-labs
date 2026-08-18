@@ -1,6 +1,6 @@
 ---
 title: "Memory Layers for the In-App Chat Package"
-lede: "The chat surface in dididecks-ai, memopop-ai, and augment-it will only feel 'within our system' if the agent on the other side has fast, cheap, accurate access to our patterns, prior decisions, project state, and what it already learned about this specific client. This explores how the eight memory systems pinned in studies/memory-layers-for-agents map onto roles in the chat package, what we'd pick for v1 given that we already lean on Chroma, and what to defer."
+lede: "Maps the eight pinned memory systems onto roles in the chat package, and picks the v1 stack given we already lean on Chroma."
 date_created: 2026-05-18
 date_modified: 2026-05-18
 authors:
@@ -26,6 +26,10 @@ tags:
   - StateBench
   - In-App-Chat
 status: Draft
+site_uuid: 440bbea3-a98d-4f63-bd7b-d879e48b840b
+hex_code: 1v99yj
+date_authored_initial_draft: 2026-05-18
+date_authored_current_draft: 2026-05-18
 ---
 
 # Memory Layers for the In-App Chat Package

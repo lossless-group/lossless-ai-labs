@@ -11,6 +11,10 @@ tags:
   - Augment-It
   - Canonical-Layer
   - FreedomFest
+site_uuid: c698d96c-20d5-4345-be77-62190c7fb91c
+hex_code: ar9dkt
+date_authored_initial_draft: 2026-07-07
+date_authored_current_draft: 2026-07-07
 ---
 
 ## Why this exists

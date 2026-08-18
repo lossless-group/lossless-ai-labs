@@ -1,6 +1,6 @@
 ---
 title: "Write Custom Chroma MCP Server (v0: a session-transcript ingester)"
-lede: "Defer the community djm81/chroma_mcp_server. Roll our own session-transcript ingester that writes into the same Chroma instance our corpus already lives in — preserving the metadata alignment that lets us cross-query corpus and conversation history together."
+lede: "Defer djm81/chroma_mcp_server; write our own session-transcript ingester into the Chroma the corpus lives in, so the two cross-query."
 date_created: 2026-05-08
 date_modified: 2026-05-08
 authors:
@@ -16,6 +16,10 @@ tags:
   - Session-Transcripts
   - Context-Engineering
 status: Draft
+site_uuid: ce33e45e-b4e9-49bd-a3ff-61204eb93c13
+hex_code: 0mt0px
+date_authored_initial_draft: 2026-05-08
+date_authored_current_draft: 2026-05-08
 ---
 
 # Write Custom Chroma MCP Server (v0: a session-transcript ingester)

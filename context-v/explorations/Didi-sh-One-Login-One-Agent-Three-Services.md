@@ -1,6 +1,6 @@
 ---
 title: "didi.sh — One Login, One Agent, Three Services"
-lede: "We bought didi.sh. The three organically-built VC-services tools — memos (memopop-ai), decks (dididecks-ai), and augment-it — become one product family: independent services coordinated by exactly two shared planes, a common identity service and a common agent named didi that loads skills per task."
+lede: "memos, decks, and augment-it become one family coordinated by exactly two shared planes: a common identity service and one agent named didi."
 date_created: 2026-07-06
 date_modified: 2026-07-06
 authors:
@@ -23,6 +23,10 @@ tags:
   - Dididecks
   - Augment-It
   - Domain-Topology
+site_uuid: 95a44103-f84d-4874-820c-ea68c71997ff
+hex_code: rswqlp
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 ---
 
 # didi.sh — One Login, One Agent, Three Services

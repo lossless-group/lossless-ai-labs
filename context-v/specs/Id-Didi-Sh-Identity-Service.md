@@ -1,6 +1,6 @@
 ---
 title: "id.didi.sh — the Didi Identity Service"
-lede: "One small, owned identity service — headless-first API, a signed session cookie on .didi.sh, invite-only accounts created from inside whichever app the user arrived at. Built on Elixir/Phoenix: the one service in the estate where the implementation language is invisible by design, and the BEAM's reliability posture matches what an identity service actually is."
+lede: "One owned identity service: headless-first API, a signed session cookie on `.didi.sh`, invite-only accounts — built on Elixir/Phoenix."
 date_created: 2026-07-06
 date_modified: 2026-07-06
 authors:
@@ -24,6 +24,10 @@ tags:
   - Invite-Only
   - Org-Model
   - Multi-Tenant
+site_uuid: a01b23e6-1ff7-49bb-92e8-37f34e4c5de2
+hex_code: v163au
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 ---
 
 # id.didi.sh — the Didi Identity Service

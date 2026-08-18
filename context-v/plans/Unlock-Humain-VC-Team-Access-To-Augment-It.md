@@ -1,6 +1,6 @@
 ---
 title: "Unlock: the humain-vc team (two people) logs into a deployed augment-it"
-lede: "One concrete user flow, written down so we build exactly what it needs and nothing else: a humain-vc team member signs in with her work email, lands in the humain-vc workspace, and works the thesis corpus — on a hosted URL, with Michael as superuser. Single-tenant deploy on purpose; per-session tenancy, admin UIs, and storage rearchitecture all explicitly deferred."
+lede: "One flow: a humain-vc member signs in with her work email, lands in her workspace, works the thesis corpus. Single-tenant deploy on purpose."
 date_created: 2026-07-06
 date_modified: 2026-07-06
 authors:
@@ -19,6 +19,10 @@ tags:
   - Deployment
   - Single-Tenant
   - Corpus-Sync
+site_uuid: 68f070c6-d91a-43d3-a7ad-343d5d1af4ae
+hex_code: nc7k7l
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 ---
 
 # Unlock: the humain-vc team logs into a deployed augment-it

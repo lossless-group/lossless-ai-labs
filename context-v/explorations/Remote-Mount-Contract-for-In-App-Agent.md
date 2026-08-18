@@ -1,6 +1,6 @@
 ---
 title: "Remote Mount Contract for @lossless/in-app-agent — How the Chat Surface Drives Federated Views Without Owning State"
-lede: "The three sub-questions that have been blocking the augment-it federation rewrite — how a capability returns 'mount this view', how the shell passes context to mounted remotes, and how remotes emit back into the shell — get answers borrowed from memopop's already-working FlowState pattern. The corrected architecture (third pass): state lives in per-app workspace packages (@augment-it/workspace, @memopop-ai/workspace, @dididecks-ai/workspace) per the [[Per-App-Workspace-Conventions]] blueprint. The chat package is UI-only — it speaks to whichever app it's mounted in through a typed WorkspaceAdapter interface. useWorkspace() (per-app) returns business state; useChat() (from in-app-agent) returns transcript and conversational state. Capability invocation goes through the workspace, not the chat. No typed event bus across federation seams. Same three-guards discipline the parent exploration committed to."
+lede: "How the chat surface drives federated views without owning state: capability invocation goes through the per-app workspace, never the chat."
 date_created: 2026-05-18
 date_modified: 2026-05-18
 authors:
@@ -20,6 +20,10 @@ tags:
   - Workspace-Adapter
   - Capability-Registry
 status: Draft
+site_uuid: 767b68ce-6558-41a4-b2f4-415a38876ea7
+hex_code: wr8cfj
+date_authored_initial_draft: 2026-05-18
+date_authored_current_draft: 2026-05-18
 ---
 
 # Remote Mount Contract for @lossless/in-app-agent

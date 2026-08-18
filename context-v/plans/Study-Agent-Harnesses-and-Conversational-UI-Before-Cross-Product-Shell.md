@@ -1,6 +1,6 @@
 ---
 title: "Study Agent Harnesses + Conversational UI, Then Decide the Cross-Product Native Shell"
-lede: "Before building a native cross-platform (Tauri) chat app that swaps context between augment-it, dididecks-ai, and memopop-ai and dynamically loads/unloads skills and MCP servers, pin two new studies (agent harnesses; Tauri/conversational-UI apps), audit the in-house prior art the 2026-05-18 in-app-agent docs already produced, read externally against specific open questions, then synthesize one architecture decision doc. No code lands in this plan."
+lede: "Pin two studies and audit in-house prior art before designing a Tauri shell that swaps context across three apps. No code lands here."
 date_created: 2026-07-13
 date_modified: 2026-07-13
 authors:
@@ -19,6 +19,10 @@ tags:
   - Augment-It
   - Dididecks-AI
 status: Draft
+site_uuid: 8d875579-1d7a-4f63-a430-018f0985aa51
+hex_code: 7ogk6u
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
 ---
 
 # Study Agent Harnesses + Conversational UI, Then Decide the Cross-Product Native Shell

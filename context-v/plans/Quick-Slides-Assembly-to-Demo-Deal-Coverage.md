@@ -1,6 +1,6 @@
 ---
 title: "Quick Slides Assembly to Demo Deal Coverage"
-lede: "One slide per deal, in an hour. Our commentary in one column, the company's own OpenGraph card in the other — and where we hold their deck, an optimized PDF made playable inside the DidiDecks shell. A time-boxed assembly that borrows memopop's settled PDF pipeline and dididecks' scroll/play shell rather than inventing anything."
+lede: "One slide per deal in an hour: our commentary, the company's own OpenGraph card, and their deck playable inside the DidiDecks shell."
 date_created: 2026-08-12
 date_modified: 2026-08-12
 authors:
@@ -21,6 +21,10 @@ tags:
   - Venture-Partner
   - Time-Boxed
   - Candidate-Blueprint
+site_uuid: 105ecb59-5eb7-4f2e-add5-cc269ba4c98d
+hex_code: 2958x0
+date_authored_initial_draft: 2026-08-12
+date_authored_current_draft: 2026-08-12
 ---
 
 ## Why Care?

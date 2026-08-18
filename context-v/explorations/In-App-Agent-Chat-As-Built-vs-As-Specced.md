@@ -1,6 +1,6 @@
 ---
 title: "In-App Agent Chat — As-Built vs. As-Specced (Internal Audit)"
-lede: "Phase 1 deliverable of the agent-harnesses/conversational-UI study plan. The four 2026-05-18 architecture docs got most of the shape right — but reality diverged from the letter of the spec in one load-bearing way: augment-it never built the shared @lossless/in-app-agent package, it built the WorkspaceAdapter pattern directly inside @augment-it/workspace instead. Memopop-native has zero agent code but a proven, generalizable Rust sidecar-dispatcher substrate. Dididecks is untouched. This changes what a cross-product native shell needs to reuse vs. build fresh."
+lede: "`@lossless/in-app-agent` was never built — augment-it inlined the WorkspaceAdapter pattern into `@augment-it/workspace` instead."
 date_created: 2026-07-13
 date_modified: 2026-07-13
 authors:
@@ -17,6 +17,10 @@ tags:
   - Workspace-Pattern
   - Tauri
 status: Draft
+site_uuid: e5acbd05-3887-4937-b46c-34074eaaab41
+hex_code: s968md
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
 ---
 
 # In-App Agent Chat — As-Built vs. As-Specced

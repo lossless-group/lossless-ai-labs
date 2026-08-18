@@ -1,6 +1,6 @@
 ---
 title: "ChromaDB as Context Improvement Across Everything, Everyone"
-lede: "Skeptical of vector databases at our scale until a founding-team demo showed me the product is no longer 'a place to put embeddings' — it is an ingestion layer for agent traces, session transcripts, and ambient developer signal that a small team can bend toward almost anything."
+lede: "A founding-team demo reframed Chroma: not a place to put embeddings, but an ingestion layer for agent traces and session transcripts."
 date_created: 2026-05-07
 date_modified: 2026-05-07
 authors:
@@ -16,6 +16,10 @@ tags:
   - MCP
   - Ingestion-Agents
 status: Open
+site_uuid: f6facba2-09c4-4d49-b89a-a3a45805d142
+hex_code: pn48cz
+date_authored_initial_draft: 2026-05-07
+date_authored_current_draft: 2026-05-07
 ---
 
 # ChromaDB as Context Improvement Across Everything, Everyone

@@ -18,6 +18,10 @@ tags:
   - Pseudomonorepos
   - Content-Rollup
 status: Open
+site_uuid: 8e6db6ce-bde0-47da-8f54-a17835960762
+hex_code: y8ql74
+date_authored_initial_draft: 2026-05-07
+date_authored_current_draft: 2026-05-07
 ---
 
 # Collate Context Files into Context Vigilance as Repo & Project

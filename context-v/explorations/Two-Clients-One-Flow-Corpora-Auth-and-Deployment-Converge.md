@@ -1,6 +1,6 @@
 ---
 title: "Two Clients, One Flow — Corpora by Domain-Type, Auth, and Deployment Converge"
-lede: "reach-edu wants corpus→memos/decks by strategy; humain-vc wants the same by thesis. Both teams want to log in and check the work. Everything we anticipated — typed domains, shared auth, container deployment, corpus substrate — just became due at once."
+lede: "reach-edu wants corpus→memos by strategy, humain-vc by thesis — and typed domains, shared auth, and deployment all came due at once."
 date_created: 2026-07-06
 date_modified: 2026-07-06
 authors:
@@ -25,6 +25,10 @@ tags:
   - humain-vc
   - Memos
   - Decks
+site_uuid: a9f2f841-9468-48b6-aefc-3894eee0e95f
+hex_code: gegohy
+date_authored_initial_draft: 2026-07-06
+date_authored_current_draft: 2026-07-06
 ---
 
 # Two Clients, One Flow — Corpora by Domain-Type, Auth, and Deployment Converge

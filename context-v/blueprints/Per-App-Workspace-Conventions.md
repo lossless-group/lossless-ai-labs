@@ -1,6 +1,6 @@
 ---
 title: "Per-App Workspace Conventions — Discipline, Not a Shared Package"
-lede: "Each Applied AI Labs app — augment-it, memopop-ai, dididecks-ai — owns its own data model and ships its own workspace package. There is no universal @lossless/workspace package, because the intersection of memos, slide decks, and CRM-augmentation records is too small to be a meaningful shared abstraction. What IS shared is the *shape* of every per-app workspace: a singleton state class, a discriminated activeView union, a capability registry as the only mutation surface, an SSE event ingestion pattern that doesn't black-screen the WebView, and a typed WorkspaceAdapter interface the @lossless/in-app-agent chat package consumes. This blueprint codifies that shape so building a new app's workspace doesn't require re-deriving the conventions from scratch."
+lede: "No universal `@lossless/workspace` package. What every app shares is the shape: singleton state, an activeView union, a capability registry."
 date_created: 2026-05-18
 date_modified: 2026-05-22
 authors:
@@ -17,6 +17,10 @@ tags:
   - Capability-Registry
   - Applied-AI-Labs
 status: Draft
+site_uuid: 1b68066c-2059-43ac-a283-d64abb385cf7
+hex_code: qva8j1
+date_authored_initial_draft: 2026-05-22
+date_authored_current_draft: 2026-05-22
 ---
 
 # Per-App Workspace Conventions

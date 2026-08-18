@@ -1,6 +1,6 @@
 ---
 title: "Shared Auth for Applied AI Labs"
-lede: "We're about to need a real auth story across three sibling apps in ai-labs — memopop-ai, dididecks-ai, and the just-arriving augment-it. None of them is at the scale that justifies Auth0/Clerk pricing or robustness. We want a small, owned auth system that handles OAuth (GitHub + Google Workspace), pre-shared invites delivered by WhatsApp or 1Password, organization-scoped permissions, and a viewer-tier for memos and decks published on client subdomains — with a roll-up seam stubbed from day one so we can wire cross-app dashboards later without rewriting clients."
+lede: "Three sibling apps need login; none is at Auth0/Clerk scale. A small owned system: OAuth, invites, org-scoped roles, a roll-up seam."
 date_created: 2026-05-17
 date_modified: 2026-07-06
 authors:
@@ -27,6 +27,10 @@ tags:
   - libSQL
   - Turso
 status: Draft
+site_uuid: 7c881567-0039-437a-8287-3ee42fdd61d7
+hex_code: itj5h0
+date_authored_initial_draft: 2026-05-17
+date_authored_current_draft: 2026-05-17
 ---
 
 # Shared Auth for Applied AI Labs

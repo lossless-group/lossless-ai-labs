@@ -1,6 +1,6 @@
 ---
 title: "Agent Capabilities — Hooking the Chat Surface into Memopop"
-lede: "A journey-mode walkthrough for the team: how the In-App Agent Chat pattern (originally scoped against dididecks) maps onto memopop-ai, where each layer of the architecture lives in the existing repo, and what the smallest read-only proof-of-life looks like. Drafted to be turned into slides — each H2 is a slide candidate."
+lede: "How the In-App Agent Chat pattern maps onto memopop-ai: where each layer lands in the repo, and the smallest read-only proof-of-life."
 date_created: 2026-05-18
 date_modified: 2026-05-18
 authors:
@@ -17,6 +17,10 @@ tags:
   - Capability-Registry
   - Team-Onboarding
 status: Draft
+site_uuid: ffb238a0-27ba-4f6d-bb12-fe561bc20f45
+hex_code: tkz2nt
+date_authored_initial_draft: 2026-05-18
+date_authored_current_draft: 2026-05-18
 ---
 
 # Agent Capabilities — Hooking the Chat Surface into Memopop

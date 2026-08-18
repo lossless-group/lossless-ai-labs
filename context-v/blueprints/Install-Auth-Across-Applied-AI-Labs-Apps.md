@@ -1,6 +1,6 @@
 ---
 title: "Install Auth Across Applied AI Labs Apps"
-lede: "Every app graduating out of `ai-labs/` — memopop-ai, dididecks-ai, augment-it, and the per-client deck workspaces dididecks already ships — needs the same shape of auth: signed-link invites for named stakeholders, optional OAuth for the wider audience, a passcode tier-3 fallback, and durable telemetry on every attempt. We don't need to re-derive that shape. The astro-knots family already converged on it, shipped it in production at calmstorm-decks and chroma-decks, and wrote it up at the parent level. This blueprint is the ai-labs handle on that pattern: what to pull in, which database backend to pick (Turso/libSQL when the calmstorm pattern is the right fit, Powabase/Postgres when the app also needs pgvector or wants GoTrue-managed OAuth out of the box), what to translate when the app is SvelteKit instead of Astro, and which org/identity conventions ai-labs apps inherit from the dididecks precedent."
+lede: "Don't re-derive the auth pattern — astro-knots already shipped it. This is the ai-labs handle: what to pull in, which DB, what to translate."
 date_created: 2026-06-05
 date_modified: 2026-06-05
 authors:
@@ -25,6 +25,10 @@ tags:
   - Signed-Link-Tokens
   - OAuth
   - Org-Model
+site_uuid: c3c3fa68-0f5e-4996-b6c8-e619ff97fa75
+hex_code: x9mdxa
+date_authored_initial_draft: 2026-06-05
+date_authored_current_draft: 2026-06-05
 ---
 
 # Install Auth Across Applied AI Labs Apps
