@@ -39,6 +39,7 @@ site_uuid: 698e0bfa-6997-4615-ae11-1694f967846f
 hex_code: 05bseu
 date_authored_initial_draft: 2026-06-19
 date_authored_current_draft: 2026-06-19
+publish: true
 ---
 
 # Corpus-Grounded Generation of Decks and Memos

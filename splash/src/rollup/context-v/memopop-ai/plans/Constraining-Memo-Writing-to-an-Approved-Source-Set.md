@@ -1,6 +1,7 @@
 ---
 title: "Constraining Memo Writing to an Approved Source Set"
-lede: "Every gate in the pipeline tests whether a URL resolves; none tests whether it was approved. That single missing predicate is why the researcher, enricher, and validator have been fighting each other — the producers can always win by inventing a URL that happens to be live. This plan adds membership enforcement to the existing gates (cheap, four files), closes the two agents that emit URLs after curation, and graduates the standalone curate_sources.py tool into memopop-native as the approve/deny/re-search surface that produces the approved set in the first place. Enforcement and curation ship together because neither works alone."
+lede: >-
+  Every gate in the pipeline tests whether a URL resolves; none tests whether it was approved. Adds the missing membership predicate.
 date_authored_initial_draft: 2026-08-06
 date_authored_current_draft: 2026-08-06
 date_authored_final_draft:
@@ -26,6 +27,8 @@ related_skills:
   - sources-md-curation
   - source-with-extracts-md
   - context-vigilance
+site_uuid: e163f332-9db2-4d93-b706-bd867928c9b9
+hex_code: 5rqxi5
 from: "memopop-ai"
 from_path: "context-v/plans/Constraining-Memo-Writing-to-an-Approved-Source-Set.md"
 ---

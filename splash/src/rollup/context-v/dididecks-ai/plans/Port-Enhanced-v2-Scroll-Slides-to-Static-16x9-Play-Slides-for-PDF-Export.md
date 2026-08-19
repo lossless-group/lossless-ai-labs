@@ -1,6 +1,6 @@
 ---
 title: "Port Enhanced-v2 Scroll Slides to Static 16:9 Play Slides for PDF Export"
-lede: "The scroll deck for chroma's pitch/enhanced-v2 is shippable by the founder's design eye, but its sections live in a scroll-flow context — `min-h-screen` heights, brand-orb gradients that bleed across section boundaries, the customer marquee animation — that won't export cleanly to PDF. This plan ports each of the 16 v2 sections, non-destructively, into static 16:9 per-slide files under `src/components/slides/enhanced-v2/{slot}-{slug}.astro` so the existing /play/[deck]/[variant]/[slot]/ runtime renders them at a predictable aspect ratio. Then a one-shot print route stacks all 16 vertically, ⌘P saves as PDF, deck ships to founder tonight. Tomorrow's Phase A++ (calmstorm-grade /play chrome + SlideCanvas/ContentFit lift) is orthogonal and not blocked by this."
+lede: "Port chroma's 16 enhanced-v2 scroll sections into static 16:9 play slides, then stack them on a print route so ⌘P yields a shippable PDF."
 date_authored_initial_draft: 2026-05-12
 date_authored_current_draft: 2026-05-12
 date_authored_final_draft: 2026-05-12
@@ -25,6 +25,8 @@ authors:
 date_created: 2026-05-12
 date_modified: 2026-05-12
 publish: false
+site_uuid: d8d53a17-26e8-4b24-835f-d2b174467d86
+hex_code: ztzej8
 from: "dididecks-ai"
 from_path: "context-v/plans/Port-Enhanced-v2-Scroll-Slides-to-Static-16x9-Play-Slides-for-PDF-Export.md"
 ---

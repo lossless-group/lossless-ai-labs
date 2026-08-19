@@ -16,6 +16,8 @@ tags: [LLM-Output, Meta-Commentary, Memo-Quality, Content-Filtering, Agent-Pipel
 authors:
   - Michael Staton
 augmented_with: "Claude Code with Claude Opus 4.6"
+site_uuid: 556f9426-7023-4db7-8bce-1359a311581b
+hex_code: vnvf5b
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/Containerizing-Internal-Comments-and-Recommendations-for-Consideration.md"
 ---

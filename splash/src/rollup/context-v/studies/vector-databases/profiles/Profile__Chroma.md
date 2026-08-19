@@ -9,6 +9,28 @@ study: studies/vector-databases
 profile_path: studies/vector-databases/chroma
 profile_kind: embedded-db + server + hosted-platform
 date_created: 2026-05-27
+site_uuid: e3908ae9-d9da-41e7-9fe2-29692458a975
+hex_code: 6qhgg8
+date_authored_initial_draft: 2026-05-27
+date_authored_current_draft: 2026-05-27
+lede: >-
+  The hybrid retrieval in Chroma's docs raises `NotImplementedError` on a
+  laptop — `Collection.search()` is gated behind Cloud.
+summary: >-
+  Source-cited profile of Chroma for the vector-databases study, and the
+  baseline the other five profiles are written against because the Lossless
+  tree runs Chroma in production via `ai-labs/context-vigilance-kit/`. Covers
+  the WAL-plus-segments storage split, the flat typed-scalar metadata schema,
+  the `$eq`/`$in`/`$contains` where-filter grammar, HNSW tuning parameters,
+  SPANN and the Schema/Search API as Cloud-only surfaces, and the tenant /
+  database / collection scoping model. An agent should read this to know what
+  the current production store can and cannot do before proposing a change to
+  it, to look up exact filter operators and HNSW knobs rather than guessing,
+  and to understand which named limitations (Cloud-only hybrid search, no
+  single-node compaction, opaque HNSW index files) motivate the comparison
+  profiles. Every claim carries an upstream `file:line` citation; trust those
+  over paraphrase.
+publish: true
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__Chroma.md"
 ---

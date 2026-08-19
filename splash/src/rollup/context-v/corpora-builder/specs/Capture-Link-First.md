@@ -1,6 +1,6 @@
 ---
 title: "Capture, Link-First — the first command that pays for itself"
-lede: "Phase 3. `corpora add <url>` turns a link into a filed source: fetched, named, deduped, and written to R2. Metadata-only by default, because the origin lesson of this whole tree is that bulk enrichment goes haywire — grounding cost is spent on survivors, never on candidates."
+lede: "`corpora add <url>` fetches, names, dedupes, and files a link as a source — metadata-only by default, because bulk enrichment goes haywire."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -16,6 +16,11 @@ tags:
   - Capture
   - Two-Tier-Fetch
   - Phase-3
+site_uuid: 4ac181d0-c29e-49ed-8582-0b190e223822
+hex_code: ryzqdt
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "corpora-builder"
 from_path: "context-v/specs/Capture-Link-First.md"
 ---

@@ -15,6 +15,11 @@ tags:
   - Design-System
   - Context-Vigilance
 status: Open
+site_uuid: f04f5f86-8844-473c-9be6-ce9a18159c57
+hex_code: dpn4ri
+date_authored_initial_draft: 2026-07-20
+date_authored_current_draft: 2026-07-20
+publish: true
 from: "corpora-builder"
 from_path: "context-v/explorations/Design-Front-Loading-and-the-Fable-Build-Loop.md"
 ---

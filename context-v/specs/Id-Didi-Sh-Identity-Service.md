@@ -28,6 +28,7 @@ site_uuid: a01b23e6-1ff7-49bb-92e8-37f34e4c5de2
 hex_code: v163au
 date_authored_initial_draft: 2026-07-06
 date_authored_current_draft: 2026-07-06
+publish: true
 ---
 
 # id.didi.sh — the Didi Identity Service

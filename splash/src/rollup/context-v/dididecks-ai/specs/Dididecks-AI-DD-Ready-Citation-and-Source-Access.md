@@ -24,6 +24,8 @@ image_prompt: "A library reading-room desk overlaid with translucent dashboards 
 date_created: 2026-05-11
 date_modified: 2026-05-11
 publish: false
+site_uuid: c55d73ed-5109-4625-a19c-f778a132ec2e
+hex_code: 3ry85y
 from: "dididecks-ai"
 from_path: "context-v/specs/Dididecks-AI-DD-Ready-Citation-and-Source-Access.md"
 ---

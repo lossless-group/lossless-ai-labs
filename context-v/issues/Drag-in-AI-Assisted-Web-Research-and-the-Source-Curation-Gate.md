@@ -33,6 +33,7 @@ site_uuid: ef87f4c1-59d9-40bf-9873-787093ec2abc
 hex_code: ix7t1b
 date_authored_initial_draft: 2026-06-27
 date_authored_current_draft: 2026-06-27
+publish: true
 ---
 
 # The Drag in AI-Assisted Web Research

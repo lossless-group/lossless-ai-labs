@@ -21,6 +21,7 @@ site_uuid: ffb238a0-27ba-4f6d-bb12-fe561bc20f45
 hex_code: tkz2nt
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
+publish: true
 ---
 
 # Agent Capabilities — Hooking the Chat Surface into Memopop

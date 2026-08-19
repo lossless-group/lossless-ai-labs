@@ -1,6 +1,6 @@
 ---
 title: "DeckFrame--Play-UI — Play-UI chrome wrapper around SlideCanvas, plus the keyboard contract"
-lede: "The Play-UI mode's outer frame. Composes <SlideCanvas> with the chrome that surrounds it on the per-slot route — the floating DeckChrome (next/prev/TOC capsule, bottom-right) and the document-level keyboard listener (← / → / PageUp / PageDown / Home / End / F fullscreen / C chrome toggle / Esc). Mounts inside `/play/[deck]/[variant]/[slot]/`. The Scroll-UI sibling is `PageAsDeckWrapper` (since the shell consolidation in this engagement) — kept as a paired pattern so the two modes have visually + behaviorally parallel chrome at run-time."
+lede: "Play-UI's outer frame at `/play/[deck]/[variant]/[slot]/` — `<SlideCanvas>` plus the floating DeckChrome and document keyboard listener."
 artifact_kind: component
 ownership: shell
 mode: play-ui
@@ -29,6 +29,9 @@ status_tags:
 date_created: 2026-05-13
 date_modified: 2026-06-07
 publish: true
+site_uuid: dc6b9036-8273-4f0c-97b3-018e7910affc
+hex_code: 3yg3s5
+date_authored_current_draft: 2026-05-13
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckFrame--Play-UI.md"
 ---

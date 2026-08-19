@@ -25,6 +25,7 @@ site_uuid: bb237f2c-d6c2-4486-8e9e-75b1a72d5923
 hex_code: 4kqfzr
 date_authored_initial_draft: 2026-06-05
 date_authored_current_draft: 2026-06-05
+publish: true
 ---
 
 # Cloud Variant of the Dididecks-AI Workspace

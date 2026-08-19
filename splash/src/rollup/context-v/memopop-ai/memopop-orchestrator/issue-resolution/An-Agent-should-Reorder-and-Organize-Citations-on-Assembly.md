@@ -16,6 +16,8 @@ tags: [Citations, Assembly, Renumbering, Consolidation, Final-Draft]
 authors:
   - Michael Staton
 augmented_with: "Claude Code with Claude Opus 4.6"
+site_uuid: ed7fbd73-346e-4180-8206-ed5ec45aba51
+hex_code: sb6l8v
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/issue-resolution/An-Agent-should-Reorder-and-Organize-Citations-on-Assembly.md"
 ---

@@ -1,6 +1,7 @@
 ---
 title: "Quick-Look Window for Source Verification"
-lede: "Replace the browser hand-off during source approval with a reusable Tauri WebviewWindow. Arc costs seconds of cold start when it's carrying a day's worth of tabs, and the obvious alternative — an inline iframe — is disqualified by measurement: 14 of 24 real ImmuneCo sources send X-Frame-Options, including NEJM, Lancet, PMC, Science, WHO and Forbes, and cross-origin that failure is silent. A second webview is a top-level navigation, so frame policy never applies; it renders 100% of sources with no browser cold start. ~20 lines across two files plus one capability entry."
+lede: >-
+  14 of 24 real sources send `X-Frame-Options`, so source preview gets its own Tauri WebviewWindow rather than an inline iframe.
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
 date_authored_final_draft:
@@ -20,6 +21,8 @@ tags:
   - Source-Curation
   - Quick-Look
   - X-Frame-Options
+site_uuid: a1072227-78ab-4a2b-b80f-cdc9de5bf238
+hex_code: 5ro051
 from: "memopop-ai"
 from_path: "context-v/plans/Quick-Look-Window-for-Source-Verification.md"
 ---

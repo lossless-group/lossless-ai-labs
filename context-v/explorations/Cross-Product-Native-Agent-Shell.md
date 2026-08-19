@@ -22,6 +22,7 @@ site_uuid: 9dff0ef7-4002-423d-a332-35d5fcebcf1a
 hex_code: sl6rhc
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+publish: true
 ---
 
 # Cross-Product Native Agent Shell — Synthesis and Architecture Decision

@@ -1,6 +1,6 @@
 ---
 title: "/api/slide-rank — read + write per-slide classifier state into the consumer's audits file"
-lede: "Dev-only API route (`prerender = false`) that reads + writes the audit registry at the consumer's `data/audits/slides.json` (default path; configurable via the integration options). GET returns the full ranks map; POST upserts a single `{deckSlug, variantSlug, slot, status}` entry with `rankedAt` ISO timestamp + `rankedBy: 'founder'`. Status `'pending'` is the implicit default — never persisted; a POST with `status === 'pending'` deletes the existing entry. Fails-soft in production static builds (the route doesn't exist there, both GET and POST 404 — SlideRankPill catches and degrades to read-only)."
+lede: "Dev-only GET/POST over `data/audits/slides.json` — `'pending'` is never persisted; posting it deletes the entry. 404s in production builds."
 artifact_kind: route
 ownership: shell
 mode: n/a
@@ -28,6 +28,9 @@ status_tags:
 date_created: 2026-05-12
 date_modified: 2026-05-15
 publish: true
+site_uuid: 695a421a-8347-4abd-af43-9f3a6829c885
+hex_code: 6bzmur
+date_authored_current_draft: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/api-slide-rank.md"
 ---

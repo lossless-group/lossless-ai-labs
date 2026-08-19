@@ -2,20 +2,22 @@
 site_uuid: dc046628-0c3a-417a-86c0-5b8198918a1c
 hex_code: 5p7nj9
 title: "Frontmatter Normalization — Remaining Repos"
-lede: "The legacy `date:` key is retired from every changelog in the tree and the build-breaking trap is gone — but 'no legacy key' turned out not to mean 'conforms to the standard.' 143 entries across 25 repos still lack the editorial pair or any frontmatter at all."
-summary: "Tracking document for the tree-wide frontmatter normalization sweep. Records which repos are complete, the fresh per-repo audit of what remains, the three repo-specific traps that are not inferable from the standard, the resolver pattern that makes a `date:` rename safe in an Astro site, and the worked precedent for retiring the legacy key and minting identity fields in one pass. Read this before starting any frontmatter work in the tree; it supersedes its own earlier file counts, which double-counted third-party pinned repos. The two frontmatter-spec references it points at are the authority on the standard itself — this document only tracks state and hazards."
+lede: "Done. All 436 changelog entries in the tree carry the editorial date pair, the legacy `date:` key is gone, and every build-breaking trap is closed — including one nobody had a name for until a lenient schema let a live ordering bug through."
+summary: "COMPLETE as of 2026-08-17. Tracking document for the tree-wide changelog frontmatter normalization sweep. Records which repos are complete, the fresh per-repo audit of what remains, the three repo-specific traps that are not inferable from the standard, the resolver pattern that makes a `date:` rename safe in an Astro site, and the worked precedent for retiring the legacy key and minting identity fields in one pass. Read this before starting any frontmatter work in the tree; it supersedes its own earlier file counts, which double-counted third-party pinned repos. The two frontmatter-spec references it points at are the authority on the standard itself — this document only tracks state and hazards."
 publish: true
 date_created: 2026-08-15
 date_modified: 2026-08-17
 date_authored_initial_draft: 2026-08-15
 date_authored_current_draft: 2026-08-17
-date_authored_final_draft:
+date_authored_final_draft: 2026-08-17
+date_work_completed: 2026-08-17
+date_first_published: 2026-08-17
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-at_semantic_version: 0.0.4.0
-status: Partially-Shipped
+at_semantic_version: 0.1.0.0
+status: Shipped
 tags:
   - Frontmatter
   - Normalization
@@ -40,102 +42,43 @@ from the standard. Trap 1 now has a **proven remedy**, applied three times.
 
 ## Current state
 
-### What is finished, and what "finished" does not mean
+### ✅ COMPLETE — 2026-08-17
 
-**The legacy `date:` key is retired from every changelog frontmatter in the
-tree.** Zero remain. The only surviving occurrence is inside a fenced
-documentation example in `banner-site`, which is body text and correctly left
-alone. The build-breaking trap is gone with it — no content collection anywhere
-still declares a required `date`.
+**All 436 changelog entries in the tree conform.** Final audit, originals only:
 
-**That is not the same as the changelog tier conforming to the standard, and
-this document previously conflated the two.** The sweep targeted repos by
-*rename count*. Repos that had skipped straight from no-convention to
-`date_created` — never using `date:` at all — registered zero renames and were
-never visited.
+| | |
+|---|---|
+| Legacy `date:` remaining | **0** |
+| Missing the editorial pair | **0** |
+| No frontmatter at all | **0** |
 
-**143 entries across 25 repos remain**, of 435 total:
+Every entry now carries `date_authored_initial_draft` and
+`date_authored_current_draft` — the keys Graphiti anchors on. Nothing falls
+through to a filesystem date or to mtime, which a reformat pass silently
+rewrites.
 
-| | Files | Nature |
-|---|---|---|
-| Missing the editorial pair | **130** | Mechanical — derive from `date_created` |
-| No frontmatter at all | **13** | Authoring — needs a title and a written lede |
+**~230 entries swept across 30+ repos** in the closing session, on top of the
+four repos completed earlier. Every repo was screened for credentials, client
+names, and financial detail *before* any publish value was set.
 
-Largest: `self-host-stack` (23), `self-host-stack/hubs/lossless-at` (23),
-`content-farm/plugin-modules/perplexed` (14), `astro-knots` (12),
-`context-v/skills` (9), `content-farm` (8), `hypernova-site` (7),
-`ai-labs/id-didi-sh` (7), `chroma-decks` (7).
+Two residuals, deliberately out of scope: **177 entries lack `site_uuid`** and
+**90 lack `publish`**. These sit in repos that were already date-conformant when
+the audit began, so they never appeared on the work list — `memopop-orchestrator`
+(81) and `dididecks-ai` (85) are the bulk. Identity fields were never in the
+original scope; they were added opportunistically to everything touched. Neither
+gap blocks Graphiti.
 
-**Enumerate a repo's content directories before assuming there is one.** Do not
-locate entries by reading the collection config — that finds only what the site
-already renders, and anything the config does not point at is invisible to the
-sweep in exactly the way it is invisible to the site. Walk the filesystem
-instead:
+### What "no legacy key" did not mean
 
-```bash
-find . -type d -name changelog -not -path '*/node_modules/*' -not -path '*/dist/*'
-```
+Worth preserving, because it caused a false finish. An earlier version of this
+document declared the tier complete on the strength of the rename being done.
+It wasn't. The sweep had targeted repos by *rename count*, so repos that skipped
+straight from no-convention to `date_created` — never using `date:` at all —
+registered zero renames and were never visited. That was 143 entries across 25
+repos, found only by re-auditing against the standard rather than against the
+task list.
 
-A repo can also split its log across two directories, with each half looking
-complete from where it stands. That is worth checking for its own sake, not
-just for the sweep — the halves can be visible to different audiences.
-
-### 137 entries swept, 11 repos
-
-| Repo | Files | Commit | Scope |
-|---|---|---|---|
-
-| Repo | Files | Commit | Scope |
-|---|---|---|---|
-| `ai-labs/context-vigilance-kit` | 12 | `b5c3673` | full |
-| `ai-labs/dididecks-ai` | 85 | `c68bd8c` | full |
-| `ai-labs/memopop-ai/apps/memopop-orchestrator` | 100 | `e35d919` | full |
-| `astro-knots/sites/fullstack-vc` | 58 + 32 | `d3da15f` + *uncommitted* | **full** — `context-v/` swept earlier; changelog legacy key retired and identity minted 2026-08-17 |
-| `astro-knots/sites/dark-matter` + nested `changelog` repo | 29 + 4 | *uncommitted* | changelog renames + `context-v/` frontmatter |
-| `astro-knots/sites/banner-site` | 12 | *uncommitted* | changelog renames |
-
-Plus, from this session: `mpstaton-site` (8), `memopop-ai` (14),
-`image-gin` (10), `lfm` (9), `arthouse-site` (4), `lmstud-yo` (3),
-`metafetch` (2), `eventcut-ai` (1), `ai-labs` (13). All committed and pushed.
-
-**The `context-v/` tier is handed off separately** — see
-[[Frontmatter-Normalization-The-Context-V-Tier]]. It is 753 documents across 41
-repos and differs in kind: no filename dates, living documents, and a
-publish-gate asymmetry that makes `publish: false` mean something different
-there.
-
-### `fullstack-vc` is complete — and is the worked precedent
-
-The repo that forced this document's original exception is now the furthest
-along, and its changelog is the **first in the tree to carry identity fields**.
-
-- **29 legacy `date:` keys deleted** (28 entries + 1 release). This was a
-  deletion, not a rename: every entry already carried
-  `date_authored_initial_draft` with an identical value — verified 28/28 with
-  zero mismatches *before* touching anything.
-- **32 entries given `site_uuid` + `hex_code`**, generated from a real RNG. All
-  32 uuids are valid v4, all 32 hex codes match `[a-z0-9]{6}`, zero duplicates
-  among themselves and zero against the 9 that already existed elsewhere (41
-  hex codes tree-wide, 41 distinct).
-- **Build verified with the legacy key fully absent** — the first time the
-  fallback chain carried the whole load rather than sitting behind `date`.
-  Rendered dates diffed **byte-identical** to the pre-sweep baseline.
-
-The one-pass script that did both lives at
-`scripts/` in spirit but was run from the session scratchpad; its two guards are
-what make it safe to reuse:
-
-1. **Refuse to delete `date:` unless the editorial key exists AND the values are
-   equal.** Anything else is reported and skipped, never guessed at.
-2. **Collect every `hex_code` already in the tree into a set before minting,**
-   and add each new one to that set as it goes — so a collision cannot slip
-   through within the run or against existing files.
-
-Note the second guard matters more than it looks: a naive tree-wide `grep` for
-existing codes **times out** on this corpus and silently returns nothing, which
-would read as "no collisions" when it actually means "no data." Scope the grep to
-directories that plausibly contain the key, and sanity-check the count is
-non-zero before trusting a uniqueness result.
+**Audit against the standard, not against the work you planned.**
 
 ### The earlier counts were inflated — read this before quoting a number
 
@@ -366,73 +309,67 @@ if it is materially better with the specific names in it, keep them and set
 `publish: false`. It stays in the repo for us. Variable and env-var *names*,
 architecture, schemas, and candid post-mortems are all fine to publish.
 
-## Suggested order
+## What the sweep actually taught — the durable part
 
-### ✅ Done 2026-08-17: `fullstack-vc` — 29 legacy keys retired, 32 entries given identity
+The file lists are spent; these are not.
 
-See *`fullstack-vc` is complete* above for what was done and the two guards worth
-reusing. **Uncommitted.**
+### Two traps had to be found by breaking something
 
-⚠️ **Stage path-scoped when committing it.** `fullstack-vc`'s working tree also
-holds an unrelated in-flight Turso migration (new `scripts/*-turso.mjs`, new
-tool entries, `package.json`, and `context-v/issues/Retire-Legacy-Astro-DB-Layer-for-Direct-Turso-Access.md`).
-`git add -A` there would sweep up someone else's work.
+**Trap 1 (strict schema)** is loud: a required `date` field fails the build the
+moment the key is renamed. Easy to scan for, and now resolved tree-wide.
 
-### ✅ Done — every rename, and every trap
+**Trap 1b (lenient schema)** is the dangerous one, and the scan for trap 1 walks
+straight past it. A schema that requires nothing still lets a *consumer* break:
+the code reading the date walks a list of field names, and if that list predates
+the editorial convention while some file depends solely on the new keys, the date
+resolves to nothing. Build passes, page renders, date is blank, sort key is zero.
 
-All renames are complete and trap 1 is resolved tree-wide. The remaining work
-is a different shape: entries that never used `date:` at all, and so never
-registered as renames.
+Found live on the `context-v/skills` splash, where the newest changelog entry was
+rendering at the bottom of the list. Nobody had noticed.
 
-### Next: the editorial pair — 130 entries, mechanical
+**The check is two questions, not one:** does any schema *require* the key being
+removed, and does every chain that reads a date know the editorial keys?
 
-These carry `date_created` / `date_modified` but no `date_authored_initial_draft`,
-so Graphiti anchors them on a filesystem date instead of an authored one.
-Derive the pair from `date_created` and leave `date_modified` alone — it is
-bumped by a mere file open and is not evidence of a substantive revision. For a
-write-once changelog entry the spec expects both editorial dates to stay equal.
+### The publish flag is the wrong control at an aggregation boundary
 
-| Repo | Files |
-|---|---|
-| `self-host-stack` | 23 |
-| `self-host-stack/hubs/lossless-at` | 23 |
-| `content-farm/plugin-modules/perplexed` | 14 |
-| `astro-knots` | 12 |
-| `context-v/skills` | 9 |
-| `content-farm` | 8 |
-| `ai-labs/id-didi-sh` | 7 |
-| `ai-labs/dididecks-ai/client-sites/chroma-decks` | 7 |
-| `astro-knots/sites/hypernova-site` | 1 (plus 6 with no frontmatter) |
-| …18 more repos | 1–5 each |
+The costliest lesson. `publish: true` is set by whoever authored an entry, for
+*their* repo's surface. A private client repo can legitimately mark everything
+`publish: true` meaning "publish on the client's gated site" — and a public
+aggregator that reads it as consent will republish it to the world. That is
+exactly what happened, and it put a client's confidential fundraise position on
+a live public URL.
 
-Mostly additive and low-risk, but **run the 1b check per repo** — several of
-these render their changelog, and a lenient schema is not proof the change is
-safe.
+Both roll-up scripts now gate on **repository visibility and on whether the
+source is client work**, default-deny, failing closed. See
+`ai-labs/splash/scripts/rollup-sync.ts` and
+`astro-knots/splash/src/loaders/rollupFetch.ts`.
 
-### Then: the no-frontmatter files — 120
+**And visibility alone is not sufficient.** `reach-edu-hub` is a *public* repo
+and a named client engagement. "Private" and "confidential" are different
+properties; a gate that checks only the first will leak the second.
 
-| Repo | Files |
-|---|---|
-| `astro-knots` | 22 |
-| `astro-knots/sites/hypernova-site` | 6 |
-| `ai-labs/memopop-ai` | 6 |
-| `astro-knots/sites/twf_site` | 4 |
-| `content-farm/plugin-modules/perplexed` | 4 |
-| `content-farm/plugin-modules/cite-wide` | 4 |
-| `.` (lossless-monorepo root) | 4 |
-| `ai-labs/dididecks-ai/client-sites/*` | 6 across three client repos |
+### Screen before you set publish, not after
 
-**These are authoring work, not a script.** Each needs a written lede, and a lede
-is written, never extracted (see the spec). Budget accordingly.
+Setting `publish: true` on a client repo and screening afterwards is how the
+above happened. On the repos swept after that lesson the screen ran first, and it
+caught a memo pipeline enumerated by company name, an LP share-label naming a
+real firm, and a lead investor named in four incidental asides.
 
-### Last: the 504 `publish` decisions
+### Other things that cost time
 
-The judgment tier. Bulk sits in `calmstorm-decks` (39), `ai-labs` (39),
-`reach-edu-hub` (31), `content-farm` (28). **Note the client-site repos** —
-`calmstorm-decks`, `reach-edu-hub`, `chroma-decks`, `humain-vc-decks`,
-`lossless-decks`, `eventcut-ai` are named client engagements and need the
-confidentiality screen with the same care `dididecks-ai` needed (that sweep moved
-34 of 66 documents to internal).
+- **Enumerate content directories from the filesystem, not from a collection
+  config.** Reading the config finds only what the site already points at. One
+  repo had split its changelog across two directories, each half looking complete
+  from where it stood — and the two were visible to *different* audiences.
+- **A fix is not live until it reaches the branch `.gitmodules` names**, which is
+  not necessarily the branch the repo is checked out on.
+- **The parent's changelog holds copies of submodule entries.** A confidentiality
+  fix in a submodule is not finished until the parent copy is checked.
+- **A tree-wide `grep` for existing identifiers times out and returns empty**,
+  which reads as "no collisions" when it means "no data." Scope the grep and
+  assert the result is non-empty before trusting it.
+- **Derive editorial dates from `date_created`, never `date_modified`** — a mere
+  file open bumps mtime, so it is not evidence of a substantive revision.
 
 ## Open scoping question — `context-v/skills/`
 

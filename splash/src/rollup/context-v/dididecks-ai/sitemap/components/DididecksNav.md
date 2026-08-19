@@ -1,6 +1,6 @@
 ---
 title: "DididecksNav — shell-injected global header linking Scroll · TOC · Play · Changelog"
-lede: "Top-of-page nav auto-mounted on every shell-injected route (/toc/*, /play/*) and importable into consumer-owned routes (homepage, scroll-deck variants). Links derive from the consumer's deck registry — Scroll → first deck slug, TOC and Play → first deck + first variant. Brand slot lets each client deck drop in its own wordmark; default is a text wordmark sourced from the integration's `client` option. Reads `Astro.url.pathname` to flag the active link with `aria-current=\"page\"`."
+lede: "Shell-injected global header auto-mounted on `/toc/*` and `/play/*`, with links derived from the consumer's own deck registry."
 artifact_kind: component
 ownership: shell
 mode: both
@@ -25,6 +25,9 @@ status_tags:
 date_created: 2026-05-12
 date_modified: 2026-05-15
 publish: true
+site_uuid: 09ca1b6b-e5cb-494c-b090-62889a34fab9
+hex_code: z7yucd
+date_authored_current_draft: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DididecksNav.md"
 ---

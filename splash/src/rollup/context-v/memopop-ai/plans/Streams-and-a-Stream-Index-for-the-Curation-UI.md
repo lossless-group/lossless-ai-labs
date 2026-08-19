@@ -1,6 +1,7 @@
 ---
 title: "Streams and a Stream-Index for the Sources Curation UI — A Plan"
-lede: "A 'stream' is a URL that regularly publishes credible, relevant content — an insights/blog index, a newsroom, an RSS feed — as opposed to a one-off article. augment-it already named and modeled this exactly ('media_streams', the recurring publisher). This plan adopts that vocabulary and adds a stream-index.md registry plus light UI affordances to the existing curate_sources.py tool, so when the analyst finds a recurring publisher (e.g. rockhealthcapital.com/insights/) they can register it as a stream instead of mis-filing it as a citable source. Plan only; no polling/walking infrastructure here."
+lede: >-
+  A recurring publisher like `rockhealthcapital.com/insights/` is a stream, not a citable source — it belongs in `stream-index.md`.
 date_authored_initial_draft: 2026-06-28
 date_last_updated: 2026-06-28
 date_created: 2026-06-28
@@ -22,6 +23,10 @@ tags:
 related_skills:
   - sources-md-curation
   - context-vigilance
+site_uuid: f8744a75-fc4d-4394-9f7c-66ffb0814caf
+hex_code: 84b7g0
+date_authored_current_draft: 2026-06-28
+publish: false
 from: "memopop-ai"
 from_path: "context-v/plans/Streams-and-a-Stream-Index-for-the-Curation-UI.md"
 ---

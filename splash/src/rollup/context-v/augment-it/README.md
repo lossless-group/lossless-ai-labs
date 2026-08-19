@@ -7,6 +7,11 @@ status: Active
 tags:
   - Context-Vigilance
   - Convention
+site_uuid: 60a76104-2421-4263-ad44-405d9dfabfaa
+hex_code: bxhzq2
+date_authored_initial_draft: 2026-05-12
+date_authored_current_draft: 2026-05-12
+publish: true
 from: "augment-it"
 from_path: "context-v/README.md"
 ---

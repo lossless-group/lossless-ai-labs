@@ -20,6 +20,9 @@ builds_on:
   - "[[Where-Investor-Firm-Rosters-Live]]"
 date_created: 2026-05-08
 date_modified: 2026-05-08
+site_uuid: 1478283f-7f82-4b71-bce5-503162a2469f
+hex_code: lw5v09
+publish: false
 from: "memopop-ai"
 from_path: "context-v/plans/Add-People-Crawl-Command-to-Memopop-Native.md"
 ---

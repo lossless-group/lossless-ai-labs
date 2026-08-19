@@ -9,6 +9,29 @@ study: studies/vector-databases
 profile_path: studies/vector-databases/weaviate
 profile_kind: networked-server + distributed-cluster + modular-runtime
 date_created: 2026-05-27
+site_uuid: 8b542dc0-425a-454d-b818-32f3b0622e3d
+hex_code: ch5gn5
+date_authored_initial_draft: 2026-05-27
+date_authored_current_draft: 2026-05-27
+lede: >-
+  The database itself calls OpenAI to embed on write and Cohere to rerank on
+  read — the RAG pipeline lives inside the store, not the app.
+summary: >-
+  Source-cited profile of Weaviate for the vector-databases study, the
+  typed-schema counterpart to Qdrant's free-form JSON payload. Covers the
+  hexagonal Go architecture, the 17 primitive data types including `cref`
+  cross-references resolved as GraphQL unions, the `validateClassInvariants`
+  write gate, the 15 filter operators, alpha-weighted hybrid search with both
+  RRF and relative-score fusion, HNSW plus flat plus auto-switching dynamic
+  indexes with PQ/BQ/SQ compression, per-tenant physical shards, and Hashicorp
+  Raft cluster consensus. An agent should read this when data has enough
+  structure to justify a type system, when cross-object traversal would
+  otherwise become application-side joins, or when evaluating whether to let a
+  database own the embedding pipeline. Note the closing cross-study section:
+  it compares Weaviate's storage-layer typing against RetainDB's
+  memory-category typing from the sibling memory-layers study. Migration out is
+  the study's most expensive — paged REST/gRPC reads, no bulk export.
+publish: true
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__Weaviate.md"
 ---

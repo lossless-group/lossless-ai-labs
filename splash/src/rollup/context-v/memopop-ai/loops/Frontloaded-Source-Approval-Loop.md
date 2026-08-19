@@ -1,6 +1,7 @@
 ---
 title: "Frontloaded Source-Approval Loop — enforce the set, then build the surface that fills it"
-lede: "Burns down Constraining-Memo-Writing-to-an-Approved-Source-Set in dependency order: the membership predicate ships before the approval UI, because a UI whose output nothing enforces has an invisible failure mode. Splits the pipeline into a gather-candidates job and a write-constrained job, and inserts an `approving_sources` stage into memopop-native's FlowStage machine between create_deal and ready_to_run — so no run ever starts unconstrained. Each iteration lands one ticket with a named verification command, a changelog beat, and its own commit."
+lede: >-
+  Ships the membership predicate before the approval UI — a curation surface whose output nothing enforces has no observable failure mode.
 date_created: 2026-08-06
 date_modified: 2026-08-06
 authors:
@@ -19,6 +20,11 @@ tags:
   - Feature-Execution
   - Browser-Drive
 status: Authored-Not-Yet-Run
+site_uuid: b7455f6d-b5f6-483a-8a6f-edccd05dad5c
+hex_code: xfjjhj
+date_authored_initial_draft: 2026-08-06
+date_authored_current_draft: 2026-08-06
+publish: false
 from: "memopop-ai"
 from_path: "context-v/loops/Frontloaded-Source-Approval-Loop.md"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Browser-drive verification as a kit practice — operationalizing the Playwright-MCP rung across every Lossless repo"
-lede: "The kit's adaptation of the anchor-root blueprint: not just HOW an agent drives a browser before a human walks the surface, but how the practice ROLLS OUT — the core-MCP registry, the idempotent per-repo wiring, and the CLAUDE.md block that travels with it."
+lede: "Not how an agent drives a browser — how the practice rolls out: a core-MCP registry, idempotent per-repo wiring, a CLAUDE.md block."
 date_created: 2026-07-22
 date_modified: 2026-07-22
 authors:
@@ -18,6 +18,10 @@ tags:
   - Context-Vigilance-Kit
 status: Draft
 publish: true
+site_uuid: 838256af-e450-4467-8a50-1963316ce102
+hex_code: jzusuu
+date_authored_initial_draft: 2026-07-22
+date_authored_current_draft: 2026-07-22
 from: "context-vigilance-kit"
 from_path: "context-v/blueprints/Browser-Drive-Verification-For-Agent-Sessions.md"
 ---

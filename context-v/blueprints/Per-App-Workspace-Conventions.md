@@ -21,6 +21,7 @@ site_uuid: 1b68066c-2059-43ac-a283-d64abb385cf7
 hex_code: qva8j1
 date_authored_initial_draft: 2026-05-22
 date_authored_current_draft: 2026-05-22
+publish: true
 ---
 
 # Per-App Workspace Conventions

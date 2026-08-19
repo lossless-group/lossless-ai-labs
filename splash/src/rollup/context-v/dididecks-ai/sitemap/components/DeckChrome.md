@@ -1,6 +1,6 @@
 ---
 title: "DeckChrome — themable floating navigation capsule for Play-UI (and eventually Scroll-UI variant cycling)"
-lede: "Floating bottom-right capsule with paginator, ← / → slot nav, TOC link, optional ↑ ↓ variant cycling, and the full keyboard contract (← → Space PageUp/Down Home End F C T Esc). Replaces v0.1's heavy dark PlayChrome bar. Structure / behavior / styling are separated by discipline: structure is the Astro template, behavior is the inline keyboard script and `ddd:section-*` event dispatch, styling reads only `--ddd-chrome-*` CSS custom properties (neutral defaults inline; consumer overrides at any wrapping element). Lives inside `DeckOverlay--Play-UI` as the default `nav` slot today; will also serve as the variant-cycling element of `DeckOverlay--Scroll-UI` under Phase 2."
+lede: "Floating bottom-right nav capsule replacing v0.1's dark PlayChrome bar; styling comes only from `--ddd-chrome-*` custom properties."
 artifact_kind: component
 ownership: shell
 mode: play-ui
@@ -46,6 +46,9 @@ status_tags:
 date_created: 2026-05-14
 date_modified: 2026-05-15
 publish: true
+site_uuid: 176c912a-6ad7-4b41-8aa7-50f2a1cf0cfc
+hex_code: t2e9mq
+date_authored_current_draft: 2026-05-14
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckChrome.md"
 ---

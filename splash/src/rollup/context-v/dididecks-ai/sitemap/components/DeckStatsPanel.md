@@ -1,6 +1,6 @@
 ---
 title: "DeckStatsPanel — the 4-tile quick-stats row above the matrix on landing pages (Variants · Slide Files · People · Companies)"
-lede: "Renders a 4-tile grid above `DeckMatrix` on consumer landings — Design Variants count (links to `/scroll/`), Slide Files count (links to the canonical variant scroll page), People count (links to `/data-assets/people`), Companies count (links to `/data-assets/companies`). All counts computed at build time from the same `import.meta.glob` patterns the `/data-assets/*` audit routes use, so the numbers always match what the audit pages render. Replaces the per-client AssetsDataPanel that calmstorm + chroma each had locally — lifted to the shell so consumer sites don't reinvent the count math or the tile chrome."
+lede: "Four-tile stats row above `DeckMatrix` — Variants, Slide Files, People, Companies — counted from the same globs `/data-assets/*` uses."
 artifact_kind: component
 ownership: shell
 mode: n/a
@@ -39,6 +39,9 @@ status_tags:
 date_created: 2026-05-15
 date_modified: 2026-06-07
 publish: true
+site_uuid: a6a81047-8d66-4a70-b6f2-d185eee53c8f
+hex_code: 4gn8y6
+date_authored_current_draft: 2026-05-15
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckStatsPanel.md"
 ---

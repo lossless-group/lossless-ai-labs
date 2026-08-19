@@ -16,6 +16,8 @@ tags: [File-Organization, Firm-Scoping, Git-Submodules, Migration, Path-Resoluti
 authors:
   - Michael Staton
 augmented_with: "Claude Code with Claude Opus 4.6"
+site_uuid: 5e11f024-07c7-43bc-88f2-aff9605f20cc
+hex_code: gtfu3c
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/blueprints/Firm-and-Deal-based-File-Organization-System.md"
 ---

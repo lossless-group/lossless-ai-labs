@@ -16,6 +16,10 @@ tags:
   - Astro-7
   - Auth-Surface
 publish: false
+site_uuid: 15c4223e-3abd-473d-8eab-286f9f32cd4c
+hex_code: 2ej85x
+date_authored_initial_draft: 2026-08-02
+date_authored_current_draft: 2026-08-02
 from: "dididecks-ai"
 from_path: "context-v/plans/Migrate-Off-AstroDB-and-Bump-Shell-to-Astro7.md"
 ---

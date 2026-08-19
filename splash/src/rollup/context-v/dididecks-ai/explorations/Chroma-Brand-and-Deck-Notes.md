@@ -1,6 +1,6 @@
 ---
 title: "Chroma Brand & Deck Notes (pre-scaffold)"
-lede: "Source-of-truth design tokens, typography, and content-source notes for the upcoming `chroma-decks` client-site. Extracted directly from trychroma.com's production CSS bundle and the Alpha Partners investment memo. Lives in dididecks-ai/context-v/explorations/ until Phase 2 of [[../plans/Init-Chroma-Decks-Client-Site]] scaffolds the chroma-decks repo — at which point this file's substance is promoted into `chroma-decks/DESIGN.md` (Stitch-spec format)."
+lede: "Design tokens and typography extracted from trychroma.com's production CSS, staged until promoted into `chroma-decks/DESIGN.md`."
 date_created: 2026-05-11
 date_modified: 2026-05-11
 authors:
@@ -17,6 +17,10 @@ tags:
   - Light-Mode-Only
 status: Draft
 publish: false
+site_uuid: b6b5c465-c842-4351-9f00-ce410e16bb7c
+hex_code: 1qw9if
+date_authored_initial_draft: 2026-05-11
+date_authored_current_draft: 2026-05-11
 from: "dididecks-ai"
 from_path: "context-v/explorations/Chroma-Brand-and-Deck-Notes.md"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Init Chroma Decks Client-Site"
-lede: "Stand up `client-sites/chroma-decks` for an early-growth-stage portfolio company raising a round — radically improve the founder's existing materials, marry them with MemoPop-generated investment memos and market research, and use the engagement to harden the calmstorm-decks template into a reusable client-site baseline."
+lede: "Stand up `client-sites/chroma-decks` for a founder raising a round, using the engagement to harden calmstorm-decks into a reusable baseline."
 date_created: 2026-05-11
 date_modified: 2026-05-16
 date_first_published: 2026-05-11
@@ -24,6 +24,10 @@ post_ship_note: |
   Chroma now has Play-UI for proto, enhanced-v2, and enhanced-v3
   variants via per-slide files under `src/components/slides/`.
 publish: false
+site_uuid: bfc44333-2dc9-45ae-87c4-068080301081
+hex_code: agrw9v
+date_authored_initial_draft: 2026-05-16
+date_authored_current_draft: 2026-05-16
 from: "dididecks-ai"
 from_path: "context-v/plans/Init-Chroma-Decks-Client-Site.md"
 ---

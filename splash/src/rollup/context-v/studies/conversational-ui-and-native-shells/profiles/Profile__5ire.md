@@ -2,13 +2,36 @@
 name: 5ire Profile
 slug: 5ire
 upstream: https://github.com/nanbingxyz/5ire
-package: "5ire" (npm-style package.json, but distributed only as electron-builder desktop binaries — macOS/Windows/Linux, via `.erb` scaffold)
+package: "\"5ire\" (npm-style package.json, but distributed only as electron-builder desktop binaries — macOS/Windows/Linux, via `.erb` scaffold)"
 license: Modified Apache-2.0 ("5ire Community Edition" — Apache 2.0 plus additional commercial-use and brand-protection terms; see Characterizing the license below)
 maintainer: Ironben / nanbingxyz (5ire.app)
 study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/5ire
 profile_kind: Electron (React renderer), MCP client + local-first chat app mid-migration from SQLite to PGlite/Postgres
 date_created: 2026-07-13
+site_uuid: 9fd5b9ae-14ee-4a79-90d5-1321b93d1216
+hex_code: 6lscdz
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
+lede: >-
+  5ire's MCP layer has no apply button — editing a server row in PGlite makes
+  the client reconnect via the live-query changefeed.
+summary: >-
+  Source-cited profile of the 5ire submodule (pinned at `c7fabb9`) for the
+  conversational-UI-and-native-shells study. Serves as the study's Electron
+  comparison point and its most complete MCP-client reference. Documents four
+  things an agent may need: (1) the in-progress SQLite/LanceDB → PGlite/Drizzle/pgvector
+  migration, including the reusable `legacyId` + `onConflictDoNothing` idempotent-migration
+  idiom and exactly which domains have not crossed over (chats, messages, bookmarks,
+  search); (2) the MCP client — SDK-native stdio and streamable-HTTP transports, a
+  retry/abort connection state machine, and reconnection driven by PGlite `live.changes`
+  on the `servers` table; (3) the minimal community marketplace (a static
+  `mcpsvr.com/servers.json` feed with a 24-hour TTL cache) whose install path converges
+  on the same `createServer` call as manual config; (4) the Modified Apache-2.0 license
+  and its commercial-use and brand carve-outs. Use it to lift architecture patterns, not
+  code — the license gates reuse. Read alongside `Profile__Dive.md` and
+  `Profile__Anything-LLM.md`.
+publish: true
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__5ire.md"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "DecomposeFirstPlaceholder — empty-slot fallback rendered when a per-slide file doesn't exist yet"
-lede: "Rendered by `/play/[deck]/[variant]/[slot]` when the resolved per-slide file at `{slidesComponentsRoot}/{variant}/{slot}-{slug}.astro` does not exist. Communicates the next action — open the TOC at `?focus={slot}`, rank as redo-worthy, click scaffold to create the stub — without sounding like an error state. The instructive-helpful tone is deliberate: this is the framework's invitation to begin the rank → decompose → recreate loop, not an Astro 404."
+lede: "Empty-slot fallback on the play route — an invitation to begin the rank → decompose → recreate loop, deliberately not an error state."
 artifact_kind: component
 ownership: shell
 mode: play-ui
@@ -22,6 +22,9 @@ status_tags:
 date_created: 2026-05-12
 date_modified: 2026-05-15
 publish: true
+site_uuid: 801a3b39-3dfa-479d-9488-d4486c71c093
+hex_code: 0qufnu
+date_authored_current_draft: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DecomposeFirstPlaceholder.md"
 ---

@@ -2,7 +2,7 @@
 site_uuid: 7a5005d0-a2a7-48cb-8054-2bd1be395754
 hex_code: 25e2eo
 title: "Frontmatter Normalization — The Context-V Tier"
-lede: "The changelog tier was mechanical: dates in filenames, write-once entries, outward-facing by default. None of that is true here. 753 living documents across 41 repos, where the date has to come from git, the lede has to be written, and `publish: false` does not keep a document out of the corpus."
+lede: "821 living documents: the date must come from git, the lede must be written, and `publish: false` does not keep a doc out of the corpus."
 summary: "The procedure for bringing `context-v/**.md` onto the frontmatter standard, written after completing the changelog tier. Covers what makes this tier different in kind from changelog work, the per-repo order, the date-derivation rule when no filename date exists, why the lede is authoring rather than normalization, and the publish-gate asymmetry between the two Chroma ingesters that makes `publish: false` misleading on a context-v document. Read alongside [[Frontmatter-Normalization-Remaining-Repos]], which covers the changelog tier and the three traps that still apply."
 publish: true
 date_created: 2026-08-17
@@ -10,12 +10,13 @@ date_modified: 2026-08-17
 date_authored_initial_draft: 2026-08-17
 date_authored_current_draft: 2026-08-17
 date_authored_final_draft:
+date_work_started: 2026-08-17
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-at_semantic_version: 0.0.1.0
-status: In-Progress
+at_semantic_version: 0.1.0.0
+status: Partially-Shipped
 tags:
   - Frontmatter
   - Normalization
@@ -38,9 +39,9 @@ graph. A document with no `lede` returns a bare title in a search hit. A
 document with no `site_uuid` mints a fresh node on every re-ingest, so its
 history through the graph is unrecoverable.
 
-The changelog tier is where this started. It is now done to the extent it can
-be — see [[Frontmatter-Normalization-Remaining-Repos]]. **This tier is larger
-and different in kind.**
+The changelog tier is where this started and it is **complete** — all 436
+entries, see [[Frontmatter-Normalization-Remaining-Repos]]. **This tier is
+larger and different in kind.**
 
 ## How this differs from the changelog tier — read before starting
 
@@ -87,36 +88,123 @@ internal-by-nature, so everything is fair game for our own retrieval) or a
 defect to fix in the ingester. The sweep's `publish` decisions mean different
 things depending on the answer.
 
-## Current state
+## Current state — updated 2026-08-17, mid-sweep
 
-**753 documents across 41 repos.** Excluding `context-v/skills/` (see the open
-question below), **631 across 40**.
+**The original counts in this document were wrong, and the correction matters.**
+It said 753 documents / 631 excluding skills. The real figure was **948 / 825**.
+The gap was almost entirely `ai-labs/augment-it` — **181 files** that landed
+after this handoff was first written, and the single largest block in the tier.
+**Re-audit from the filesystem before trusting any count in a handoff**; a stale
+inventory silently scopes work out.
 
-| Category | Files | Nature of the work |
-|---|---|---|
-| No frontmatter at all | **107** | Authoring — needs title, lede, dates, publish |
-| Missing `date_created` | **104** | Mechanical — derive per the rule below |
-| Missing `publish` | **405** | Judgment — one decision per document |
-| Missing `lede` / `description` | **160** | **Authoring — cannot be scripted** |
+Scope now settled at **821 documents** (`context-v/skills/` excluded by decision,
+see below; the count moved from 825 as stubs were deleted and documents written).
 
-Largest blocks:
+### Progress this session
 
-| Repo | Total | No-FM | No-date | No-publish | No-lede |
-|---|---|---|---|---|---|
-| `context-v/skills` | 122 | 61 | 40 | 39 | 9 |
-| `astro-knots` | 99 | 18 | 3 | 68 | 3 |
-| `memopop-orchestrator` | 77 | 0 | 0 | 0 | 5 |
-| `dididecks-ai` | 69 | 0 | 0 | 0 | 2 |
-| `ai-labs` | 40 | 2 | 2 | 38 | 4 |
-| `reach-edu-hub` | 32 | 1 | 4 | 31 | 0 |
-| `fullstack-vc` | 28 | 0 | 0 | 0 | 18 |
-| `content-farm` | 28 | 0 | 2 | 28 | 10 |
-| `memopop-ai` | 28 | 6 | 5 | 17 | 0 |
-| `calmstorm-decks` | 22 | 2 | 19 | 20 | 19 |
+| Field | Was | Now | How |
+|---|---|---|---|
+| No frontmatter at all | 38 | **0** | blocks created, bodies untouched |
+| `hex_code` | 788 | **4** | generated, never typed |
+| `site_uuid` | 776 | **4** | as above |
+| `date_authored_current_draft` | 594 | **50** | := `initial_draft` where absent |
+| `date_authored_initial_draft` | 551 | **50** | `date_modified` if within 7d of `date_created`, else `date_created` |
+| `date_created` | 101 | **28** | own-repo git first-commit |
+| `publish` | 581 | **581** | untouched by design — see below |
+| `lede` | 183 | in progress | authoring |
 
-Note `memopop-orchestrator` (77) and `dididecks-ai` (69) are already swept —
-they appear here only for their missing ledes, which the earlier sweep
-correctly declined to fabricate.
+The residual 4 identifiers are the hard-denied `site/` files. Integrity after
+~1,800 field writes: **0 broken frontmatter blocks, 0 duplicate keys, 0 non-ISO
+dates, 0 inverted editorial pairs, 0 invalid identifiers in scope.**
+
+### Decisions taken (do not re-litigate)
+
+1. **`context-v/skills/` is OUT of scope.** Codified as rule 9 in
+   `frontmatter-spec.md`. Removes 123 files and ~101 phantom gaps from every
+   future audit. This was the "open question" at the bottom of this document; it
+   is now closed.
+2. **The publish-gate asymmetry is INTENTIONAL and ratified.** On a context-v
+   document `publish` gates the website only. Chroma and Graphiti deliberately
+   read everything. **Do not "fix" `ingest-to-chroma.py`.** `private: true` is the
+   sole retrieval control. Codified in the spec.
+3. **`habits/` is a real experimental folder**, now codified in the
+   `context-vigilance` skill: a habit is an obligation with a trigger and a scope
+   (*do X, on this trigger*), where a reminder is a correction (*when you do X,
+   do it this way*).
+4. **Never derive a date over an existing frontmatter value.** Two errors were
+   made this session doing exactly that by hand — a README habit backdated by 7
+   months, and a spec by 10 days. The *scripts* never did it; they refuse by
+   construction. **Hand-authoring was the weak link, not automation.**
+
+### The migration trap — dates predate their repos
+
+context-v files move: a parent pseudomonorepo gets created, or a child repo is
+carved out (memopop split into four). **The owning repo's first commit is then
+the date of the MOVE, not of authorship.** Measured: 36 documents demonstrably
+lived in another repo first, gaps up to **407 days**.
+
+Handled by never overwriting an existing `date_created` — a migrated file carries
+its date along. Cross-repo archaeology was considered and rejected: it would have
+changed exactly one of 64 files, by 20 days. Evidence preserved in
+`context-v-cross-repo-dates.csv`.
+
+**But where the date was ALREADY wrong, this matters commercially.** Five
+augment-it documents claimed `2026-05-18` while git proved authorship in
+July–August 2025 — understating a live client engagement by ~10 months. Corrected
+2026-08-17. **When a client repo's dates are evidence of work performed, check
+them against the pre-move repo's history before quoting them.**
+
+## What the changelog tier learned that applies here
+
+Four things, in descending order of how much they will cost if ignored.
+
+### 1. The publish flag is not an aggregation control — and this tier is where that bites hardest
+
+The changelog sweep ended with a client's confidential fundraise position on a
+live public URL. Cause: a private client repo had marked its entries
+`publish: true`, meaning "publish on the client's own gated site," and a public
+roll-up script read that flag as consent.
+
+Both roll-up scripts now gate on repository visibility and on whether the source
+is client work, default-deny and failing closed. **But context-v is the richer
+target.** Changelog entries describe what shipped; `context-v/` holds the specs,
+plans, and explorations — the reasoning, the alternatives rejected, the client
+detail that motivated a decision. If an aggregation boundary is going to leak
+something expensive, it leaks it from here.
+
+Before setting a single `publish` value in this tier, confirm which roll-ups
+consume the repo and what they do with the flag.
+
+### 2. Visibility is necessary but not sufficient
+
+`reach-edu-hub` is a **public** repo and a named client engagement. A gate that
+checks only repository visibility will pass it. "Private" and "confidential" are
+different properties — client work is excluded structurally, by where it lives in
+the tree, not by whether GitHub calls the repo private.
+
+### 3. Screen before setting publish, never after
+
+Setting the value and screening afterwards is precisely how the leak happened.
+On every repo swept after that lesson the screen ran first, and it earned its
+keep: a memo pipeline enumerated by company name, an LP share-label naming a real
+firm, a lead investor in four incidental asides, and an internal deal-directory
+layout.
+
+The screen is three greps — credential-shaped assignments, known client and
+portfolio names, financial figures — and takes under a minute per repo.
+
+### 4. Trap 1b: a lenient schema hides a broken consumer
+
+Recorded in full in the changelog handoff. The short version: a schema that
+requires nothing still lets the *consuming* code break, because that code walks
+a list of field names that may predate the editorial convention. Found live, with
+the newest entry rendering at the bottom of a list.
+
+**This tier has more of these waiting.** Roughly fourteen `context-v/` page
+chains across the splashes still do not know the editorial keys. They are not
+broken yet only because this tier is unswept — the moment a context-v document
+depends solely on `date_authored_*`, they blank. Fix the chains *before*
+sweeping, not after. The changelog tier proved that order matters.
 
 ## The procedure
 
@@ -309,21 +397,115 @@ expect a similar ratio and budget reading time accordingly.
 `dididecks-ai` 2, `content-farm` 10) are pure authoring and can be batched
 whenever there is appetite for writing rather than sweeping.
 
-## Open question — is `context-v/skills/` in scope?
+## ~~Open question~~ — RESOLVED 2026-08-17: `context-v/skills/` is out of scope
 
-**122 files, 101 mechanical, 61 with no frontmatter — the single largest block,
-and excluded from the totals above pending a decision.**
+Those files are `references/*.md`, `README.md`, `SKILL.md` — **skill internals
+that happen to live under a `context-v/` path**, authored against the
+skill-authoring contract rather than this spec, with the loader as their consumer
+rather than a rendered surface or a retrieval layer. Same logic that already
+excludes `*/context-v/agent-skills/`, one directory up.
 
-The case for excluding it: those files are `references/*.md`, `README.md`,
-`CLAUDE.md` — **skill internals that happen to live under a `context-v/`
-path**, not context-v documents. This tree already excludes
-`*/context-v/agent-skills/` on exactly that logic, since `SKILL.md` frontmatter
-is a machine contract Claude Code parses. The same reasoning appears to apply
-one directory up.
+**Codified as rule 9 in `context-vigilance/references/frontmatter-spec.md`** so no
+future audit re-surfaces it. An audit that counts them reports ~123 extra files
+and ~101 phantom gaps.
 
-If in scope, the tier total is **753**. If out, **631** — and the exclusion
-belongs in `context-vigilance/references/frontmatter-spec.md` so no future
-audit re-surfaces it.
+## Remaining work
+
+Two blocks, both genuinely non-mechanical, plus cleanup.
+
+### 1. `publish` — 581 decisions
+
+**Untouched, deliberately.** Cannot be mechanized; requires reading each document.
+This is the field that put a client's fundraise position on a public URL during
+the changelog tier.
+
+- **Screen before setting, never after.** Three greps per repo. The credential
+  screen has already run tree-wide over `context-v/` and came back clean apart
+  from `dididecks-ai/context-v/reminders/Auth-Loose-Ends.md` (now `private: true`).
+- **Count the repo's own convention first** — the split is not uniform.
+  `memopop-orchestrator` runs 73 `false` to 8 `true`; `dididecks-ai` is ~50/50;
+  the five `ai-labs/studies/*` repos have **no `publish` key at all**, so every
+  one there is a fresh judgment with no convention to inherit.
+- **Client repos last:** `calmstorm-decks`, `reach-edu-hub`, `chroma-decks`,
+  `humain-vc-decks`, `lossless-decks`, `eventcut-ai`, `the-water-foundation`.
+
+### 1b. The confidentiality screen — RUN AND CLEARED, 2026-08-18
+
+All eight client-facing repos screened before any `publish` value was set. Do not
+re-run this from scratch; re-run only what has changed since.
+
+**Visibility, checked with an UNAUTHENTICATED API call** (an authenticated call
+succeeds against private repos and defeats the purpose):
+
+| Repo | Visibility |
+|---|---|
+| `reach-edu-hub` | **PUBLIC** |
+| `fullstack-vc` | **PUBLIC** |
+| `calmstorm-decks`, `chroma-decks`, `humain-vc-decks`, `lossless-decks`, `eventcut-ai`, `the-water-foundation` | private |
+
+**Credential + high-entropy screen: zero hits across all eight.** The only
+credential exposure in the whole tier remains `dididecks-ai`'s `Auth-Loose-Ends.md`,
+already gated with `private: true` and pending credential rotation.
+
+**`reach-edu-hub` — cleared by the operator, 2026-08-18.** The screen surfaced
+REACH's live fundraise position in six `pitch.md` files: $25M goal over three
+years, $6M committed, Carnegie Corporation ($2M) and Schusterman named as
+committed funders, ~$3M in motion, an August 2026 cohort close, and enrollment
+scaling 3,400 → 7,500. Two of those documents self-label "(Internal)". All of it
+sits in a public repo.
+
+**Operator ruling: fine to publish.** REACH is a non-profit running a public
+campaign and is not protecting these figures. **Do not flag this again**, and do
+not genericize it — the specificity is the point in a fundraising narrative.
+
+Two things that follow from the ruling rather than contradict it:
+
+- **The "(Internal)" labels in those two titles are now misleading.** They say
+  Internal in a public repo about material deliberately published. Worth removing
+  so the next reader does not trust the label over the reality.
+- **A passcode on the deployed site does not protect the GitHub repo.** These are
+  different surfaces, and the screen must check repository visibility rather than
+  assume the site's auth covers the source. That assumption is what would have let
+  this pass unexamined.
+
+The other 272 financial hits in `reach-edu-hub` are **publicly reported
+philanthropy figures with footnote citations** to Fortune, Forbes, and press
+releases — funder-landscape research, not client confidences. A naive
+`\$[0-9]+M` grep flags all of them; do not treat that count as a finding.
+
+**`fullstack-vc`** — clean. One financial hit, a survey quote. The repo
+self-describes as build-in-public.
+
+### 2. Ledes — 183, of which 151 warrant one
+
+~243,000 words to read, median 1,241 per document. The 5 genuine stubs get **no
+lede** — an invented one is a promise the page cannot keep.
+
+**Do the publish call and the lede in the SAME read.** The blueprint sequences
+them as separate passes, but both require reading the document, and a sharper
+lede comes out of having just decided whether the thing is publishable — both
+questions turn on "what is actually interesting here." Two passes means reading
+151 documents twice.
+
+Composition: 55 study profiles (uniform, no client data — the right place to
+start), 35 narratives (fullstack-vc all-hands + calmstorm — **client**),
+45 reminders/issues/plans, ~46 other.
+
+### 3. Cleanup carried forward
+
+- **Rotate the credentials** in `Auth-Loose-Ends.md`. `private: true` removes it
+  from retrieval; it does **not** remove the passcodes and production Turso
+  hostname from git history. Only rotation does.
+- **[[Malformed-Site-UUIDs-At-Source-In-Content-Repo]]** — 6 invalid `site_uuid`
+  values whose sources live in `content/`. Roll-up regeneration propagates them
+  rather than fixing them.
+- **Two template files carry unparseable dates** — `YYYY-MM-DD` and `2026-MM-DD`.
+  Instructive for a human, but `z.coerce.date()` yields `Invalid Date` rather than
+  rejecting, and the `lenient*` helpers only preprocess `''` and `null`. Latent
+  build bug if either template ever lands in a rendered collection.
+- **The roll-up is likely to be rebuilt** from GitHub CMS / CDN endpoints so
+  content reaches the website and splash pages directly. Whatever replaces the
+  current script inherits the invalid-identifier problem above.
 
 ## See also
 

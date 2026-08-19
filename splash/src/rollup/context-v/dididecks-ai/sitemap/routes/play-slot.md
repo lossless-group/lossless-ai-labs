@@ -1,6 +1,6 @@
 ---
 title: "/play/[deckSlug]/[variantSlug]/[slot]/ — single-slot Play-UI renderer with keyboard nav"
-lede: "Static route emitted for every slot in `SLOTS[variantSlug]`. Resolves the slot's `slug` from the registry, then dynamic-imports the per-slide component at `/src/components/slides/{variant}/{slot}-{slug}.astro` via `import.meta.glob` and renders it inside SlideCanvas; falls back to DecomposeFirstPlaceholder if the file doesn't exist. Today the route directly composes DididecksNav + DeckChrome + SlideCanvas inline; the target shape composes them via `DeckOverlay--Play-UI`, which also wraps the slide in `<section data-slot data-variant>` so SlideRankPill mounts work (closes A++.2 structurally)."
+lede: "Static per-slot route: dynamic-imports `slides/{variant}/{slot}-{slug}.astro` into SlideCanvas, falling back to DecomposeFirstPlaceholder."
 artifact_kind: route
 ownership: shell
 mode: play-ui
@@ -32,6 +32,9 @@ status_tags:
 date_created: 2026-05-12
 date_modified: 2026-05-15
 publish: true
+site_uuid: 822f5b12-5287-4e2b-a79f-2c55bfde7cfc
+hex_code: 7mm2rh
+date_authored_current_draft: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/play-slot.md"
 ---

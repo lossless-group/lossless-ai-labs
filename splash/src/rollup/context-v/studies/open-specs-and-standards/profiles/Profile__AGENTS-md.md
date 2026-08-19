@@ -9,6 +9,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/agents-md
 profile_kind: file-convention
 date_created: 2026-05-05
+site_uuid: 42eb0a4a-c72c-4139-bda5-573687fae0dd
+hex_code: agwg0r
+date_authored_initial_draft: 2026-05-05
+date_authored_current_draft: 2026-05-05
+lede: >-
+  The entire specification is one precedence rule: the closest `AGENTS.md` to
+  the edited file wins. No schema, no validator.
+summary: >-
+  Profile of the AGENTS.md convention as pinned in this study. It is the smallest-scope and
+  widest-adoption artifact in the collection, and it sits *under* the spec/workflow tools rather
+  than competing with them — a repo using OpenSpec, Spec Kit, or GSD still wants an AGENTS.md at
+  root. Covers the four observable rules (any markdown, closest-file-wins precedence, listed
+  commands actually get run, living documentation), the nested-file pattern for monorepos, the
+  `mv AGENT.md AGENTS.md && ln -s` migration recipe, the 23-agent compatibility list, and the
+  Linux Foundation stewardship that separates it from a vendor label. Use it when deciding what
+  goes in a repo's agent-facing context file versus its README, and note that the convention is
+  advisory — enforcement belongs to the host runtime's permission system.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__AGENTS-md.md"
 ---

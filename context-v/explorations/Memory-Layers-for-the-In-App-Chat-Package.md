@@ -30,6 +30,7 @@ site_uuid: 440bbea3-a98d-4f63-bd7b-d879e48b840b
 hex_code: 1v99yj
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
+publish: true
 ---
 
 # Memory Layers for the In-App Chat Package

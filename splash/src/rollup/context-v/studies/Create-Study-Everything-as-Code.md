@@ -1,8 +1,19 @@
 ---
+site_uuid: def4d4f9-5895-4856-ab5c-cf950fa1595b
+hex_code: xlorch
+title: Create Study Everything as Code
+date_created: 2026-05-02
+date_authored_initial_draft: 2026-05-02
+date_authored_current_draft: 2026-05-02
+authors:
+  - Michael Staton
+at_semantic_version: 0.0.1.0
+tags:
+  - Context-Vigilance
+publish: true
 from: "studies"
 from_path: "context-v/Create-Study-Everything-as-Code.md"
 ---
-
 The thesis isn't "as-code is good" — it's vendor-neutral artifact formats
    are how you escape the agent-lock-in flywheel. Notion+Notion-AI, Microsoft+Copilot, Figma+Figma-AI
    all bet that you'll keep your work in their proprietary format because their agent grokks it best.

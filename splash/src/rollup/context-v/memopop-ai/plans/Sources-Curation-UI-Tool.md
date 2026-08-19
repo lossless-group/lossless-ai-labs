@@ -1,6 +1,7 @@
 ---
 title: "Sources Curation UI — A Local Tool for Converging a Sources.md"
-lede: "A small, disposable, single-file local web tool that binds a curation UI to one Sources-aggregated.md: page through each source, edit its metadata, delete/reorder, preview its content via Jina, type a new search term and fire SearXNG, and pull relevant results back into the list. Reuses the orchestrator's existing src/curation parsing + fetch; adds no dependencies. Saves a converged inputs/Sources.md (backed up, never clobbering the worksheet). Built for the immediate ImmuneCo curation, refactor-friendly later."
+lede: >-
+  A single-file local tool bound to one `Sources-aggregated.md`: edit, preview via Jina, re-search via SearXNG, save `inputs/Sources.md`.
 date_authored_initial_draft: 2026-06-27
 date_last_updated: 2026-08-06
 date_created: 2026-06-27
@@ -22,6 +23,10 @@ tags:
 related_skills:
   - sources-md-curation
   - context-vigilance
+site_uuid: 4cdeec22-a044-45e7-9d0e-5fe70fedf91c
+hex_code: dha3fd
+date_authored_current_draft: 2026-06-27
+publish: false
 from: "memopop-ai"
 from_path: "context-v/plans/Sources-Curation-UI-Tool.md"
 ---

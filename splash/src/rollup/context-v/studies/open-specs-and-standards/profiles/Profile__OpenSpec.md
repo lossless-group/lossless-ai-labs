@@ -8,6 +8,23 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/open-spec
 profile_kind: tool
 date_created: 2026-05-03
+site_uuid: 56d76ea2-ed67-469a-897b-fd3e6e9b481e
+hex_code: f54hn2
+date_authored_initial_draft: 2026-05-03
+date_authored_current_draft: 2026-05-03
+lede: >-
+  An LLM should never re-emit a whole spec to change one line, so changes ship
+  as `ADDED` / `MODIFIED` / `REMOVED` deltas.
+summary: >-
+  Profile of OpenSpec as pinned in this study. It is the lightweight pole of the spec-and-workflow
+  cluster; read it against the Spec Kit profile, which makes nearly the opposite choice at every
+  fork, and the GSD profile, which abandons the spec format entirely for orchestration. Covers the
+  parseable `Requirement:` / `Scenario:` heading grammar with RFC 2119 keywords, the delta-spec
+  change model and what it buys for brownfield work, the `schema.yaml` artifact DAG the agent
+  queries via `openspec status --json`, the specs-versus-changes source-of-truth split, and the
+  `/opsx:*` command loop. The upstream repo dogfoods itself, so its own `openspec/` directory is a
+  live source of worked examples. Use it as the reference for delta-style spec discipline.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__OpenSpec.md"
 ---

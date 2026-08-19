@@ -7,10 +7,11 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-semantic_version: 0.0.0.2
+semantic_version: 0.0.0.3
 status: Partially-Shipped
 date_first_published: 2026-08-12
 revisions:
+  - "2026-08-18 — v0.0.0.3 — Generalized: portfolio-company names removed (this repo is public) and the capture-crop finding rewritten to lead with asking the founder for a shareable PDF rather than re-hosting a cropped capture."
   - "2026-08-12 — v0.0.0.2 — Stages 0–3 shipped against 9 deals in lossless-decks. Stage 4 (play-from-PDF) reduced to a filmstrip + PDF link; full Play-UI deferred."
   - "2026-08-12 — v0.0.0.1 — initial plan, authored while the roster was being gathered."
 tags:
@@ -25,6 +26,7 @@ site_uuid: 105ecb59-5eb7-4f2e-add5-cc269ba4c98d
 hex_code: 2958x0
 date_authored_initial_draft: 2026-08-12
 date_authored_current_draft: 2026-08-12
+publish: false
 ---
 
 ## Why Care?
@@ -305,19 +307,19 @@ forward it.
 
 - 9 deals across 2 sections; 11 slots auto-registered via the `data-slot` scan
 - All 9 OG cards fetched and cached offline at `src/data/og-cache/`
-- `scripts/slim_deck.py` in memopop — the reusable slimmer, now with viewer-chrome cropping
-- Impulse Labs deck: 28.0 MB → 1.4 MB (4.9%), DocSend chrome stripped
+- `scripts/slim_deck.py` in memopop — the reusable slimmer, now with a capture-margin crop
+- Best case on a held deck: 28.0 MB → 1.4 MB (4.9%), viewer margins trimmed
 
 **Not done, in priority order:**
 
 1. **Commentary is empty on all 9 deals.** Only Michael can write it. The slides render a
    "pending" state so the gap is visible rather than silent.
-2. **Two degraded cards** — ContextMemory (no OG tags, no image at all) and Verdant (no OG
-   tags, only a 64px logo-mark). Stage 6 triage.
-3. **Impulse deck is 13 of 15 pages.** The DocSend counter reads "N / 15"; captures stop at
-   13. Pages 14–15 need re-capture.
-4. **Hover artifact** — DocSend's next-page arrow is burned into some captured pages
-   (it sat under the cursor). Cropping can't remove it; only re-capture or the real PDF can.
+2. **Two degraded cards** — one deal has no OG tags and no image at all; another has no OG
+   tags and only a 64px logo-mark. Stage 6 triage.
+3. **One deck is incomplete** — 13 of 15 pages captured. The missing pages should come
+   from the founder as a real PDF; this is a request to make, not a capture to redo.
+4. **Hover artifact** — a viewer control is burned into some captured pages (it sat under
+   the cursor). Cropping can't remove it. Same answer: ask for the source file.
 5. **Play-UI** — Stage 4 landed as a filmstrip + PDF link, not true in-shell paging. Option B
    (page JPEGs as Play-UI slides) is still the right next move; the JPEGs already exist.
 6. **Framing slides** (Stage 5) — cover, sourcing, coverage matrix, closing.
@@ -355,9 +357,13 @@ pills and Play-UI slot identity. They just don't populate the TOC.
 - **The existing lossless-decks slides carry no `data-slot`.** `src/pages/index.astro` and
   `scroll/firm/v1/index.astro` also fail typecheck — `ModeToggle` requires a `client` prop
   neither passes. Pre-existing; surfaced, not fixed.
-- **Screenshot decks carry the viewer's identity.** The DocSend captures included the
-  viewing account's avatar and a page counter. Anything screenshot-sourced needs the crop
-  pass before it goes to a third party — this generalizes well past this deck.
+- **Screen-captured material carries the viewer's identity.** Captures from a hosted
+  document viewer included the viewing account's avatar. That is a reason to question
+  *whether* the artifact should be forwarded at all, not merely a crop to perform: a deck
+  delivered through a tracked viewer was shared on terms, and re-hosting a cropped copy
+  routes around both the founder's tracking and their consent. **Ask the founder for a PDF
+  they're happy for us to show.** Every deal in the roster is a company we have a live
+  relationship with; the ask costs one message and removes the question entirely.
 
 ## Risks, named up front
 
@@ -371,7 +377,10 @@ pills and Play-UI slot identity. They just don't populate the TOC.
    One component, N instances, until Stage 2's exit criteria are met.
 5. **Confidentiality.** Founders' decks under a private/shared tier only. No public route,
    no sitemap entry, and per `open-graph-share-seo-geo` discipline, nothing that makes these
-   unfurl publicly.
+   unfurl publicly. **Prefer a founder-supplied PDF over a screen capture** — if we only
+   hold a capture from a tracked viewer, the deck was shared with us on terms a re-hosted
+   copy quietly breaks. And keep deal names out of this plan: `ai-labs` is a public repo,
+   so the roster lives in `deals.ts` in the client-site, never here.
 
 ---
 

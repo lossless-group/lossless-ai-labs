@@ -1,6 +1,6 @@
 ---
 title: "Plans Inventory and Phase A Outcome — What Shipped, What Remains, and the Three Gaps the Founder Surfaced on First Smoke-Test"
-lede: "Four plans live in `dididecks-ai/context-v/plans/`. Two have been fully executed (the dididecks-ai monorepo init and the chroma-decks scaffold). One is partly executed (Phase A of `@dididecks/shell` — A.1 through A.6 working in workspace-link mode; A.7 publish is administratively blocked). One is fully deferred (the slide componentization sweep, which now retargets into the shell). After landing the shell today, the founder smoke-tested the running surface and named three concrete gaps: no global navigation chrome, no in-scroll-deck slide-rank UI (a feature neither calmstorm nor chroma has today), and no per-slide static HTML files to feed a `/play` runtime. The next plan — Phase A+ — closes those three in a single coherent slice."
+lede: "Phase A landed; smoke-testing surfaced three gaps — no global nav chrome, no in-deck slide-rank UI, no per-slide static HTML for `/play`."
 date_authored_initial_draft: 2026-05-12
 date_authored_current_draft: 2026-05-12
 date_authored_final_draft: 2026-05-12
@@ -35,6 +35,8 @@ authors:
 date_created: 2026-05-12
 date_modified: 2026-05-12
 publish: false
+site_uuid: ec994dfc-eac8-49ad-9a62-626c93975f29
+hex_code: zneqf8
 from: "dididecks-ai"
 from_path: "context-v/explorations/Plans-Inventory-and-Phase-A-Outcome.md"
 ---

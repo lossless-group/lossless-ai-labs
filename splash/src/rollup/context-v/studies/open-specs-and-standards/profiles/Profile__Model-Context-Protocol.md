@@ -9,6 +9,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/modelcontextprotocol
 profile_kind: wire-protocol
 date_created: 2026-05-05
+site_uuid: 4da2393b-3484-4a26-9ff2-1d8d60c7e79a
+hex_code: tp297c
+date_authored_initial_draft: 2026-05-05
+date_authored_current_draft: 2026-05-05
+lede: >-
+  The three *client* primitives — Sampling, Roots, Elicitation — let a server
+  use the host's model without ever getting the user's key.
+summary: >-
+  Profile of the Model Context Protocol as pinned in this study. MCP is the agent-to-tool wire
+  protocol; A2A is agent-to-agent. Read the two profiles together — the intended composition is
+  MCP inside agents, A2A between them. Covers the LSP analogy and the N x M to N + M argument, the
+  eight published design principles (with "stability over velocity" and "capability over
+  compensation" doing most of the work), initialize-time capability negotiation, the three server
+  and three client primitives, stdio versus Streamable HTTP transports, OAuth 2.0 authorization,
+  date-based rather than semantic versioning, the TypeScript-first schema with generated JSON
+  Schema, the SEP process, and the Linux Foundation BDFL governance model. Note that the protocol
+  cannot enforce its own security model — consent and tool-description distrust are the host's job.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Model-Context-Protocol.md"
 ---

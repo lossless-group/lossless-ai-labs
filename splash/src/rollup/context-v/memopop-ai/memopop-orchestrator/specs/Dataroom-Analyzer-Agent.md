@@ -18,6 +18,8 @@ image_prompt: A sophisticated document processing pipeline showing diverse docum
 date_created: 2025-11-26
 date_modified: 2025-11-26
 publish: false
+site_uuid: d81bef7f-e37d-4160-8859-59a9521acac8
+hex_code: dbcr8r
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/specs/Dataroom-Analyzer-Agent.md"
 ---

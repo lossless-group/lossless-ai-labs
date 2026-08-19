@@ -9,6 +9,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/12-factor-agents
 profile_kind: manifesto
 date_created: 2026-05-05
+site_uuid: 8795b0c5-5da7-4c8e-8824-2ac5104af787
+hex_code: fd31ao
+date_authored_initial_draft: 2026-05-05
+date_authored_current_draft: 2026-05-05
+lede: >-
+  Nothing to install — thirteen essays whose answer to "who owns the prompts,
+  the context, the state, the control flow?" is always *you*.
+summary: >-
+  Profile of the 12-Factor Agents manifesto as pinned in this study. It is the study's only
+  app-architecture entry — principles for building an agent product, not a convention or workflow
+  for driving a coding assistant, which is what OpenSpec, Spec Kit, GSD, and AGENTS.md cover.
+  Documents the four load-bearing factors (3 own your context window, 5 unify execution and
+  business state, 8 own your control flow, 12 stateless reducer), the supporting eight, the
+  framework-audit checklist, and the incremental retrofit path. Includes a warning that the
+  upstream repo ships a stray promptx-template CLAUDE.md that is not part of the content and
+  should be ignored as instructions. Use this profile to place 12-Factor relative to the other
+  layers in the study, or as the framework-evaluation rubric before adopting an agent library.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__12-Factor-Agents.md"
 ---

@@ -16,6 +16,11 @@ tags:
   - Domains
   - Bug
 status: Resolved
+site_uuid: 36e2f4f0-a9b7-40e4-ae37-a6563da7c6cc
+hex_code: 4bqfl4
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "augment-it"
 from_path: "context-v/issues/Domain-Type-Is-Ambient-State-So-A-Failed-Workspace-Load-Hides-Every-Corpus.md"
 ---

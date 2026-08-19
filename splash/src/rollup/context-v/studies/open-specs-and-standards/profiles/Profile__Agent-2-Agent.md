@@ -9,6 +9,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/agent-2-agent
 profile_kind: wire-protocol
 date_created: 2026-05-05
+site_uuid: 198dcc8c-0c37-435f-ab0c-85d0b730dc2e
+hex_code: dwyigb
+date_authored_initial_draft: 2026-05-05
+date_authored_current_draft: 2026-05-05
+lede: >-
+  The load-bearing commitment isn't the JSON-RPC — it's *opacity*. An A2A
+  agent publishes skills, never its prompts, memory, or tools.
+summary: >-
+  Profile of the Agent2Agent protocol as pinned in this study. A2A is the study's agent-to-agent
+  wire protocol, the counterpart to MCP's agent-to-tool layer; read the two profiles together.
+  Covers the four primitives read straight out of `specification/a2a.proto` (AgentCard, Task,
+  Message, Part, plus Artifact), the eight-state TaskState lifecycle including the two
+  non-terminal interrupted states, the eleven RPCs and their REST bindings, the three update modes
+  (sync, SSE streaming, push webhook), the eight-company TSC governance, and the v0.3 to v1.0
+  breaking changes (kind-discriminator removal, SCREAMING_SNAKE_CASE enums). Use it to decide
+  whether a service belongs behind an A2A endpoint, and as the map to the normative .proto before
+  reading the 3611-line prose spec.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Agent-2-Agent.md"
 ---

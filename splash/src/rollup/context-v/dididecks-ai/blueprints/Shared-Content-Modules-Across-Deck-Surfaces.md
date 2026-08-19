@@ -1,6 +1,6 @@
 ---
 title: "Shared Content Modules Across Deck Surfaces"
-lede: "One typed content module per deck variant drives every surface — Scroll-UI sections, Play-UI slides, and the native-shapes PPTX exporter — so copy, structure, and citations cannot drift between the web deck and the file a funder opens in Google Slides. Proven on reach-edu-hub's eight pitch decks (2026-07-28): one generic renderer + 8 data modules replaced ~80 hand-written slide files, and the PPT exporter reads the same modules byte-for-byte."
+lede: "One typed content module per deck variant drives Scroll-UI, Play-UI, and the PPTX exporter — so copy cannot drift between surfaces."
 date_created: 2026-07-28
 date_modified: 2026-07-28
 authors:
@@ -18,6 +18,10 @@ tags:
   - Citations
   - DidiDecks
 publish: true
+site_uuid: ee059d7e-a0f3-4aa7-bdb8-b303d868e79a
+hex_code: 64etcg
+date_authored_initial_draft: 2026-07-28
+date_authored_current_draft: 2026-07-28
 from: "dididecks-ai"
 from_path: "context-v/blueprints/Shared-Content-Modules-Across-Deck-Surfaces.md"
 ---

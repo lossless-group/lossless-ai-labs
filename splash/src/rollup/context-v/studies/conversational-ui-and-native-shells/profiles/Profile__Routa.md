@@ -9,6 +9,31 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/routa
 profile_kind: Dual-backend (Next.js + Rust/Axum) multi-agent coordination platform, three client surfaces (Tauri desktop, web, VS Code extension)
 date_created: 2026-07-13
+site_uuid: 683bbbef-fc28-460c-8253-d06956bf6fbd
+hex_code: gvfktz
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
+lede: >-
+  The swappable unit turns out to be the session, not the workspace: two
+  sessions in one workspace can run two different agent CLIs.
+summary: >-
+  Source-cited profile of the Routa submodule for the conversational-UI-and-native-shells
+  study, and the study's positive result against which `Profile__Anything-LLM.md` and
+  `Profile__Dive.md` are measured. Establishes the distinction an agent should carry
+  forward: workspace is the addressing and coordination scope (schema-level
+  `workspace_id NOT NULL` across sessions, codebases, worktrees, tasks), while session is
+  the unit that actually receives a distinct process and adapter — `AcpManager` is a live
+  child-process registry, not a config cache, and `create_session` resolves provider,
+  model, cwd, and a `wsId`/`sid`-scoped MCP endpoint from real per-call arguments. Also
+  covers the dual-backend posture (Next.js and Rust/Axum as two independent
+  implementations aligned by `api-contract.yaml` plus CI parity jobs, not by shared code),
+  three client surfaces, and six protocol adapters. Read the repo's own `docs/adr/` and
+  `docs/ARCHITECTURE.md` before doing source archaeology — the ADRs pre-answer most
+  "deliberate or accidental" questions, and the architecture doc names its own unmet
+  invariants, including that the `default` workspace is transition scaffolding. Caveat:
+  this is the largest and most heavily tooled repo in the study, a full product rather
+  than a minimal pattern demonstration.
+publish: true
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Routa.md"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "lib/deck-overview — registry + filesystem walker; loadDeckOverview(deckSlug) returns DeckOverview with variants/slots/per-slide-file flags"
-lede: "Build-time data loader for landing dashboards. `loadDeckOverview(deckSlug)` returns a `DeckOverview` object — variant cards + per-variant slot lists + counts. Reads `decksRegistryPath` + `slotsRegistryPath` + `slidesComponentsRoot` from the shell's resolved options on `globalThis.__dididecksShellOptions`, so any client-site can call it without the shell knowing the consumer's import paths. Substantiation counts (people, headshots, investor firms, portfolio companies) from the chroma original were deliberately dropped — those are per-client substantiation layers; each client implements its own counts on top of this base if needed."
+lede: "`loadDeckOverview(deckSlug)` reads registry paths off `globalThis.__dididecksShellOptions`, so the shell never needs the consumer's imports."
 artifact_kind: lib
 ownership: shell
 mode: n/a
@@ -31,6 +31,9 @@ status_tags:
 date_created: 2026-06-06
 date_modified: 2026-06-07
 publish: true
+site_uuid: 82d565bd-41dd-4a90-abc9-b6223203e229
+hex_code: vx6mqs
+date_authored_current_draft: 2026-06-06
 from: "dididecks-ai"
 from_path: "context-v/sitemap/lib/deck-overview.md"
 ---

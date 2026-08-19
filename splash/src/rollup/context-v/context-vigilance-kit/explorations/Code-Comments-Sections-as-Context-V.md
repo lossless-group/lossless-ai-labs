@@ -1,6 +1,6 @@
 ---
 title: "Code-Comment Sections as Context-V Source"
-lede: "JSDoc treats code comments as the source of truth for API documentation. The same move might work one level up — treating *certain section-level comment blocks* in a codebase as the source of truth for context-v entries that today live as standalone markdown. The question is which kinds of context belong embedded in source files versus floating beside them."
+lede: "JSDoc made code comments the source of truth for API docs. Could section-level comment blocks be the source of truth for context-v entries?"
 date_created: 2026-05-11
 date_modified: 2026-05-11
 authors:
@@ -18,6 +18,10 @@ tags:
   - Build-Time-Tooling
   - Drift
 publish: true
+site_uuid: 25904877-2008-4fc2-a54e-4c09e0d7ca42
+hex_code: rttkvb
+date_authored_initial_draft: 2026-05-11
+date_authored_current_draft: 2026-05-11
 from: "context-vigilance-kit"
 from_path: "context-v/explorations/Code-Comments-Sections-as-Context-V.md"
 ---

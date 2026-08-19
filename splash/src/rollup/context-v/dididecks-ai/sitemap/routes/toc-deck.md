@@ -1,6 +1,6 @@
 ---
 title: "/toc/[deckSlug]/ — deck-level dual-surface review matrix (one row per slot × one column per variant)"
-lede: "The deck-level audit surface — distinct from `/toc/[deckSlug]/[variantSlug]/` which is the per-variant TOC. This route renders the full variants × slots matrix with dual-surface (Scroll + Play) ratings per cell, per-variant shippability rollups in the column headers, and a per-row drift indicator (`≠`) when scroll and play disagree. Effectively just embeds the `DeckMatrix` component with `showNav={true}` so the variant-chooser pills sit at the top. Reads from the same audits registry the per-slot SlideRankPill writes to — values match what reviewers actually clicked."
+lede: "The deck-level review matrix: variants × slots with dual-surface ratings per cell, distinct from the per-variant `/toc/[deck]/[variant]/`."
 artifact_kind: route
 ownership: shell
 mode: n/a
@@ -32,6 +32,9 @@ related_models:
 date_created: 2026-05-15
 date_modified: 2026-06-07
 publish: true
+site_uuid: 750b2f94-d7b7-4118-b6d9-7d57ce74046e
+hex_code: c57t6v
+date_authored_current_draft: 2026-05-15
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/toc-deck.md"
 ---

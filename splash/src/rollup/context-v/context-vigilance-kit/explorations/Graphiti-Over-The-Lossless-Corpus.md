@@ -1,6 +1,6 @@
 ---
 title: "Graphiti Over the Lossless Corpus"
-lede: "Chroma answers 'what did we write that sounds like this.' It cannot answer 'what changed about this, and when.' Graphiti's bi-temporal knowledge graph is the shape that second question wants — so we pointed it at the changelog rollup, the one slice of the corpus that is natively made of dated events, and left the other 28,000 chunks alone until the bet proves out."
+lede: "Chroma cannot answer \"what changed, and when.\" Graphiti's bi-temporal graph can — pointed at the changelog rollup until the bet proves out."
 date_created: 2026-08-14
 date_modified: 2026-08-14
 authors:
@@ -19,6 +19,10 @@ tags:
   - Context-Engineering
   - Ollama
 publish: true
+site_uuid: 7ad275e3-f8dd-4488-a7eb-e6b7ca7a663d
+hex_code: 0amtbg
+date_authored_initial_draft: 2026-08-14
+date_authored_current_draft: 2026-08-14
 from: "context-vigilance-kit"
 from_path: "context-v/explorations/Graphiti-Over-The-Lossless-Corpus.md"
 ---

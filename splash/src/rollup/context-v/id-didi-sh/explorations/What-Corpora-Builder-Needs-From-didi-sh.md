@@ -1,6 +1,6 @@
 ---
 title: "What Corpora-Builder Needs From didi.sh — the primitives list, handed over early"
-lede: "corpora-builder wants its workspace identity to come from didi.sh rather than a config constant. Increment 1 already supplies most of it — org, roles, didi_id — but two things are missing and one of them is structural: workspaces are not a thing here yet, and a CLI has nowhere to put a browser cookie. This enumerates exactly what the fourth consumer needs, so it can be specced alongside rather than discovered at integration time."
+lede: "corpora-builder wants workspace identity from didi.sh. Two gaps: workspaces aren't a thing here yet, and a CLI has nowhere to put a cookie."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -16,6 +16,11 @@ tags:
   - Identity
   - Workspaces
   - Consumer-Requirements
+site_uuid: b9f6be50-8a42-4a02-8ff8-d504312b483d
+hex_code: ywp7rx
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "id-didi-sh"
 from_path: "context-v/explorations/What-Corpora-Builder-Needs-From-didi-sh.md"
 ---

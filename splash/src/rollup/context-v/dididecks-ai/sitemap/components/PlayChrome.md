@@ -1,6 +1,6 @@
 ---
 title: "PlayChrome — DEPRECATED thin shim around DeckChrome"
-lede: "Deprecated as of v0.2. Use `<DeckChrome>` directly. Kept as a thin shim so any external code still importing `PlayChrome` keeps working through the transition. v0.1's heavy dark bottom-bar chrome was replaced by the calmstorm-flavored floating capsule per the `Restore-Calmstorm-Nav-Elegance-as-Themable-Shell-Primitives` plan. Remove in v0.3."
+lede: "Deprecated as of v0.2 — a thin shim around `<DeckChrome>` kept so external imports keep working. Removed in v0.3."
 artifact_kind: component
 ownership: shell
 mode: play-ui
@@ -25,6 +25,9 @@ status_tags:
 date_created: 2026-05-14
 date_modified: 2026-06-07
 publish: true
+site_uuid: bf3490e5-459e-4364-8949-8132495ad2e4
+hex_code: dhwh0p
+date_authored_current_draft: 2026-05-14
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/PlayChrome.md"
 ---

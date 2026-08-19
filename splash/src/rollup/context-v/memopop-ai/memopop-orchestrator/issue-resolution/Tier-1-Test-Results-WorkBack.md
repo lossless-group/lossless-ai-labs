@@ -16,6 +16,8 @@ tags: [Testing, Anti-Hallucination, Work-Back-AI, Seed-Stage, Validation]
 authors:
   - Michael Staton
 augmented_with: "Claude Code with Claude Opus 4.6"
+site_uuid: 203e1bc5-c227-4200-adc3-1eb50d96b316
+hex_code: 8kcawz
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/issue-resolution/Tier-1-Test-Results-WorkBack.md"
 ---

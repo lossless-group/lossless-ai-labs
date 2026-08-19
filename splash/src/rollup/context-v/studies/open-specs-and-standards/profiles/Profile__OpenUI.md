@@ -13,6 +13,25 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/openui
 profile_kind: framework
 date_created: 2026-05-06
+site_uuid: 42e091c5-28c9-498f-88da-720da80ed710
+hex_code: e212hh
+date_authored_initial_draft: 2026-05-06
+date_authored_current_draft: 2026-05-06
+lede: >-
+  JSON spends ~30% of its bytes on punctuation an LLM has no reason to emit;
+  the same seven UIs cost 47–67% fewer tokens in OpenUI Lang.
+summary: >-
+  Profile of Thesys's OpenUI as pinned in this study — not the W3C OpenUI Community Group and not
+  `wandb/openui`; the profile opens with that disambiguation. It is the study's generative-UI
+  entry: a streaming-first declarative language plus a React runtime that parses model output
+  token-by-token. Covers the measured token benchmarks and why output tokens are the column that
+  matters, the three streaming-safety mechanics (auto-close on incomplete input, ternary
+  peek-ahead across newlines, forward references resolved in later chunks), the
+  library-as-system-prompt pattern that collapses Zod types, LLM contract, and renderer grammar
+  into one source of truth, and the constrained-output tradeoff. Includes an honest fit note: the
+  runtime is React-only and therefore collides with the astro-knots prohibition, so read this for
+  the patterns worth stealing rather than as an adoption recommendation.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__OpenUI.md"
 ---

@@ -28,6 +28,7 @@ date_created: 2026-05-17
 date_modified: 2026-05-17
 site_uuid: c3e50dcd-14b1-4550-acdd-7da8f9b02c54
 hex_code: z2zlyz
+publish: true
 ---
 
 # In-App Agent Chat — Core Package Spec

@@ -1,6 +1,6 @@
 ---
 title: "Bridging PLG Self-Serve with the Previous Approach"
-lede: "A collaborator moved faster than expected and stood up Postgres on her own server, anchoring the data layer on cheap self-hosted infrastructure instead of the Powabase track the Cloud-Workspace spec was drifting toward. She's also angling for product-led-growth self-serve, where users won't tolerate triggering builds. The previous direction — Play-UI as static, no-JS, rigid-aspect Astro components authored by an agent — was DD-grade by construction. This exploration walks the gap between the two stances, names the actual disagreement (it's about the unit of authoring, not the engine), proposes a hybrid where slides live as structured spec rows that an agent writes and a build step compiles to Play-UI components, and pulls the PLG-vs-DD-grade fork into the open as a deliberate product decision rather than a drifted one."
+lede: "PLG self-serve vs. DD-grade Play-UI: the disagreement is the unit of authoring, not the engine — the hybrid compiles rows to components."
 date_authored_initial_draft: 2026-06-07
 date_authored_current_draft: 2026-06-07
 date_authored_final_draft:
@@ -31,6 +31,8 @@ tags:
 date_created: 2026-06-07
 date_modified: 2026-06-07
 publish: false
+site_uuid: e3f14271-189d-44fa-a132-c3e31dd2f53a
+hex_code: 3g1sc6
 from: "dididecks-ai"
 from_path: "context-v/explorations/Bridging-PLG-Self-Serve-with-Previous-Approach.md"
 ---

@@ -9,6 +9,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/symphony
 profile_kind: service-spec
 date_created: 2026-05-05
+site_uuid: 121b61c5-8196-4f26-821c-647ebf75673d
+hex_code: tk1uds
+date_authored_initial_draft: 2026-05-05
+date_authored_current_draft: 2026-05-05
+lede: >-
+  OpenAI shipped the spec, not the product: 2169 lines of RFC 2119 with
+  sections *deliberately made redundant* for coding agents.
+summary: >-
+  Profile of Symphony as pinned in this study. It is the study's only operations-layer artifact — a
+  long-running daemon that turns an issue tracker into the work queue for a fleet of coding agents,
+  taking the developer out of the per-feature loop entirely. Covers the four primitives
+  (`WORKFLOW.md` as in-repo policy with YAML front matter plus a strict Liquid prompt body, the
+  normalized Issue record, the per-issue Workspace and its two safety invariants, the eleven-phase
+  Run Attempt state machine), the poll-reconcile-dispatch loop, the distinction between
+  continuation retries and failure backoff, the deliberate in-memory-only recovery model, and the
+  soft coupling to Codex app-server. Flagged as an engineering preview by its own README — read the
+  safety invariants as the minimum bar, not the finished hardening.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Symphony.md"
 ---

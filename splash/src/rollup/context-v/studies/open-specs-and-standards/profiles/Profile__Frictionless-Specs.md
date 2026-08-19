@@ -9,6 +9,23 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/frictionless-specs
 profile_kind: standard
 date_created: 2026-05-03
+site_uuid: ee323d4a-eb28-4aa1-a6d1-7e77e28151d5
+hex_code: 4i6p5l
+date_authored_initial_draft: 2026-05-03
+date_authored_current_draft: 2026-05-03
+lede: >-
+  This one specs *datasets*: every RFC 2119 "MUST" in the prose maps onto a
+  constraint in a published JSON-Schema profile.
+summary: >-
+  Profile of the Data Package standard (the canonical Frictionless specification) as pinned in
+  this study. Explicitly a different category from OpenSpec and Spec Kit — those specify what
+  software should do, this specifies what a dataset is and how to read it. Covers the four
+  interlocking sub-specs (Data Package to Data Resource to Table Schema plus Table Dialect), the
+  prose-explains-why / schema-enforces-that discipline, the `$schema` profile-versioning pin,
+  the recipes-then-extensions-then-private-properties escalation, and a maturity comparison table
+  against the emerging agent specs. Read it as the reference exemplar when evaluating or designing
+  a new open spec, not as something to adopt for behavior specification.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Frictionless-Specs.md"
 ---

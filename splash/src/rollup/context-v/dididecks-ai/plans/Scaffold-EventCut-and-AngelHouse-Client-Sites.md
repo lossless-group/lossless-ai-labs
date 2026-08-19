@@ -16,6 +16,10 @@ tags:
   - EventCut
   - AngelHouse
 publish: false
+site_uuid: 7299100c-8f0a-4ac8-8fdf-a76b84d9f851
+hex_code: v911wg
+date_authored_initial_draft: 2026-08-02
+date_authored_current_draft: 2026-08-02
 from: "dididecks-ai"
 from_path: "context-v/plans/Scaffold-EventCut-and-AngelHouse-Client-Sites.md"
 ---

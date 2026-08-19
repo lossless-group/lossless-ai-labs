@@ -1,6 +1,6 @@
 ---
 title: "Phase A++ — Play Fidelity, In-Play Ranking, and Variant URL Safety"
-lede: "Phase A+ shipped the global nav, the floating in-scroll rank pill, a working `/play` runtime, two seeded per-slide files, and the TOC `[view →]` link — all the surfaces the founder asked for. Day-of smoke-test surfaced three concrete gaps: `/play/pitch/proto/` 404s because the proto variant has no `SLOTS[]` entry yet (the index-redirect was unconditional), the Play runtime doesn't yet have the elegant UI of calmstorm-decks (chrome feels like a dev tool, not a presentation surface), and the `<SlideRankPill>` is mounted in `/scroll` but not in `/play` even though the founder is reading-and-judging slides there too. Phase A++ closes all three without touching Phase A.7's still-blocked publish step, and seeds the calmstorm-primitive lift the larger Phase B will continue."
+lede: "Three Phase A+ gaps: `/play/pitch/proto/` 404s on a slot-less variant, Play chrome reads as a dev tool, and no rank pill inside `/play`."
 date_authored_initial_draft: 2026-05-12
 date_authored_current_draft: 2026-05-12
 date_authored_final_draft:
@@ -26,6 +26,8 @@ authors:
 date_created: 2026-05-12
 date_modified: 2026-05-12
 publish: false
+site_uuid: a55b9fca-4d21-41d9-b9fd-0687ef8779d3
+hex_code: o8t7iq
 from: "dididecks-ai"
 from_path: "context-v/plans/Phase-A-Plus-Plus-Play-Fidelity-In-Play-Ranking-and-Variant-URL-Safety.md"
 ---

@@ -21,6 +21,7 @@ site_uuid: e5acbd05-3887-4937-b46c-34074eaaab41
 hex_code: s968md
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+publish: true
 ---
 
 # In-App Agent Chat — As-Built vs. As-Specced

@@ -23,6 +23,7 @@ site_uuid: 8d875579-1d7a-4f63-a430-018f0985aa51
 hex_code: 7ogk6u
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+publish: true
 ---
 
 # Study Agent Harnesses + Conversational UI, Then Decide the Cross-Product Native Shell

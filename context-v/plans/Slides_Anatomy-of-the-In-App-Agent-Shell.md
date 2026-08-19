@@ -23,6 +23,7 @@ site_uuid: 3a6d4903-07bc-41c4-90e8-336b4e61fc97
 hex_code: adbf9x
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
+publish: true
 ---
 
 # The Anatomy of the In-App Agent Shell

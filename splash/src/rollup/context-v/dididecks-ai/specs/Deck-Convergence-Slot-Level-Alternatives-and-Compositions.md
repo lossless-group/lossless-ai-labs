@@ -1,6 +1,6 @@
 ---
 title: "Deck Convergence: Slot-Level Alternatives and Compositions"
-lede: "Generative AI can produce a hundred ways to pitch the same slide. The bottleneck is no longer making alternatives — it's converging on one. This spec moves the alternative from the deck to the slot, so 'we've been pitching it this way, make alternatives, we pick, we converge' becomes a durable, resumable artifact instead of a memory."
+lede: "Making alternatives isn't the bottleneck; converging is. Move the alternative from the deck to the slot so convergence is resumable."
 date_authored_initial_draft: 2026-08-04
 date_authored_current_draft: 2026-08-04
 date_authored_final_draft:
@@ -26,6 +26,8 @@ tags:
 date_created: 2026-08-04
 date_modified: 2026-08-04
 publish: false
+site_uuid: e7b0be84-5a86-4f00-872a-563b64a1bed4
+hex_code: qruwfo
 from: "dididecks-ai"
 from_path: "context-v/specs/Deck-Convergence-Slot-Level-Alternatives-and-Compositions.md"
 ---

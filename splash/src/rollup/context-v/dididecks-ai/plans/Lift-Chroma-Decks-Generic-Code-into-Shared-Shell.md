@@ -1,6 +1,6 @@
 ---
 title: "Lift chroma-decks' generic layouts, utilities, and registry-derivation helpers into the shared @dididecks/shell so every client-site inherits the same primitives instead of forking from chroma"
-lede: "Chroma-decks was built before the @dididecks/shell carve-out, so it carries the original implementations of several deck-generic primitives (PageAsDeckWrapper, SlideShell, mode-switcher, ModeToggle, deck-overview) inside client-specific paths. Each new client-site onboarded since then has either re-implemented the same behavior locally (humain-vc-decks initially had no keyboard nav at all) or copy-pasted from chroma without a clean import boundary. The humain-vc-decks onboarding on 2026-06-06 surfaced this drift directly when the new client's scroll pages shipped without scroll-snap, keyboard arrows, or a section counter — affordances every client should get for free from the shell. PageAsDeckWrapper has already been lifted (commit c87c643) as the first cut; this plan formalizes the rest of the audit list and sequences the remaining promotions so that (a) every client-site can consume the same vocabulary, (b) chroma's local copies migrate off cleanly without breaking the working production deck, and (c) future client onboardings start with a fresh-shell audit pass before any copy-paste."
+lede: "Chroma still owns deck-generic primitives that predate the shell carve-out — SlideShell, mode-switcher, deck-overview. Lift them."
 date_authored_initial_draft: 2026-06-06
 date_authored_current_draft: 2026-06-06
 date_authored_final_draft:
@@ -35,6 +35,8 @@ related:
 date_created: 2026-06-06
 date_modified: 2026-06-07
 publish: false
+site_uuid: eb069ccc-cce8-413b-9d88-37ccc286004e
+hex_code: t6d2t4
 from: "dididecks-ai"
 from_path: "context-v/plans/Lift-Chroma-Decks-Generic-Code-into-Shared-Shell.md"
 ---

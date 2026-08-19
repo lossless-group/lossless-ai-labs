@@ -1,6 +1,6 @@
 ---
 title: "Three-Modes Derivation for chroma-decks"
-lede: "How light / dark / vibrant get derived from Chroma's light-only brand. Captures the value choices, why we made them, and the dramatic-lean posture the user picked. Canonical reference: astro-knots/sites/fullstack-vc/src/styles/theme.css and the theme-system skill."
+lede: "How light / dark / vibrant get derived from Chroma's light-only brand — the value choices, and the dramatic-lean posture the user picked."
 date_created: 2026-05-11
 date_modified: 2026-05-11
 authors:
@@ -16,6 +16,10 @@ tags:
   - Dramatic-Lean
 status: Draft
 publish: false
+site_uuid: ea815dfe-1f94-457e-9fb8-d3b40d2491a0
+hex_code: 6kai6f
+date_authored_initial_draft: 2026-05-11
+date_authored_current_draft: 2026-05-11
 from: "dididecks-ai"
 from_path: "context-v/blueprints/Three-Modes-Derivation.md"
 ---

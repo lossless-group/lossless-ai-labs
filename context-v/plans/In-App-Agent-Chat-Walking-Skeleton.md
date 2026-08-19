@@ -20,6 +20,7 @@ site_uuid: 3723a8e9-8bdd-4320-8db3-8a1911d666dd
 hex_code: bnlba0
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
+publish: true
 ---
 
 # In-App Agent Chat — Walking Skeleton Plan

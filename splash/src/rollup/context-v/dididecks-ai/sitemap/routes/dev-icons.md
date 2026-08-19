@@ -1,6 +1,6 @@
 ---
 title: "/dev/icons — recurring design-review workbench"
-lede: "Originally a one-off Phase 4 review surface for the dual-surface icon pair on the TOC redesign. Founder picked Pair B 'Frameless glyphs' on 2026-05-17; rather than delete the route, the pattern was kept: a single /dev/* page per project that renders every candidate for a visual-primitive decision side-by-side at multiple sizes, on multiple backgrounds, inside the real composed context (chip-next-to-icon, drift case, missing-file dimmed case). Alternates live one directory deeper at `apps/deck-shell/src/components/icons/alternates/` and remain importable so the design history stays legible. Future icon families, chip variants, badge styles, button states extend this route with additional sections rather than spawning a new /dev/* route per decision."
+lede: "A kept design-review workbench — one `/dev/*` page rendering every candidate for a visual-primitive decision side by side, in real context."
 artifact_kind: route
 ownership: shell
 mode: utility
@@ -30,6 +30,9 @@ status_tags:
 date_created: 2026-05-17
 date_modified: 2026-05-17
 publish: true
+site_uuid: cddb7c21-cd5d-4ae3-85e8-8e57a418784f
+hex_code: 3bavu6
+date_authored_current_draft: 2026-05-17
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/dev-icons.md"
 ---

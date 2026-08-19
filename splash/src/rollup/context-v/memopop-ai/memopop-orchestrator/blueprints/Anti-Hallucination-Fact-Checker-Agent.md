@@ -16,6 +16,8 @@ tags: [Perplexity, Premium-Sources, Research, Citations, YAML-Outlines, Implemen
 authors:
   - Michael Staton
 augmented_with: "Claude Code with Claude Opus 4.6"
+site_uuid: f21f6417-1b12-43a9-a39b-15fa62f01836
+hex_code: iqphot
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/blueprints/Anti-Hallucination-Fact-Checker-Agent.md"
 ---

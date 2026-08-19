@@ -18,6 +18,11 @@ tags:
   - Changelog-Conventions
   - Browser-Drive
 status: Proven-Once
+site_uuid: e556fadc-ae70-4003-b055-d09fe60e98ca
+hex_code: ne4ysb
+date_authored_initial_draft: 2026-07-27
+date_authored_current_draft: 2026-07-27
+publish: true
 from: "augment-it"
 from_path: "context-v/loops/Implement-Feature-Loop.md"
 ---

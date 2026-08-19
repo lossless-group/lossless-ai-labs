@@ -1,6 +1,6 @@
 ---
 title: "Source-File Schema Reconciliation — One Way to Name, Fetch, and File a Source"
-lede: "Three apps independently arrived at the same model for capturing a web source as a markdown file — augment-it's content-ingest service, memopop's source-with-extracts convention, and the strategy-curator view model. The skeleton already agrees: date-slug filenames, fetched_at vs published_at, normalized_url as the dedup key, a two-tier candidate→promoted lifecycle. The vocabulary does not. This blueprint fixes the canonical field set, maps every existing name onto it, and states the adoption rule: copy-from, knots-style, never a shared package."
+lede: "Three apps built the same source-file model with different names. This fixes the canonical field set — adopted copy-from, not as a package."
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
 date_authored_final_draft:
@@ -21,6 +21,8 @@ tags:
   - Convergence
   - Augment-It
   - MemoPop
+site_uuid: b59ddbd8-17b3-4b18-8a45-003505c69603
+hex_code: 8d61qg
 from: "corpora-builder"
 from_path: "context-v/blueprints/Source-File-Schema-Reconciliation.md"
 ---

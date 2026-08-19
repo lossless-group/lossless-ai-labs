@@ -1,6 +1,6 @@
 ---
 title: "Slide audit registry — per-slot dual-surface review ratings"
-lede: "The only runtime-mutable data model in the filesystem. A single JSON file per client stores reviewer ratings per (variant, slot) cell, separately for Scroll-UI and Play-UI, mutated by the shell's /api/slide-rank POST endpoint as reviewers click the rating pill in the deck overlay."
+lede: "The only runtime-mutable model on disk: one JSON per client holding per-(variant, slot) ratings, written by `/api/slide-rank`."
 date_authored_initial_draft: 2026-06-07
 date_last_updated: 2026-06-07
 at_semantic_version: 0.0.1.0
@@ -17,6 +17,9 @@ runtime_mutability: high
 date_created: 2026-06-07
 date_modified: 2026-06-07
 publish: false
+site_uuid: 7609273b-1935-426f-b72f-372572694b63
+hex_code: 3feukx
+date_authored_current_draft: 2026-06-07
 from: "dididecks-ai"
 from_path: "context-v/models/Slide-Audit-Registry-Data-Model.md"
 ---

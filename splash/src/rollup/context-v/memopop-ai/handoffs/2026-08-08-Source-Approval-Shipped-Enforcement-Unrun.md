@@ -16,6 +16,11 @@ tags:
   - Membership-Gate
   - Memopop-Native
   - Data-Recovery
+site_uuid: 32ea997f-1b3c-4747-baeb-931f50aa2089
+hex_code: ledrnx
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: false
 from: "memopop-ai"
 from_path: "context-v/handoffs/2026-08-08-Source-Approval-Shipped-Enforcement-Unrun.md"
 ---
@@ -87,7 +92,7 @@ Two things came out of this:
 MEMOPOP_SOURCE_ENFORCEMENT=enforce                        # when ready
 ```
 
-The audit currently predicts: Panthalassa **42 of 49 citations off-set**, alpha-partners/ChromaDB 5 of 26, avalanche/ChromaDB 2 of 22.
+The audit currently predicts: the ocean-energy deal **42 of 49 citations off-set**, and two other client/ChromaDB runs at 5 of 26 and 2 of 22.
 
 **4. Watch for the coverage collapse.** `Citation-Coverage-Promoter.md` measured 7-of-33 curated sources actually cited *before* any ceiling existed. Enforcement is the ceiling; that plan is the floor and is unbuilt. The loop has an explicit stop condition: if an enforced run cites under ~⅓ of the approved set, stop and build the promoter first.
 

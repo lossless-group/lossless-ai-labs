@@ -1,6 +1,7 @@
 ---
 title: "Metadata on Paste — Make an Added Link Name Itself"
-lede: "Fixes the three defects in Pasted-Link-Shows-Host-Instead-Of-Title: paste performs no fetch, Preview discards the metadata it learns, and the preview pane renders Jina's header block as article text. The fetch and the parse already work — the metadata simply never reaches the row, so a pasted a16z article displays as `a16z.com` while the correct title sits on screen one row below. Resolves four decision points and implements the cheap tier the two-tier convention already specified."
+lede: >-
+  The fetch and the parse already work — the metadata just never reaches the row, so a pasted a16z article displays as `a16z.com`.
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
 date_authored_final_draft:
@@ -20,6 +21,8 @@ tags:
   - Metadata
   - Two-Tier-Fetch
   - Jina
+site_uuid: 5ff2f484-2bec-4ff1-bfc9-9edf39d8055f
+hex_code: bgye30
 from: "memopop-ai"
 from_path: "context-v/plans/Metadata-On-Paste-For-Source-Curation.md"
 ---

@@ -1,6 +1,7 @@
 ---
 title: "Crawl for Better Team Structured Output"
-lede: "Building a team slide takes analysts 1–2 hours of clicking. The orchestrator already writes prose about teams; what it doesn't do is hand back the structured roster — names, titles, durable photo URLs, professional socials — that the MemoPop app needs to render cards. Here's the option space for closing that gap."
+lede: >-
+  The orchestrator writes prose about teams but never returns the structured roster the app needs to render cards: names, titles, photo URLs.
 date_authored_initial_draft: 2026-05-07
 date_authored_current_draft: 2026-05-07
 date_authored_final_draft:
@@ -16,6 +17,9 @@ authors:
 image_prompt: A small grid of glowing team-card silhouettes floating above an open browser window, a stylized crawler bot threading silver lines between a company /team page and each card, social-network glyphs orbiting one card, a magnifying glass checking a photo URL for a green checkmark, deep-violet background, technical annotation labels in a monospaced font.
 date_created: 2026-05-07
 date_modified: 2026-05-07
+site_uuid: 7dc994c9-ca5e-4b30-963c-4a56cf48a5a6
+hex_code: mhl0ld
+publish: true
 from: "memopop-ai"
 from_path: "context-v/explorations/Crawl-for-Better-Team-Structured-Output.md"
 ---

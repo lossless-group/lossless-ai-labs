@@ -1,6 +1,6 @@
 ---
 title: "SlideCanvas — pure-CSS 16:9 wrapper that scales a 1920×1080 stage to fit any canvas"
-lede: "Per @dididecks/shell contract, rendered play decks must be static HTML + CSS — no JS in the scaling pipeline. SlideCanvas uses CSS container queries (`container-type: size`) to compute a unitless scale ratio from canvas size to the design size (1920×1080 by default), then applies `transform: scale()` to a `position: absolute` stage. `min(100cqw/designW, 100cqh/designH)` picks whichever axis is the binding constraint so the slide letterboxes correctly when canvas aspect ≠ 16:9. The route's `[slot].astro` is responsible for sizing the canvas; this component just translates that size into a scaled stage."
+lede: "Pure-CSS 16:9 stage — container queries scale a 1920×1080 design size to any canvas, so the Play-UI scaling pipeline needs no JS."
 artifact_kind: component
 ownership: shell
 mode: play-ui
@@ -24,6 +24,9 @@ status_tags:
 date_created: 2026-05-13
 date_modified: 2026-05-15
 publish: true
+site_uuid: aa84d68d-9e5b-466a-8cf6-b31e147e1770
+hex_code: 2s6ach
+date_authored_current_draft: 2026-05-13
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/SlideCanvas.md"
 ---

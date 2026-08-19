@@ -23,6 +23,7 @@ site_uuid: 68f070c6-d91a-43d3-a7ad-343d5d1af4ae
 hex_code: nc7k7l
 date_authored_initial_draft: 2026-07-06
 date_authored_current_draft: 2026-07-06
+publish: true
 ---
 
 # Unlock: the humain-vc team logs into a deployed augment-it

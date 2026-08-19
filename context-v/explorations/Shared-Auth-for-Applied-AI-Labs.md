@@ -31,6 +31,7 @@ site_uuid: 7c881567-0039-437a-8287-3ee42fdd61d7
 hex_code: itj5h0
 date_authored_initial_draft: 2026-05-17
 date_authored_current_draft: 2026-05-17
+publish: true
 ---
 
 # Shared Auth for Applied AI Labs

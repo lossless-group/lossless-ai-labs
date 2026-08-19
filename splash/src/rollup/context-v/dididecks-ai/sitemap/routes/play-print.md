@@ -1,6 +1,6 @@
 ---
 title: "/play/[deckSlug]/[variantSlug]/print/ — one-shot PDF export surface; renders the whole variant stacked for the browser print dialog"
-lede: "Print-styled route that renders every slot for a given (deck, variant) as a stacked sequence of SlideCanvas instances, page-broken with `page-break-after: always` per slide. No @page size override — the browser decides paper size; each SlideCanvas letterboxes inside that printable area via CSS-only container-query scaling (`cqi`/`cqb`). Reader prints via the browser dialog; PDF comes out as one slide per page. Static HTML/CSS, no JS — same constraint as Play-UI slides themselves, because runtime hydration would break the print render."
+lede: "Stacks every slot as SlideCanvas instances with `page-break-after: always`; no `@page` override, so the browser picks paper size."
 artifact_kind: route
 ownership: shell
 mode: play-ui
@@ -27,6 +27,9 @@ status_tags:
 date_created: 2026-05-15
 date_modified: 2026-06-07
 publish: true
+site_uuid: d94d3ca6-aafc-4bd1-886e-ed74d83523a6
+hex_code: ws2pmo
+date_authored_current_draft: 2026-05-15
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/play-print.md"
 ---

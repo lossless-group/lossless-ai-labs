@@ -9,6 +9,27 @@ study: studies/vector-databases
 profile_path: studies/vector-databases/pgvector
 profile_kind: postgres-extension
 date_created: 2026-05-27
+site_uuid: 70ff6d49-5fcb-455f-a1ea-dd2eb592d069
+hex_code: legjzv
+date_authored_initial_draft: 2026-05-27
+date_authored_current_draft: 2026-05-27
+lede: >-
+  About 3k lines of substantive C, and it inherits MVCC, WAL, replication,
+  PITR, and row-level security completely untouched.
+summary: >-
+  Source-cited profile of pgvector for the vector-databases study, representing
+  the "vectors are a column type" end of the design space. Covers the four
+  types (`vector`, `halfvec`, `sparsevec`, `bit`), the six distance operators
+  and their C kernels, HNSW and IVFFlat defaults and dimension caps, the
+  post-filter recall problem and its three fixes (raise `ef_search`, iterative
+  scan, partial indexes), quantization via expression indexes, and the fact
+  that there is no scope primitive at all — multi-tenancy is a column plus RLS.
+  An agent should read this whenever a project already runs Postgres, when
+  sizing the real cost of adding a separate vector tier, or when reading the
+  sibling memory-layers study: the closing section argues pgvector is the
+  substrate profile for most of those systems, and explains why that pattern
+  keeps recurring.
+publish: true
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__pgvector.md"
 ---

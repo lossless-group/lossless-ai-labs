@@ -1,6 +1,6 @@
 ---
 title: "A Structural Frontend for Single-Tenant Client Sites — What Step One Actually Requires"
-lede: "The goal is a client-site where DidiDecks *is* the site at that URL — same feature set everywhere, only the brand inherits locally. Today the shell ships review tooling, not a frontend, so every new client re-clones auth, routes, styles, and a landing page. Five workstreams close the gap, and four of them are the same motion the eventual dddecks.ai self-serve tenant needs."
+lede: "The shell ships review tooling, not a frontend — every new client re-clones auth, routes, styles, and a landing page."
 date_authored_initial_draft: 2026-08-04
 date_authored_current_draft: 2026-08-04
 date_authored_final_draft:
@@ -27,6 +27,8 @@ tags:
 date_created: 2026-08-04
 date_modified: 2026-08-04
 publish: false
+site_uuid: 28b8cfa5-4823-452f-9808-553101cff974
+hex_code: yqa320
 from: "dididecks-ai"
 from_path: "context-v/explorations/Structural-Frontend-for-Single-Tenant-Client-Sites.md"
 ---

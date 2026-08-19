@@ -1,6 +1,7 @@
 ---
 title: "Pasted Link Shows the Host Instead of the Title"
-lede: "Pasting an a16z article into the approval surface produced a row reading `a16z.com` — while the preview pane directly beneath it displayed `Title: GMV Retention: The Marketplace Metric Most Ignore` and `Published Time: 2022-04-28`. The metadata is fetched and parsed correctly; it just never reaches the row. Three separate defects on the same path: paste fetches nothing, preview discards what it learns, and the preview pane renders Jina's header block as if it were article content."
+lede: >-
+  A pasted a16z article renders as `a16z.com` while the preview pane one row below shows the correct title and publication date.
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
 date_authored_final_draft:
@@ -20,6 +21,8 @@ tags:
   - Metadata
   - Jina
   - Two-Tier-Fetch
+site_uuid: 1c54d38f-19b5-4173-b1d2-01f48e2488a8
+hex_code: fl5tw4
 from: "memopop-ai"
 from_path: "context-v/issues/Pasted-Link-Shows-Host-Instead-Of-Title.md"
 ---

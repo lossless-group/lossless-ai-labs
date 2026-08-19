@@ -1,6 +1,6 @@
 ---
 title: "Sitemap — Living Map of the DidiDecks Universal-Frontend-over-Client-Decks Architecture"
-lede: "A living mini-spec per artifact (route, component, per-slide component) across the dididecks-ai shell and its client-site consumers. Splits across two levels: this directory describes the *universal* shell artifacts inherited by every client deck; per-client overrides and consumer-authored artifacts live in each `client-sites/<client>/context-v/sitemap/`. Each entry is short, kept up-to-date with the running code, and cross-linked so an agent reading any one file can trace composition, theming inheritance, and the plan-of-record that produced it."
+lede: "One mini-spec per `@dididecks/shell` artifact — the universal layer; per-client overrides live in each client-site's own `context-v/`."
 date_authored_initial_draft: 2026-05-15
 date_authored_current_draft: 2026-06-07
 date_last_updated: 2026-06-07
@@ -19,6 +19,8 @@ authors:
 date_created: 2026-05-15
 date_modified: 2026-06-07
 publish: true
+site_uuid: 925f384a-9843-41ee-ab16-82709f515586
+hex_code: s3oiqn
 from: "dididecks-ai"
 from_path: "context-v/sitemap/README.md"
 ---

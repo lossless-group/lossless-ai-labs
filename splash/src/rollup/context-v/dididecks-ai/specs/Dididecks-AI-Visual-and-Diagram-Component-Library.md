@@ -1,6 +1,6 @@
 ---
 title: "Dididecks-AI: Visual and Diagram Component Library"
-lede: "DD-grade decks lean on a wide universe of recurring visual primitives — concept diagrams, mental models, classification schemes, frameworks. A reusable, AI-composable library of these primitives is what lets each new deck reach 'wow' without re-drawing from scratch."
+lede: "A reusable, AI-composable library of recurring visual primitives — diagrams, mental models, 2x2s — so each deck doesn't redraw from scratch."
 date_authored_initial_draft: 2026-05-11
 date_authored_current_draft: 2026-05-11
 date_authored_final_draft:
@@ -24,6 +24,8 @@ image_prompt: "An apothecary's cabinet of curiosities reimagined for ideas — e
 date_created: 2026-05-11
 date_modified: 2026-05-11
 publish: false
+site_uuid: 41853e76-7fb7-4b91-baf1-fada441559ea
+hex_code: whoy9w
 from: "dididecks-ai"
 from_path: "context-v/specs/Dididecks-AI-Visual-and-Diagram-Component-Library.md"
 ---

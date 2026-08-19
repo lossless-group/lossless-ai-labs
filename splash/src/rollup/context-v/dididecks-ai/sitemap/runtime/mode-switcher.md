@@ -1,6 +1,6 @@
 ---
 title: "runtime/mode-switcher — TS factory createModeSwitcher({client, defaultMode, respectSystemPreference}); per-client localStorage namespace"
-lede: "Three-mode state machine ('light' | 'dark' | 'vibrant'). Rewritten in TS as a factory; called once per deployment with the consumer's `client` value, which becomes the localStorage key prefix (`{client}:mode`) so multi-deck-on-one-domain scenarios don't collide. Installs the singleton on `window.modeSwitcher` so multiple `ModeToggle` instances on the same page share state. Sets `data-mode` on `<html>`; dispatches `mode-change` custom event so ARIA labels stay in sync. Lifted from `chroma-decks/src/utils/mode-switcher.js` on 2026-06-06 (the chroma original was JS; the shell version is TS with config + factory; chroma now consumes via a top-level side-effect shim that calls the factory with chroma's config)."
+lede: "Three-mode state machine factory, namespaced to `{client}:mode` in localStorage and installed as a `window.modeSwitcher` singleton."
 artifact_kind: runtime
 ownership: shell
 mode: both
@@ -35,6 +35,9 @@ status_tags:
 date_created: 2026-06-06
 date_modified: 2026-06-07
 publish: true
+site_uuid: 5ba29148-17fd-4b51-a1b1-2fd3fc5c5c49
+hex_code: o2ycp1
+date_authored_current_draft: 2026-06-06
 from: "dididecks-ai"
 from_path: "context-v/sitemap/runtime/mode-switcher.md"
 ---

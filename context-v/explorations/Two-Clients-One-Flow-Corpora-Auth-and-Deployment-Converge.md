@@ -29,6 +29,7 @@ site_uuid: a9f2f841-9468-48b6-aefc-3894eee0e95f
 hex_code: gegohy
 date_authored_initial_draft: 2026-07-06
 date_authored_current_draft: 2026-07-06
+publish: true
 ---
 
 # Two Clients, One Flow — Corpora by Domain-Type, Auth, and Deployment Converge

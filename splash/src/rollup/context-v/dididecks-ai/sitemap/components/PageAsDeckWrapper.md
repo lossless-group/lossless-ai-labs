@@ -1,6 +1,6 @@
 ---
 title: "PageAsDeckWrapper — Scroll-UI navigation primitive: scroll-snap + keyboard + section counter + reveal-on-intersect"
-lede: "Wraps a series of `<section data-slot data-variant>` children in a scroll-snap deck. Delivers: vertical scroll-snap, the full keyboard contract (Arrow ↑/↓, PageUp/Down, Home, End, `c` chrome toggle, `f` fullscreen), double-click step, floating section indicator top-right (`NN / total`), `#s-N` hash navigation on load, IntersectionObserver-driven reveal animations for `.reveal-item` children, and the event protocol (dispatches `deck:section-changed`, listens for `deck:section-prev` / `deck:section-next` so DeckChrome buttons drive the same nav as keyboard / scroll). Lifted from `chroma-decks/src/layouts/PageAsDeckWrapper.astro` on 2026-06-06."
+lede: "Wraps `<section data-slot data-variant>` children in a scroll-snap deck: keyboard contract, section counter, and `#s-N` hash nav."
 artifact_kind: component
 ownership: shell
 mode: scroll-ui
@@ -37,6 +37,9 @@ status_tags:
 date_created: 2026-06-06
 date_modified: 2026-06-07
 publish: true
+site_uuid: bb9986fa-827b-471d-abfa-abeee14e7076
+hex_code: 0ghj58
+date_authored_current_draft: 2026-06-06
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/PageAsDeckWrapper.md"
 ---

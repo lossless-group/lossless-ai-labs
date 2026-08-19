@@ -31,6 +31,9 @@ depends_on:
 supersedes:
   - "[[lossless-monorepo/content/specs/Create-a-Collaborative-Markdown-based-Desktop-Publisher]]"
 image_prompt: "An open document that is simultaneously a stack of paper and a lattice of glowing structured files — markdown, CSS, a CSV table, an SVG curve — hovering in ordered layers, warm light, precise geometry."
+hex_code: uzgr7l
+date_authored_initial_draft: 2026-08-15
+date_authored_current_draft: 2026-08-15
 from: "flave"
 from_path: "context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md"
 ---

@@ -1,6 +1,7 @@
 ---
 title: "Grill Me: A Per-Section User-Input Moment in MemoPop Runs"
-lede: "A proposed pause-point in the orchestrator where, for any given section, MemoPop turns the question around and grills the user — surfacing what it found, what's ambiguous, and what choice the user (not the model) should make about the synthesized output. First user is the competitive section, where the gap between an exhaustive research file and a synthesized memo section is large enough that the model shouldn't pick the synthesis frame alone. Designed generic from day one so other sections can adopt it without re-architecting."
+lede: >-
+  A pause-point where MemoPop grills the user — the competitive section's synthesis frame is a judgment the model shouldn't make alone.
 date_authored_initial_draft: 2026-06-09
 date_authored_current_draft: 2026-06-09
 date_authored_final_draft:
@@ -21,6 +22,9 @@ tags:
   - Architecture
 authors:
   - Michael Staton
+site_uuid: 4ba81081-8e0f-488e-8efb-c6a9ee38ef47
+hex_code: j66mvp
+publish: true
 from: "memopop-ai"
 from_path: "context-v/explorations/Grill-Me-Per-Section-User-Input-Moment.md"
 ---

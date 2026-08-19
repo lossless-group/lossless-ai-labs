@@ -1,6 +1,6 @@
 ---
 title: "Plans Inventory 2026-05-16 — Post-DeckOverlay, Post-/play-Chooser-Fix, Post-Status-Sweep"
-lede: "Snapshot of `dididecks-ai/context-v/plans/` as of 2026-05-16, four days after Phase A+ shipped and two days after the Restore-Calmstorm-Nav-Elegance partial landed. Supersedes `Plans-Inventory-and-Phase-A-Outcome.md` (which froze at 2026-05-12 and predates the Scroll-UI/Play-UI framing correction). Designed for a cold-start future-session land: what shipped, what's running, what's actively partial, what's deferred, and three reasonable directions for the next iteration."
+lede: "Cold-start snapshot of `context-v/plans/` at 2026-05-16 — what shipped, what's partial, what's deferred. Supersedes the 05-12 inventory."
 date_authored_initial_draft: 2026-05-16
 date_authored_current_draft: 2026-05-16
 date_last_updated: 2026-05-16
@@ -23,6 +23,8 @@ authors:
 date_created: 2026-05-16
 date_modified: 2026-05-16
 publish: false
+site_uuid: 933eb4f2-2cd2-4e64-9018-adee1572c4d3
+hex_code: edbmwn
 from: "dididecks-ai"
 from_path: "context-v/explorations/Plans-Inventory-2026-05-16.md"
 ---

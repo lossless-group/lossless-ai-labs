@@ -1,6 +1,6 @@
 ---
 title: "Storage Seam — one interface, three implementations, and the workspace that names the bucket"
-lede: "Phase 1 of the MVP plan. A CorpusStore abstraction with local, R2, and caching implementations, proven by a single conformance suite that runs against every backend with no test-side branching — because a seam only earns its keep if swapping what's behind it changes nothing above it. Carries the WorkspaceResolver seam too, so didi.sh wires in later as a swap rather than a rewrite."
+lede: "A CorpusStore over local, R2, and cache, proven by one conformance suite that runs against every backend with no test-side branching."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -17,6 +17,11 @@ tags:
   - Cloudflare-R2
   - Identity
   - Phase-1
+site_uuid: 9761a313-bc42-4cef-a20c-7e98a2bb0a9b
+hex_code: y3v71z
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "corpora-builder"
 from_path: "context-v/specs/Storage-Seam.md"
 ---

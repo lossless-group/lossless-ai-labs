@@ -9,6 +9,29 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/kaas
 profile_kind: Tauri (Rust backend) + React frontend, multi-provider chat client
 date_created: 2026-07-13
+site_uuid: 549aa797-958b-4b72-99a3-1bbe3bc57be4
+hex_code: 8993jw
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
+lede: >-
+  Every credential, provider quirk, and even context assembly lives in Rust;
+  React gets typed `invoke()` calls and nothing else.
+summary: >-
+  Source-cited profile of the Kaas submodule for the conversational-UI-and-native-shells
+  study. It is the study's compact single-shell reference (Tauri + React) and its
+  cleanest example of persistence and provider dispatch living entirely in the Rust
+  backend. Covers: the SeaORM/SQLite `Repository` (one connection, code-based migrations,
+  soft-delete by default with messages the sole hard-delete exception, transactional
+  message-plus-content writes, backend-side context assembly); the closed `LLMClient`
+  enum over a forked `async-openai`, where adding a provider means one variant plus one
+  config pair plus one executor constructor and no change to dispatch; per-provider
+  options structs stored as re-validated JSON on the conversation row, discarded on
+  provider switch by design; and the two-transport IPC split — typed commands for CRUD,
+  raw `window.emit`/`listen` string sentinels for streaming. Explicit non-answers:
+  no MCP, no tool-calling, no dual-shell, no per-request cancellation, no WAL tuning.
+  Use it as the provider-abstraction reference; use `Profile__Openagent.md` for MCP and
+  skills, `Profile__Dive.md` for dual-shell.
+publish: true
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Kaas.md"
 ---

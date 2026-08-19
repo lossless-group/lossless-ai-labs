@@ -16,6 +16,8 @@ tags: [Justify-Mode, Web-Research, Fallback, Internal-Context, Issue-Resolution]
 authors:
   - Michael Staton
 augmented_with: "Claude Code with Claude Opus 4.6"
+site_uuid: cccb2086-4ab7-4b8d-b229-94822b6b6507
+hex_code: cajk6u
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/issue-resolution/Getting-AI-to-Refocus-when-Web-Research-is-empty.md"
 ---

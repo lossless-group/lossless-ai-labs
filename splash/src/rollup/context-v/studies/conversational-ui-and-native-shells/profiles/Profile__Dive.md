@@ -9,6 +9,28 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/dive
 profile_kind: Dual-shell (Tauri + Electron) MCP Host desktop app, React + Jotai frontend, Python MCP host subprocess
 date_created: 2026-07-13
+site_uuid: 62991315-6e2d-49a4-9ba7-3ddbcd995b17
+hex_code: 0qs4ix
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
+lede: >-
+  Two native shells, neither containing a line of agent logic — both are thin
+  supervisors spawning the same Python subprocess.
+summary: >-
+  Source-cited profile of the Dive submodule for the conversational-UI-and-native-shells
+  study. It is the study's dual-shell (Tauri + Electron) data point and its clearest
+  example of the shell reduced to a process supervisor around a language-agnostic
+  backend. Three things an agent should take from it: (1) the actual MCP host is a
+  separate Python repo (`dive-mcp-host`, an uninitialized submodule here) launched as
+  `dive_httpd`, with port discovery via a filesystem status file and all agent logic
+  reached over plain localhost `fetch()` — so reading `dive/` alone shows shell
+  supervision, never MCP protocol handling; (2) the per-tool control model — a
+  server-level `enabled` flag plus a per-sub-tool `exclude_tools` list, both persisted
+  by POSTing the entire config, with failures degrading to a per-server disabled toggle;
+  (3) dated migration evidence from git history for estimating what a shell migration
+  actually costs and how long "in progress" can last. Cite it when arguing that
+  pushing agent logic out of the shell is what makes shell choice reversible.
+publish: true
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Dive.md"
 ---

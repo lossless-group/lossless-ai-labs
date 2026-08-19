@@ -20,6 +20,11 @@ tags:
   - Affiliations
   - Pulse-Pattern
 status: Shipped
+site_uuid: 2b0b4a7f-9684-4db2-b043-6ef0681a3069
+hex_code: udksef
+date_authored_initial_draft: 2026-07-22
+date_authored_current_draft: 2026-07-22
+publish: true
 from: "augment-it"
 from_path: "context-v/plans/Augment-From-DB-Phase-4-People-Reveal-And-Add-Person.md"
 ---

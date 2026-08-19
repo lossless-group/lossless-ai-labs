@@ -22,6 +22,7 @@ site_uuid: 3bf9227d-f5d3-44e3-b961-ea619a04b052
 hex_code: 9ep3mv
 date_authored_initial_draft: 2026-07-24
 date_authored_current_draft: 2026-07-24
+publish: true
 ---
 
 # State-Inspector — a universal need across the ai-labs apps

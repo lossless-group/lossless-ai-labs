@@ -19,6 +19,7 @@ site_uuid: 648b9efe-7431-4fac-808a-906037f91f95
 hex_code: qisp1e
 date_authored_initial_draft: 2026-05-08
 date_authored_current_draft: 2026-05-08
+publish: true
 ---
 
 # Add a Chroma Local UI Interface

@@ -9,6 +9,29 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/anything-llm
 profile_kind: Node/Express backend + Prisma/SQLite + React frontend, multi-user document-chat platform
 date_created: 2026-07-13
+site_uuid: 7c95712a-ae10-4fbe-a60b-05ecb1e98e79
+hex_code: j3p25r
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
+lede: >-
+  A "workspace" is a config row over one always-shared backend: the chat
+  provider varies per workspace, the vector DB never can.
+summary: >-
+  Source-cited profile of the AnythingLLM submodule for the
+  conversational-UI-and-native-shells study, and the study's workspace-switching
+  reference. Opens with a correction to the study brief: this checkout is the
+  Docker/Node web app (`server/`, `collector/`, `frontend/`), not a native shell, so it
+  answers nothing about Tauri-vs-Electron — use `Profile__Dive.md` and `Profile__5ire.md`
+  for that. Its load-bearing content is the answer to the study's sub-inquiry 2
+  ("adapter swap or shallow filter?"): the `workspaces` Prisma row parameterizes one
+  shared Express process; `resolveProviderConnector` rebuilds the LLM connector from
+  `workspace.chatProvider` on every chat call, while `getVectorDbClass()` takes no
+  workspace argument at all and resolves `process.env.VECTOR_DB` for the whole server,
+  with per-workspace isolation coming only from a `slug`-keyed namespace/table.
+  An agent should cite this profile when arguing that config-row parameterization is
+  not equivalent to per-context adapter isolation, and should read `Profile__Routa.md`
+  for the positive counterpart.
+publish: true
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Anything-LLM.md"
 ---

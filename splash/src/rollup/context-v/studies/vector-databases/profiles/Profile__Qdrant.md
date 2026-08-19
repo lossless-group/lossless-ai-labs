@@ -9,6 +9,27 @@ study: studies/vector-databases
 profile_path: studies/vector-databases/qdrant
 profile_kind: vector database (Rust core; server / cluster / embedded)
 date_created: 2026-05-27
+site_uuid: 97a386f8-a66a-4b3b-b4b3-1d12e9532184
+hex_code: rwroxw
+date_authored_initial_draft: 2026-05-27
+date_authored_current_draft: 2026-05-27
+lede: >-
+  Qdrant estimates a filter's cardinality *before* searching, which is why
+  recall doesn't collapse the moment you filter on `tenant_id`.
+summary: >-
+  Source-cited profile of Qdrant for the vector-databases study, and the
+  closest API-shape match for a migration off Chroma. The centerpiece is the
+  filter-push-down mechanism, traced through four code paths: cardinality-driven
+  strategy selection, the in-graph `FilteredScorer` predicate, `payload_m`
+  additional payload links, and the opt-in ACORN traversal. Also covers the
+  free-form JSON payload model, the eight payload index types, first-class
+  scalar/product/binary/Turbo quantization, prefetch-plus-RRF hybrid retrieval,
+  and the WAL / segment / shard / Raft persistence stack. An agent should read
+  this when filter recall is the problem, when planning a Chroma-to-Qdrant move
+  (the profile carries a concept mapping table and names the behavioral
+  differences to expect), or when studying Mem0's adapter as the reference
+  application driving Qdrant.
+publish: true
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__Qdrant.md"
 ---

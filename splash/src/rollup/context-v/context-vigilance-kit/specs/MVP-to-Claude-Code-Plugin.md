@@ -1,6 +1,6 @@
 ---
 title: "MVP: context-v as a Claude Code Plugin"
-lede: "The fastest path to a true kit is not the Chroma memory system the June specs planned — it's a plugin: the context-vigilance skill we already wrote, a scaffolder, and doc templates, packaged so `/plugin install` is the whole onboarding. Chroma becomes an upgrade an adopter grows into, invoked as `/cv:init chroma` only when their tree earns it."
+lede: "The kit's MVP is not the Chroma memory system the June specs planned — it's a plugin where `/plugin install` is the whole onboarding."
 date_authored_initial_draft: 2026-07-21
 date_authored_current_draft: 2026-08-02
 date_authored_final_draft:
@@ -23,6 +23,8 @@ authors:
 date_created: 2026-07-21
 date_modified: 2026-08-02
 publish: true
+site_uuid: cadd7323-af1b-49d7-b5ec-8ad87ef022f1
+hex_code: oobyyd
 from: "context-vigilance-kit"
 from_path: "context-v/specs/MVP-to-Claude-Code-Plugin.md"
 ---

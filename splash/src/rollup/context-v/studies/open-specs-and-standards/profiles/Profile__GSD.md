@@ -9,6 +9,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/get-shit-done
 profile_kind: tool
 date_created: 2026-05-05
+site_uuid: 04f5330d-0816-4dbb-8031-a093d82a834f
+hex_code: i63ife
+date_authored_initial_draft: 2026-05-05
+date_authored_current_draft: 2026-05-05
+lede: >-
+  GSD's wager is that the limiting factor is context rot, not spec rigor — so
+  it ships no spec grammar and resets the window per task.
+summary: >-
+  Profile of Get Shit Done as pinned in this study. GSD is the third design path in the
+  spec-and-workflow cluster alongside OpenSpec and Spec Kit: where those give you a spec format,
+  GSD gives you an orchestrator. Covers the typed `.planning/` file inventory, the XML `<task>`
+  primitive with its `<verify>` and `<done>` tags, the six-command loop and its wave-based
+  parallelism, the 16-runtime installer, the 11 runtime hooks (including prompt-injection scanning
+  of planning artifacts, which are themselves system prompts), atomic per-task commits with
+  file-locked STATE.md writes, and the heavier-than-average recovery surface. Use it to understand
+  the context-rot argument and the thin-orchestrator pattern; note the profile's explicit list of
+  cases where a spec artifact matters more than a workflow.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__GSD.md"
 ---

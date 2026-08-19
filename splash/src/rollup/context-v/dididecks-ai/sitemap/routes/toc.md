@@ -1,6 +1,6 @@
 ---
 title: "/toc/[deckSlug]/[variantSlug]/ — bird's-eye-view audit dashboard with rank pills + scaffold buttons"
-lede: "Static table-of-contents route emitted for every (deck, variant) pair in the consumer's `DECKS` registry. Renders one row per slot from `SLOTS[variantSlug]`, each row showing the slot number, title, five rank pills (mirroring SlideRankPill's enum), a scaffold button that POSTs to /api/slide-decompose, and — when the per-slide file exists — a `[view →]` link to `/play/{deck}/{variant}/{slot}/`. The TOC is the read-only-on-deploy / read-write-in-dev audit surface; it complements (does not replace) the in-place SlideRankPill on scroll-deck routes."
+lede: "Per-variant TOC — one row per slot with five rank pills and a scaffold button POSTing to `/api/slide-decompose`. Read-write in dev only."
 artifact_kind: route
 ownership: shell
 mode: n/a
@@ -24,6 +24,9 @@ status_tags:
 date_created: 2026-05-12
 date_modified: 2026-05-15
 publish: true
+site_uuid: e3622bb4-4aec-49c7-b551-176817435a3b
+hex_code: s3dmcm
+date_authored_current_draft: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/toc.md"
 ---

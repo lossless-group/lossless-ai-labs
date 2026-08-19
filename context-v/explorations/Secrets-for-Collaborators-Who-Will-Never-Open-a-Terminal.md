@@ -22,6 +22,7 @@ site_uuid: d33ff596-1f7d-4d5d-813c-d7a6d299cb4b
 hex_code: wzzb9e
 date_authored_initial_draft: 2026-07-25
 date_authored_current_draft: 2026-07-25
+publish: true
 ---
 
 # Secrets for Collaborators Who Will Never Open a Terminal

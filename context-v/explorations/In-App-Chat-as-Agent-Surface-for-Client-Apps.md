@@ -26,6 +26,7 @@ site_uuid: 836c1f80-0e73-4783-b885-9d1719f75a6a
 hex_code: orc3qj
 date_authored_initial_draft: 2026-05-17
 date_authored_current_draft: 2026-05-17
+publish: true
 ---
 
 # In-App Chat as the Agent Surface for Client Apps

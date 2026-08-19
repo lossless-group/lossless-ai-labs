@@ -1,6 +1,6 @@
 ---
 title: "Data + content models in dididecks-ai (as-observed-from-filesystem)"
-lede: "A reference set for a collaborator designing the remote database. We've been using the local filesystem as a polyglot data store across calmstorm-decks, chroma-decks, and humain-vc-decks — different shapes per client, but with recoverable patterns. This directory documents what the patterns actually are so the remote DB design doesn't have to be guessed at."
+lede: "What the client-sites' filesystem-as-database actually looks like — so the collaborator designing the remote DB stops guessing at shapes."
 date_authored_initial_draft: 2026-06-07
 date_authored_current_draft: 2026-06-07
 date_first_published: 2026-06-07
@@ -14,6 +14,8 @@ authors:
 date_created: 2026-06-07
 date_modified: 2026-06-07
 publish: false
+site_uuid: e7f70dc5-20a0-4253-a474-4245ca1c8a26
+hex_code: lttewy
 from: "dididecks-ai"
 from_path: "context-v/models/README.md"
 ---

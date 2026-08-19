@@ -33,6 +33,7 @@ site_uuid: 47541775-5643-46b0-b3d7-66fbf71c5ff2
 hex_code: yz3l5f
 date_authored_initial_draft: 2026-06-27
 date_authored_current_draft: 2026-06-27
+publish: true
 ---
 
 # The Source Curation Gate

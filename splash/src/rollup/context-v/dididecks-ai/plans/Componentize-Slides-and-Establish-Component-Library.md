@@ -1,6 +1,6 @@
 ---
 title: "Componentize Slides and Establish Component Library"
-lede: "Walk the calmstorm-decks slide deck page-by-page, extracting raw inline HTML+CSS into a properly-taxonomized Astro component library while simultaneously building the design system that backs it. The end state: every slide variant composes from named, reusable parts; `components/basics/` stops being a dumping ground; and the work doubles as the first concrete proof of the sibling Visual-and-Diagram-Component-Library spec."
+lede: "Walk calmstorm-decks slide by slide, extracting inline HTML+CSS into a taxonomized Astro component library plus the design system behind it."
 date_created: 2026-05-11
 date_modified: 2026-05-16
 authors:
@@ -31,6 +31,10 @@ deferral_note: |
   where the UI mode matters, mode-agnostic naming where it doesn't.
   The substance of this plan remains valid; only its execution venue moved.
 publish: false
+site_uuid: 1771e91e-6138-4605-ade7-a79e2ec4f492
+hex_code: 7ljq4q
+date_authored_initial_draft: 2026-05-16
+date_authored_current_draft: 2026-05-16
 from: "dididecks-ai"
 from_path: "context-v/plans/Componentize-Slides-and-Establish-Component-Library.md"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Engagement telemetry — PageView + Action append-only logs"
-lede: "Reader-behavior telemetry colocated in the same astro:db as the auth surface. Captures every page view + every meaningful action (clicked CTA, opened TOC, rated a slot, jumped to a slot) tied to a session. Append-only — never updated. Foundation for 'who looked at what for how long' reporting back to founders."
+lede: "Append-only PageView + Action logs in the auth astro:db — the foundation for 'who read what, for how long' reporting back to founders."
 date_authored_initial_draft: 2026-06-07
 date_last_updated: 2026-06-07
 at_semantic_version: 0.0.1.0
@@ -16,6 +16,9 @@ storage: "astro:db (same DB as auth surface — auth.db locally, Turso remote)"
 date_created: 2026-06-07
 date_modified: 2026-06-07
 publish: false
+site_uuid: dd277eab-a224-431a-ad04-78e44fe40e87
+hex_code: tt5agc
+date_authored_current_draft: 2026-06-07
 from: "dididecks-ai"
 from_path: "context-v/models/Engagement-Telemetry-Data-Model.md"
 ---

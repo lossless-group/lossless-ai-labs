@@ -9,6 +9,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/llms-txt
 profile_kind: file-convention
 date_created: 2026-05-05
+site_uuid: fbc2da2e-fd68-4497-bb7c-f0594a3ec864
+hex_code: f3v4oq
+date_authored_initial_draft: 2026-05-05
+date_authored_current_draft: 2026-05-05
+lede: >-
+  The only behavioral semantic in the whole format is an H2 named `##
+  Optional` — links there may be dropped when context is tight.
+summary: >-
+  Profile of the llms.txt proposal as pinned in this study. It is the website-side counterpart to
+  AGENTS.md's repository-side convention, and the two profiles should be read as a pair. Covers the
+  strict-but-tiny format (H1 required, blockquote summary, non-heading preamble, H2 link lists),
+  the `## Optional` context-budget semantic, the companion convention of serving `.md` sidecars at
+  every HTML URL, the `llms-ctx.txt` / `llms-ctx-full.txt` pre-expansion pattern, and the reference
+  Python parser and `llms_txt2ctx` CLI. Also records the honest adoption gap: unlike AGENTS.md and
+  A2A, llms.txt is steward-by-personality (Answer.AI / Jeremy Howard) rather than by foundation.
+  Use it when publishing docs for LLM consumption or when deciding between llms.txt, robots.txt,
+  and sitemap.xml.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__llms-txt.md"
 ---

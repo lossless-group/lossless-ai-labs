@@ -10,6 +10,27 @@ profile_path: studies/vector-databases/milvus
 profile_kind: distributed-server + embedded (Lite) + hosted (Zilliz Cloud)
 pinned_sha: 9a455d61ec
 date_created: 2026-05-27
+site_uuid: 4568ee4b-9be2-447e-8564-38d64191cd13
+hex_code: sptkn7
+date_authored_initial_draft: 2026-05-27
+date_authored_current_draft: 2026-05-27
+lede: >-
+  One Milvus deployment is not a process — it is nine roles, three external
+  dependencies, and a C++ ANN core reached through cgo.
+summary: >-
+  Source-cited profile of Milvus for the vector-databases study, pinned at
+  `9a455d61ec`. It is the distributed-by-default entry: the profile enumerates
+  the nine roles from `cmd/roles/roles.go`, the etcd / object-storage /
+  message-queue dependencies, the Knowhere index registry (HNSW, IVF, DiskANN,
+  SCANN, GPU CAGRA, sparse), the ANTLR filter grammar including PostGIS-style
+  geometry predicates, the five compaction policies, and the four-level
+  database / collection / partition / partition-key tenancy model. An agent
+  should read this to size Milvus honestly against a workload — the profile
+  states plainly that the Lossless corpus does not need it and names the
+  specific conditions (past a single-node ceiling, k8s plus S3 plus Kafka
+  already running, DiskANN or GPU indexes needed, very high tenant count) under
+  which the complexity starts to pay.
+publish: true
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__Milvus.md"
 ---

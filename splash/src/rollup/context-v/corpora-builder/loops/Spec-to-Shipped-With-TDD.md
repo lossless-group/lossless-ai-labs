@@ -1,6 +1,6 @@
 ---
 title: "Spec to Shipped with TDD — the two-role loop that runs unattended"
-lede: "The lifecycle the operator has been running by intuition, written down so an agent can run it alone: Lead Product Manager writes the spec and enumerates its tests in natural language; Lead Engineer implements until the ledger is green; issues feed back until the spec closes. Status is derived by running the suite, never asserted in prose — because prose is what every previous loop silently lost track of."
+lede: "A two-role loop — PM enumerates the tests, engineer implements to green — with status derived by running the suite, never asserted in prose."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -19,6 +19,11 @@ tags:
   - Context-Vigilance
   - Git-Conventions
   - Changelog-Conventions
+site_uuid: f3010b91-2384-4bf5-a070-f8815de71022
+hex_code: 3jpnpl
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "corpora-builder"
 from_path: "context-v/loops/Spec-to-Shipped-With-TDD.md"
 ---

@@ -1,6 +1,7 @@
 ---
 title: "Human-Curated Source Sets and Per-Firm RAG for Memo Narrative"
-lede: "What if 'fighting Perplexity' is the wrong frame — and the fix is to keep its one-shot take as commentary, route the real research through validated harvesters, then let the analyst rank and prune sources in a GUI before any prose gets written, with the firm's own PDFs and transcripts as a parallel standing corpus the writer can cite from? Here's the pipeline shape and the retrieval-provider option set that supports it."
+lede: >-
+  Keep Perplexity's take as quarantined commentary and route real research through validated harvesters plus a per-firm standing RAG store.
 date_authored_initial_draft: 2026-05-22
 date_authored_current_draft: 2026-05-22
 date_authored_final_draft:
@@ -25,6 +26,9 @@ authors:
 image_prompt: A three-station workshop bench — left station is a librarian-harvester pulling real URLs from a sea of stamped-and-rejected slips, center station is a human curator at a tall lectern dragging rows in a list to rank them with red X's beside discards, right station is a writer at a typewriter producing prose with footnote markers tethered by glowing threads back to the curator's ranked list; a parallel filing cabinet labeled "firm corpus — PDFs, transcripts, notes" feeds into the writer's desk; deep-violet uplight, hand-drawn blueprint annotations in monospaced font, technical-illustration aesthetic.
 date_created: 2026-05-22
 date_modified: 2026-05-22
+site_uuid: fa617119-933c-4c03-a51c-2df5409e2632
+hex_code: 91mg1l
+publish: true
 from: "memopop-ai"
 from_path: "context-v/explorations/Human-Curated-Source-Sets-and-Per-Firm-RAG-for-Memo-Narrative.md"
 ---

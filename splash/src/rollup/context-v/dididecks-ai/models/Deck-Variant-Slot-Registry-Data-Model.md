@@ -1,6 +1,6 @@
 ---
 title: "Deck / Variant / Slot — the deck-OS registry"
-lede: "The spine of dididecks. Each client carries TypeScript modules at src/data/{decks,slides}.ts that the shell's registry-loader evaluates at build time to derive what decks + variants + slots exist. The filesystem is the source of truth for slot existence — the scroll-page section annotations are scanned and reconciled against the manual map. Translating this to a DB means modeling the registry the same way it composes today: deck → variants → slots, plus derived runtime state."
+lede: "The deck → variant → slot spine — `src/data/{decks,slides}.ts` read at build time; the filesystem is source of truth for slot existence."
 date_authored_initial_draft: 2026-06-07
 date_last_updated: 2026-06-07
 at_semantic_version: 0.0.1.0
@@ -15,6 +15,9 @@ schema_authority:
 date_created: 2026-06-07
 date_modified: 2026-06-07
 publish: false
+site_uuid: b56dd8de-0a27-410d-bc7c-09e2f4143023
+hex_code: iqt5qh
+date_authored_current_draft: 2026-06-07
 from: "dididecks-ai"
 from_path: "context-v/models/Deck-Variant-Slot-Registry-Data-Model.md"
 ---

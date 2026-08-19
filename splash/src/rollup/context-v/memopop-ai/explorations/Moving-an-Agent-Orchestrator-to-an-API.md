@@ -16,6 +16,9 @@ authors:
 image_prompt: A blueprint-style cutaway of a desktop application — a translucent native window on the left, a Python service icon on the right, a glowing localhost connector arcing between them, agent worker silhouettes lined up inside the Python service, soft violet uplight, technical annotations in monospaced font.
 date_created: 2026-04-30
 date_modified: 2026-04-30
+site_uuid: 2234f38d-c925-4ac2-b286-ba7bdc3ab996
+hex_code: nlbb83
+publish: true
 from: "memopop-ai"
 from_path: "context-v/explorations/Moving-an-Agent-Orchestrator-to-an-API.md"
 ---

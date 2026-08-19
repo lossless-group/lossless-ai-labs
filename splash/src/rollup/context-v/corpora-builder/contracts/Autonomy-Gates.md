@@ -1,6 +1,6 @@
 ---
 title: "Autonomy Gates — what an agent may do here unattended, and where it must stop"
-lede: "The operator's goal is to start a run, walk away, and return only to check work and make decisions. That only works if 'may I proceed?' has a written answer. This contract gives it one: a green list that needs no permission, a red list that always does, and the four gates in between."
+lede: "A written answer to \"may I proceed?\" — a green list that needs no permission, a red list that always does, and the four gates in between."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -15,6 +15,11 @@ tags:
   - Autonomy
   - Agent-Behavior
   - Context-Vigilance
+site_uuid: b09e691d-8da5-49c2-bc66-4c2f3a29ea1d
+hex_code: ypi2ps
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "corpora-builder"
 from_path: "context-v/contracts/Autonomy-Gates.md"
 ---

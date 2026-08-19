@@ -20,6 +20,7 @@ site_uuid: c823d7ba-0f6e-4a69-aa0c-de787be6fdee
 hex_code: ug7yc0
 date_authored_initial_draft: 2026-05-08
 date_authored_current_draft: 2026-05-08
+publish: true
 ---
 
 # Track and Ingest Lossless Content into Chroma (with Change Detection)

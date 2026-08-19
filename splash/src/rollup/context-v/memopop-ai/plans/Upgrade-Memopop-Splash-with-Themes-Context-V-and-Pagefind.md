@@ -1,6 +1,7 @@
 ---
 title: "Upgrade the MemoPop AI splash with three-mode theming, context-v rollup, peer-aware discovery, and Pagefind"
-lede: "The current memopop-site shipped fast but pre-dates the conventions astro-knots/splash settled into a few days later. This plan brings memopop-site up to that bar — three-mode toggle on a two-tier token system, a context-v archive alongside the existing changelog, peer-directory rollup that walks the monorepo (apps/* and packages/*) instead of children, and Pagefind across both archives — without touching the design language. Implementation is free to invent its own visual identity; this plan only locks down the mechanics."
+lede: >-
+  Brings the pre-convention memopop-site up to the splash bar: three-mode theming, a context-v rollup, peer-dir discovery, and Pagefind.
 date_authored_initial_draft: 2026-05-06
 date_authored_current_draft: 2026-05-06
 date_authored_final_draft: "[]"
@@ -27,6 +28,9 @@ authors:
   - AI Labs Team
 image_prompt: "An exploded-axonometric drawing of a small Astro site at the center of a workshop bench, with five tributary cables labeled 'orchestrator', 'native', 'web-app', 'site', and 'monorepo' converging into it; a tri-state toggle switch hovers above, casting three different colored shadows."
 applies_to: apps/memopop-site
+site_uuid: 06ea3b8c-1ca7-47df-8a98-f53b44bfb6b4
+hex_code: kyhx2k
+publish: false
 from: "memopop-ai"
 from_path: "context-v/plans/Upgrade-Memopop-Splash-with-Themes-Context-V-and-Pagefind.md"
 ---

@@ -9,6 +9,29 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/openagent
 profile_kind: Tauri desktop chat client — Rust backend + SvelteKit webview, MCP-native
 date_created: 2026-07-13
+site_uuid: 8e1f608d-fdcf-4dfe-8f02-130565870676
+hex_code: xi1ebf
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
+lede: >-
+  Delegation recursion is prevented not by a depth counter but by never
+  registering `spawn_agent` on the child's tool server.
+summary: >-
+  Source-cited profile of the OpenAgent submodule for the
+  conversational-UI-and-native-shells study. It is the study's most literal
+  `agentskills.io`-shaped Skills implementation and, more usefully, its most legible
+  codebase — delegation, long-term memory, MCP client, and skills each fit in one or two
+  files under about 300 lines. Documents all four: the non-recursive `spawn_agent` tool
+  and its cascading cancellation fix; the SQLite + FTS5 + `fastembed` hybrid memory store,
+  where retrieval is RRF plus a freshness term (contradicting the repo's own `CLAUDE.md`)
+  while write-time dedup uses cosine similarity directly; an MCP client with only HTTP and
+  stdio transports, no permission gate, no allowlist, and all-or-nothing reconnect on any
+  config change; and skills discovered by directory walk with only name/description
+  injected into the prompt, full content lazy-loaded via `read_file`. Two hard constraints
+  for an agent: the repo is GPL-3.0-or-later, so copy the shape and not the code, and it is
+  a two-person project under two months old, so treat everything as "what the code does
+  today," not a proven pattern.
+publish: true
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Openagent.md"
 ---

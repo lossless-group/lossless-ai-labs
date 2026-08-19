@@ -1,6 +1,6 @@
 ---
 title: "Refactor data-assets audit for per-asset quality ratings, brand-asset disambiguation, and deck-render guards"
-lede: "The /data-assets/{companies,people} audit pages today treat brand imagery as a generic 'logo' field. In practice a company has FOUR distinct assets — favicon, trademark, wordmark, og:image — and each can be present-but-glitchy, missing, or immaculate. Decks bundle these assets at render time, and a glitchy favicon shipped into an investor's inbox is a brand-credibility wound that's expensive to recover from. This plan refactors the audit pages to (1) display each of the four assets as its own labeled cell, (2) carry a per-asset U/C/P/Star quality rating, (3) flag incomplete/missing/glitchy assets visibly, and (4) introduce a build-time render guard so a flagged asset can't accidentally ship to a final deck. People audit gets the parallel treatment for headshots + LinkedIn presence."
+lede: "Split the audit's generic 'logo' into favicon, trademark, wordmark, og:image — each with its own quality rating and a render guard."
 date_authored_initial_draft: 2026-05-17
 date_authored_current_draft: 2026-05-17
 date_last_updated: 2026-05-17
@@ -21,6 +21,8 @@ authors:
 date_created: 2026-05-17
 date_modified: 2026-05-17
 publish: false
+site_uuid: 5bb21d12-037b-4335-bfe1-ec78686a264f
+hex_code: lm10sl
 from: "dididecks-ai"
 from_path: "context-v/plans/Refactor-Data-Assets-Audit-for-Brand-Quality-Ratings-and-Render-Guards.md"
 ---

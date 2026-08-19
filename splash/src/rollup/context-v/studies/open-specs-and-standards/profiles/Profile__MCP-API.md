@@ -9,6 +9,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/mcp-api
 profile_kind: applied-product
 date_created: 2026-05-05
+site_uuid: ccb76823-c008-48c1-aeab-d5b1af096da5
+hex_code: c09mpg
+date_authored_initial_draft: 2026-05-05
+date_authored_current_draft: 2026-05-05
+lede: >-
+  However many APIs a user registers, the model only ever sees two tools:
+  `ListAvailableApis` and `CallApi`.
+summary: >-
+  Profile of MCP-API as pinned in this study. It is the only applied-product entry in a collection
+  otherwise made of protocols, conventions, and methodologies — a deployed multi-tenant SaaS that
+  turns any REST API with an OpenAPI, Swagger, GraphQL, or Postman spec into MCP tools. Read it
+  paired with the Model Context Protocol profile: MCP makes the N+M claim, this is one of the M's
+  and the proof the claim survives production. Covers the two-tool dynamic dispatcher, the
+  polymorphic per-API auth model and its Cosmos serializer gotcha, the split-storage pattern for
+  documents over 2MB, the three distinct auth layers (user, MCP-server, upstream API), the tier
+  limits checked before dispatch, and the SSRF defense that is mandatory for any product that
+  executes user-supplied URLs. Use it for the hardening checklist, not as a spec.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__MCP-API.md"
 ---

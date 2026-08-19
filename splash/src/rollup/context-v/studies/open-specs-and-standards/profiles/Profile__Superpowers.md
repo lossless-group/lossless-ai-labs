@@ -8,6 +8,24 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/superpowers
 profile_kind: methodology
 date_created: 2026-05-07
+site_uuid: 9e3c8cc9-d1ce-49df-b80f-f3d138fbd91c
+hex_code: v8etlx
+date_authored_initial_draft: 2026-05-07
+date_authored_current_draft: 2026-05-07
+lede: >-
+  A SessionStart hook injects the bootstrap skill as `<EXTREMELY_IMPORTANT>`
+  before the agent has written its first word.
+summary: >-
+  Profile of Superpowers as pinned in this study. Framed correctly, it is a software-development
+  methodology delivered as a multi-harness plugin, not a skill collection — the study's clearest
+  example of behavior-shaping over capability-extending. Covers the 14 skills and their Iron Laws,
+  the SessionStart context-injection bootstrap and why the bundle is dead weight without it, the
+  subagent-driven-development pattern with its two-stage review and its prohibition on parallel
+  implementers, the seven-harness substrate that works because skills name roles rather than tool
+  names, the behavioral test suite that plants real bugs and checks the agent catches them, and the
+  contributor guide's 94%-rejection anti-slop posture. Ends with an honest fit note against
+  Lossless conventions: the techniques are worth lifting; wholesale adoption probably is not.
+publish: true
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Superpowers.md"
 ---

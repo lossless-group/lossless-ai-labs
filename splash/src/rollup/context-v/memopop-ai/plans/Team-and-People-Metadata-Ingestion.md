@@ -16,6 +16,9 @@ authors:
 implements_exploration: "[[Crawl-for-Better-Team-Structured-Output]]"
 date_created: 2026-05-07
 date_modified: 2026-05-07
+site_uuid: 272b8357-17ed-465c-b03a-6447d65dec87
+hex_code: bwcyrk
+publish: false
 from: "memopop-ai"
 from_path: "context-v/plans/Team-and-People-Metadata-Ingestion.md"
 ---

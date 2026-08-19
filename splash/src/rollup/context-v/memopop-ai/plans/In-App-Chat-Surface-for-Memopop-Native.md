@@ -1,6 +1,7 @@
 ---
 title: "In-App Chat Surface for MemoPop Native — A Plan"
-lede: "Stand up a context-aware chat co-pilot inside the MemoPop Native Tauri app: a Svelte drawer that reads FlowState to anticipate the next verbs, a sidecar-side /chat/turn endpoint that assembles the four-slab prompt and routes a turn to answer / propose / invoke, and a capability layer that — at first — wraps the operations the app already has (memo runs, deal/firm creation, artifact open, roster crawl) before reaching for net-new source-curation verbs. Built on the existing two-method transport, the LLM-gateway invariant (sidecar holds the key), and the FlowState reactivity discipline — so chat is a new surface, not a new runtime. Plan only; no implementation here."
+lede: >-
+  A Svelte chat drawer for MemoPop Native: a sidecar `/chat/turn` routes each turn to answer, propose, or invoke over the app's own verbs.
 date_authored_initial_draft: 2026-06-27
 date_last_updated: 2026-06-27
 date_created: 2026-06-27
@@ -26,6 +27,10 @@ tags:
 related_skills:
   - context-vigilance
   - pseudomonorepos
+site_uuid: 92d87b20-ef39-4de9-abd1-ee7b5eba595a
+hex_code: 9hpd3l
+date_authored_current_draft: 2026-06-27
+publish: false
 from: "memopop-ai"
 from_path: "context-v/plans/In-App-Chat-Surface-for-Memopop-Native.md"
 ---

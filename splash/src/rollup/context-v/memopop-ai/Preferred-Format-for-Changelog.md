@@ -1,9 +1,19 @@
 ---
+site_uuid: db326606-7ba1-4479-924a-3af292a11cf5
+hex_code: xi76j2
+title: Preferred Format for Changelog
+date_created: 2025-12-27
+date_authored_initial_draft: 2025-12-27
+date_authored_current_draft: 2026-04-27
+authors:
+  - Michael Staton
+at_semantic_version: 0.0.1.0
+tags:
+  - Context-Vigilance
+publish: true
 from: "memopop-ai"
 from_path: "context-v/Preferred-Format-for-Changelog.md"
 ---
-
-
 # Context
 At this point our agency, The Lossless Group, has dozens of projects and a few clients, and a loose group of people who are developing, designing, and publishing content.  
 

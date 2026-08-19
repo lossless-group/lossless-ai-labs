@@ -21,6 +21,9 @@ authors:
 image_prompt: "Six steam-punk portraits arranged in a horizontal row above a workshop bench. Three of them have a soft golden halo pulsing around their oval frames; the other three rest in dark brass borders. Below each lit portrait, a small brass plate is etched with a phrase like 'Revising a section' or 'Compiling final draft'. Background is a dimly lit Victorian study with diagrams and ledgers."
 date_created: 2026-05-03
 date_modified: 2026-05-03
+site_uuid: 31831852-1ebd-48f2-a1f1-21954e36ada5
+hex_code: hvq916
+publish: false
 from: "memopop-ai"
 from_path: "context-v/specs/Character-Cast-for-Live-Agent-Indication.md"
 ---

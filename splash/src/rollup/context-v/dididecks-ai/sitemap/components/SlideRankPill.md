@@ -1,6 +1,6 @@
 ---
 title: "SlideRankPill — floating five-button classifier for the active slot (rename pending → SlideClassifierPill)"
-lede: "Bottom-right floating pill that shows the active slot's number + title and exposes five enum buttons — Urgent / Could-be-better / Passable / Perfect / Pending. In Scroll-UI it discovers the active slot via IntersectionObserver over `section[data-slot][data-variant]` tags; in Play-UI the DeckOverlay--Play-UI wraps the slide in such a section so exactly one is in view. Hydrates ranks from `GET /api/slide-rank` on mount, posts optimistically on click, fails-soft in production builds. Rename to `SlideClassifierPill` is queued — 'classify' matches the cognitive act more accurately than 'rank' (the enum is a finite tag set, not an ordering)."
+lede: "Bottom-right floating pill exposing the five-state classifier for the active slot, found via IntersectionObserver over `section[data-slot]`."
 artifact_kind: component
 ownership: shell
 mode: both
@@ -30,6 +30,9 @@ status_tags:
 date_created: 2026-05-12
 date_modified: 2026-05-15
 publish: true
+site_uuid: 9462cf15-a163-4626-9821-b74b46f0850a
+hex_code: cdyj7o
+date_authored_current_draft: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/SlideRankPill.md"
 ---

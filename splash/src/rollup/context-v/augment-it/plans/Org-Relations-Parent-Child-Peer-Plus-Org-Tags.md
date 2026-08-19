@@ -22,6 +22,11 @@ tags:
   - Org-Workbench
   - Data-Modeling
 status: Shipped
+site_uuid: 22f7ff73-9f0b-4b1c-894e-34e09a962472
+hex_code: rc6mbj
+date_authored_initial_draft: 2026-07-27
+date_authored_current_draft: 2026-07-27
+publish: true
 from: "augment-it"
 from_path: "context-v/plans/Org-Relations-Parent-Child-Peer-Plus-Org-Tags.md"
 ---

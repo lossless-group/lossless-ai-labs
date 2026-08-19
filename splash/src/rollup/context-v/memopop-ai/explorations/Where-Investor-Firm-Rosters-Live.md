@@ -15,6 +15,9 @@ authors:
   - Michael Staton
 date_created: 2026-05-08
 date_modified: 2026-05-08
+site_uuid: 06ef6cad-c3d0-47a6-8a14-06cf8f77742e
+hex_code: y5yxju
+publish: false
 from: "memopop-ai"
 from_path: "context-v/explorations/Where-Investor-Firm-Rosters-Live.md"
 ---

@@ -9,6 +9,30 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/open-vibe
 profile_kind: Single-backend (Tauri 2 + Rust/Tokio) desktop shell around the `codex app-server` CLI, one child process per workspace
 date_created: 2026-07-13
+site_uuid: ccee3c94-6239-470f-9f9b-81450456c1ef
+hex_code: v4ywh0
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
+lede: >-
+  One real OS child process per workspace — but only ever one binary. What
+  varies per workspace is the invocation, not the backend.
+summary: >-
+  Source-cited profile of the Open Vibe submodule for the
+  conversational-UI-and-native-shells study, written to adjudicate a specific claim in
+  the research summary. Verdict: the "one `codex app-server` process per workspace over
+  JSON-RPC/stdio" claim is fully confirmed in source, but calling it a process-level
+  adapter swap overstates it — there is exactly one adapter. The profile separates the
+  two axes an agent is likely to conflate: real process isolation and per-workspace
+  config inheritance (both present, cleanly done, worktree-to-parent fallback chains for
+  `CODEX_HOME` and CLI args) versus swappable backend identity (absent — no provider
+  enum, no second agent CLI). Also documents two things easily misread: the
+  `remote_backend` module, a mutually exclusive single-TCP-connection transport that
+  collapses the per-workspace model entirely when active, and the nanobot `LLMProvider`
+  trait, which belongs to the chat-bridge feature and is not a coding-agent adapter.
+  Note the maturity caveat — single-contributor, no ADRs, no architecture doc, so every
+  claim here comes from source rather than a maintained decision log. Positions between
+  `Profile__Routa.md` (positive result) and `Profile__Dive.md` (one shared subprocess).
+publish: true
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Open-Vibe.md"
 ---

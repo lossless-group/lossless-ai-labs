@@ -1,6 +1,6 @@
 ---
 title: "Source-File Model — the schema becomes code, and two silent failures become loud"
-lede: "Phase 2. The canonical frontmatter from the Source-File-Schema-Reconciliation blueprint, as a dataclass that round-trips without losing anything it did not expect. Two bugs this tree already paid for are promoted to hard errors: the stray `---` that hid 13 of ImmuneCo's 93 sources for three weeks, and the round-trip that silently stripped `sensitivity` from eight."
+lede: "The schema as a round-tripping dataclass — the stray `---` that hid 13 of ImmuneCo's 93 sources is now a hard error, not a silent one."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -16,6 +16,11 @@ tags:
   - Frontmatter-Schema
   - Source-Curation
   - Phase-2
+site_uuid: 3198ebde-726a-4eb4-8275-18f9805ffc99
+hex_code: w7ug39
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "corpora-builder"
 from_path: "context-v/specs/Source-File-Model.md"
 ---

@@ -20,6 +20,7 @@ site_uuid: f6facba2-09c4-4d49-b89a-a3a45805d142
 hex_code: pn48cz
 date_authored_initial_draft: 2026-05-07
 date_authored_current_draft: 2026-05-07
+publish: true
 ---
 
 # ChromaDB as Context Improvement Across Everything, Everyone

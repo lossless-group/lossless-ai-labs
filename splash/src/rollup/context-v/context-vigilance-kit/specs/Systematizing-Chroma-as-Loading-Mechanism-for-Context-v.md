@@ -1,6 +1,6 @@
 ---
 title: "Systematizing Chroma as the Loading Mechanism for context-v"
-lede: "Chroma has the data — 5,224 context-v chunks plus 257 changelog entries across the Lossless tree — but we still load context by hand or by Claude Code dir-scan. This spec names the three loops that turn the corpus from a Q&A snapshot into a living loading system: an agent that auto-fires the working-set ask at session start, a nudge policy that keeps users ambiently aware of recent activity, and a portable freshness ceremony so any pseudomonorepo can adopt the same shape."
+lede: "Chroma holds 5,224 context-v chunks and we still load context by hand. Three loops turn the corpus into a session-start loading system."
 date_authored_initial_draft: 2026-06-01
 date_authored_current_draft: 2026-06-01
 date_authored_final_draft:
@@ -23,6 +23,8 @@ authors:
 date_created: 2026-06-01
 date_modified: 2026-06-01
 publish: true
+site_uuid: f0c06fe2-d39d-4a80-b5a8-80b165ccbc7f
+hex_code: w8aec8
 from: "context-vigilance-kit"
 from_path: "context-v/specs/Systematizing-Chroma-as-Loading-Mechanism-for-Context-v.md"
 ---

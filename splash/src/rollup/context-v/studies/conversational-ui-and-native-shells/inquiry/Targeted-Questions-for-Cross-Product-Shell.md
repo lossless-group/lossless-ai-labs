@@ -1,6 +1,6 @@
 ---
 title: "Conversational UI / Native Shells — Answers to the Plan's Targeted Questions"
-lede: "Phase 2 of the study plan. Not a survey of the study — two specific questions, answered by citing the profiles already written, in service of the Phase 3 synthesis decision."
+lede: "Phase 2, not a survey: two questions — Dive's Electron/Tauri migration and anything-llm's workspace switch — answered from the profiles."
 date_created: 2026-07-13
 authors:
   - Michael Staton
@@ -13,6 +13,11 @@ tags:
   - Tauri
   - MCP
 status: Draft
+site_uuid: b289f783-15bb-43a4-aadb-2f72f192cdbd
+hex_code: udxdxs
+date_authored_initial_draft: 2026-07-13
+date_authored_current_draft: 2026-07-13
+publish: true
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/inquiry/Targeted-Questions-for-Cross-Product-Shell.md"
 ---

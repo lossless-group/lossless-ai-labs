@@ -22,6 +22,7 @@ site_uuid: 0bce7fa2-c87e-4439-8f4b-1f12dc64c198
 hex_code: fpme7z
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
+publish: true
 ---
 
 # Per-App Workspaces and the Chat as Optional Surface

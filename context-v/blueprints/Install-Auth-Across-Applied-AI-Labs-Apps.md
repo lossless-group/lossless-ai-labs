@@ -29,6 +29,7 @@ site_uuid: c3c3fa68-0f5e-4996-b6c8-e619ff97fa75
 hex_code: x9mdxa
 date_authored_initial_draft: 2026-06-05
 date_authored_current_draft: 2026-06-05
+publish: true
 ---
 
 # Install Auth Across Applied AI Labs Apps

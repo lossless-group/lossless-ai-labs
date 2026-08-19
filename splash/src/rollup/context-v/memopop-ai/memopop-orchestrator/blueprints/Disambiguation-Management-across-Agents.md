@@ -16,6 +16,8 @@ tags: [Disambiguation, Entity-Confusion, Anti-Hallucination, Agent-Pipeline, Res
 authors:
   - Michael Staton
 augmented_with: "Claude Code with Claude Opus 4.6"
+site_uuid: 29d333e1-b1c5-408d-aa32-5f0446735f9f
+hex_code: red2s5
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/blueprints/Disambiguation-Management-across-Agents.md"
 ---

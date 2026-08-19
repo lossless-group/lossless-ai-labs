@@ -10,6 +10,7 @@ authors:
 at_semantic_version: 0.0.1.0
 tags:
   - Exploration
+publish: true
 ---
 
 # Pi vs. Claude Code

@@ -26,6 +26,7 @@ site_uuid: 2b616039-8200-48c0-8e80-74d03dc51f90
 hex_code: 1t2ade
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
+publish: true
 ---
 
 # didi.sh Login and Workspace-Delivered Config for Corpora

@@ -1,6 +1,6 @@
 ---
 title: "Capture From The Screen — the surface stops being a viewer"
-lede: "Paste a URL into the page and watch it get fetched, named, deduped and filed. Writing is opt-in at the server, because the first thing this screen was ever pointed at was a client corpus, and a browse tool that silently gained the ability to write into one is exactly the accident worth designing against."
+lede: "Paste a URL and watch it get filed. Writing is opt-in at the server (`--writable`) because the first corpus this screen saw was a client's."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -15,6 +15,11 @@ tags:
   - Corpora-Builder
   - UI
   - Capture
+site_uuid: b6710e3f-8f2f-47c6-88ea-f979d48d8774
+hex_code: ie25v6
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "corpora-builder"
 from_path: "context-v/specs/Capture-From-The-Screen.md"
 ---

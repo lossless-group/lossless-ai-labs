@@ -1,6 +1,6 @@
 ---
 title: "Redesign TOC as a Deck-Level Dual-Surface Review Matrix"
-lede: "Today's `/toc/[deck]/[variant]/` answers a build-system question ('which slot has a Play-UI file?') when the deck-iteration-workflow centers on a workflow question ('where am I in the review cycle, and which variant is closest to shippable?'). The calmstorm-decks `/index` shows the right shape: variants as columns, slides as rows, a review-status chip per cell. We go one step further than calmstorm: each cell carries TWO chips, one per surface — scroll-review and play-review — because the workflow reviews each slide twice (once during scroll-iteration, once after porting to Play-UI). The goal the matrix should make obvious at a glance: find a single column where every slide is ≥ passable on both surfaces, with as many ★s as possible. Drift between scroll-rating and play-rating is itself a workflow signal (the port may have lost fidelity). This redesign migrates the audits schema from one rating per (slot, variant) to two ratings, makes the SlideRankPill surface-aware, builds a new `/toc/[deck]/` deck-level matrix route, and keeps the per-variant `/toc/[deck]/[variant]/` route alive as the variant landing/index — distinct purpose from the matrix. [Original lede said \"folds the per-variant TOC into a redirect\"; revised 2026-05-17 in-flight when in-browser review made clear the two surfaces serve different workflow needs.]"
+lede: "A deck-level matrix replaces the port-status TOC: variants as columns, two review chips per cell, so shippability reads at a glance."
 date_authored_initial_draft: 2026-05-17
 date_authored_current_draft: 2026-05-17
 date_authored_final_draft:
@@ -25,6 +25,8 @@ authors:
 date_created: 2026-05-17
 date_modified: 2026-05-17
 publish: false
+site_uuid: 8508f01f-08f3-4d04-b5a6-41c4c25c74ea
+hex_code: b0fxfn
 from: "dididecks-ai"
 from_path: "context-v/plans/Redesign-TOC-as-Deck-Level-Dual-Surface-Review-Matrix.md"
 ---

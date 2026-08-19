@@ -24,6 +24,7 @@ site_uuid: 38689958-c357-471a-9e84-9262c32d4953
 hex_code: v2lij3
 date_authored_initial_draft: 2026-06-28
 date_authored_current_draft: 2026-06-28
+publish: true
 ---
 
 # The Source Curation Surface

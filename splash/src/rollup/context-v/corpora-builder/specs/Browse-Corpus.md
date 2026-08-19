@@ -1,6 +1,6 @@
 ---
 title: "Browse Corpus — a screen for the work that already exists"
-lede: "The first surface. Read-only, local-first, pointed at the 892 files already built for reach-edu. Brought forward from Phase 7 because the operator has been reading terminal output while waiting for something to click on, and a Tauri shell was never the cheapest way to give them one."
+lede: "The first surface: read-only over reach-edu's 892 existing files. Pulled out of Phase 7 because Tauri was never the cheapest first screen."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -15,6 +15,11 @@ tags:
   - Corpora-Builder
   - UI
   - Browse
+site_uuid: 85fb3631-7550-4d29-a9aa-ef400291fce1
+hex_code: ua4dak
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "corpora-builder"
 from_path: "context-v/specs/Browse-Corpus.md"
 ---

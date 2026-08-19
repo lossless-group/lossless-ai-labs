@@ -1,6 +1,6 @@
 ---
 title: "Loop Harness — the ledger that lets an agent run unattended"
-lede: "The smallest possible spec, written first so the harness proves itself: spec test IDs bind to test functions, status is derived by running the suite, and a promise with no test is a build failure. If this spec is green, the loop's bookkeeping can be trusted; everything else is built on top of it."
+lede: "Spec IDs bind to test functions, status is derived by running the suite, and a promise with no test is a build failure."
 date_created: 2026-08-08
 date_modified: 2026-08-08
 authors:
@@ -15,6 +15,11 @@ tags:
   - Loop
   - TDD
   - Autonomy
+site_uuid: 7555f597-c1d0-4328-802e-ff9f8f5ea077
+hex_code: 8yazdc
+date_authored_initial_draft: 2026-08-08
+date_authored_current_draft: 2026-08-08
+publish: true
 from: "corpora-builder"
 from_path: "context-v/specs/Loop-Harness.md"
 ---

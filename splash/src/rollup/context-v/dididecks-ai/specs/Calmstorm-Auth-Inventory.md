@@ -1,6 +1,6 @@
 ---
 title: "Calmstorm Auth — Inventory and Future-Package Map"
-lede: "Session 1 deliverable of the Shared-Auth-for-Applied-AI-Labs three-session plan. Inventories the auth surface currently running in calmstorm-decks — every file, line count, dependency, env var, DB table — and maps each piece to its future location in the extracted `lossless-auth-core` package. The current calmstorm code implements ~70% of the v1 hard requirements from the parent exploration; this doc names what's package-ready, what's calmstorm-specific (and must stay in the consumer), and what's MISSING (Session 2 work)."
+lede: "Inventories calmstorm-decks' running auth — files, env vars, DB tables — and maps each piece into the future `lossless-auth-core` package."
 date_authored_initial_draft: 2026-05-17
 date_authored_current_draft: 2026-05-17
 date_authored_final_draft:
@@ -23,6 +23,8 @@ date_created: 2026-05-17
 date_modified: 2026-05-17
 parent_exploration: "[[../../../context-v/explorations/Shared-Auth-for-Applied-AI-Labs]]"
 publish: false
+site_uuid: 8eebe9f0-1dbb-4c92-ac16-6b7814fb0f8e
+hex_code: xjxmxe
 from: "dididecks-ai"
 from_path: "context-v/specs/Calmstorm-Auth-Inventory.md"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Tidy Context Vigilance Files Across All"
-lede: "A phased, manifest-driven plan to bring every context-v file in the corpus to a state we are proud of — starting with the most-developed docs, fanning out to idea-started ones, with concurrent duplicate detection and ruthless decisions on merge / kill / relocate as we go."
+lede: "A manifest-driven pass over 583 collated context-v files: worked-on (110) first, then idea-started (263), with concurrent duplicate hunting."
 date_created: 2026-05-08
 date_modified: 2026-05-08
 authors:
@@ -18,6 +18,10 @@ tags:
   - ChromaDB
 status: Draft
 publish: true
+site_uuid: 27b54e10-e803-4f4c-9b7d-9cf48b19c5db
+hex_code: ll32wp
+date_authored_initial_draft: 2026-05-08
+date_authored_current_draft: 2026-05-08
 from: "context-vigilance-kit"
 from_path: "context-v/plans/Tidy-Context-Vigilance-Files-Across-All.md"
 ---

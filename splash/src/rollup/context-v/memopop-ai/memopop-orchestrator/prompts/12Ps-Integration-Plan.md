@@ -16,6 +16,8 @@ tags: [12Ps, Scorecard, Outline, Integration, Workflow]
 authors:
   - Michael Staton
 augmented_with: "Claude Code with Claude Opus 4.6"
+site_uuid: 645ea853-53b5-4c37-8c51-fa4c4aa053ce
+hex_code: 73zio9
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/prompts/12Ps-Integration-Plan.md"
 ---

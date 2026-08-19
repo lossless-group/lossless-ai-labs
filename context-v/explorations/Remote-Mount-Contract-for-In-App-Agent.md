@@ -24,6 +24,7 @@ site_uuid: 767b68ce-6558-41a4-b2f4-415a38876ea7
 hex_code: wr8cfj
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
+publish: true
 ---
 
 # Remote Mount Contract for @lossless/in-app-agent

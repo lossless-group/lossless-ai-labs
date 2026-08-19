@@ -1,6 +1,6 @@
 ---
 title: "Corpora-Builder MVP — R2-Native Storage With Application-Level Checkpoint History"
-lede: "Four decisions taken 2026-08-08 end the recurring stall: Python core, R2-native behind a storage seam, reach-edu as the proving corpus, Tauri as the destination. R2 has no object versioning — which means the blob choice determines the version-control design rather than competing with it. The answer is a live browsable tree plus a content-addressed object store with checkpoint manifests: git's model, minus git, on a substrate that has neither."
+lede: "R2 has no object versioning, so history becomes application-level: a browsable tree plus content-addressed objects and checkpoint manifests."
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
 date_last_updated: 2026-08-08
@@ -20,6 +20,8 @@ tags:
   - Content-Addressed-Storage
   - Tauri
   - MVP
+site_uuid: 63552d1e-4e95-4204-9b7c-09f86a7d7b8f
+hex_code: pklf13
 from: "corpora-builder"
 from_path: "context-v/plans/Corpora-Builder-MVP-R2-Native-With-Checkpoint-History.md"
 ---

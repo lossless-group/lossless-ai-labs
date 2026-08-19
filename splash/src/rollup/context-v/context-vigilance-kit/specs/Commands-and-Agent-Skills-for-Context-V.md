@@ -1,6 +1,6 @@
 ---
 title: "Commands and Agent Skills for context-v"
-lede: "Reference catalog of every command, slash command, and agent skill the context-vigilance-kit ships — name, status, trigger, signature, purpose, and where the implementation lives. Modeled on Spec-Kit's pattern of making the agent-facing surface discoverable to Claude Code via .claude/commands/ and .claude/skills/, so adopters see the kit's full vocabulary natively at session start."
+lede: "Catalog of every command, slash command, and agent skill the kit ships — surfaced natively via `.claude/commands/` and `.claude/skills/`."
 date_authored_initial_draft: 2026-06-01
 date_authored_current_draft: 2026-06-01
 date_authored_final_draft:
@@ -22,6 +22,8 @@ authors:
 date_created: 2026-06-01
 date_modified: 2026-06-01
 publish: true
+site_uuid: bf87035a-fc5f-4f4c-8a29-cb12de6682d0
+hex_code: 53qehu
 from: "context-vigilance-kit"
 from_path: "context-v/specs/Commands-and-Agent-Skills-for-Context-V.md"
 ---

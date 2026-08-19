@@ -15,6 +15,11 @@ tags:
   - Context-Vigilance
   - RAG
 status: Open
+site_uuid: 91a5d3a5-0883-4914-945c-c6752dc6a768
+hex_code: exp936
+date_authored_initial_draft: 2026-07-20
+date_authored_current_draft: 2026-07-20
+publish: true
 from: "corpora-builder"
 from_path: "context-v/explorations/Corpora-Builder-System-Design.md"
 ---

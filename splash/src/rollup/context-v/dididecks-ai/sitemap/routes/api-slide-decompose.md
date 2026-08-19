@@ -1,6 +1,6 @@
 ---
 title: "/api/slide-decompose — non-destructive stub generator for the Phase 1 → Phase 2 transition"
-lede: "Dev-only API route that writes an empty per-slide stub file at `{slidesComponentsRoot}/{variant}/{slot}-{slug}.astro` in the consumer's working tree. Non-destructive: refuses to overwrite, returns 409 if the file already exists. The stub is a minimal `<section data-slot data-variant></section>` with a generated-by header comment instructing the recreate-do-not-extract discipline (Phase 2 of the deck-iteration-workflow). Static Vercel builds never carry this route; file writes only happen against a local working tree."
+lede: "Dev-only route that writes an empty per-slide stub and refuses to overwrite — 409 if the file exists. Static Vercel builds never carry it."
 artifact_kind: route
 ownership: shell
 mode: n/a
@@ -28,6 +28,9 @@ status_tags:
 date_created: 2026-05-12
 date_modified: 2026-05-15
 publish: true
+site_uuid: ad3a1f82-6942-4ed7-8e23-602dec12d20c
+hex_code: x5firz
+date_authored_current_draft: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/api-slide-decompose.md"
 ---

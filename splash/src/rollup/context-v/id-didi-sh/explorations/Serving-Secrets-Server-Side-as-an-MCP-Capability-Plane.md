@@ -1,6 +1,6 @@
 ---
 title: "Serving Secrets Server-Side as an MCP Capability Plane"
-lede: "Implementation-local notes on the most likely new job for this service: a remote MCP endpoint that holds credentials server-side and hands collaborators capabilities instead of secrets. The canonical exploration and any contract changes live in the ai-labs parent — this doc only carries what is specific to building it here."
+lede: "Implementation-local notes on a remote MCP endpoint that holds credentials server-side and hands collaborators capabilities, not secrets."
 date_created: 2026-07-24
 date_modified: 2026-07-24
 authors:
@@ -17,6 +17,11 @@ tags:
   - Capability-Plane
   - Elixir
   - Implementation-Local
+site_uuid: 49ebb586-9ac8-4eab-933d-14629d876507
+hex_code: rjw6lx
+date_authored_initial_draft: 2026-07-24
+date_authored_current_draft: 2026-07-24
+publish: true
 from: "id-didi-sh"
 from_path: "context-v/explorations/Serving-Secrets-Server-Side-as-an-MCP-Capability-Plane.md"
 ---

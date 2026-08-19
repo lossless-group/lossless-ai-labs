@@ -12,6 +12,9 @@ status: Draft
 tags:
   - Spec
   - Corpora-Builder
+site_uuid: 73151013-2337-4989-916e-8e83121d58ef
+hex_code: kc5ay6
+publish: false
 from: "corpora-builder"
 from_path: "context-v/specs/_TEMPLATE-Spec-With-Tests.md"
 ---
