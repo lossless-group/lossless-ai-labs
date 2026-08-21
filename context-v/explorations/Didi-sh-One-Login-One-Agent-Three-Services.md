@@ -386,9 +386,52 @@ workspace declares its org in `clients/<id>/workspace.json` (`{"org_id":
 "reach.edu"}`), with an env fallback (`WORKSPACE_ORG_MAP=humain-vc=humain.vc,
 reach-edu=reach.edu`) for deploys where the clients directory lives on a
 volume rather than in git. A workspace with no org binding is invisible to
-client sessions — it fails safe. Consumers two and three will each need their
-own version of this: **the identity service deliberately does not know what a
-workspace, a deck, or a memo is.**
+client sessions — it fails safe.
+
+**Do not copy this part.** It is the *pre-entities* implementation, and the
+entities strategy supersedes it — see the next subsection.
+
+### Tenancy moved to entities — consumers two and three inherit it rather than reinvent it
+
+The single most important correction to this doc's original framing.
+[[Flexible-Entity-Relationships-to-Mirror-Messy-IRL-Collaboration]]
+(2026-08-20) rules that **organization, workspace, and project are three
+conventional labels for the same kind of thing**: one `entities` table where
+`kind ∈ organization | workspace | project` is a **display label carrying no
+structural meaning**, with **no `parent_id`, no containment, and no
+inheritance of anything, ever**. `entity_memberships` generalises
+`workspace_memberships`, and the migration is stated: `workspaces` → `entities`
+with `kind: workspace`, existing ids preserved.
+
+The reasoning is empirical rather than aesthetic — **projects are
+collaborations among many organizations**, so a project belonging to exactly
+one org is the exception. Encode a hierarchy and the common case (three
+companies on one project) becomes the thing you fight the schema to express.
+
+This changes the advice above in two concrete ways:
+
+1. **memos and decks must NOT invent their own workspace analogue.** A memo
+   collection and a deck are `entities` with a `kind` label; who may see them
+   is `entity_memberships`. augment-it's `workspace.json` + `WORKSPACE_ORG_MAP`
+   is a pre-entities workaround for a service that had no entity model, not a
+   pattern to replicate twice more.
+2. **The identity service now does know what a workspace is** — it holds the
+   entities and the memberships. What stays per-service is the *authorization*
+   decision: id says which entities you hold and at what role, each service
+   decides what that role may do against its own capabilities. The line moved;
+   it did not disappear.
+
+Two further rulings bear on consumer planning. **Credentials are lent by
+people, never owned by entities** — the lending act is what confers admin, and
+withdrawing keys leaves the work intact. And the `user:org:workspace:project`
+tuple survives as an **acting context** — derived, sparse, rendered into audit
+rows and MCP resource URIs — explicitly *not* a path and never stored, because
+the copies would disagree. Any consumer tempted to persist that tuple should
+read Ruling 1 first.
+
+This is also what decision **O6** is waiting on: scopes stay at
+`openid`/`profile`/`email` until the entity model lands, because entity-scoped
+grants would otherwise invent a grammar before the thing it names exists.
 
 ### The plane grew a second door the day before this update
 
@@ -557,7 +600,11 @@ Client-owned deck domains remain outside the cookie either way.
    but worth restating so nobody expects the apex cookie to cover it.
 8. **Do deck *viewers* need didi.sh identities, or only deck authors?** The
    fork named in the dididecks section above, and the one that decides whether
-   the migration is small or large. Answer this before touching code.
+   the migration is small or large. Under the entities model the mechanism
+   exists either way — a viewer would be an `entity_membership` at a `viewer`
+   role on the deck's entity — so the question is no longer *can we* but
+   *should we*: is a per-viewer identity worth the friction on a surface whose
+   whole job is to open for a room of LPs? Answer before touching code.
 9. **Machine identity for headless agents — sharpened by the 2026-08-20
    amendment, not answered by it.** `memopop-orchestrator` is a Python agent
    with no browser and no user session. didi.sh now speaks OAuth 2.1, but
@@ -601,6 +648,9 @@ Client-owned deck domains remain outside the cookie either way.
 - [[Id-Didi-Sh-Identity-Service]] — the spec this doc forked; **read its
   2026-08-20 authorization-server amendment before wiring any consumer**, it
   adds an OAuth 2.1 / OIDC door this exploration originally predated.
+- [[Flexible-Entity-Relationships-to-Mirror-Messy-IRL-Collaboration]] — the
+  entities strategy that replaces per-service workspace modelling; read
+  Rulings 1 and 2 before designing tenancy for memos or decks.
 - [[Shared-Auth-for-Applied-AI-Labs]] — the auth architecture didi.sh
   re-topologizes; everything below Fork 1 carries over.
 - [[Two-Clients-One-Flow-Corpora-Auth-and-Deployment-Converge]] — the
