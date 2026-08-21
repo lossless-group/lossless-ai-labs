@@ -390,6 +390,41 @@ client sessions — it fails safe. Consumers two and three will each need their
 own version of this: **the identity service deliberately does not know what a
 workspace, a deck, or a memo is.**
 
+### The plane grew a second door the day before this update
+
+One correction to the framing above: as of the **2026-08-20 amendment** to
+[[Id-Didi-Sh-Identity-Service]], didi.sh is not only a session-cookie service —
+it is an **OAuth 2.1 + OIDC authorization server** (`/oauth2/authorize`,
+`/oauth2/token`, `/oauth2/userinfo`, `.well-known` discovery, open Dynamic
+Client Registration per RFC 7591). It grew that door for Claude Desktop's MCP
+path and for Onyx, not for our own three services.
+
+This matters for consumers two and three, because there are now **two** ways
+to integrate and they suit different callers:
+
+| Door | Shape | Fits |
+|---|---|---|
+| **Session cookie** (`.didi.sh`) | bespoke `fetch` against `/api/magic-links*`, service owns the pixels | first-party web surfaces on `*.didi.sh` — what augment-it does |
+| **OAuth 2.1 / OIDC** (`/oauth2/*`) | standards flow, `id_token`, discovery, DCR | anything off-origin, third-party, or that already speaks OIDC |
+
+For `memos.didi.sh` the cookie door remains the right one — same origin
+family, fewer moving parts, and augment-it has already de-risked it. The OAuth
+door becomes interesting exactly where the cookie cannot reach: **client-owned
+domains** and **desktop clients**. `memopop-native` (Tauri) is the clearest
+candidate — system-browser authorization-code flow against `/oauth2/authorize`
+is now a supported path rather than something we would have to build, which
+materially lowers the cost of the "stays hard" item recorded above.
+
+Two constraints from that amendment carry directly into consumer planning:
+
+- **O2 binds every access token to a `sid` — a user session.** There is no
+  machine identity in the model. That sharpens rather than resolves the
+  headless-agent question (see Q9).
+- **O6 keeps scopes at `openid` / `profile` / `email`** and *defers*
+  entity- and workspace-scoped grants until the entity model lands. So neither
+  memos nor decks can express "this token may touch this org's memos" through
+  scopes yet — per-service authorization stays where augment-it put it.
+
 ### Five scars worth inheriting rather than re-earning
 
 1. **The CORS allowlist is a silent failure mode.** `id-didi-sh`'s production
@@ -523,11 +558,18 @@ Client-owned deck domains remain outside the cookie either way.
 8. **Do deck *viewers* need didi.sh identities, or only deck authors?** The
    fork named in the dididecks section above, and the one that decides whether
    the migration is small or large. Answer this before touching code.
-9. **Service-to-service credentials.** `memopop-orchestrator` is a headless
-   Python agent with no browser and no user session. Does the identity service
-   issue machine tokens, or do agents run under a delegated user identity, or
-   is this outside its remit entirely? augment-it never had to ask, because
-   its services talk over NATS behind the workspace gate.
+9. **Machine identity for headless agents — sharpened by the 2026-08-20
+   amendment, not answered by it.** `memopop-orchestrator` is a Python agent
+   with no browser and no user session. didi.sh now speaks OAuth 2.1, but
+   decision **O2 binds every access token to a `sid`** — a user session row —
+   and no `client_credentials` grant exists. So the choice is explicit: add a
+   machine-client grant (and with it a token lifecycle that is *not* a human
+   session), run agents under a **delegated user identity** (the operator who
+   launched the run, which keeps revocation and attribution in one place), or
+   rule it out of the service's remit and let agents ride a service's own
+   internal trust boundary. augment-it never had to ask, because its services
+   talk over NATS behind the workspace gate. Lean: delegated user identity —
+   it needs no new grammar and makes "who ran this memo" answerable.
 10. **Do the three deck auth implementations migrate, freeze, or consolidate?**
    `calmstorm-decks`, `chroma-decks`, and `eventcut-ai` are live client
    surfaces. "Migrate all three now" competes with "consolidate into one
@@ -556,6 +598,9 @@ Client-owned deck domains remain outside the cookie either way.
 
 ## Related
 
+- [[Id-Didi-Sh-Identity-Service]] — the spec this doc forked; **read its
+  2026-08-20 authorization-server amendment before wiring any consumer**, it
+  adds an OAuth 2.1 / OIDC door this exploration originally predated.
 - [[Shared-Auth-for-Applied-AI-Labs]] — the auth architecture didi.sh
   re-topologizes; everything below Fork 1 carries over.
 - [[Two-Clients-One-Flow-Corpora-Auth-and-Deployment-Converge]] — the
