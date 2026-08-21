@@ -7,7 +7,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5
-semantic_version: 0.0.0.2
+semantic_version: 0.0.0.3
 status: Draft
 tags:
   - Spec
@@ -99,6 +99,51 @@ several entities explicitly (Ruling 2b), which is a list, not a hierarchy. The
 tree bought determinism that flatness gets for free, and charged for it in
 expressiveness. Withdrawn.
 
+## Ruling 1b — memberships are independent; removal NEVER cascades
+
+The membership half of Ruling 1, stated separately because it is the half a later
+engineer will try to "fix."
+
+People move fluidly, and their presences are not a set. An admin may want to:
+
+- remove someone from a **workspace** but keep them on the **organization**;
+- remove them from the **organization** but keep them in a **workspace**;
+- remove them from a **workspace** but keep them on a **project**.
+
+All three are ordinary. None is a data-integrity problem.
+
+**INVARIANT: each membership row is independent. Removing a person from one
+entity has no effect on their membership in any other entity, in any direction.**
+No `ON DELETE CASCADE` between memberships, no "remove from org" that tidies up
+workspaces, no notion of a membership being orphaned. A person who belongs to a
+project and nothing else is in a perfectly normal state, not a dangling reference
+waiting to be cleaned up.
+
+Stated as an invariant for the same reason the 2026-08-09 amendment stated its
+own: so a later reader does not simplify it back into something tidier. In
+Okta-world, removing someone from the org removes them from everything, because
+the directory says the org contains the rest. Here the org contains nothing.
+
+### Offboarding is a declared list, not a consequence
+
+People *will* want "remove Alice from everything," and they should have it — as an
+**explicit multi-select** over the entities she is in, never as an implicit side
+effect of removing one. Same shape as the cascade in Ruling 2b: declared by a
+human, not derived from structure.
+
+### Removal must disclose what it does NOT do
+
+Symmetric to the lending disclosure in Ruling 2b. When removing someone from an
+entity, show what survives:
+
+> *Removing Alice from Acme Corp. She will keep access to: Apollo (project),
+> Q3 Diligence (workspace).*
+
+Without that line the remover believes they have offboarded someone who still has
+access to three things — the most likely way this model produces a nasty
+surprise. The flexibility is the point; the disclosure is what makes it safe
+enough to live with.
+
 ### Entity links, if we want them at all
 
 If it becomes useful to record that a project involves orgs A and B, do it as a
@@ -138,7 +183,8 @@ That is an accurate description of a great many real projects between funding.
 
 A person's role in an entity is the **greater of**:
 
-- their assigned membership role (`entity_memberships.role`), and
+- their assigned membership role (`entity_memberships.role`), if any — there may
+  be no row at all, and
 - `admin`, if they currently have at least one live loan to that entity.
 
 When the last loan from a person ends, their *derived* admin ends with it; any
@@ -146,12 +192,30 @@ separately assigned role is untouched. Admin is therefore self-healing in both
 directions — it appears when someone contributes and recedes when they stop,
 without anyone filing a ticket.
 
+### Lending does not require membership
+
+The person with the credit card is frequently **not on the project**: an advisor,
+an investor, a parent company, a founder funding a side effort, the operator
+setting the whole thing up from another company's address. Requiring membership
+to lend would break the primary use case this spec exists for.
+
+So: **anyone may lend to an entity they can see.** A live loan confers derived
+`admin` whether or not the lender holds a membership row. When the loan ends they
+revert to whatever membership they had — possibly none, and that is a normal
+resting state, not an error.
+
+This is the third independence axis, and it follows from the first two:
+
+**INVARIANT: membership and lending are independent. Removing someone's
+membership does not end their loans; ending their loans does not remove their
+membership.** Alice can be removed from Acme Corp and still be funding Apollo. If
+you want both gone, do both — explicitly, per Ruling 1b.
+
 ### What the model deliberately does not do
 
-It does not ask who is *allowed* to lend. Any member may. Over-flexible by
-choice: in a world where a new API shows up every week, the cost of asking
-permission to be useful is higher than the cost of someone lending a key nobody
-needed.
+It does not ask who is *allowed* to lend. Over-flexible by choice: in a world
+where a new API shows up every week, the cost of asking permission to be useful is
+higher than the cost of someone lending a key nobody needed.
 
 ## Ruling 2b — the cascade is a lender's gesture, not a directory's structure
 
@@ -325,6 +389,13 @@ Migration note: `workspaces` → `entities` with `kind: workspace`;
       one entity while the rest of the cascade survives
 - [ ] The lending UI states that a loan reaches whoever is in the entity **later**,
       not only its current members
+- [ ] Removing a person from an organization leaves every workspace and project
+      membership they hold untouched — and the reverse
+- [ ] The removal UI names what the person will still have access to afterwards
+- [ ] "Remove from everything" exists as an explicit multi-select, never as an
+      implicit consequence of a single removal
+- [ ] A non-member can lend to an entity and is admin of it while the loan is
+      live, then quietly stops being anything when it ends
 - [ ] A lender can see what their key was spent on, by whom, in which entity
 - [ ] A lender can cap spend, and hitting the cap notifies rather than fails
       silently
