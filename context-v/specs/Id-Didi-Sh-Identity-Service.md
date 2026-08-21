@@ -2,12 +2,12 @@
 title: "id.didi.sh — the Didi Identity Service"
 lede: "One owned identity service: headless-first API, a signed session cookie on `.didi.sh`, invite-only accounts — built on Elixir/Phoenix."
 date_created: 2026-07-06
-date_modified: 2026-07-06
+date_modified: 2026-08-20
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.1.1
+semantic_version: 0.0.2.0
 status: Implementing
 category: Specification
 tags:
@@ -322,6 +322,116 @@ memberships + role changes, sessions (list, kill), auth-event log, app
 registry. `superuser` only; every superuser action writes an `auth_events`
 row with the acting user (the audit-trail requirement from the original
 exploration).
+
+## Amendment 2026-08-20 — didi.sh becomes an authorization server (OAuth 2.1 + OIDC)
+
+**Status: proposed. O1–O6 need sign-off before implementation.**
+
+### The direction confusion this must not create
+
+didi.sh **already speaks OAuth — in the opposite direction.**
+`GET /api/oauth/:provider/start` and `GET /oauth/:provider/callback` are didi.sh
+acting as an OAuth **client**, consuming Google and GitHub to log a person in.
+
+This amendment makes didi.sh an OAuth **authorization server**: other apps send
+people *here* to log in, and receive tokens they can verify.
+
+Same word, opposite direction, and the existing routes already occupy `/oauth/*`.
+Getting this wrong produces a route collision and a permanent source of
+confusion for anyone reading the router.
+
+### Why now
+
+Two consumers need it, and neither is hypothetical:
+
+- **Onyx SSO.** palmer-ai runs Onyx with `AUTH_TYPE=basic` and open
+  registration, deliberately time-boxed. Onyx ships multi-provider OIDC in
+  `backend/onyx/server/oidc_multi.py` — the **MIT** path, not `ee/` — so didi.sh
+  can become its login with no enterprise licence.
+- **MCP connectors.** `self-host-stack`'s homebase spec, amendment **A1**
+  (2026-08-20), makes didi.sh the authorization server for the one-connector-per-
+  client plane. Claude Desktop speaks OAuth 2.1 and requires dynamic client
+  registration.
+
+`context-v/explorations/Serving-Secrets-Server-Side-as-an-MCP-Capability-Plane.md`
+line 52 flagged this surface as *"a contract addition → parent spec first."*
+This is that.
+
+### Decisions proposed
+
+| # | Decision | Why |
+|---|---|---|
+| **O1** | **New authorization-server endpoints live under `/oauth2/`.** The existing inbound `/oauth/:provider/*` client routes are untouched. | Avoids a route collision and a breaking rename of endpoints consumers already call. `/oauth2/authorize` is unambiguous; `/oauth/authorize` beside `/oauth/google/callback` is not. |
+| **O2** | **Access tokens are short-lived EdDSA JWTs verified via the existing JWKS, carrying the `sid` (session id). The session row stays the revocation authority.** No new token store. | This is the session model the service already has — *"30-day server-side sessions as the revocation authority, short-lived EdDSA tokens verified locally via JWKS."* An OAuth access token becomes another audience of the same machinery rather than a parallel one. Killing a session kills its tokens. |
+| **O3** | **Dynamic Client Registration (RFC 7591) is supported and open, rate-limited rather than gated.** | Claude Desktop registers itself against servers nobody pre-registered it with; without DCR the MCP path does not work at all. Openness is the requirement, not a convenience — mitigate with rate limits and short unused-client expiry, not with an approval queue. |
+| **O4** | **OIDC on top: `id_token` + `/oauth2/userinfo`.** `/api/me` remains as-is. | Onyx needs identity claims to create a user row, which OAuth alone does not provide. `userinfo` is the standards-shaped view of what `/api/me` already returns; the existing endpoint keeps its own contract for existing consumers. |
+| **O5** | **Every URL in the discovery documents must be absolute `https://`.** | Measured, on a sibling stack: Twenty behind Railway's proxy advertised `http://` endpoints and Claude Desktop's DCR died with *"Couldn't register with …'s sign-in service."* didi.sh sits behind Fly's proxy. Verify the rendered `.well-known` output, not the config. |
+| **O6** | **Scopes start minimal — `openid`, `profile`, `email`.** Entity/workspace-scoped grants are deferred. | Do not invent a scope grammar before the model that needs it lands. See [[Flexible-Entity-Relationships-to-Mirror-Messy-IRL-Collaboration]], which defines the entities scopes would eventually name. |
+
+### Endpoints added
+
+| Endpoint | Does |
+|---|---|
+| `GET /.well-known/openid-configuration` | OIDC discovery. Absolute https URLs (O5). |
+| `GET /.well-known/oauth-authorization-server` | RFC 8414 metadata, same content shaped for OAuth-only clients. |
+| `GET /oauth2/authorize` | Authorization-code flow with PKCE. Reuses the existing `didi_session` cookie when present; otherwise falls through to the magic-link flow we already have, then returns here. Renders the consent step. |
+| `POST /oauth2/token` | Code → access token (+ `id_token` when `openid` was requested) + refresh token. PKCE `code_verifier` required. |
+| `POST /oauth2/register` | RFC 7591 dynamic client registration (O3). |
+| `GET /oauth2/userinfo` | OIDC claims for the bearer token (O4). |
+| `POST /oauth2/revoke` | RFC 7009. Revokes a refresh token; killing the session remains the stronger lever. |
+
+`/.well-known/jwks.json` is unchanged and already serves the verification keys.
+
+### Schema added by this amendment
+
+| Table | Notes |
+|---|---|
+| `oauth_clients` | `client_id`, hashed `client_secret` (nullable — public clients use PKCE only), `redirect_uris` (exact-match allowlist), `client_name`, `grant_types`, `token_endpoint_auth_method`, `registered_via ∈ dcr / manual`, `created_at`, `last_used_at`. `last_used_at` exists so unused DCR clients can be reaped (O3). |
+| `oauth_authorization_codes` | Hashed `code`, `client_id`, `didi_id`, `sid`, `redirect_uri`, `scope`, `code_challenge` + `code_challenge_method`, `expires_at`, `claimed_at`. Single-use, short TTL — the same hashed-single-use discipline as `login_tokens`. |
+| `oauth_refresh_tokens` | Hashed token, `client_id`, `didi_id`, `sid`, `scope`, `expires_at`, `revoked_at`, `rotated_to`. Tied to `sid` so session revocation cascades (O2). |
+
+No changes to `users`, `sessions`, `organizations`, `workspaces`,
+`workspace_memberships`, `login_tokens`, or `apps`.
+
+### Implementation increments
+
+Appended to the list above. Ordered cheapest-risk-first, so the step most likely
+to fail opaquely is proven before anything is built on it.
+
+1. **Discovery documents only.** Both `.well-known` routes, rendering absolute
+   https URLs. Deploy and curl them from outside. **Gate: the rendered JSON shows
+   `https://` for every endpoint, from behind Fly's proxy** (O5). This is an
+   afternoon and it de-risks the failure that killed a sibling deployment's DCR.
+2. **Schema + migration** for the three tables above.
+3. **`/oauth2/authorize` + `/oauth2/token`** with PKCE, reusing `didi_session`
+   and falling through to magic-link when absent. **Gate: a scripted client
+   completes the code exchange and verifies the token against JWKS.**
+4. **`/oauth2/register`** (DCR). **Gate: Claude Desktop adds the connector
+   without a manually created client.**
+5. **`id_token` + `/oauth2/userinfo`.** **Gate: claims validate against the OIDC
+   spec's required set.**
+6. **Onyx as first consumer.** Add didi.sh as an OIDC provider row in
+   palmer-ai's Onyx. **Gate: three real people sign into Onyx with didi.sh, and
+   `AUTH_TYPE=basic` plus open registration are retired.**
+
+### Open questions this amendment adds
+
+1. **Consent screen for first-party clients** — does an app we registered
+   ourselves still show *"allow this app…"*, or auto-approve? Auto-approval is
+   friendlier and removes a step the persona will misread as an error; showing it
+   is more honest about what is being granted.
+2. **Refresh-token rotation** — rotate on every use (safer, detects replay) or
+   long-lived (simpler)? Interacts with the 30-day session, which may make
+   refresh tokens nearly redundant.
+3. **Abuse controls on open DCR** — rate limit per IP, cap unused clients,
+   expiry for never-used registrations. Needed before this is internet-facing.
+4. **Does `/api/me` eventually collapse into `/oauth2/userinfo`?** Two endpoints
+   returning the same identity is a divergence risk, but `/api/me` has existing
+   consumers and returns more than OIDC standard claims.
+
+This amendment answers parent exploration **OQ#4** (*"how much of the OAuth
+surface do the desktop clients actually exercise"*) only partially — increments 1
+and 4 are where that gets measured rather than assumed.
 
 ## Consumer adapters
 
