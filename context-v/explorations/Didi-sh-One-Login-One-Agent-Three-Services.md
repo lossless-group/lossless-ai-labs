@@ -1,14 +1,14 @@
 ---
 title: "didi.sh — One Login, One Agent, Three Services"
-lede: "memos, decks, and augment-it become one family coordinated by exactly two shared planes: a common identity service and one agent named didi."
+lede: "memos, decks, and augment-it become one family coordinated by exactly two shared planes: a common identity service and one agent named didi. Consumer one is live; the local-auth question is now closed."
 date_created: 2026-07-06
-date_modified: 2026-07-06
+date_modified: 2026-08-21
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.1.1
-status: Draft
+semantic_version: 0.0.2.0
+status: Consumer 1 shipped · consumers 2–3 open
 tags:
   - Exploration
   - Ai-Labs-Architecture
@@ -23,10 +23,13 @@ tags:
   - Dididecks
   - Augment-It
   - Domain-Topology
+  - Magic-Link
+  - Multi-Tenancy
+  - Auth-Migration
 site_uuid: 95a44103-f84d-4874-820c-ea68c71997ff
 hex_code: rswqlp
 date_authored_initial_draft: 2026-07-06
-date_authored_current_draft: 2026-07-06
+date_authored_current_draft: 2026-08-21
 publish: true
 ---
 
@@ -345,16 +348,159 @@ survives with its auth thread re-targeted:
    augment-it-first since that's where the deployed surface and the client
    users are — decide when the identity service is real.
 
+## Update 2026-08-21 — consumer 1 is live, and the local-auth question is closed
+
+Seven weeks on, the identity plane stopped being a proposal. This section
+records what shipped, what it cost, and what that implies for consumers two
+and three. The plan above is unchanged in shape — this is evidence, not a
+revision.
+
+### What augment-it proved
+
+`id.didi.sh` runs on Fly; `augment.didi.sh` and `ws.augment.didi.sh` run on
+Railway. Since 2026-07-28 **one instance serves two client orgs** —
+`humain.vc` and `reach.edu` — with the session carrying the workspace. Two of
+this doc's open questions are answered by the fact of it: the subdomain is
+`id.didi.sh` (Q1), and the stable person id shipped as **`didi_id`** (Q2).
+
+The **headless contract held**, which was the load-bearing bet. The identity
+service owns no pixels. augment-it's `SignInWall.svelte` (full-page, pre-auth)
+and `DidiBadge.svelte` (in-header popover) each render their own surface and
+call the same small API directly:
+
+| Endpoint | Used for |
+|---|---|
+| `POST /api/magic-links` | issue — `{email, app}`; 202 for unknown addresses, no enumeration |
+| `POST /api/magic-links/redeem` | redeem a token, set the `didi_session` cookie |
+| `GET /api/me` | identity + memberships, which resolve to allowed workspaces |
+| `POST /api/session/refresh` | re-mint an expired JWT while the 30-day row lives |
+| `DELETE /api/session` | sign out everywhere |
+
+Services verify server-side against JWKS (`ID_JWKS_URL`, `ID_ISSUER`,
+`DIDI_AUTH=required`) rather than trusting a claim. Authorization stayed
+per-service exactly as designed: id says *who you are and what orgs you hold*,
+augment-it's `enforceTenant` decides what that may touch.
+
+**Org ↔ workspace binding** is the one piece of genuinely new mechanism. Each
+workspace declares its org in `clients/<id>/workspace.json` (`{"org_id":
+"reach.edu"}`), with an env fallback (`WORKSPACE_ORG_MAP=humain-vc=humain.vc,
+reach-edu=reach.edu`) for deploys where the clients directory lives on a
+volume rather than in git. A workspace with no org binding is invisible to
+client sessions — it fails safe. Consumers two and three will each need their
+own version of this: **the identity service deliberately does not know what a
+workspace, a deck, or a memo is.**
+
+### Five scars worth inheriting rather than re-earning
+
+1. **The CORS allowlist is a silent failure mode.** `id-didi-sh`'s production
+   `cors_origins` (`config/runtime.exs`) was **empty** when augment-it first
+   deployed, so every cross-origin browser call failed quietly — no error
+   worth noticing, just nothing working. *Every new `*.didi.sh` consumer must
+   be added to that list as it goes live.* This is the single highest-value
+   line in this section.
+2. **The cookie is `Domain=.didi.sh`, which is a hard topology constraint.**
+   A consumer not served from a `*.didi.sh` origin gets nothing from it. This
+   is fine for `memos.didi.sh`; it is fatal for client-owned domains, which
+   remain a separate auth problem (unchanged, but now proven rather than
+   predicted).
+3. **Sessions expiring mid-flight turned the app into a zombie** — stale UI
+   over a dead identity. The fix was an hourly `/api/session/refresh` plus a
+   `visibilitychange` handler, and clearing `user` on `auth_required` so the
+   sign-in wall re-asserts over the stale surface. See
+   [[../../augment-it/context-v/issues/Session-Expiry-Turns-The-App-Into-A-Zombie|Session-Expiry-Turns-The-App-Into-A-Zombie]].
+   Any consumer with long-lived tabs inherits this problem.
+4. **`PUBLIC_*` config is baked at build time, not read at runtime.**
+   `PUBLIC_ID_BASE` has exactly the property that just cost augment-it a
+   production outage on `PUBLIC_WS_URL` — a correct value set on the service
+   does nothing until a *rebuild*. See
+   [[../../augment-it/context-v/issues/Every-Remote-Hardcodes-The-Workspace-WS-To-Localhost-So-Prod-Loads-No-Data|Every-Remote-Hardcodes-The-Workspace-WS-To-Localhost]].
+   The generalisable rule: resolve shared endpoints in **one** module, never
+   as a literal per surface.
+5. **Local dev needs an escape hatch or nobody will run the wall.** augment-it
+   echoes a `dev_token` from the issue endpoint and auto-redeems it when
+   `PUBLIC_DEV_AUTO_LOGIN_EMAIL` is set — no inbox round-trip. It must be
+   one-shot per tab (guarded in `sessionStorage`): an earlier component-local
+   flag re-fired on the post-redeem reload and produced an infinite
+   magic-link loop.
+
+### The decision: no new local auth, anywhere
+
+**We maintain didi.sh for augment-it regardless.** That single fact collapses
+the build-vs-adopt question for the other two services — the marginal cost of
+adopting is wiring, while the marginal cost of *not* adopting is another
+independent auth implementation to secure, migrate, and keep alive forever.
+
+The current state makes the asymmetry concrete:
+
+| Repo | Auth today | Implication |
+|---|---|---|
+| `augment-it` | didi.sh, live, two orgs | the reference consumer |
+| `dididecks-ai` | **three separate local implementations** — `client-sites/calmstorm-decks`, `chroma-decks`, `eventcut-ai`, each with its own `src/lib/auth/` (passcode + token + middleware), its own `db/schema.ts`, its own `invite.ts` | already the drift this plane exists to prevent |
+| `memopop-ai` | **none** — `memopop-web-app`, `memopop-site`, `memopop-orchestrator`, `memopop-native` carry no session, cookie, or passcode code | greenfield; should never grow one |
+
+dididecks is the more interesting case precisely because `calmstorm-decks` is
+the implementation this doc's prior art cites as the audited reference. It
+didn't stay one implementation. It became three, which is the predicted
+failure mode arriving on schedule.
+
+### Wiring memopop — greenfield, so go straight there
+
+Nothing to migrate; the work is additive.
+
+- **Web tier (`memopop-web-app`, `memopop-site`)** — copy augment-it's
+  headless pattern, not its code: a full-page wall for the pre-auth state and
+  a badge for the signed-in state, both calling the five endpoints above.
+  Serve from `memos.didi.sh` so the cookie applies. Add that origin to
+  `cors_origins` **before** testing, or you will debug a silent failure.
+- **`memopop-orchestrator`** is a Python CLI/agent, not a browser. It needs
+  **service-to-service** credentials, not a user session — a different story
+  the identity spec does not yet tell. Flagged as an open question below
+  rather than assumed.
+- **`memopop-native` (Tauri)** stays the hard one, unchanged from the analysis
+  above: system-browser OAuth, deep-link back, refresh token in the OS
+  keychain, bearer on sidecar calls. Worth deferring until the web tier is
+  proven.
+
+The `memos` ↔ org mapping needs the same treatment augment-it gave workspaces:
+a memo (or a memo collection) belongs to an org, and the session's memberships
+decide visibility. Do not let it default to "any signed-in didi.sh account."
+
+### Wiring dididecks — a migration, and it forks on *who is signing in*
+
+The three deck sites are **client-viewer** surfaces, not operator surfaces.
+That is a materially different population from augment-it's, and it is the
+question that has to be answered before any code moves:
+
+- **Authoring** — the people building decks are us and our clients' teams.
+  These are unambiguously didi.sh accounts. Straightforward.
+- **Viewing** — a passcode handed to a room of LPs is a *deliberately*
+  low-friction, low-assurance affordance. Requiring each viewer to hold a
+  didi.sh identity may be the right call (attribution, per-viewer analytics,
+  revocation) or exactly the wrong one (friction on the surface whose entire
+  job is to be openable).
+
+A plausible resolution — to argue with, not adopt — is that **authoring
+migrates and viewing does not**: deck authors sign in with didi.sh, while
+per-deck viewer passcodes survive as a share mechanism, with the passcode
+implementation consolidated into *one* package instead of three. That keeps
+the low-friction share, ends the drift, and still means no new auth system.
+
+Client-owned deck domains remain outside the cookie either way.
+
 ## Open questions
 
-1. **Subdomain names.** `id.didi.sh` vs `auth.didi.sh` vs `login.didi.sh`;
+> **Resolved since drafting (2026-08-21):** Q1 (subdomain) and Q2 (`didi_id`)
+> are settled by what shipped — see the update section above. Q6 (BYOK) and Q7
+> (white-label) are untouched. Three new questions are appended at the end.
+
+1. ~~**Subdomain names.**~~ **Resolved — `id.didi.sh`.** `id.didi.sh` vs `auth.didi.sh` vs `login.didi.sh`;
    `augment.didi.sh` vs `it.didi.sh` (the pun) vs renaming the service to
    match `memos`/`decks` vocabulary (`corpus.didi.sh`? `research.didi.sh`?).
    The apex-as-front-door half of this question is answered by the GTM
    section — the apex is never the acquisition path; at most it hosts a
    secondary account console ("your account, your orgs, your services")
    reached from inside the apps.
-2. **`lossless_id` → `didi_id`?** The stable person id is about to be minted
+2. ~~**`lossless_id` → `didi_id`?**~~ **Resolved — shipped as `didi_id`.** The stable person id is about to be minted
    by the didi.sh service; naming it after the platform reads better in every
    downstream schema. Decide before the first row exists, not after.
 3. **Is didi the platform brand or just the agent?** "didi.sh services" vs
@@ -374,6 +520,18 @@ survives with its auth thread re-targeted:
    (`memos.acmevc.com`) were always a separate auth problem; a didi.sh
    account behind them is now the *authoring* identity either way. Unchanged,
    but worth restating so nobody expects the apex cookie to cover it.
+8. **Do deck *viewers* need didi.sh identities, or only deck authors?** The
+   fork named in the dididecks section above, and the one that decides whether
+   the migration is small or large. Answer this before touching code.
+9. **Service-to-service credentials.** `memopop-orchestrator` is a headless
+   Python agent with no browser and no user session. Does the identity service
+   issue machine tokens, or do agents run under a delegated user identity, or
+   is this outside its remit entirely? augment-it never had to ask, because
+   its services talk over NATS behind the workspace gate.
+10. **Do the three deck auth implementations migrate, freeze, or consolidate?**
+   `calmstorm-decks`, `chroma-decks`, and `eventcut-ai` are live client
+   surfaces. "Migrate all three now" competes with "consolidate into one
+   package, migrate opportunistically" — and the answer depends on Q8.
 
 ## What forks from this
 
