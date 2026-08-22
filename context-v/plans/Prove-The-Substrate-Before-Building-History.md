@@ -9,7 +9,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-at_semantic_version: 0.0.0.1
+at_semantic_version: 0.0.0.2
 status: Draft
 site_uuid: 9345909f-1569-4e5e-b1cc-227428f849fd
 hex_code: nmaw8l
@@ -280,18 +280,54 @@ The document service wants its own spec in `flave-ai/context-v/specs/`, and it
 should not start until Phase 2 exists, because it is the same feed and the same
 structured change record pointed at a different artifact.
 
-## Open questions
+## Answered while writing this — corpora-builder's origin and scope
 
-1. **Does the reach-edu corpus stay in `augment-it`, or move to
-   corpora-builder's world?** It is currently a submodule of augment-it, edited
-   by augment-it's tooling, while corpora-builder is a separate program that has
-   never touched it. Two programs, one corpus, no defined relationship. **This is
-   the most consequential unanswered question in the plan** and Phase 0 should
-   not paper over it.
-2. **What is corpora-builder for, if the corpus lives in git in another repo?**
-   Capture and quality-scan are real and working. Whether they operate *on* the
-   augment-it corpus or on a separate one is undecided, and the answer changes
-   Phase 1's direction.
+Owner, 2026-08-22:
+
+> I built corpora-builder within augment-it because it centered around the same
+> use case — augmenting record sets for a client. But as we built it out, I
+> realized that it's useful as a **standalone app**, as well as one that
+> **integrates into the didi.sh venture capital suite** of dididecks-ai and
+> memopop-ai.
+
+This resolves what were the plan's two most consequential open questions, and it
+changes Phase 1's meaning rather than its steps.
+
+**corpora-builder is not augment-it tooling that got promoted. It is a product
+that happened to be born inside augment-it**, because the first corpus it needed
+was one augment-it already had. The "two programs, one corpus, no defined
+relationship" reading in the audit was wrong in an instructive way: they were
+*one* program, and the relationship is **inheritance, not overlap**.
+
+Three consequences worth carrying:
+
+1. **The corpus living in `augment-it/clients/reach-edu/corpus/` is a legacy of
+   origin, not a design decision.** Nobody chose to put a corpus in a
+   record-enrichment app; it was already there when corpora-builder split out.
+2. **Phase 1 is the first step of a handover, not a copy.** Mirroring
+   `augment-it/clients/reach-edu/corpus/` into corpora-builder's `live/` is not a
+   category error — it is the corpus starting to move to the program that now
+   owns the concept. Whether augment-it later *reads* from there, keeps its own,
+   or drops it is a separate decision, and Phase 1 does not force it because the
+   mirror is one-way and non-destructive.
+3. **Three consumers, not one.** augment-it (record sets), dididecks-ai (decks),
+   and memopop-ai (memos) all want corpora, which is the strongest argument yet
+   for corpus-as-its-own-thing. It also re-raises the standing prohibition on
+   sharing dependencies across `ai-labs` apps: the answer is a **service with a
+   verb contract and file formats** — the `source.*` vocabulary already sketched
+   in the corpora-builder system design — **never an imported package**.
+
+## Still open
+
+1. **What does augment-it read from, after Phase 1?** Its own submodule, or
+   corpora-builder's bucket? Not forced by this plan, but it is the next
+   decision after the mirror lands, and it is the one that makes the handover
+   real rather than notional.
+2. **Standalone versus suite — which ships first?** A standalone corpora-builder
+   and a suite-integrated one imply different next surfaces (its own Tauri shell
+   per the MVP plan's Phase 7, versus a didi.sh-mounted view). The MVP plan
+   assumes the former; the answer above allows both, so the sequencing is now
+   genuinely open rather than assumed.
 3. **Is the second client (`humain-vc`) in the same shape?** Not audited. It has
    a corpus directory; nothing else was checked.
 4. **Retention.** Git has no thinning story and an autosave-shaped gesture will
