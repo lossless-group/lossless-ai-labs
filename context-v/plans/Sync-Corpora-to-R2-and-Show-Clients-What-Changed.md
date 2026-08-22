@@ -1,5 +1,5 @@
 ---
-title: "Prove the Substrate Before Building History"
+title: "Sync Corpora to R2, and Show Clients What Changed"
 lede: "The R2 prefix has held zero objects for fourteen days — and the corpus grew anyway, in git. Mirror first, version later."
 date_created: 2026-08-22
 date_modified: 2026-08-22
@@ -9,7 +9,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-at_semantic_version: 0.0.0.2
+at_semantic_version: 0.0.1.0
 status: Draft
 site_uuid: 9345909f-1569-4e5e-b1cc-227428f849fd
 hex_code: nmaw8l
@@ -40,7 +40,28 @@ tags:
 publish: true
 ---
 
-# Prove the Substrate Before Building History
+# Sync Corpora to R2, and Show Clients What Changed
+
+## The plan in one table
+
+Three engines, one per layer, staged by **trigger** rather than by date — plus the
+one piece nobody sells, which is the only thing we write.
+
+| | What | Layer | When | Where below |
+|---|---|---|---|---|
+| **1** | **rclone** → R2 | Transport | **Now.** ~30 minutes | Phase 1 |
+| **2** | **the feed** — the gesture, the sentence, the render | **Legibility** | **Now.** Against git | Phase 2, 3 |
+| **3** | **Kopia** — a repo per client, beside `live/` | History | When R2 becomes primary | Parked, trigger 2 |
+| **4** | **Syncthing** — `receiveonly` collaborator mirrors | Transport, human↔human | When a named person asks for live access | Parked, trigger 4 |
+| **5** | **Automerge** — CRDT | Simultaneous editing | Probably never. Only if two people must edit one paragraph at once | Parked, trigger 5 |
+
+**Steps 1 and 2 are the plan. Steps 3–5 are pre-decided answers waiting on
+triggers**, so that when one fires nobody re-runs the research —
+`ai-labs/studies/sync-and-content-version-control` already did it, six references
+deep, one profile each.
+
+**Git is the history layer until step 3 fires.** It already is one, and nobody
+counted it — see below.
 
 ## Why Care?
 

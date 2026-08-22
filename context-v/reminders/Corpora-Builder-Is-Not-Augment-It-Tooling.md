@@ -111,7 +111,7 @@ top of.
 
 ## Related
 
-- `../plans/Prove-The-Substrate-Before-Building-History.md` — where the origin was recorded and what it changes
+- `../plans/Sync-Corpora-to-R2-and-Show-Clients-What-Changed.md` — where the origin was recorded and what it changes
 - `../../corpora-builder/context-v/explorations/Corpora-Builder-System-Design.md` — the operator wishlist and the domain model
 - `../explorations/A-Syncbox-For-Client-Document-Folders.md` — the substrate and history reasoning around it
 - `../../../context-v/reminders/Check-The-Substrate-Before-Reasoning-On-Top-Of-It.md` — the tree-wide guardrail from the same session
