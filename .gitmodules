@@ -51,3 +51,7 @@
 	path = flave-ai
 	url = https://github.com/lossless-group/flave.git
 	branch = main
+[submodule "studies/sync-and-content-version-control"]
+	path = studies/sync-and-content-version-control
+	url = https://github.com/lossless-group/study-sync-and-content-version-control.git
+	branch = main

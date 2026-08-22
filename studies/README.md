@@ -124,3 +124,9 @@ re-derived. The study is the project's institutional memory for that domain.
   (Kaas, openagent, Dive, 5ire, anything-llm, routa, open-vibe,
   librechat). Promoted to
   `lossless-group/study-conversational-ui-and-native-shells`.
+- [sync-and-content-version-control](./sync-and-content-version-control) —
+  for a folder of documents shared bidirectionally between an operator and a
+  non-technical client, backed by blob storage, at which layer does history
+  live: the transport, the store, the application, or the document? (jj,
+  Seafile, Syncthing, restic, Kopia, Automerge). Promoted to
+  `lossless-group/study-sync-and-content-version-control`.
