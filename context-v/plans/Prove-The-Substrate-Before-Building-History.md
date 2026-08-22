@@ -1,6 +1,6 @@
 ---
 title: "Prove the Substrate Before Building History"
-lede: "The R2 corpus prefix has been empty for fourteen days while the corpus grew in git. Mirror what exists, build the feed, and let triggers decide the rest."
+lede: "The R2 prefix has held zero objects for fourteen days — and the corpus grew anyway, in git. Mirror first, version later."
 date_created: 2026-08-22
 date_modified: 2026-08-22
 date_authored_initial_draft: 2026-08-22
