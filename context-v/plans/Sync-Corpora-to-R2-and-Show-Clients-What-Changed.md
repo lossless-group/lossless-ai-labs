@@ -9,7 +9,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-at_semantic_version: 0.0.1.1
+at_semantic_version: 0.0.1.2
 status: Draft
 site_uuid: 9345909f-1569-4e5e-b1cc-227428f849fd
 hex_code: nmaw8l
@@ -50,7 +50,7 @@ one piece nobody sells, which is the only thing we write.
 | | What | Layer | When | Where below |
 |---|---|---|---|---|
 | **1** | **rclone** → R2 | Transport | **✅ Done 2026-08-22** | Phase 1 |
-| **2** | **the feed** — the gesture, the sentence, the render | **Legibility** | **Now.** Against git | Phase 2, 3 |
+| **2** | **the feed** — the sentence and the render | **Legibility** | **✅ Read side done 2026-08-22** | Phase 2, 3 |
 | **3** | **Kopia** — a repo per client, beside `live/` | History | When R2 becomes primary | Parked, trigger 2 |
 | **4** | **Syncthing** — `receiveonly` collaborator mirrors | Transport, human↔human | When a named person asks for live access | Parked, trigger 4 |
 | **5** | **Automerge** — CRDT | Simultaneous editing | Probably never. Only if two people must edit one paragraph at once | Parked, trigger 5 |
@@ -210,7 +210,7 @@ byte-identically, and the numbers are in the changelog.
 > environment variables so no R2 secret is persisted to disk.
 > Full numbers: `corpora-builder/changelog/2026-08-22_01.md`.
 
-### Phase 2 — The legibility layer, against git *(ai-labs → augment-it)*
+### Phase 2 — The legibility layer, against git *(corpora-builder)* — ✅ **Read side shipped 2026-08-22**
 
 The actual product, and the answer to the invisible-progress problem. No
 reference in the study supplies this; every one of them scores *none* on it.
@@ -237,6 +237,18 @@ getting the interface right matters more than getting the implementation right.*
 
 **Done when:** a reach-edu-shaped feed renders the last ten changes with reasons,
 from real repository data, and a non-technical reader can tell what happened.
+
+> [!success] **Shipped 2026-08-22 — the read side**
+> `corpora changes` over the real reach-edu corpus in **0.23 seconds**. All
+> sixteen `FEED-*` IDs green, mypy clean, ladder passing. Built in
+> **corpora-builder**, not augment-it as this plan originally annotated — the
+> origin clarification made corpora-builder the owner of the corpus concept, and
+> it already had the CLI surface and the spec-driven loop.
+> **Still open from this phase: the gesture.** "Save a version" as a *write*,
+> with a required sentence, is its own spec — this one is read-only like
+> `Browse-Corpus`. Nothing here creates a change.
+> Spec: `corpora-builder/context-v/specs/Corpus-Change-Feed.md` ·
+> Ship note: `corpora-builder/changelog/2026-08-22_02.md`
 
 ### Phase 3 — The client read surface *(augment-it, didi.sh)*
 
