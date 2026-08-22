@@ -9,7 +9,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-at_semantic_version: 0.0.1.0
+at_semantic_version: 0.0.1.1
 status: Draft
 site_uuid: 9345909f-1569-4e5e-b1cc-227428f849fd
 hex_code: nmaw8l
@@ -49,7 +49,7 @@ one piece nobody sells, which is the only thing we write.
 
 | | What | Layer | When | Where below |
 |---|---|---|---|---|
-| **1** | **rclone** → R2 | Transport | **Now.** ~30 minutes | Phase 1 |
+| **1** | **rclone** → R2 | Transport | **✅ Done 2026-08-22** | Phase 1 |
 | **2** | **the feed** — the gesture, the sentence, the render | **Legibility** | **Now.** Against git | Phase 2, 3 |
 | **3** | **Kopia** — a repo per client, beside `live/` | History | When R2 becomes primary | Parked, trigger 2 |
 | **4** | **Syncthing** — `receiveonly` collaborator mirrors | Transport, human↔human | When a named person asks for live access | Parked, trigger 4 |
@@ -173,7 +173,7 @@ re-derive it.
 **Done when:** a reader of the corpora-builder plan learns the bucket is empty
 and why, without opening this document.
 
-### Phase 1 — Mirror what exists *(augment-it, corpora-builder)*
+### Phase 1 — Mirror what exists *(augment-it, corpora-builder)* — ✅ **Shipped 2026-08-22**
 
 The cheapest useful move in the whole plan. Roughly thirty minutes.
 
@@ -196,6 +196,19 @@ authoritative. This is a mirror. The laptop and git remain the truth.
 
 **Done when:** `live/` holds 892 objects, the down-sync reproduces the tree
 byte-identically, and the numbers are in the changelog.
+
+> [!success] **Shipped 2026-08-22 — and the target number was wrong**
+> `live/` holds **886** objects, not 892. The six-file difference is `.DS_Store`,
+> excluded deliberately; 886 is exactly what `git ls-files corpus` reports, so
+> the bucket now mirrors what git tracks. 153.7 MiB up in 28 seconds, pulled back
+> into an empty directory, **886/886 files with every `sha256` identical**.
+> Hand-recoverability is now measured rather than intended: `grep -rl "rural"`
+> on the recovered tree returns 46 hits with no corpora-builder installed.
+> Repeatable via `corpora-builder/scripts/mirror_corpus.sh <src> [--verify]`,
+> which uses `copy` not `sync` (the destination is a client-owned bucket and a
+> mirror should not be able to delete there) and configures rclone from
+> environment variables so no R2 secret is persisted to disk.
+> Full numbers: `corpora-builder/changelog/2026-08-22_01.md`.
 
 ### Phase 2 — The legibility layer, against git *(ai-labs → augment-it)*
 
