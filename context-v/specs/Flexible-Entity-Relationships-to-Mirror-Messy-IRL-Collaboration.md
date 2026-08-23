@@ -219,6 +219,22 @@ higher than the cost of someone lending a key nobody needed.
 
 ## Ruling 2b — the cascade is a lender's gesture, not a directory's structure
 
+> **Terminology collision, flagged 2026-08-23 — unresolved.** "Cascade" is now
+> being used for a second, unrelated thing: the `parent:child` tag syntax shared
+> by entities and domains (`entity:organization`, `domain:strategy`), where
+> *"parent-child is not enforced, it is derived from the syntax, and can
+> cascade"* means **the chain composes through levels**.
+>
+> That is close to the opposite of this ruling, which exists to say a cascade is
+> **declared by a lender per act** and explicitly *not* structural. Two meanings,
+> two adjacent specs, one word — and the one below is about credentials while
+> the other is about naming.
+>
+> One of them has to be renamed before either is written into code. Candidates
+> for the syntax sense: *chain*, *lineage*, *derived path*. See
+> [[../../corpora-builder/context-v/plans/Didi-Auth-and-Multi-Org-Corpora]],
+> catch 3.
+
 The contrast that makes this clear is Okta. Okta assumes a **tight** concept of
 organization, a tight in-or-out, tight parent-child relationships, and
 inheritance that follows from all of it. Access flows downhill because the

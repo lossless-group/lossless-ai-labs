@@ -2,12 +2,12 @@
 title: "id.didi.sh — the Didi Identity Service"
 lede: "One owned identity service: headless-first API, a signed session cookie on `.didi.sh`, invite-only accounts — built on Elixir/Phoenix."
 date_created: 2026-07-06
-date_modified: 2026-08-20
+date_modified: 2026-08-23
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Fable 5
-semantic_version: 0.0.2.0
+semantic_version: 0.0.3.0
 status: Implementing
 category: Specification
 tags:
@@ -27,7 +27,7 @@ tags:
 site_uuid: a01b23e6-1ff7-49bb-92e8-37f34e4c5de2
 hex_code: v163au
 date_authored_initial_draft: 2026-07-06
-date_authored_current_draft: 2026-07-06
+date_authored_current_draft: 2026-08-23
 publish: true
 ---
 
@@ -259,12 +259,62 @@ access.** Auto-join writes an ordinary membership row; from that moment the row,
 not the domain, is the authority. Changing or clearing a domain therefore cannot
 revoke anyone.
 
-**4. Organizations survive, demoted.** Still domain-as-id, still useful for
-grouping, billing, and firm profiles. They stop being the access boundary.
+**4. Organizations survive, demoted.** Still useful for grouping, billing, and
+firm profiles. They stop being the access boundary.
+
+> **Amended 2026-08-23 — the handle is the identity, not the domain.** Ruling 4
+> originally read *"still domain-as-id."* That cannot hold for the same reason
+> ruling 2 exists: `palmer-ai` is not an email domain, and the account was made
+> on a `human.vc` address. An org keyed on a domain it does not own is a row
+> that has to be faked before it can be created.
+>
+> `organizations.slug` already exists and is the handle — `[palmer-ai]`,
+> `[reach-edu]`, `[humain-vc]`, `[nextladder]`. **It becomes the identity;
+> `domain` becomes a nullable self-signup hint on the org exactly as
+> `default_domain` already is on the workspace.** One argument, applied twice.
+>
+> **An entity may exist with no corpus, no bucket, and no domain.** NextLadder
+> is the worked case: an org somebody is a member of before anything has been
+> provisioned for it. Any code that assumes *entity ⇒ storage* breaks on the
+> first one, so entity creation and resource provisioning stay separate steps.
 
 This is the shape Slack, Notion and Linear each converged on, for the same
 reason: optional domain-based auto-join plus explicit invitations that ignore it
 entirely.
+
+### Amended 2026-08-23 — a session holds SEVERAL entities at once
+
+The workspace picker in
+[[../plans/Didi-Login-and-Workspace-Config-for-Corpora]] is single-select. That
+is wrong for the actual work:
+
+> *"When someone like me is authorized, they WILL be able to view corpora for
+> multiple organizations if they choose … consulting, multiple workspaces,
+> multiple projects. A lot of times a source has broad applications."*
+
+So membership resolution is **a set, not a choice**. `GET /api/entities` returns
+everything the caller may act in, with role; the client decides how many to hold
+open. Reach Edu, Palmer AI and NextLadder are expected to carry *massively
+overlapping* corpora, and the overlap is the point rather than a duplication to
+resolve.
+
+Two consequences that bind on any consumer:
+
+- **Read is the union; write names exactly one.** With three tenants open,
+  *"file this"* has no default, and inferring one is how a client's material
+  ends up in another client's corpus.
+- **Credentials become a set.** The brokered short-lived credentials of the
+  2026-08-08 plan are per-tenant, so a client holds a map keyed by handle with
+  independent expiries — not one credential.
+
+**Open, and blocking:** [[Flexible-Entity-Relationships-to-Mirror-Messy-IRL-Collaboration]]
+Ruling 1 specifies **one `entities` table** with `kind` as a display label and
+**no `parent_id`**, having explicitly retracted containment. This spec still
+specifies separate `organizations` and `workspaces` with `workspaces.org_id`.
+They cannot both be built. The newer ruling is the better-argued one — *"projects
+are collaborations among many organizations"* — and reconciling toward it is the
+recommendation, but it is an operator call and it blocks creating the four
+entities above.
 
 **What stays in the services.** Per-resource state — which deck, which memo,
 which corpus domain — remains theirs. What moves here is the *tenant* and its

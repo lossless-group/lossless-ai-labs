@@ -2,14 +2,15 @@
 title: "didi.sh Login and Workspace-Delivered Config — the plan across three repos"
 lede: "corpora-builder should get its config — R2 credentials included — from the didi.sh workspace, not a local `.env`."
 date_created: 2026-08-08
-date_modified: 2026-08-08
+date_modified: 2026-08-23
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-semantic_version: 0.0.0.3
+semantic_version: 0.0.0.4
 status: Draft
 revisions:
+  - "2026-08-23 — v0.0.0.4 — evolved: the workspace picker is MULTI-select (read is the union, write names one); org identity is the handle, not the domain; and the entities-vs-organizations+workspaces schema conflict is named as blocking. Corpora-builder half split out to `corpora-builder/context-v/plans/Didi-Auth-and-Multi-Org-Corpora.md`."
   - "2026-08-08 — v0.0.0.3 — second correction: secretspec was never installed, only its manifest format adopted. Demoted from 'the interface' to an option, with the honest for/against and a leaning to skip it here."
   - "2026-08-08 — v0.0.0.2 — operator correction: domain-as-id is too strict for how this actually works (palmer-ai accounts on a human.vc address; advisors, investors and service providers at every startup). Workspace becomes the tenancy AND secret boundary; domain demoted to an auto-join convenience. Route A dropped. secretspec named as the interface."
   - "2026-08-08 — v0.0.0.1 — initial draft, offering org-keyed (A) vs workspace-first (B)."
@@ -185,6 +186,39 @@ multi-provider abstraction. The stacks — three clients, many secrets, Railway 
 `.env` and didi all in play — are where the abstraction would actually pay. That
 also means the decision can be made later against a real case, which is the same
 discipline applied to workspaces above.
+
+## Evolved 2026-08-23 — three corrections
+
+This plan stands. Three things changed after it, and the corpora-builder half now
+lives in its own plan:
+[[../../corpora-builder/context-v/plans/Didi-Auth-and-Multi-Org-Corpora]].
+
+**1. The workspace picker is multi-select.** Phase D said *"the operator sees
+reach-edu, palmer-ai and lossless in one list"* — and then picks one. They need to
+hold several **open at once**: consulting, several projects, and corpora that
+overlap massively on purpose. Read becomes the union of the selected tenants;
+**write still names exactly one**, because with three open *"file this"* has no
+safe default.
+
+For corpora-builder this is a new `CorpusStore` over N tenants rather than a
+rewrite — which is the payoff the storage seam was written to buy — so it costs
+far less than its blast radius suggests.
+
+**2. Credentials are a set.** Phase C described one credential client. It holds a
+map keyed by handle, with independent TTLs and refreshes.
+
+**3. Org identity is the handle, not the domain.** Ruling 4 of the spec amendment
+kept orgs as domain-as-id. `palmer-ai` is not a domain, for the same reason the
+advisor case exists. `organizations.slug` becomes the identity; `domain` becomes
+a nullable self-signup hint. Entities to create: `reach-edu`, `humain-vc`,
+`palmer-ai`, `nextladder` — the last with **no corpus**, which is what proves
+entity creation and resource provisioning are separate steps.
+
+**Newly blocking:** the schema conflict between
+[[../specs/Flexible-Entity-Relationships-to-Mirror-Messy-IRL-Collaboration]]
+(one `entities` table, no containment) and
+[[../specs/Id-Didi-Sh-Identity-Service]] (separate `organizations` + `workspaces`
+with `org_id`). Phase B cannot create the four entities without that call.
 
 ## The phases
 
