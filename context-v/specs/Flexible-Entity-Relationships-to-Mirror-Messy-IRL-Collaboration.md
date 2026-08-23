@@ -265,9 +265,8 @@ consistent with the existing ruling on `user:org:workspace:project` below:
 *"Do not store it as a tuple — the copies would disagree."* One entity, many
 possible chains, each true in the context that wrote it.
 
-*Reading taken:* `entities.slug.cascade` names the **derived chained form** built
-at call time, not a stored column. Correct this line if a column was meant — the
-rest of the section depends on it.
+**Confirmed by the operator 2026-08-23:** `entities.slug.cascade` names the
+**derived chained form**, built at call time. Not a stored column.
 
 #### Why this is the useful shape
 
