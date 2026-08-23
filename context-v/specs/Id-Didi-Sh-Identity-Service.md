@@ -307,14 +307,27 @@ Two consequences that bind on any consumer:
   2026-08-08 plan are per-tenant, so a client holds a map keyed by handle with
   independent expiries — not one credential.
 
-**Open, and blocking:** [[Flexible-Entity-Relationships-to-Mirror-Messy-IRL-Collaboration]]
-Ruling 1 specifies **one `entities` table** with `kind` as a display label and
-**no `parent_id`**, having explicitly retracted containment. This spec still
-specifies separate `organizations` and `workspaces` with `workspaces.org_id`.
-They cannot both be built. The newer ruling is the better-argued one — *"projects
-are collaborations among many organizations"* — and reconciling toward it is the
-recommendation, but it is an operator call and it blocks creating the four
-entities above.
+### Resolved 2026-08-23 — one `entities` table, keyed by slug
+
+The schema question is answered: **`entities`**, per
+[[Flexible-Entity-Relationships-to-Mirror-Messy-IRL-Collaboration]] Ruling 1 —
+one table, `kind` a display label, **no `parent_id`**. `organizations` and
+`workspaces` reconcile toward it rather than standing beside it.
+
+**`entities.slug` is the identity** — `[reach-edu]`, `[humain-vc]`,
+`[palmer-ai]`, `[nextladder]`. Not the email domain, which becomes a nullable
+self-signup hint, and not a UUID in any surface a person reads.
+
+**Parenthood is invoked, never stored.** An entity referenced by its slug alone
+is independent. A *chained* reference — `organization:palmer-ai:workspace:q3` —
+is a different act, and writing the chain is what authorises parent-child
+behaviour in the UX and in how data is fetched and transformed. The record does
+not change; the reference does. See that spec's *"The cascade is invoked, not
+stored."*
+
+This is what lets one workspace be invoked under Palmer AI on Monday and under a
+joint venture on Tuesday with **neither invocation more true than the other** —
+the case containment was retracted to make cheap.
 
 **What stays in the services.** Per-resource state — which deck, which memo,
 which corpus domain — remains theirs. What moves here is the *tenant* and its

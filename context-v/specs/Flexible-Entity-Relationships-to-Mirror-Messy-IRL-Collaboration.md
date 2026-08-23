@@ -240,6 +240,47 @@ higher than the cost of someone lending a key nobody needed.
 > Both keep the same contrast with Okta: there the directory decides what flows,
 > here a person does.
 
+### The cascade is invoked, not stored *(operator, 2026-08-23)*
+
+> *"Cascade means the parent-child behavior is only used when they are
+> purposefully chained together. So a workspace is independent, but when called
+> as `organization:workspace` then some parent-child behavior can be in the UX
+> and how data is transformed, called."*
+
+**The relationship is a property of the reference, not of the record.** This is
+what makes Ruling 1 and cascading co-exist rather than compete:
+
+- `entities.slug` is the identity. An entity referenced by its slug alone is
+  **independent** — no parent, no children, nothing inherited. That is Ruling 1,
+  unchanged.
+- A **chained reference** — `organization:palmer-ai:workspace:q3-planning` — is
+  a *different act*. Writing the chain is the declaration, and it is what
+  authorises parent-child behaviour in the UX and in how data is transformed and
+  fetched. The same workspace, invoked with parenthood.
+- Nothing about the record changed. **Chain it and you get the behaviour; name it
+  alone and you do not.**
+
+So the chained form is derived per reference and never persisted as a tuple —
+consistent with the existing ruling on `user:org:workspace:project` below:
+*"Do not store it as a tuple — the copies would disagree."* One entity, many
+possible chains, each true in the context that wrote it.
+
+*Reading taken:* `entities.slug.cascade` names the **derived chained form** built
+at call time, not a stored column. Correct this line if a column was meant — the
+rest of the section depends on it.
+
+#### Why this is the useful shape
+
+A workspace is genuinely shared. `q3-planning` may be invoked under Palmer AI on
+Monday and under a joint venture on Tuesday, and **neither invocation is more
+true than the other**. Store the parenthood and you have to pick one and fight
+the schema for the second — which is the failure Ruling 1 retracted containment
+to avoid. Declare it per reference and both are cheap.
+
+It also explains why folder nesting has never needed enforcing: a path **is** a
+written chain, so it already cascades, and a prefix test is what honouring it
+looks like.
+
 The contrast that makes this clear is Okta. Okta assumes a **tight** concept of
 organization, a tight in-or-out, tight parent-child relationships, and
 inheritance that follows from all of it. Access flows downhill because the
