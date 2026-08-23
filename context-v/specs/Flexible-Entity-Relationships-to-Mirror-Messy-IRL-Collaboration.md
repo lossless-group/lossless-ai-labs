@@ -219,21 +219,26 @@ higher than the cost of someone lending a key nobody needed.
 
 ## Ruling 2b — the cascade is a lender's gesture, not a directory's structure
 
-> **Terminology collision, flagged 2026-08-23 — unresolved.** "Cascade" is now
-> being used for a second, unrelated thing: the `parent:child` tag syntax shared
-> by entities and domains (`entity:organization`, `domain:strategy`), where
-> *"parent-child is not enforced, it is derived from the syntax, and can
-> cascade"* means **the chain composes through levels**.
+> **One word, one concept — noted 2026-08-23.** The `parent:child` tag syntax
+> shared by entities and domains (`entity:organization`, `domain:strategy`) also
+> *cascades*: *"parent-child is not enforced, it is derived from the syntax, and
+> can cascade."* That was first read here as a collision needing a rename. It is
+> not. It is the same idea, and the rename would have cost the unity.
 >
-> That is close to the opposite of this ruling, which exists to say a cascade is
-> **declared by a lender per act** and explicitly *not* structural. Two meanings,
-> two adjacent specs, one word — and the one below is about credentials while
-> the other is about naming.
+> **A cascade is declared propagation, not structural inheritance.** Someone
+> asserts a relationship — by lending to a named set of entities, or by naming a
+> chain — and what follows flows along it. What makes it a cascade rather than
+> inheritance is that **no stored structure decides it**. That is why it sits
+> beside Ruling 1 rather than against it: *hierarchy is not in code, but
+> propagation is still declarable.* The colon chain is the declaring act for
+> naming; `cascade_id` is the declaring act for authority.
 >
-> One of them has to be renamed before either is written into code. Candidates
-> for the syntax sense: *chain*, *lineage*, *derived path*. See
-> [[../../corpora-builder/context-v/plans/Didi-Auth-and-Multi-Org-Corpora]],
-> catch 3.
+> The credential sense below is the **extended** one — it carries a cap, a
+> wind-down, and an end that pulls every loan at once, because authority needs
+> those and a name does not. The syntax sense is the plainer general case.
+>
+> Both keep the same contrast with Okta: there the directory decides what flows,
+> here a person does.
 
 The contrast that makes this clear is Okta. Okta assumes a **tight** concept of
 organization, a tight in-or-out, tight parent-child relationships, and
