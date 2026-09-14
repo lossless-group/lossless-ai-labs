@@ -55,3 +55,6 @@
 	path = studies/sync-and-content-version-control
 	url = https://github.com/lossless-group/study-sync-and-content-version-control.git
 	branch = main
+[submodule "studies/frontend-ui-kits-component-libraries"]
+	path = studies/frontend-ui-kits-component-libraries
+	url = https://github.com/lossless-group/study-frontend-ui-kits-component-libraries.git
