@@ -54,3 +54,7 @@
 [submodule "studies/frontend-ui-kits-component-libraries"]
 	path = studies/frontend-ui-kits-component-libraries
 	url = https://github.com/lossless-group/study-frontend-ui-kits-component-libraries.git
+[submodule "context-vigilance-kit"]
+	path = context-vigilance-kit
+	url = https://github.com/lossless-group/context-vigilance-kit.git
+	branch = development
