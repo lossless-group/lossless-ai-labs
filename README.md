@@ -33,10 +33,12 @@ A document that keeps its workings. Publish a `.flave` and people see the conclu
 
 → `flave-ai/` · [lossless-group/flave](https://github.com/lossless-group/flave)
 
-### Context Vigilance Kit — the corpus tooling
-Walks every `context-v/` directory across the Lossless tree (and beyond), buckets files by depth-of-completion, and prepares them for ingestion into a ChromaDB-backed corpus. Now backs a local Chroma MCP server (four collections: context-vigilance corpus, changelog, Claude Code sessions, tool traces) queryable from any session under `ai-labs/`. Brand site at [contextvigilance.com](https://contextvigilance.com) (forthcoming). Will graduate to its own top-level repo when v0.1 is ready to leave the nest.
+### Context Vigilance Kit — the installable practice
+The `cv` Claude Code plugin: the context-vigilance skill, `/cv:*` commands, templates, a starter scaffold, and neutral examples. Install it and you have the practice, without cloning anyone's corpus. Brand site at [contextvigilance.com](https://contextvigilance.com) (forthcoming).
 
 → `context-vigilance-kit/` · [lossless-group/context-vigilance-kit](https://github.com/lossless-group/context-vigilance-kit)
+
+The tree-wide corpus this kit grew out of (collated `context-v/`, manifests, Chroma and Graphiti ingesters, the corpus splash) was renamed and moved to the anchor root on 2026-10-01: `../context-v-corpus/` · [lossless-group/context-v-corpus](https://github.com/lossless-group/context-v-corpus).
 
 ## Studies — pinned reading lists, not docs
 
@@ -70,7 +72,7 @@ ai-labs/                              # this repo — the pseudomonorepo
 ├── augment-it/                       # submodule · active product
 ├── id-didi-sh/                       # submodule · active product (Elixir/Phoenix, the polyglot exception)
 ├── flave-ai/                         # submodule · spec of record, pre-implementation (repo: lossless-group/flave)
-├── context-vigilance-kit/            # submodule · experiment becoming a product
+├── context-vigilance-kit/            # submodule · the cv plugin (corpus moved to ../context-v-corpus)
 ├── studies/                          # pinned reading lists
 │   ├── open-specs-and-standards/                     #   submodule
 │   ├── memory-layers-for-agents/                     #   submodule

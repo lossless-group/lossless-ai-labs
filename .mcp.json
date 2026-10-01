@@ -7,7 +7,7 @@
         "--client-type",
         "persistent",
         "--data-dir",
-        "/Users/mpstaton/code/lossless-monorepo/ai-labs/context-vigilance-kit/.chroma"
+        "/Users/mpstaton/code/lossless-monorepo/context-v-corpus/.chroma"
       ]
     }
   }
