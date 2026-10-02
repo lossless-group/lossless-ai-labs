@@ -58,3 +58,7 @@
 	path = context-vigilance-kit
 	url = https://github.com/lossless-group/context-vigilance-kit.git
 	branch = development
+[submodule "hope-ai"]
+	path = hope-ai
+	url = https://github.com/lossless-group/hope-ai.git
+	branch = main
