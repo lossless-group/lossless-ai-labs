@@ -381,7 +381,175 @@ flowchart TB
   end
 ```
 
-### 4.7 Bucket counts per layer
+### 4.7 Stack against harness
+
+Added 2026-10-03 after the first share. Read from manifests and entry files
+at the snapshot SHAs: `functions/package.json`, `firebase.json`,
+`functions/index.js`, `functions/lib/config.js`, `public/index.html` on
+their side; `augment-it/package.json`, `augment-it/services/*/package.json`,
+`augment-it/docker-compose.yml`, `augment-it/DEPLOYMENT.md`,
+`memopop-ai/package.json`, `memopop-ai/apps/*/package.json` and
+`memopop-orchestrator/pyproject.toml` on ours.
+
+| | dialogiq | augment-it | memopop-ai |
+|---|---|---|---|
+| Shape | One repo, one app | pnpm workspace: 20 apps, 12 services, 7 packages, a shell | Bun workspace of 4 apps, plus the Python orchestrator as a submodule |
+| Front end | **No framework.** About 20k lines of plain JS: 23 numbered scripts in `public/js/` loaded in order by `public/index.html`, plus separate pages (`builder`, `portal`, `studio`, `sim`, `admin`). About 600 direct DOM lookups | Svelte 5, rsbuild, Module Federation into the shell | SvelteKit 2 (`memopop-web-app`, and `memopop-native` on Tauri 2), Astro 5 (`memopop-site`) |
+| Back end | Express 5 on Cloud Functions, Node 22, `europe-west1`, 1 GiB, 300s (`functions/index.js` lines 41–48), about 20k lines in `routes/` and `lib/` | Fastify with WebSockets, NATS, SearXNG, Docker Compose | Python 3.11, LangGraph, LangChain, uv |
+| Data | Firestore and Storage; `firestore.rules` and `storage.rules` deny all client access | SurrealDB | Files on disk (artifact trail) |
+| Types | None | TypeScript 6, zod | pydantic; TypeScript in the apps |
+| Hosting | Firebase Hosting and Functions; Firebase compat SDK 10.14.1 from `gstatic.com`, App Check | Railway (`DEPLOYMENT.md`) | Desktop and web |
+| Models | `functions/lib/llm.js` routes Gemini flash-lite models, DeepSeek, GPT-4o-mini and Claude Haiku 4.5; the choice is runtime config in Firestore | Anthropic SDK, Claude Agent SDK, Composio | Anthropic via LangChain; Perplexity, Tavily, Firecrawl |
+| Speech | Azure TTS (main), Google TTS, Google Speech-to-Text, Whisper | n/a | n/a |
+
+**Where their stack wins.** No build and no toolchain, so an agent has no
+bundler, type config or federation manifest to break. One deploy surface.
+Deny-all data rules limit the damage of an agent's mistake. Model routing
+as data makes model comparisons cheap. Everything scales to zero.
+
+**Where it costs them.** No types and no imports: the 23 scripts share
+globals and depend on load order, which explains the allowlist full of
+line-number greps (step 1 §3.2). The 12,897-line dead `public/script.js`
+is still tracked. Firebase lock-in and a fixed region. No CI.
+
+**Where ours wins.** Types and module boundaries give agents contracts to
+read. Independently deployable parts suit a multi-client platform. Python
+and LangGraph suit a 46-agent pipeline.
+
+**Where ours costs us.** Far more moving parts (federation, NATS,
+SurrealDB, Railway, Docker); much of our dev-harness machinery exists to
+manage them, so the stack is the root of the overbuilding in §5.1. A slow
+first session for a fresh agent. Three languages across two monorepos. No
+model routing as data, which replay and preflights (recommendations 1–2)
+would need.
+
+**Stack recommendations.** For them: types at the API boundary through
+JSDoc and `// @ts-check` (no build step), and delete `public/script.js`.
+For us: make model routing runtime config before building the replay
+harness, then audit which moving parts earn their keep.
+
+### 4.8 Database: Firestore against SurrealDB
+
+Each fits its data. Theirs is document-shaped: sessions, transcripts, exams
+and reports, each owned by a user. Ours is a graph of people,
+organizations and affiliations shared across clients
+(`RELATE $child->affiliations->$parent`,
+`augment-it/services/record-surrealdb-resolver/src/org-relations.ts:124`).
+
+| | Firestore (theirs) | SurrealDB Cloud (ours) |
+|---|---|---|
+| Data model | Documents and collections; no joins, no graph | Multi-model: documents, graph edges, relational-style queries, plus vector, full-text, geo, time-series and live queries in one engine |
+| What's actually used | Transactions, collection-group queries, batched writes and counters (in 3, 3, 6 and 2 files) | Schemaless documents (`DEFINE TABLE` in 8 files) and graph edges (`RELATE` in 5 files). **No** vector indexes, full-text search, live queries, events or custom functions. Vector search lives separately in Chroma |
+| Security | Rules enforced in the database; theirs deny all client access | Namespaces suit multi-client separation, but augment-it connects with dev-only credentials and a client-tagging write rule (`Connecting-To-And-Using-SurrealDB.md`) |
+| Operations | Fully managed, scales to zero, emulator for tests | Managed cloud, younger, version jumps |
+| Lock-in | High | Lower: open source, can self-host or run locally |
+| Agent familiarity | High: years of examples in training data | Low: needed a blueprint, the `surrealdb-canonical-layer` skill and an MCP verification pass |
+
+**Multi-model: the benefits.**
+- One engine and one query language for documents and relationships. No
+  second database to sync, no copied data drifting between stores.
+- The graph is native. Affiliations are edges you traverse, not foreign
+  keys or duplicated documents, which suits a people-and-organizations
+  product.
+- Room to grow without new infrastructure: vector, full-text and live
+  queries are there when needed.
+- Namespaces and databases map cleanly onto clients.
+
+**Multi-model: the costs.**
+- **Mostly unrealized so far.** We use two of the models. The vector work
+  that could live in SurrealDB runs in a separate Chroma instance, so we
+  pay for multi-model generality and still run two stores.
+- **A broader surface for agents to get wrong.** SurrealQL spans several
+  paradigms, and models know it least well of any database we use. That's
+  harness cost (blueprints, skills, verification) a mainstream choice
+  wouldn't need.
+- **Less depth per model.** A specialist (Postgres plus pgvector, or a
+  dedicated vector store) is usually more mature at any one job.
+- **One engine, one failure domain.** If documents, graph and search all
+  live in one database, its outage takes all of them down (see §4.10).
+
+**Verdict.** Right choice on both sides. Firestore would make the
+cross-client entity graph painful; SurrealDB would be overkill for
+per-user sessions. On our side, either start using the other models
+(moving vector search into SurrealDB would retire a store) or stop
+counting them as a reason for the choice.
+
+### 4.9 Architecture: monolith against monorepo of services
+
+Lossless's stated rationale: as code, collaborators and agents scale,
+boundaries let each agent load only the context it needs, and keep
+parallel work from overwriting itself.
+
+**Where the evidence supports it.**
+- Smaller context per task. An agent changing one federated app reads that
+  app and its contract. In their monolith, 23 scripts share globals, so
+  any change could touch anything, and agents search by line number
+  (`awk 'NR<=7320 …'` against a 12,897-line file, step 1 §3.2).
+- Fewer collisions. Separate packages rarely put two agents in one file.
+  Their monolith shows the failure mode: commit `0e31688` folded 16 days of
+  work done outside git into one 129k-line commit.
+- Ownership, tests and deploys per unit.
+
+**Where it doesn't.**
+- Cross-boundary work gets harder. A change to a NATS message or the
+  federation contract needs context from several services at once, and
+  errors move between services. That's why `scripts/verify-federation.mjs`
+  exists.
+- A slower first session for a fresh agent.
+- Overwrites are mostly a git problem. Branches, worktrees, small commits
+  and handoffs prevent them in any shape. Their big overwrite came from
+  working outside git, not from being a monolith.
+- Every boundary needs its own instructions, contract and checks: part of
+  why our dev harness is deep, and part of why it's overbuilt.
+
+**The nuance.** What helps agents is clear module boundaries with explicit
+contracts. Microservices are one way to get them, and the most expensive.
+A modular monolith (one repo, one deploy, real modules with imports, types
+and a short instruction file each) gets most of the benefit. For them:
+ES modules plus `// @ts-check` in place of 23 global scripts. For us: the
+services shape is right for many collaborators and clients in parallel,
+but it should be a deliberate cost, not a default.
+
+### 4.10 Failure isolation
+
+Lossless's second rationale: with microservices in containers, one part
+failing doesn't take the others down.
+
+**What isolation buys.** A crash stays in its process: if `xlsx-ingest`
+dies, the shell and other apps keep running. Containers restart on their
+own (`restart: on-failure`, `augment-it/docker-compose.yml`). A bad deploy
+of one service leaves the rest alone. A federated app that fails to load
+leaves the others rendering.
+
+**Where it doesn't hold yet.**
+- **A shared trunk.** Every federated app connects straight to
+  `workspace-service` over WebSocket (`augment-it/DEPLOYMENT.md:16`), most
+  services talk over NATS, and the data lives in SurrealDB. Any of the
+  three going down takes nearly everything with it.
+- **Invisible partial failure.**
+  `augment-it/context-v/issues/Live-Not-Live-Indicator-Tooling-And-Cross-Service-Error-Surfacing.md`
+  lists five different failures that all look the same to the user: "a
+  dead click". The system keeps running, but nobody can tell what broke.
+- **Isolation needs the rest to become resilience:** timeouts, retries,
+  fallbacks, health checks, and a UI that says which part is down.
+- **More parts, more failures.** Isolation shrinks how much breaks; more
+  services increase how often something does.
+
+**Their side gets more than "monolith" suggests.** Hosting is a static CDN,
+separate from the API, so pages load when the API is down. They deploy
+seven functions: one `api` behind every `/api/**` route, plus six triggers
+and scheduled jobs (`functions/index.js` lines 38–62), so a bug in
+integrity analysis can't stop an exam sitting. Cloud Functions contain a
+crashing request to its instance. Their weak spot is the single `api`
+function: a bad deploy takes every route down at once. The fix is
+splitting it by surface, which is configuration, not microservices.
+
+**For both sides.** Us: build the live/not-live indicators from that
+issue, add timeouts and fallbacks on WebSocket and NATS calls, and plan
+for the trunk (redundancy, or a read-only degraded mode). Them: split
+`api` into a few functions by surface.
+
+### 4.11 Bucket counts per layer
 
 ```mermaid
 pie title Developer layer: ledger rows
