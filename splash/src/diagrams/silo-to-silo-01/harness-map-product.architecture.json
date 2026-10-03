@@ -1,0 +1,634 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Harness map: in-product-agents layer",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "cloud": {
+          "label": "Runtime machinery"
+        },
+        "frontend": {
+          "label": "Rules and inputs"
+        },
+        "security": {
+          "label": "Generation and gates"
+        },
+        "database": {
+          "label": "Memory and records"
+        },
+        "backend": {
+          "label": "Evaluation"
+        },
+        "messagebus": {
+          "label": "Sync rule"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "l-agents",
+      "type": "cloud",
+      "label": "src/agents, prompt-runner",
+      "sublabel": "prompts built in code",
+      "pos": [
+        40,
+        96
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-prompts",
+      "type": "cloud",
+      "label": "Runtime prompt builders",
+      "sublabel": "examiner, grader, handoff",
+      "pos": [
+        650,
+        96
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-provider",
+      "type": "cloud",
+      "label": "llm_provider.py",
+      "sublabel": "routing in code",
+      "pos": [
+        40,
+        156
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-llm",
+      "type": "cloud",
+      "label": "llm.js routing",
+      "sublabel": "routing in runtime config",
+      "pos": [
+        650,
+        156
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-outline",
+      "type": "cloud",
+      "label": "Outline YAML + schema",
+      "sublabel": "the outline is the contract",
+      "pos": [
+        40,
+        216
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-skeleton",
+      "type": "cloud",
+      "label": "Skeleton JSON + validator",
+      "sublabel": "slots, invariants",
+      "pos": [
+        650,
+        216
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-rules",
+      "type": "frontend",
+      "label": "Orchestrator AGENTS.md",
+      "sublabel": "numbered runtime rules",
+      "pos": [
+        40,
+        302
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-rulebook",
+      "type": "frontend",
+      "label": "Exam rulebook",
+      "sublabel": "single source of truth",
+      "pos": [
+        650,
+        302
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-inputs",
+      "type": "frontend",
+      "label": "data/, Sources.md",
+      "sublabel": "per-deal inputs",
+      "pos": [
+        40,
+        362
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-intake",
+      "type": "frontend",
+      "label": "Intake sheets",
+      "sublabel": "[CHECK], [STILL OPEN]",
+      "pos": [
+        650,
+        362
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-skills",
+      "type": "security",
+      "label": "Claude Code memo skills",
+      "sublabel": "describe the stops",
+      "pos": [
+        40,
+        448
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-command",
+      "type": "security",
+      "label": "/exam-build command",
+      "sublabel": "enforces the stops",
+      "pos": [
+        650,
+        448
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-approval",
+      "type": "security",
+      "label": "Source approval, reviewers",
+      "sublabel": "human gates",
+      "pos": [
+        40,
+        508
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-sketch",
+      "type": "security",
+      "label": "Sketch sign-off gates",
+      "sublabel": "two gates in product",
+      "pos": [
+        650,
+        508
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-pipeline",
+      "type": "security",
+      "label": "LangGraph pipeline",
+      "sublabel": "CLI and native app",
+      "pos": [
+        40,
+        568
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-studio",
+      "type": "security",
+      "label": "/studio generator",
+      "sublabel": "the command, in product",
+      "pos": [
+        650,
+        568
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-trail",
+      "type": "database",
+      "label": "Artifact trail",
+      "sublabel": "every step to disk",
+      "pos": [
+        40,
+        654
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-flight",
+      "type": "database",
+      "label": "Flight recorder",
+      "sublabel": "every step to disk",
+      "pos": [
+        650,
+        654
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-resolution",
+      "type": "database",
+      "label": "issue-resolution, reminders",
+      "sublabel": "36 scattered files",
+      "pos": [
+        40,
+        714
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-ledger",
+      "type": "database",
+      "label": "EXAM_CRAFT.md ledger",
+      "sublabel": "2,163 lines, ID-stable",
+      "pos": [
+        650,
+        714
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-evaluate",
+      "type": "backend",
+      "label": "evaluate_memo, fact checkers",
+      "sublabel": "is it true and good?",
+      "pos": [
+        40,
+        800
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-audits",
+      "type": "backend",
+      "label": "Rubric + re-ask audits",
+      "sublabel": "did it obey?",
+      "pos": [
+        650,
+        800
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-nosim",
+      "type": "backend",
+      "label": "No tiered simulator",
+      "sublabel": "no synthetic deals",
+      "pos": [
+        40,
+        860
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-sim",
+      "type": "backend",
+      "label": "/sim + 18 profiles",
+      "sublabel": "error bars, ρ vs tier",
+      "pos": [
+        650,
+        860
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-noreplay",
+      "type": "backend",
+      "label": "No run-to-run replay",
+      "sublabel": "variance suppressed",
+      "pos": [
+        40,
+        920
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-replay",
+      "type": "backend",
+      "label": "gate-replay",
+      "sublabel": "flip rate 2% (1/63)",
+      "pos": [
+        650,
+        920
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-nopreflight",
+      "type": "backend",
+      "label": "No live-model preflight",
+      "pos": [
+        40,
+        980
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-preflight",
+      "type": "backend",
+      "label": "Preflights",
+      "sublabel": "persona + shipped prompt",
+      "pos": [
+        650,
+        980
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-slabs",
+      "type": "messagebus",
+      "label": "chat.ts slabs from SKILL.md",
+      "sublabel": "update together",
+      "pos": [
+        40,
+        1066
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-nosync",
+      "type": "messagebus",
+      "label": "No source-of-truth rule",
+      "sublabel": "/exam-build vs /studio",
+      "pos": [
+        650,
+        1066
+      ],
+      "size": [
+        230,
+        48
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Lossless: in-product harness (moderate)",
+      "wraps": [
+        "l-agents",
+        "l-provider",
+        "l-outline",
+        "l-rules",
+        "l-inputs",
+        "l-skills",
+        "l-approval",
+        "l-pipeline",
+        "l-trail",
+        "l-resolution",
+        "l-evaluate",
+        "l-nosim",
+        "l-noreplay",
+        "l-nopreflight",
+        "l-slabs"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "The Collaborator: in-product harness (deep)",
+      "wraps": [
+        "c-prompts",
+        "c-llm",
+        "c-skeleton",
+        "c-rulebook",
+        "c-intake",
+        "c-command",
+        "c-sketch",
+        "c-studio",
+        "c-flight",
+        "c-ledger",
+        "c-audits",
+        "c-sim",
+        "c-replay",
+        "c-preflight",
+        "c-nosync"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "l-agents--c-prompts",
+      "from": "l-agents",
+      "to": "c-prompts",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-provider--c-llm",
+      "from": "l-provider",
+      "to": "c-llm",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-outline--c-skeleton",
+      "from": "l-outline",
+      "to": "c-skeleton",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-rules--c-rulebook",
+      "from": "l-rules",
+      "to": "c-rulebook",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-inputs--c-intake",
+      "from": "l-inputs",
+      "to": "c-intake",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-skills--c-command",
+      "from": "l-skills",
+      "to": "c-command",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-approval--c-sketch",
+      "from": "l-approval",
+      "to": "c-sketch",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-pipeline--c-studio",
+      "from": "l-pipeline",
+      "to": "c-studio",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-trail--c-flight",
+      "from": "l-trail",
+      "to": "c-flight",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-resolution--c-ledger",
+      "from": "l-resolution",
+      "to": "c-ledger",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-evaluate--c-audits",
+      "from": "l-evaluate",
+      "to": "c-audits",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-nosim--c-sim",
+      "from": "l-nosim",
+      "to": "c-sim",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-noreplay--c-replay",
+      "from": "l-noreplay",
+      "to": "c-replay",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-nopreflight--c-preflight",
+      "from": "l-nopreflight",
+      "to": "c-preflight",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-slabs--c-nosync",
+      "from": "l-slabs",
+      "to": "c-nosync",
+      "label": "missing on their side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+<svg class="s2s-svg" data-diagram="loop-product-collaborator" focusable="false" viewBox="0 0 913 652" role="img" lang="en" aria-labelledby="s2s-loop-product-collaborator-archify-diagram-title s2s-loop-product-collaborator-archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="s2s-loop-product-collaborator-archify-diagram-title">The Collaborator: in-product loop (exam generation)</title>
+        <desc id="s2s-loop-product-collaborator-archify-diagram-description">The Collaborator's in-product loop for generating an exam. Source text and notes go into a session opener; the agent reads the rulebook and craft ledger; the exam-build command or its in-product studio drafts a sketch and stops for human sign-off; the exam is assembled from a skeleton and validated, then run through a simulator with error bars and preflights. Findings go to the craft ledger; when it holds, a human sits the exam and the sitting is reviewed.</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="s2s-loop-product-collaborator-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="s2s-loop-product-collaborator-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="s2s-loop-product-collaborator-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="s2s-loop-product-collaborator-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="s2s-loop-product-collaborator-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <!-- Swimlanes -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-product-collaborator-lane-0" x="40" y="52" width="857" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Human</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-product-collaborator-lane-1" x="40" y="176" width="857" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Agent</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-product-collaborator-lane-2" x="40" y="300" width="857" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Checks</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-product-collaborator-lane-3" x="40" y="424" width="857" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Memory</text>
+        <!-- Phase headers -->
+        <line x1="68" y1="35" x2="160" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="68" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="114" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Input</text>
+        <line x1="188" y1="35" x2="280" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="188" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="234" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Rules</text>
+        <line x1="348" y1="35" x2="440" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="348" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="394" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Draft</text>
+        <line x1="536.4" y1="35" x2="628.4" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="536.4" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="582.4" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Check</text>
+        <line x1="656.4" y1="35" x2="868.4" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="656.4" y="27" width="212" height="16" rx="4" class="c-mask"/>
+        <text x="762.4" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Review and learn</text>
+        <!-- Workflow groups -->
+        <!-- Edge paths -->
+        <path data-edge-from="assemble" data-edge-to="sim" data-edge-key="0" data-edge-id="s2s-loop-product-collaborator-assemble-sim" data-composition-points="582.4,269;582.4,341" d="M 582.4 269 L 582.4 341" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-product-collaborator-arrowhead-emphasis)"/>
+        <path data-edge-from="draft" data-edge-to="assemble" data-edge-label="approved" data-edge-key="1" data-edge-id="s2s-loop-product-collaborator-draft-assemble" data-composition-points="460,243;516.4,243" d="M 460 243 L 516.4 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-product-collaborator-arrowhead-emphasis)"/>
+        <path data-edge-from="draft" data-edge-to="signoff" data-edge-label="stop" data-edge-key="2" data-edge-id="s2s-loop-product-collaborator-draft-signoff" data-composition-points="394,217;394,145" d="M 394 217 L 394 145" class="a-security" stroke-width="1.4" marker-end="url(#s2s-loop-product-collaborator-arrowhead-security)"/>
+        <path data-edge-from="rules" data-edge-to="draft" data-edge-key="3" data-edge-id="s2s-loop-product-collaborator-rules-draft" data-composition-points="300,243;328,243" d="M 300 243 L 328 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-product-collaborator-arrowhead-emphasis)"/>
+        <path data-edge-from="sim" data-edge-to="ledger" data-edge-label="log finding" data-edge-key="4" data-edge-id="s2s-loop-product-collaborator-sim-ledger" data-composition-points="582.4,393;582.4,414;702.4,414;702.4,465" d="M 582.4 393 L 582.4 414 L 702.4 414 L 702.4 465" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-product-collaborator-arrowhead-emphasis)"/>
+        <path data-edge-from="sim" data-edge-to="sitting" data-edge-label="holds" data-edge-key="5" data-edge-id="s2s-loop-product-collaborator-sim-sitting" data-composition-points="648.4,367;822.4,367;822.4,145" d="M 648.4 367 L 822.4 367 L 822.4 145" class="a-default" stroke-width="1.4" marker-end="url(#s2s-loop-product-collaborator-arrowhead)"/>
+        <path data-edge-from="source" data-edge-to="rules" data-edge-key="6" data-edge-id="s2s-loop-product-collaborator-source-rules" data-composition-points="180,119;234,119;234,217" d="M 180 119 L 234 119 L 234 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-product-collaborator-arrowhead-emphasis)"/>
+        <!-- Nodes -->
+        <g id="s2s-loop-product-collaborator-node-source" data-node-id="s2s-loop-product-collaborator-source" data-node-label="Source text + notes" data-node-kind="external" data-node-sublabel="into session opener" data-node-context="Human › Input">
+          <title>Source text + notes · into session opener · Human › Input</title>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(54 99) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="10.8" font-weight="600" text-anchor="middle">Source text + notes</text>
+          <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">into session opener</text>
+        </g>
+        <g id="s2s-loop-product-collaborator-node-signoff" data-node-id="s2s-loop-product-collaborator-signoff" data-node-label="Sign-off stop" data-node-kind="security" data-node-sublabel="approve or revise" data-node-context="Human › Draft">
+          <title>Sign-off stop · approve or revise · Human › Draft</title>
+          <rect x="328" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="328" y="93" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(334 99) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="394" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Sign-off stop</text>
+          <text data-detail="context" x="394" y="131" class="t-muted" font-size="8" text-anchor="middle">approve or revise</text>
+        </g>
+        <g id="s2s-loop-product-collaborator-node-sitting" data-node-id="s2s-loop-product-collaborator-sitting" data-node-label="Human sitting" data-node-kind="external" data-node-sublabel="flightReview grades it" data-node-context="Human › Review and learn">
+          <title>Human sitting · flightReview grades it · Human › Review and learn</title>
+          <rect x="756.4" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="756.4" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(762.4 99) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="822.4" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Human sitting</text>
+          <text data-detail="context" x="822.4" y="131" class="t-muted" font-size="8" text-anchor="middle">flightReview grades it</text>
+        </g>
+        <g id="s2s-loop-product-collaborator-node-rules" data-node-id="s2s-loop-product-collaborator-rules" data-node-label="Read rulebook" data-node-kind="frontend" data-node-sublabel="+ craft ledger" data-node-context="Agent › Rules">
+          <title>Read rulebook · + craft ledger · Agent › Rules</title>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(174 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="234" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Read rulebook</text>
+          <text data-detail="context" x="234" y="255" class="t-muted" font-size="8" text-anchor="middle">+ craft ledger</text>
+        </g>
+        <g id="s2s-loop-product-collaborator-node-draft" data-node-id="s2s-loop-product-collaborator-draft" data-node-label="/exam-build, /studio" data-node-kind="backend" data-node-sublabel="drafts the sketch" data-node-context="Agent › Draft">
+          <title>/exam-build, /studio · drafts the sketch · Agent › Draft</title>
+          <rect x="328" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="328" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(334 223) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="394" y="238" class="t-primary" font-size="10.3" font-weight="600" text-anchor="middle">/exam-build, /studio</text>
+          <text data-detail="context" x="394" y="255" class="t-muted" font-size="8" text-anchor="middle">drafts the sketch</text>
+        </g>
+        <g id="s2s-loop-product-collaborator-node-assemble" data-node-id="s2s-loop-product-collaborator-assemble" data-node-label="Assemble" data-node-kind="backend" data-node-sublabel="skeleton + validator" data-node-context="Agent › Check">
+          <title>Assemble · skeleton + validator · Agent › Check</title>
+          <rect x="516.4" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="516.4" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(522.4 223) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="582.4" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Assemble</text>
+          <text data-detail="context" x="582.4" y="255" class="t-muted" font-size="8" text-anchor="middle">skeleton + validator</text>
+        </g>
+        <g id="s2s-loop-product-collaborator-node-sim" data-node-id="s2s-loop-product-collaborator-sim" data-node-label="/sim + preflights" data-node-kind="backend" data-node-sublabel="error bars" data-node-context="Checks › Check">
+          <title>/sim + preflights · error bars · Checks › Check</title>
+          <rect x="516.4" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="516.4" y="341" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(522.4 347) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="582.4" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">/sim + preflights</text>
+          <text data-detail="context" x="582.4" y="379" class="t-muted" font-size="8" text-anchor="middle">error bars</text>
+        </g>
+        <g id="s2s-loop-product-collaborator-node-ledger" data-node-id="s2s-loop-product-collaborator-ledger" data-node-label="Craft ledger" data-node-kind="database" data-node-sublabel="defect named, measured" data-node-context="Memory › Review and learn">
+          <title>Craft ledger · defect named, measured · Memory › Review and learn</title>
+          <rect x="636.4" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="636.4" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(642.4 471) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="702.4" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Craft ledger</text>
+          <text data-detail="context" x="702.4" y="503" class="t-muted" font-size="8" text-anchor="middle">defect named, measured</text>
+        </g>
+        <!-- Edge labels -->
+        <g data-detail="context" data-edge-from="draft" data-edge-to="assemble" data-edge-label="approved" data-edge-key="1" data-edge-id="s2s-loop-product-collaborator-draft-assemble">
+          <rect x="464" y="223" width="48.4" height="14" rx="3" class="c-mask"/>
+          <text x="488.2" y="233" class="t-backend" font-size="8" text-anchor="middle">approved</text>
+        </g>
+        <g data-detail="context" data-edge-from="draft" data-edge-to="signoff" data-edge-label="stop" data-edge-key="2" data-edge-id="s2s-loop-product-collaborator-draft-signoff">
+          <rect x="379" y="197" width="30" height="14" rx="3" class="c-mask"/>
+          <text x="394" y="207" class="t-security" font-size="8" text-anchor="middle">stop</text>
+        </g>
+        <g data-detail="context" data-edge-from="sim" data-edge-to="ledger" data-edge-label="log finding" data-edge-key="4" data-edge-id="s2s-loop-product-collaborator-sim-ledger">
+          <rect x="611" y="394" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="642.4" y="404" class="t-backend" font-size="8" text-anchor="middle">log finding</text>
+        </g>
+        <g data-detail="context" data-edge-from="sim" data-edge-to="sitting" data-edge-label="holds" data-edge-key="5" data-edge-id="s2s-loop-product-collaborator-sim-sitting">
+          <rect x="718.4" y="347" width="34" height="14" rx="3" class="c-mask"/>
+          <text x="735.4" y="357" class="t-muted" font-size="8" text-anchor="middle">holds</text>
+        </g>
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="20" y="552" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Rules and inputs" data-legend-x="20" data-legend-baseline="572" data-legend-width="113">
+            <rect x="20" y="564" width="14" height="9" rx="2" class="c-frontend" stroke-width="1"/>
+            <text x="42" y="572" class="t-muted" font-size="7.5" font-weight="500">Rules and inputs</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Generation and checks" data-legend-x="140" data-legend-baseline="572" data-legend-width="135">
+            <rect x="140" y="564" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+            <text x="162" y="572" class="t-muted" font-size="7.5" font-weight="500">Generation and checks</text>
+          </g>
+          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Human stop" data-legend-x="282" data-legend-baseline="572" data-legend-width="87">
+            <rect x="282" y="564" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
+            <text x="304" y="572" class="t-muted" font-size="7.5" font-weight="500">Human stop</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Memory" data-legend-x="376" data-legend-baseline="572" data-legend-width="70">
+            <rect x="376" y="564" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+            <text x="398" y="572" class="t-muted" font-size="7.5" font-weight="500">Memory</text>
+          </g>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Person or trigger" data-legend-x="453" data-legend-baseline="572" data-legend-width="117">
+            <rect x="453" y="564" width="14" height="9" rx="2" class="c-external" stroke-width="1"/>
+            <text x="475" y="572" class="t-muted" font-size="7.5" font-weight="500">Person or trigger</text>
+          </g>
+        </g>
+      </svg>

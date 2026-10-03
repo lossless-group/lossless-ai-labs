@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Lossless: in-product loop (memo generation)",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": { "mode": "auto", "entries": {
+      "external": { "label": "Person or trigger" }, "frontend": { "label": "Rules and inputs" },
+      "backend": { "label": "Generation and checks" }, "security": { "label": "Human stop" }, "database": { "label": "Memory" } } }
+  },
+  "lanes": [
+    { "id": "human", "label": "Human" }, { "id": "agent", "label": "Agent" },
+    { "id": "checks", "label": "Checks" }, { "id": "memory", "label": "Memory" }
+  ],
+  "phases": [
+    { "id": "p-input", "label": "Input", "fromCol": 0, "toCol": 0 },
+    { "id": "p-rules", "label": "Rules", "fromCol": 1, "toCol": 1 },
+    { "id": "p-draft", "label": "Draft", "fromCol": 2, "toCol": 2 },
+    { "id": "p-measure", "label": "Check", "fromCol": 3, "toCol": 3 },
+    { "id": "p-learn", "label": "Review and learn", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["inputs", "outline", "write", "factcheck", "evaluate", "lessons"],
+  "nodes": [
+    { "id": "inputs", "lane": "human", "col": 0, "type": "external", "label": "Deal inputs", "sublabel": "data, Sources.md, deck", "width": 132 },
+    { "id": "outline", "lane": "agent", "col": 1, "type": "frontend", "label": "Outline YAML", "sublabel": "+ runtime AGENTS.md", "width": 132 },
+    { "id": "write", "lane": "agent", "col": 2, "type": "backend", "label": "Harvest + write", "sublabel": "closed corpus", "width": 132 },
+    { "id": "factcheck", "lane": "checks", "col": 3, "type": "backend", "label": "Fact + citation", "sublabel": "checking agents", "width": 132 },
+    { "id": "evaluate", "lane": "checks", "col": 4, "type": "backend", "label": "evaluate, score", "sublabel": "one run, one score", "width": 132 },
+    { "id": "analyst", "lane": "human", "col": 4, "type": "security", "label": "Analyst satisfied?", "sublabel": "revise or export", "width": 132 },
+    { "id": "missing", "lane": "checks", "col": 5, "type": "external", "label": "Missing here", "sublabel": "replay, tiers, error bars", "width": 132 },
+    { "id": "lessons", "lane": "memory", "col": 5, "type": "database", "label": "issue-resolution", "sublabel": "or an AGENTS.md rule", "width": 132 }
+  ],
+  "edges": [
+    { "id": "inputs-outline", "from": "inputs", "to": "outline", "variant": "emphasis" },
+    { "id": "outline-write", "from": "outline", "to": "write", "variant": "emphasis" },
+    { "id": "write-factcheck", "from": "write", "to": "factcheck", "variant": "emphasis" },
+    { "id": "factcheck-evaluate", "from": "factcheck", "to": "evaluate", "variant": "emphasis" },
+    { "id": "evaluate-analyst", "from": "evaluate", "to": "analyst" },
+    { "id": "evaluate-missing", "from": "evaluate", "to": "missing", "variant": "security" },
+    { "id": "evaluate-lessons", "from": "evaluate", "to": "lessons", "label": "lessons", "variant": "emphasis" }
+  ]
+}

@@ -1,0 +1,467 @@
+<svg class="s2s-svg" data-diagram="harness-map-product" focusable="false" viewBox="0 0 950 1202" role="img" lang="en" aria-labelledby="s2s-harness-map-product-archify-diagram-title s2s-harness-map-product-archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="s2s-harness-map-product-archify-diagram-title">Harness map: in-product-agents layer</title>
+        <desc id="s2s-harness-map-product-archify-diagram-description">In-product-agents harness. Lossless on the left, The Collaborator on the right, artifacts grouped by category. Most pairs are similar. Three lines are missing on our side: a tiered simulator, run-to-run replay and live-model preflights. One is missing on their side: a source-of-truth rule between a coding-agent command and its in-product copy.</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="s2s-harness-map-product-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="s2s-harness-map-product-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="s2s-harness-map-product-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="s2s-harness-map-product-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="s2s-harness-map-product-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <!-- Boundaries (behind everything) -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="s2s-harness-map-product-0" data-composition-frame-label="Lossless: in-product harness (moderate)" x="10" y="66" width="290" height="1068" rx="12" class="c-region" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="s2s-harness-map-product-1" data-composition-frame-label="The Collaborator: in-product harness (deep)" x="620" y="66" width="290" height="1068" rx="12" class="c-region" stroke-width="1"/>
+        <!-- Connection paths (before components for correct z-order) -->
+        <path data-edge-from="l-agents" data-edge-to="c-prompts" data-edge-label="shared" data-edge-key="0" data-edge-id="s2s-harness-map-product-l-agents--c-prompts" data-composition-points="270,120;650,120" d="M 270 120 L 650 120" class="a-emphasis" stroke-width="1.8"/>
+        <path data-edge-from="l-provider" data-edge-to="c-llm" data-edge-label="shared" data-edge-key="1" data-edge-id="s2s-harness-map-product-l-provider--c-llm" data-composition-points="270,180;650,180" d="M 270 180 L 650 180" class="a-emphasis" stroke-width="1.8"/>
+        <path data-edge-from="l-outline" data-edge-to="c-skeleton" data-edge-label="similar" data-edge-key="2" data-edge-id="s2s-harness-map-product-l-outline--c-skeleton" data-composition-points="270,240;650,240" d="M 270 240 L 650 240" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-rules" data-edge-to="c-rulebook" data-edge-label="similar" data-edge-key="3" data-edge-id="s2s-harness-map-product-l-rules--c-rulebook" data-composition-points="270,326;650,326" d="M 270 326 L 650 326" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-inputs" data-edge-to="c-intake" data-edge-label="similar" data-edge-key="4" data-edge-id="s2s-harness-map-product-l-inputs--c-intake" data-composition-points="270,386;650,386" d="M 270 386 L 650 386" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-skills" data-edge-to="c-command" data-edge-label="similar" data-edge-key="5" data-edge-id="s2s-harness-map-product-l-skills--c-command" data-composition-points="270,472;650,472" d="M 270 472 L 650 472" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-approval" data-edge-to="c-sketch" data-edge-label="similar" data-edge-key="6" data-edge-id="s2s-harness-map-product-l-approval--c-sketch" data-composition-points="270,532;650,532" d="M 270 532 L 650 532" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-pipeline" data-edge-to="c-studio" data-edge-label="similar" data-edge-key="7" data-edge-id="s2s-harness-map-product-l-pipeline--c-studio" data-composition-points="270,592;650,592" d="M 270 592 L 650 592" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-trail" data-edge-to="c-flight" data-edge-label="shared" data-edge-key="8" data-edge-id="s2s-harness-map-product-l-trail--c-flight" data-composition-points="270,678;650,678" d="M 270 678 L 650 678" class="a-emphasis" stroke-width="1.8"/>
+        <path data-edge-from="l-resolution" data-edge-to="c-ledger" data-edge-label="similar" data-edge-key="9" data-edge-id="s2s-harness-map-product-l-resolution--c-ledger" data-composition-points="270,738;650,738" d="M 270 738 L 650 738" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-evaluate" data-edge-to="c-audits" data-edge-label="similar" data-edge-key="10" data-edge-id="s2s-harness-map-product-l-evaluate--c-audits" data-composition-points="270,824;650,824" d="M 270 824 L 650 824" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-nosim" data-edge-to="c-sim" data-edge-label="missing on our side" data-edge-key="11" data-edge-id="s2s-harness-map-product-l-nosim--c-sim" data-composition-points="270,884;650,884" d="M 270 884 L 650 884" class="a-security" stroke-width="1.5"/>
+        <path data-edge-from="l-noreplay" data-edge-to="c-replay" data-edge-label="missing on our side" data-edge-key="12" data-edge-id="s2s-harness-map-product-l-noreplay--c-replay" data-composition-points="270,944;650,944" d="M 270 944 L 650 944" class="a-security" stroke-width="1.5"/>
+        <path data-edge-from="l-nopreflight" data-edge-to="c-preflight" data-edge-label="missing on our side" data-edge-key="13" data-edge-id="s2s-harness-map-product-l-nopreflight--c-preflight" data-composition-points="270,1004;650,1004" d="M 270 1004 L 650 1004" class="a-security" stroke-width="1.5"/>
+        <path data-edge-from="l-slabs" data-edge-to="c-nosync" data-edge-label="missing on their side" data-edge-key="14" data-edge-id="s2s-harness-map-product-l-slabs--c-nosync" data-composition-points="270,1090;650,1090" d="M 270 1090 L 650 1090" class="a-security" stroke-width="1.5"/>
+        <!-- Components -->
+        <g id="s2s-harness-map-product-node-l-agents" data-node-id="s2s-harness-map-product-l-agents" data-node-label="src/agents, prompt-runner" data-node-kind="cloud" data-node-sublabel="prompts built in code" data-node-context="Lossless: in-product harness (moderate)">
+          <title>src/agents, prompt-runner · prompts built in code · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="96" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="96" width="230" height="48" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(46 102) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="118" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">src/agents, prompt-runner</text>
+        <text data-detail="context" x="155" y="134" class="t-muted" font-size="9" text-anchor="middle">prompts built in code</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-prompts" data-node-id="s2s-harness-map-product-c-prompts" data-node-label="Runtime prompt builders" data-node-kind="cloud" data-node-sublabel="examiner, grader, handoff" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>Runtime prompt builders · examiner, grader, handoff · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="96" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="96" width="230" height="48" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(656 102) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="118" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Runtime prompt builders</text>
+        <text data-detail="context" x="765" y="134" class="t-muted" font-size="9" text-anchor="middle">examiner, grader, handoff</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-provider" data-node-id="s2s-harness-map-product-l-provider" data-node-label="llm_provider.py" data-node-kind="cloud" data-node-sublabel="routing in code" data-node-context="Lossless: in-product harness (moderate)">
+          <title>llm_provider.py · routing in code · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="156" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="156" width="230" height="48" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(46 162) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="178" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">llm_provider.py</text>
+        <text data-detail="context" x="155" y="194" class="t-muted" font-size="9" text-anchor="middle">routing in code</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-llm" data-node-id="s2s-harness-map-product-c-llm" data-node-label="llm.js routing" data-node-kind="cloud" data-node-sublabel="routing in runtime config" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>llm.js routing · routing in runtime config · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="156" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="156" width="230" height="48" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(656 162) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="178" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">llm.js routing</text>
+        <text data-detail="context" x="765" y="194" class="t-muted" font-size="9" text-anchor="middle">routing in runtime config</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-outline" data-node-id="s2s-harness-map-product-l-outline" data-node-label="Outline YAML + schema" data-node-kind="cloud" data-node-sublabel="the outline is the contract" data-node-context="Lossless: in-product harness (moderate)">
+          <title>Outline YAML + schema · the outline is the contract · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="216" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="216" width="230" height="48" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(46 222) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Outline YAML + schema</text>
+        <text data-detail="context" x="155" y="254" class="t-muted" font-size="9" text-anchor="middle">the outline is the contract</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-skeleton" data-node-id="s2s-harness-map-product-c-skeleton" data-node-label="Skeleton JSON + validator" data-node-kind="cloud" data-node-sublabel="slots, invariants" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>Skeleton JSON + validator · slots, invariants · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="216" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="216" width="230" height="48" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(656 222) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Skeleton JSON + validator</text>
+        <text data-detail="context" x="765" y="254" class="t-muted" font-size="9" text-anchor="middle">slots, invariants</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-rules" data-node-id="s2s-harness-map-product-l-rules" data-node-label="Orchestrator AGENTS.md" data-node-kind="frontend" data-node-sublabel="numbered runtime rules" data-node-context="Lossless: in-product harness (moderate)">
+          <title>Orchestrator AGENTS.md · numbered runtime rules · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="302" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="302" width="230" height="48" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(46 308) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="324" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Orchestrator AGENTS.md</text>
+        <text data-detail="context" x="155" y="340" class="t-muted" font-size="9" text-anchor="middle">numbered runtime rules</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-rulebook" data-node-id="s2s-harness-map-product-c-rulebook" data-node-label="Exam rulebook" data-node-kind="frontend" data-node-sublabel="single source of truth" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>Exam rulebook · single source of truth · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="302" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="302" width="230" height="48" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(656 308) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="324" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Exam rulebook</text>
+        <text data-detail="context" x="765" y="340" class="t-muted" font-size="9" text-anchor="middle">single source of truth</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-inputs" data-node-id="s2s-harness-map-product-l-inputs" data-node-label="data/, Sources.md" data-node-kind="frontend" data-node-sublabel="per-deal inputs" data-node-context="Lossless: in-product harness (moderate)">
+          <title>data/, Sources.md · per-deal inputs · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="362" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="362" width="230" height="48" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(46 368) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="384" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">data/, Sources.md</text>
+        <text data-detail="context" x="155" y="400" class="t-muted" font-size="9" text-anchor="middle">per-deal inputs</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-intake" data-node-id="s2s-harness-map-product-c-intake" data-node-label="Intake sheets" data-node-kind="frontend" data-node-sublabel="[CHECK], [STILL OPEN]" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>Intake sheets · [CHECK], [STILL OPEN] · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="362" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="362" width="230" height="48" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(656 368) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="384" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Intake sheets</text>
+        <text data-detail="context" x="765" y="400" class="t-muted" font-size="9" text-anchor="middle">[CHECK], [STILL OPEN]</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-skills" data-node-id="s2s-harness-map-product-l-skills" data-node-label="Claude Code memo skills" data-node-kind="security" data-node-sublabel="describe the stops" data-node-context="Lossless: in-product harness (moderate)">
+          <title>Claude Code memo skills · describe the stops · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="448" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="448" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(46 454) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="470" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Claude Code memo skills</text>
+        <text data-detail="context" x="155" y="486" class="t-muted" font-size="9" text-anchor="middle">describe the stops</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-command" data-node-id="s2s-harness-map-product-c-command" data-node-label="/exam-build command" data-node-kind="security" data-node-sublabel="enforces the stops" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>/exam-build command · enforces the stops · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="448" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="448" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(656 454) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="470" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">/exam-build command</text>
+        <text data-detail="context" x="765" y="486" class="t-muted" font-size="9" text-anchor="middle">enforces the stops</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-approval" data-node-id="s2s-harness-map-product-l-approval" data-node-label="Source approval, reviewers" data-node-kind="security" data-node-sublabel="human gates" data-node-context="Lossless: in-product harness (moderate)">
+          <title>Source approval, reviewers · human gates · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="508" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="508" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(46 514) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="530" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Source approval, reviewers</text>
+        <text data-detail="context" x="155" y="546" class="t-muted" font-size="9" text-anchor="middle">human gates</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-sketch" data-node-id="s2s-harness-map-product-c-sketch" data-node-label="Sketch sign-off gates" data-node-kind="security" data-node-sublabel="two gates in product" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>Sketch sign-off gates · two gates in product · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="508" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="508" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(656 514) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="530" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Sketch sign-off gates</text>
+        <text data-detail="context" x="765" y="546" class="t-muted" font-size="9" text-anchor="middle">two gates in product</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-pipeline" data-node-id="s2s-harness-map-product-l-pipeline" data-node-label="LangGraph pipeline" data-node-kind="security" data-node-sublabel="CLI and native app" data-node-context="Lossless: in-product harness (moderate)">
+          <title>LangGraph pipeline · CLI and native app · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="568" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="568" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(46 574) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="590" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">LangGraph pipeline</text>
+        <text data-detail="context" x="155" y="606" class="t-muted" font-size="9" text-anchor="middle">CLI and native app</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-studio" data-node-id="s2s-harness-map-product-c-studio" data-node-label="/studio generator" data-node-kind="security" data-node-sublabel="the command, in product" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>/studio generator · the command, in product · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="568" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="568" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(656 574) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="590" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">/studio generator</text>
+        <text data-detail="context" x="765" y="606" class="t-muted" font-size="9" text-anchor="middle">the command, in product</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-trail" data-node-id="s2s-harness-map-product-l-trail" data-node-label="Artifact trail" data-node-kind="database" data-node-sublabel="every step to disk" data-node-context="Lossless: in-product harness (moderate)">
+          <title>Artifact trail · every step to disk · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="654" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="654" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(46 660) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="676" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Artifact trail</text>
+        <text data-detail="context" x="155" y="692" class="t-muted" font-size="9" text-anchor="middle">every step to disk</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-flight" data-node-id="s2s-harness-map-product-c-flight" data-node-label="Flight recorder" data-node-kind="database" data-node-sublabel="every step to disk" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>Flight recorder · every step to disk · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="654" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="654" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(656 660) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="676" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Flight recorder</text>
+        <text data-detail="context" x="765" y="692" class="t-muted" font-size="9" text-anchor="middle">every step to disk</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-resolution" data-node-id="s2s-harness-map-product-l-resolution" data-node-label="issue-resolution, reminders" data-node-kind="database" data-node-sublabel="36 scattered files" data-node-context="Lossless: in-product harness (moderate)">
+          <title>issue-resolution, reminders · 36 scattered files · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="714" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="714" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(46 720) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="736" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">issue-resolution, reminders</text>
+        <text data-detail="context" x="155" y="752" class="t-muted" font-size="9" text-anchor="middle">36 scattered files</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-ledger" data-node-id="s2s-harness-map-product-c-ledger" data-node-label="EXAM_CRAFT.md ledger" data-node-kind="database" data-node-sublabel="2,163 lines, ID-stable" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>EXAM_CRAFT.md ledger · 2,163 lines, ID-stable · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="714" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="714" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(656 720) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="736" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">EXAM_CRAFT.md ledger</text>
+        <text data-detail="context" x="765" y="752" class="t-muted" font-size="9" text-anchor="middle">2,163 lines, ID-stable</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-evaluate" data-node-id="s2s-harness-map-product-l-evaluate" data-node-label="evaluate_memo, fact checkers" data-node-kind="backend" data-node-sublabel="is it true and good?" data-node-context="Lossless: in-product harness (moderate)">
+          <title>evaluate_memo, fact checkers · is it true and good? · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="800" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="800" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 806) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="822" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">evaluate_memo, fact checkers</text>
+        <text data-detail="context" x="155" y="838" class="t-muted" font-size="9" text-anchor="middle">is it true and good?</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-audits" data-node-id="s2s-harness-map-product-c-audits" data-node-label="Rubric + re-ask audits" data-node-kind="backend" data-node-sublabel="did it obey?" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>Rubric + re-ask audits · did it obey? · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="800" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="800" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(656 806) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="822" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Rubric + re-ask audits</text>
+        <text data-detail="context" x="765" y="838" class="t-muted" font-size="9" text-anchor="middle">did it obey?</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-nosim" data-node-id="s2s-harness-map-product-l-nosim" data-node-label="No tiered simulator" data-node-kind="backend" data-node-sublabel="no synthetic deals" data-node-context="Lossless: in-product harness (moderate)">
+          <title>No tiered simulator · no synthetic deals · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="860" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="860" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 866) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="882" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">No tiered simulator</text>
+        <text data-detail="context" x="155" y="898" class="t-muted" font-size="9" text-anchor="middle">no synthetic deals</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-sim" data-node-id="s2s-harness-map-product-c-sim" data-node-label="/sim + 18 profiles" data-node-kind="backend" data-node-sublabel="error bars, ρ vs tier" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>/sim + 18 profiles · error bars, ρ vs tier · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="860" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="860" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(656 866) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="882" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">/sim + 18 profiles</text>
+        <text data-detail="context" x="765" y="898" class="t-muted" font-size="9" text-anchor="middle">error bars, ρ vs tier</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-noreplay" data-node-id="s2s-harness-map-product-l-noreplay" data-node-label="No run-to-run replay" data-node-kind="backend" data-node-sublabel="variance suppressed" data-node-context="Lossless: in-product harness (moderate)">
+          <title>No run-to-run replay · variance suppressed · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="920" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="920" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 926) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="942" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">No run-to-run replay</text>
+        <text data-detail="context" x="155" y="958" class="t-muted" font-size="9" text-anchor="middle">variance suppressed</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-replay" data-node-id="s2s-harness-map-product-c-replay" data-node-label="gate-replay" data-node-kind="backend" data-node-sublabel="flip rate 2% (1/63)" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>gate-replay · flip rate 2% (1/63) · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="920" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="920" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(656 926) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="942" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">gate-replay</text>
+        <text data-detail="context" x="765" y="958" class="t-muted" font-size="9" text-anchor="middle">flip rate 2% (1/63)</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-nopreflight" data-node-id="s2s-harness-map-product-l-nopreflight" data-node-label="No live-model preflight" data-node-kind="backend" data-node-context="Lossless: in-product harness (moderate)">
+          <title>No live-model preflight · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="980" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="980" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 986) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" x="155" y="1008" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">No live-model preflight</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-preflight" data-node-id="s2s-harness-map-product-c-preflight" data-node-label="Preflights" data-node-kind="backend" data-node-sublabel="persona + shipped prompt" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>Preflights · persona + shipped prompt · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="980" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="980" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(656 986) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="1002" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Preflights</text>
+        <text data-detail="context" x="765" y="1018" class="t-muted" font-size="9" text-anchor="middle">persona + shipped prompt</text>
+        </g>
+        <g id="s2s-harness-map-product-node-l-slabs" data-node-id="s2s-harness-map-product-l-slabs" data-node-label="chat.ts slabs from SKILL.md" data-node-kind="messagebus" data-node-sublabel="update together" data-node-context="Lossless: in-product harness (moderate)">
+          <title>chat.ts slabs from SKILL.md · update together · Lossless: in-product harness (moderate)</title>
+          <rect x="40" y="1066" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="1066" width="230" height="48" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(46 1072) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="1088" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">chat.ts slabs from SKILL.md</text>
+        <text data-detail="context" x="155" y="1104" class="t-muted" font-size="9" text-anchor="middle">update together</text>
+        </g>
+        <g id="s2s-harness-map-product-node-c-nosync" data-node-id="s2s-harness-map-product-c-nosync" data-node-label="No source-of-truth rule" data-node-kind="messagebus" data-node-sublabel="/exam-build vs /studio" data-node-context="The Collaborator: in-product harness (deep)">
+          <title>No source-of-truth rule · /exam-build vs /studio · The Collaborator: in-product harness (deep)</title>
+          <rect x="650" y="1066" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="1066" width="230" height="48" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(656 1072) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="1088" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">No source-of-truth rule</text>
+        <text data-detail="context" x="765" y="1104" class="t-muted" font-size="9" text-anchor="middle">/exam-build vs /studio</text>
+        </g>
+        <!-- Connection labels -->
+        <g data-detail="context" data-edge-from="l-agents" data-edge-to="c-prompts" data-edge-label="shared" data-edge-key="0" data-edge-id="s2s-harness-map-product-l-agents--c-prompts">
+          <rect x="440.6" y="100" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="110" class="t-backend" font-size="8" text-anchor="middle">shared</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-provider" data-edge-to="c-llm" data-edge-label="shared" data-edge-key="1" data-edge-id="s2s-harness-map-product-l-provider--c-llm">
+          <rect x="440.6" y="160" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="170" class="t-backend" font-size="8" text-anchor="middle">shared</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-outline" data-edge-to="c-skeleton" data-edge-label="similar" data-edge-key="2" data-edge-id="s2s-harness-map-product-l-outline--c-skeleton">
+          <rect x="438.2" y="220" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="230" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-rules" data-edge-to="c-rulebook" data-edge-label="similar" data-edge-key="3" data-edge-id="s2s-harness-map-product-l-rules--c-rulebook">
+          <rect x="438.2" y="306" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="316" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-inputs" data-edge-to="c-intake" data-edge-label="similar" data-edge-key="4" data-edge-id="s2s-harness-map-product-l-inputs--c-intake">
+          <rect x="438.2" y="366" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="376" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-skills" data-edge-to="c-command" data-edge-label="similar" data-edge-key="5" data-edge-id="s2s-harness-map-product-l-skills--c-command">
+          <rect x="438.2" y="452" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="462" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-approval" data-edge-to="c-sketch" data-edge-label="similar" data-edge-key="6" data-edge-id="s2s-harness-map-product-l-approval--c-sketch">
+          <rect x="438.2" y="512" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="522" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-pipeline" data-edge-to="c-studio" data-edge-label="similar" data-edge-key="7" data-edge-id="s2s-harness-map-product-l-pipeline--c-studio">
+          <rect x="438.2" y="572" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="582" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-trail" data-edge-to="c-flight" data-edge-label="shared" data-edge-key="8" data-edge-id="s2s-harness-map-product-l-trail--c-flight">
+          <rect x="440.6" y="658" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="668" class="t-backend" font-size="8" text-anchor="middle">shared</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-resolution" data-edge-to="c-ledger" data-edge-label="similar" data-edge-key="9" data-edge-id="s2s-harness-map-product-l-resolution--c-ledger">
+          <rect x="438.2" y="718" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="728" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-evaluate" data-edge-to="c-audits" data-edge-label="similar" data-edge-key="10" data-edge-id="s2s-harness-map-product-l-evaluate--c-audits">
+          <rect x="438.2" y="804" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="814" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-nosim" data-edge-to="c-sim" data-edge-label="missing on our side" data-edge-key="11" data-edge-id="s2s-harness-map-product-l-nosim--c-sim">
+          <rect x="409.4" y="864" width="101.2" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="874" class="t-security" font-size="8" text-anchor="middle">missing on our side</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-noreplay" data-edge-to="c-replay" data-edge-label="missing on our side" data-edge-key="12" data-edge-id="s2s-harness-map-product-l-noreplay--c-replay">
+          <rect x="409.4" y="924" width="101.2" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="934" class="t-security" font-size="8" text-anchor="middle">missing on our side</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-nopreflight" data-edge-to="c-preflight" data-edge-label="missing on our side" data-edge-key="13" data-edge-id="s2s-harness-map-product-l-nopreflight--c-preflight">
+          <rect x="409.4" y="984" width="101.2" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="994" class="t-security" font-size="8" text-anchor="middle">missing on our side</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-slabs" data-edge-to="c-nosync" data-edge-label="missing on their side" data-edge-key="14" data-edge-id="s2s-harness-map-product-l-slabs--c-nosync">
+          <rect x="404.6" y="1070" width="110.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="1080" class="t-security" font-size="8" text-anchor="middle">missing on their side</text>
+        </g>
+        <!-- Boundary labels (foreground masks keep routes out of titles) -->
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="s2s-harness-map-product-0" data-composition-frame-kind="region" data-composition-frame-label="Lossless: in-product harness (moderate)">
+          <rect data-graph-role="structural-frame-label-mask" x="14" y="76" width="220.6" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="18" y="89" class="t-cloud" font-size="9" font-weight="600">Lossless: in-product harness (moderate)</text>
+        </g>
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="s2s-harness-map-product-1" data-composition-frame-kind="region" data-composition-frame-label="The Collaborator: in-product harness (deep)">
+          <rect data-graph-role="structural-frame-label-mask" x="624" y="76" width="242.2" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="628" y="89" class="t-cloud" font-size="9" font-weight="600">The Collaborator: in-product harness (deep)</text>
+        </g>
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="40" y="1166" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Rules and inputs" data-legend-x="40" data-legend-baseline="1186" data-legend-width="123">
+            <rect x="40" y="1177" width="16" height="10" rx="2.5" class="c-frontend" stroke-width="1"/>
+            <text x="62" y="1186" class="t-muted" font-size="10" font-weight="500">Rules and inputs</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Evaluation" data-legend-x="185" data-legend-baseline="1186" data-legend-width="93">
+            <rect x="185" y="1177" width="16" height="10" rx="2.5" class="c-backend" stroke-width="1"/>
+            <text x="207" y="1186" class="t-muted" font-size="10" font-weight="500">Evaluation</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Memory and records" data-legend-x="300" data-legend-baseline="1186" data-legend-width="133">
+            <rect x="300" y="1177" width="16" height="10" rx="2.5" class="c-database" stroke-width="1"/>
+            <text x="322" y="1186" class="t-muted" font-size="10" font-weight="500">Memory and records</text>
+          </g>
+          <g data-legend-semantic-kind="cloud" data-legend-kind="cloud" data-legend-label="Runtime machinery" data-legend-x="455" data-legend-baseline="1186" data-legend-width="128">
+            <rect x="455" y="1177" width="16" height="10" rx="2.5" class="c-cloud" stroke-width="1"/>
+            <text x="477" y="1186" class="t-muted" font-size="10" font-weight="500">Runtime machinery</text>
+          </g>
+          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Generation and gates" data-legend-x="605" data-legend-baseline="1186" data-legend-width="143">
+            <rect x="605" y="1177" width="16" height="10" rx="2.5" class="c-security" stroke-width="1"/>
+            <text x="627" y="1186" class="t-muted" font-size="10" font-weight="500">Generation and gates</text>
+          </g>
+          <g data-legend-semantic-kind="messagebus" data-legend-kind="messagebus" data-legend-label="Sync rule" data-legend-x="770" data-legend-baseline="1186" data-legend-width="88">
+            <rect x="770" y="1177" width="16" height="10" rx="2.5" class="c-messagebus" stroke-width="1"/>
+            <text x="792" y="1186" class="t-muted" font-size="10" font-weight="500">Sync rule</text>
+          </g>
+        </g>
+      </svg>

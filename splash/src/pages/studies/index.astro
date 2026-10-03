@@ -117,6 +117,11 @@ const studies: Study[] = await Promise.all(
 );
 
 const totalPinned = studies.reduce((acc, s) => acc + s.pinned.length, 0);
+
+/** Collaboration studies: a small hand-maintained list (not pinned upstreams). */
+const COLLABORATIONS: { slug: string; title: string; note: string }[] = [
+  { slug: 'silo-to-silo-01', title: 'Silo to Silo 01', note: 'Lossless beside a single-app Firebase repo · 2026-10-03' },
+];
 ---
 
 <BaseLayout title="Studies">
@@ -173,6 +178,30 @@ const totalPinned = studies.reduce((acc, s) => acc + s.pinned.length, 0);
       </div>
     </section>
   ))}
+
+  <section class="study" id="collaborations">
+    <div class="container">
+      <header class="study__head">
+        <p class="eyebrow">collaborations</p>
+        <h2 class="study__title">Collaborations</h2>
+        <blockquote class="study__question">
+          Silo against silo: when a friend has built their own agentic-coding harness next
+          to ours, what can each side learn from the other?
+        </blockquote>
+      </header>
+      {/* Hand-maintained. Collaborators stay anonymous: generic titles only. */}
+      <ul class="pinned-grid" aria-label="Collaboration studies">
+        {COLLABORATIONS.map((c) => (
+          <li class="pinned-card">
+            <a href={`${base}studies/collaborations/${c.slug}/`} class="pinned-card__link">
+              <span class="pinned-card__slug">{c.title}</span>
+              <span class="pinned-card__source"><span class="pinned-card__name">{c.note}</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
   <section class="outro">
     <div class="container">

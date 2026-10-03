@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "The Collaborator: in-product loop (exam generation)",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": { "mode": "auto", "entries": {
+      "external": { "label": "Person or trigger" }, "frontend": { "label": "Rules and inputs" },
+      "backend": { "label": "Generation and checks" }, "security": { "label": "Human stop" }, "database": { "label": "Memory" } } }
+  },
+  "lanes": [
+    { "id": "human", "label": "Human" }, { "id": "agent", "label": "Agent" },
+    { "id": "checks", "label": "Checks" }, { "id": "memory", "label": "Memory" }
+  ],
+  "phases": [
+    { "id": "p-input", "label": "Input", "fromCol": 0, "toCol": 0 },
+    { "id": "p-rules", "label": "Rules", "fromCol": 1, "toCol": 1 },
+    { "id": "p-draft", "label": "Draft", "fromCol": 2, "toCol": 2 },
+    { "id": "p-measure", "label": "Check", "fromCol": 3, "toCol": 3 },
+    { "id": "p-learn", "label": "Review and learn", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["source", "rules", "draft", "assemble", "sim", "ledger"],
+  "nodes": [
+    { "id": "source", "lane": "human", "col": 0, "type": "external", "label": "Source text + notes", "sublabel": "into session opener", "width": 132 },
+    { "id": "rules", "lane": "agent", "col": 1, "type": "frontend", "label": "Read rulebook", "sublabel": "+ craft ledger", "width": 132 },
+    { "id": "draft", "lane": "agent", "col": 2, "type": "backend", "label": "/exam-build, /studio", "sublabel": "drafts the sketch", "width": 132 },
+    { "id": "signoff", "lane": "human", "col": 2, "type": "security", "label": "Sign-off stop", "sublabel": "approve or revise", "width": 132 },
+    { "id": "assemble", "lane": "agent", "col": 3, "type": "backend", "label": "Assemble", "sublabel": "skeleton + validator", "width": 132 },
+    { "id": "sim", "lane": "checks", "col": 3, "type": "backend", "label": "/sim + preflights", "sublabel": "error bars", "width": 132 },
+    { "id": "sitting", "lane": "human", "col": 5, "type": "external", "label": "Human sitting", "sublabel": "flightReview grades it", "width": 132 },
+    { "id": "ledger", "lane": "memory", "col": 4, "type": "database", "label": "Craft ledger", "sublabel": "defect named, measured", "width": 132 }
+  ],
+  "edges": [
+    { "id": "source-rules", "from": "source", "to": "rules", "variant": "emphasis" },
+    { "id": "rules-draft", "from": "rules", "to": "draft", "variant": "emphasis" },
+    { "id": "draft-signoff", "from": "draft", "to": "signoff", "label": "stop", "variant": "security" },
+    { "id": "draft-assemble", "from": "draft", "to": "assemble", "label": "approved", "variant": "emphasis" },
+    { "id": "assemble-sim", "from": "assemble", "to": "sim", "variant": "emphasis" },
+    { "id": "sim-ledger", "from": "sim", "to": "ledger", "label": "log finding", "variant": "emphasis" },
+    { "id": "sim-sitting", "from": "sim", "to": "sitting", "label": "holds" }
+  ]
+}

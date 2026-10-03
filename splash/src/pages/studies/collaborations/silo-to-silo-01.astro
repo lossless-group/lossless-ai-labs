@@ -1,0 +1,929 @@
+---
+/**
+ * /studies/collaborations/silo-to-silo-01/
+ *
+ * Step 3 of a collaboration study: one page built only from the study's
+ * step 1 (harness evidence) and step 2 (compare and contrast, by layer).
+ * The headline is the layer map: two harnesses (developer agents, in-product
+ * agents), with opposite depths on each side.
+ *
+ * ANONYMITY: this page is public and indexed. The collaborator appears only
+ * as "The Collaborator". Never add their repo, account, product or people's
+ * names here, in the diagram sources, or in the description. Don't link to
+ * the study notes, which name them.
+ *
+ * Diagrams: Archify sources + generated SVG live in
+ * src/diagrams/silo-to-silo-01/ (regenerate with build.mjs there). The SVGs
+ * carry Archify's semantic classes; the token mapping at the bottom of this
+ * file re-themes them for the three splash modes. The layer map is
+ * hand-authored HTML with inline SVG arrows (see the note on it below).
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { SITE_REPO } from '@lib/seo';
+import mapDevSvg from '../../../diagrams/silo-to-silo-01/harness-map-dev.svg?raw';
+import mapProductSvg from '../../../diagrams/silo-to-silo-01/harness-map-product.svg?raw';
+import loopDevThemSvg from '../../../diagrams/silo-to-silo-01/loop-dev-collaborator.svg?raw';
+import loopDevOursSvg from '../../../diagrams/silo-to-silo-01/loop-dev-lossless.svg?raw';
+import loopProductThemSvg from '../../../diagrams/silo-to-silo-01/loop-product-collaborator.svg?raw';
+import loopProductOursSvg from '../../../diagrams/silo-to-silo-01/loop-product-lossless.svg?raw';
+import shapeSvg from '../../../diagrams/silo-to-silo-01/shape.svg?raw';
+import mapDev from '../../../diagrams/silo-to-silo-01/harness-map-dev.architecture.json';
+import mapProduct from '../../../diagrams/silo-to-silo-01/harness-map-product.architecture.json';
+
+const base = import.meta.env.BASE_URL;
+const THEM = 'The Collaborator';
+const EXPLORATION_URL = `${SITE_REPO}/blob/main/studies/context-v/explorations/Explore-Collaborator-Codebases-for-Insights-Comparative-Highlights.md`;
+
+// ─── Layer map (step 2 §3) ────────────────────────────────────────────────
+type Depth = { word: 'Thin' | 'Moderate' | 'Deep'; level: 1 | 2 | 3 };
+const THIN: Depth = { word: 'Thin', level: 1 };
+const MODERATE: Depth = { word: 'Moderate', level: 2 };
+const DEEP: Depth = { word: 'Deep', level: 3 };
+const layerMap = {
+  dev: {
+    name: 'Developer-agents harness',
+    what: 'How coding agents help build the software.',
+    ours: { depth: DEEP, note: 'Deep, overbuilt in places.', why: 'Layered AGENTS.md / CLAUDE.md from anchor to app, 240 context-v files in augment-it alone, about 206 changelog entries, 11 loops, handoffs, a Stow-linked skills library, CI plus a deploy watchdog, and a Chroma corpus over past sessions.' },
+    them: { depth: THIN, note: 'Thin.', why: 'No instruction file, CI or changelog; a frozen 210-entry click-approval allowlist; one dev skill. Two real strengths: signed-off specs that get post-ship updates, and commit bodies that work as a dated, measured record.' },
+    arrow: { dir: 'right', label: `Lossless teaches ${THEM}`, sub: 'easy: the small pieces, each effort S' },
+  },
+  product: {
+    name: 'In-product-agents harness',
+    what: "How the product's own agents generate its output.",
+    ours: { depth: MODERATE, note: 'Moderate.', why: 'An outline YAML contract with a schema, runtime AGENTS.md principles cited in code, 46 agents including fact checkers and citation validators, an artifact trail, and an in-app agent on skill-sourced prompts. Missing: replay, synthetic inputs, preflights, error bars.' },
+    them: { depth: DEEP, note: 'Deep.', why: 'A rulebook with a single-source rule, a 2,163-line ID-stable findings ledger with a checked index, skeleton plus validator plus assembler, /exam-build ported into the product as /studio, an 18-profile simulator with error bars, five preflight and audit scripts, and a flight recorder.' },
+    arrow: { dir: 'left', label: `${THEM} teaches Lossless`, sub: 'real, not cheap: effort M to L' },
+  },
+};
+const layers = [layerMap.dev, layerMap.product];
+
+// ─── Buckets per layer (step 2 §4.7) ──────────────────────────────────────
+type BucketKey = 'shared' | 'similar' | 'different' | 'missing';
+const BUCKETS: { key: BucketKey; label: string; dev: number; product: number; gist: string }[] = [
+  { key: 'shared', label: 'Shared', dev: 6, product: 4, gist: 'Same kind of artifact on both sides.' },
+  { key: 'similar', label: 'Similar', dev: 10, product: 11, gist: 'Same job, different form.' },
+  { key: 'different', label: 'Different', dev: 11, product: 1, gist: 'One side only, and right for its context.' },
+  { key: 'missing', label: 'Missing', dev: 3, product: 4, gist: 'One side only, and the other would benefit.' },
+];
+const DEV_ROWS = BUCKETS.reduce((a, b) => a + b.dev, 0);
+const PRODUCT_ROWS = BUCKETS.reduce((a, b) => a + b.product, 0);
+
+// ─── Harness maps stacked for narrow screens ──────────────────────────────
+// Derived from the same Archify sources as the SVGs, so the two never drift.
+type Comp = { id: string; type: string; label: string; sublabel?: string; pos: number[] };
+type MapDoc = { meta: { legend: { entries: Record<string, { label: string }> } }; components: Comp[]; connections: { from: string; to: string; label?: string }[] };
+function stackFrom(doc: MapDoc) {
+  const byId = new Map(doc.components.map((c) => [c.id, c]));
+  const pairs = doc.components
+    .filter((c) => c.id.startsWith('l-'))
+    .map((l) => {
+      const conn = doc.connections.find((k) => k.from === l.id);
+      return { y: l.pos[1], category: doc.meta.legend.entries[l.type]?.label ?? '', ours: l, them: conn ? byId.get(conn.to) : undefined, bucket: conn?.label ?? 'no counterpart' };
+    })
+    .sort((a, b) => a.y - b.y);
+  return [...new Set(pairs.map((p) => p.category))].map((cat) => ({ cat, rows: pairs.filter((p) => p.category === cat) }));
+}
+const stacks = { dev: stackFrom(mapDev as MapDoc), product: stackFrom(mapProduct as MapDoc) };
+const bucketClass = (b: string) =>
+  b === 'shared' ? 'shared' : b === 'similar' ? 'similar' : b.startsWith('missing') ? 'missing' : 'different';
+
+// ─── Ledger (step 2 §5.0), anonymized on the collaborator's side ─────────
+type Row = { id: string; them: string; ours: string };
+const ledger: Record<BucketKey, { dev: Row[]; product: Row[] }> = {
+  shared: {
+    dev: [
+      { id: 'D-SH1', them: '.claude/settings.json', ours: 'ai-labs and memopop-ai .claude/settings.local.json (both tracked in git)' },
+      { id: 'D-SH2', them: '.claude/skills/verify/SKILL.md', ours: 'augment-it decile-hub-interface skill' },
+      { id: 'D-SH3', them: 'functions/test/ (platform half), fixtures README (dev facet)', ours: 'augment-it vitest (48 test files), test-all.sh; orchestrator tests (platform half)' },
+      { id: 'D-SH4', them: 'README.md', ours: 'READMEs, DEPLOYMENT.md, PROJECT-STRUCTURE.md, user guides' },
+      { id: 'D-SH5', them: 'functions/package.json, .eslintrc.js, firebase.json', ours: 'package.json, tsconfig*.json, pyproject.toml' },
+      { id: 'D-SH6', them: 'Agent-written commits with Claude trailers', ours: 'git history under the git-conventions skill' },
+    ],
+    product: [
+      { id: 'P-SH1', them: 'Runtime prompt builders (examiner, conversation, handoff, grader)', ours: 'Orchestrator src/agents/; augment-it prompt-runner, prompt-store, prompt-template manager' },
+      { id: 'P-SH2', them: 'functions/lib/llm.js, config.js', ours: 'Orchestrator src/llm_provider.py' },
+      { id: 'P-SH3', them: 'Flight recorder (front end and server)', ours: 'Orchestrator artifact trail, "every step writes its output to file"' },
+      { id: 'P-SH4', them: 'functions/test/ (LLM-machinery half), fixtures README (product facet)', ours: 'Orchestrator tests (product half: preservation, thesis frames, prompt templates)' },
+    ],
+  },
+  similar: {
+    dev: [
+      { id: 'D-SI1', them: 'Session opener (dev facet: carried-over platform to-dos)', ours: 'context-v/handoffs/, Pickup-*.md reminders, prompts/' },
+      { id: 'D-SI2', them: 'A simulator action plan', ours: 'context-v/plans/ (41 in augment-it, 11 in memopop-ai, 10 in the orchestrator)' },
+      { id: 'D-SI3', them: 'Two UI after-action summaries', ours: 'changelog/ (109, 5, 6 and 86 entries)' },
+      { id: 'D-SI4', them: 'Four design docs in docs/ (dev facet)', ours: 'context-v/specs/ and explorations/' },
+      { id: 'D-SI5', them: 'Three feature references in docs/', ours: 'Blueprints, notes, patterns, decisions, refactors, reminders' },
+      { id: 'D-SI6', them: 'docs/record-test-checklist.md', ours: 'A test-registry spec in augment-it' },
+      { id: 'D-SI7', them: 'Ad-hoc Puppeteer and Playwright drives in the scratchpad', ours: 'Browser-drive blueprint, e2e/harness.mjs, prove and smoke scripts' },
+      { id: 'D-SI8', them: 'TODO.md', ours: 'context-v/issues/ (55 in augment-it), a sprint hitlist, Tasks.md' },
+      { id: 'D-SI9', them: 'Notes/ (two .rtf files)', ours: 'context-v/extra/ (gitignored scratch)' },
+      { id: 'D-SI10', them: 'scripts/check-deploy-drift.sh', ours: 'augment-it deploy-watch.yml' },
+    ],
+    product: [
+      { id: 'P-SI1', them: 'Exam rulebook (EXAM_TEMPLATE_PROMPT.md)', ours: 'Orchestrator AGENTS.md (runtime contract)' },
+      { id: 'P-SI2', them: 'EXAM_CRAFT.md findings ledger', ours: 'Orchestrator issue-resolution/ (24), reminders/ (11)' },
+      { id: 'P-SI3', them: 'scripts/check-craft-index.js', ours: 'gen_pipeline_reference.py --check' },
+      { id: 'P-SI4', them: 'Architecture doc (product facet: pipeline, model routing)', ours: 'PIPELINE-REFERENCE.md and its overlay' },
+      { id: 'P-SI5', them: 'Exam skeleton JSON, generated shapes, validator', ours: 'Outline YAML, sections-schema.json, memo templates, style guide' },
+      { id: 'P-SI6', them: 'Intake template, three filled intake sheets, session opener (product facet)', ours: 'data/*.json, brand configs, Sources and corrections templates' },
+      { id: 'P-SI7', them: '.claude/commands/exam-build.md', ours: 'Claude Code memo skills (seven across the orchestrator and memopop-ai)' },
+      { id: 'P-SI8', them: 'Sketch schema with two sign-off gates', ours: 'Source-approval loop; augment-it request and response reviewers' },
+      { id: 'P-SI9', them: '/studio (assembler, route, page)', ours: 'LangGraph pipeline, CLI, memopop-native app' },
+      { id: 'P-SI10', them: 'A pedagogy reference doc', ours: 'Domain skills: competitive-analysis, market-capture-analysis, timeline-scenario-analysis' },
+      { id: 'P-SI11', them: 'Rubric-gate and re-ask audits, review of real sittings', ours: 'evaluate_memo, score_memo, scorecards; validator, fact-checker, citation and attribution agents' },
+    ],
+  },
+  different: {
+    dev: [
+      { id: 'D-DF1', them: '—', ours: 'Pseudomonorepo rules: branch tiers, the relocation hard stop, submodule bumps' },
+      { id: 'D-DF2', them: '—', ours: 'Shared skills library, linked with GNU Stow' },
+      { id: 'D-DF3', them: '—', ours: 'Chroma corpus over context, changelogs and past sessions' },
+      { id: 'D-DF4', them: '—', ours: 'Spec Kit in augment-it' },
+      { id: 'D-DF5', them: '—', ours: 'Design-system machinery and its drift scripts' },
+      { id: 'D-DF6', them: '—', ours: 'Publishing frontmatter, splash sites, Pages workflows' },
+      { id: 'D-DF7', them: '—', ours: 'Legacy per-harness files: WARP.md, project-instructions.md' },
+      { id: 'D-DF8', them: '—', ours: 'MCP wiring: SurrealDB, Playwright, Chroma' },
+      { id: 'D-DF9', them: '—', ours: 'The context-vigilance convention' },
+      { id: 'D-DF10', them: '—', ours: 'augment-it dev loops (11)' },
+      { id: 'D-DF11', them: 'Deny-all Firestore and Storage rules', ours: '—' },
+    ],
+    product: [{ id: 'P-DF1', them: '—', ours: 'Firm-private nested submodules under the orchestrator' }],
+  },
+  missing: {
+    dev: [
+      { id: 'D-MI1', them: 'Missing: no CLAUDE.md or AGENTS.md', ours: 'Layered instruction files, anchor to app' },
+      { id: 'D-MI2', them: 'Missing: no CI', ours: 'augment-it ci.yml' },
+      { id: 'D-MI3', them: 'Missing: no changelog', ours: 'The changelog-conventions skill' },
+    ],
+    product: [
+      { id: 'P-MI1', them: '/sim driver and 18 tiered profiles', ours: 'Missing' },
+      { id: 'P-MI2', them: 'scripts/gate-replay.js', ours: 'Missing' },
+      { id: 'P-MI3', them: 'Persona and handoff preflights', ours: 'Missing' },
+      { id: 'P-MI4', them: 'Missing: no declared source of truth between /exam-build and /studio', ours: 'augment-it chat.ts slabs ("the SKILL.md is the source of truth"), runtime skills' },
+    ],
+  },
+};
+
+// ─── Insights and recommendations (step 2 §6, §7) ─────────────────────────
+type Layer = 'Dev' | 'Product' | 'Both';
+const insightsOurs: { layer: Layer; exception?: boolean; t: string; d: string }[] = [
+  { layer: 'Product', t: 'We verify the code around the model, not the model.', d: 'Our checks ask whether a memo is true. Theirs also ask whether the system would say the same thing twice, and whether it ranks a known-strong input above a known-weak one.' },
+  { layer: 'Product', t: 'We suppress variance where they measure it.', d: 'Pinning the writer to temperature 0 hides variance without telling us how large it is. Three averaged grading passes, plus a flip rate, tell them.' },
+  { layer: 'Product', t: 'Craft knowledge compounds better in one ledger.', d: 'For bugs, one file per issue is right. For product craft, an ID-stable ledger with a “not yet distilled” tier and a per-run log compounds in a way 36 scattered files don’t.' },
+  { layer: 'Product', t: 'The convergences confirm our product bets.', d: 'Assemble, don’t generate; a rulebook with addressable rules; run records on disk; human gates before generation. A silo with none of our conventions reached all four.' },
+  { layer: 'Dev', exception: true, t: 'A command enforces; a loop doc only describes.', d: 'Their best workflow is one invocable file with a tool list and hard stops. Our dev loops are better written, but an agent has to be told to read them.' },
+  { layer: 'Dev', t: 'We’re overbuilt where layers pile up without pruning.', d: 'Spec Kit beside context-v, four instruction files in the orchestrator, diverged skill copies, undiscoverable project skills, stale paths. None is serious alone.' },
+  { layer: 'Dev', t: 'Committing settings.local.json is our slip, not theirs.', d: 'They kept the local file local. We track it in two repos.' },
+  { layer: 'Dev', t: 'Our dev memory depends on infrastructure.', d: 'The Chroma server was down for this very comparison. Markdown plus git log can’t go down.' },
+  { layer: 'Both', t: 'Both silos prototype product agents in the coding harness.', d: '/exam-build became /studio; our triage skill became a slab in augment-it’s in-app agent. On both sides it lacks a sync rule.' },
+];
+const recsOurs: { layer: Layer; exception?: boolean; t: string; d: string; from: string; size: string }[] = [
+  { layer: 'Product', t: 'Measure run-to-run reliability.', d: 'Replay one section N times on frozen inputs; report verdict flip rate and score spread. Make evaluate_memo.py report a standard error.', from: 'From their gate replay and reviewer error bars.', size: 'M' },
+  { layer: 'Product', t: 'Preflight prompt changes against the live model.', d: 'N passes before shipping, recorded as “a statement about production”.', from: 'From their handoff preflight.', size: 'S–M' },
+  { layer: 'Product', t: 'A craft ledger for memo writing.', d: 'Stable finding IDs, an evidence line each, a “not yet distilled” tier, an append-only run log, an index checked in tests.', from: 'From EXAM_CRAFT.md and its index check.', size: 'M' },
+  { layer: 'Product', t: 'Synthetic inputs in tiers.', d: 'Synthetic deals from clearly strong to clearly weak with expected score bands, each preflighted to read as its tier. Harder for memos than for exams.', from: 'From their tiered profiles and profile preflight.', size: 'L' },
+  { layer: 'Product', t: 'Obedience audits.', d: 'Over a batch of runs, check agents did what their rules say, separately from whether the memo is good.', from: 'From their rubric-gate and re-ask audits.', size: 'S' },
+  { layer: 'Product', t: '[CHECK] and [STILL OPEN] markers in run inputs.', d: 'So the human sees what is unverified.', from: 'From their intake template.', size: 'S' },
+  { layer: 'Both', exception: true, t: 'Name the graduation path from Claude Code skill to product agent.', d: 'With a sync rule and a check.', from: 'From /exam-build becoming /studio.', size: 'M' },
+  { layer: 'Dev', exception: true, t: 'Make our most-used loops invocable.', d: 'A .claude/commands/ file with allowed-tools, a reading order, explicit stops and a “do not push or deploy” line.', from: 'A product artifact of theirs teaching our dev layer.', size: 'M' },
+  { layer: 'Dev', exception: true, t: 'Epistemic tags and “start here” sections in specs,', d: 'plus a written model-routing rule for coding sessions.', from: 'From their measurement design and architecture doc.', size: 'S' },
+  { layer: 'Dev', exception: true, t: 'A pruning pass on our dev harness.', d: 'Retire legacy harness files, untrack settings.local.json, reconcile diverged skills, link project skills, fix stale paths, decide Spec Kit’s future.', from: 'Prompted by their one-place harness, by contrast.', size: 'S–M' },
+];
+const insightsThem: { layer: Layer; exception?: boolean; t: string; d: string }[] = [
+  { layer: 'Dev', t: 'The harness around your best work is almost all defaults.', d: 'No repo-wide instruction file, and a permission allowlist nobody curated, frozen since 2026-08-20, that lets an agent push and deploy without asking. The permission allowlist held credentials.' },
+  { layer: 'Dev', t: 'Two workflows, one front door.', d: 'Exam work opens with a session opener and /exam-build. Platform work starts cold, which probably explains the exploratory greps in the allowlist.' },
+  { layer: 'Dev', t: 'Your dev discipline is real, just hard to find.', d: 'Signed-off specs, post-ship sections and measured commits are all there. They need a map, not a new system.' },
+  { layer: 'Dev', t: 'The gates exist, but nothing makes them run.', d: 'Tests, a validator, a craft-index check and a deploy-drift check all run only when remembered.' },
+  { layer: 'Dev', t: 'History has a hole, and stale context misleads.', d: 'One commit folds 16 days of work done “outside git” into a single commit, and TODO.md contradicts the repo. A short end-of-session habit prevents both.' },
+  { layer: 'Dev', t: 'Your simplicity is an asset.', d: 'One repo, plain JavaScript, deny-all database rules, model choice in runtime config. Take only the small pieces.' },
+  { layer: 'Product', t: 'Your product harness is ahead of ours, and of most we’ve seen.', d: 'Measuring the instrument before the exam, giving the reviewer error bars, and logging human sittings that “could not have come from a matrix” is rigorous evaluation practice.' },
+  { layer: 'Product', exception: true, t: 'The /exam-build to /studio port needs a source-of-truth rule.', d: 'Two implementations of one flow will drift, and the template has already started.' },
+];
+const recsThem: { layer: Layer; exception?: boolean; t: string; d: string; from: string; size: string }[] = [
+  { layer: 'Dev', t: 'Add a short root CLAUDE.md for platform work.', d: '40 to 80 lines: what the app is, a map of the API routes and libraries and the ordered front-end scripts, a line saying the old script is dead, how to test and verify, the rule that must never break (no --only functions against production), a pointer to docs/ and the exam session opener, who deploys and commits.', from: 'Worked example: memopop-ai/CLAUDE.md, minus the tree rules.', size: 'S' },
+  { layer: 'Dev', t: 'Turn the allowlist into a policy.', d: 'Rotate the credentials it held. Cut it to the 20 to 30 commands you’re glad to have run without asking; move push, deploy and credential commands to “ask”; deny curl against production.', from: 'Honestly, we don’t have a good worked example; we plan to do this too.', size: 'S' },
+  { layer: 'Dev', t: 'Run npm test in CI on every push.', d: 'One workflow: Node 22, npm ci, npm test, plus the exam validator over shipped exams. Keep live-model preflights manual.', from: 'Worked example: augment-it ci.yml and its “WHY THIS EXISTS” header.', size: 'S' },
+  { layer: 'Dev', t: 'End every session with a handoff, platform sessions included.', d: 'First line states git state, then where things stand and the next step. Fold TODO.md into it. Save any browser drive that proved something.', from: 'Worked example: an augment-it Pickup handoff that opens “Nothing is uncommitted. Nothing is unpushed.”', size: 'S' },
+  { layer: 'Product', exception: true, t: 'Name the source of truth between /exam-build and /studio.', d: 'One comment at the top of both saying which leads, then a small test in the style of your own craft-index check that fails when they disagree or the template falls behind.', from: 'Worked example: augment-it chat.ts (“the SKILL.md is the source of truth … update together”). Ours has the rule but no check, so yours would be better.', size: 'S' },
+];
+const layerPill = (l: Layer) => (l === 'Dev' ? 'pill--thread' : l === 'Product' ? 'pill--accent' : 'pill--soft');
+const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? 'Product layer' : 'Both layers');
+---
+
+<BaseLayout
+  title="Silo to Silo 01: Two Agent Harnesses"
+  description="A two-way comparison of agentic-coding harnesses, split into the developer-agents harness and the in-product-agents harness: Lossless beside an anonymized collaborator's single-app repo, with opposite depths in each layer."
+>
+  <div class="s2s" data-pagefind-body>
+    <!-- 1 · Hero ────────────────────────────────────────────────────── -->
+    <section class="hero" aria-labelledby="s2s-title">
+      <div class="container">
+        <p class="eyebrow">study · collaboration · 01</p>
+        <h1 id="s2s-title">Silo to silo. <br /><span class="gradient-text">Two harnesses, opposite depths.</span></h1>
+        <p class="lede">
+          Every team building an AI product with coding agents runs two harnesses: one for the
+          agents that build the software, one for the agents inside the product. We put ours
+          beside {THEM}'s, a spoken-assessment app on Firebase, and found each side deep where
+          the other is thin.
+        </p>
+        <dl class="audience">
+          <div>
+            <dt>For Lossless</dt>
+            <dd>How to take our in-product harness to the next level, learning from theirs.</dd>
+          </div>
+          <div>
+            <dt>For {THEM}</dt>
+            <dd>The small developer-harness pieces worth adopting from ours, sized for one repo.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 2 · Layer map (centerpiece) ─────────────────────────────────── -->
+    <section class="layermap" aria-labelledby="s2s-layermap">
+      <div class="container">
+        <p class="eyebrow">ch · the layer map</p>
+        <h2 id="s2s-layermap">Each side is deep where the other is thin</h2>
+        {/* Hand-authored, not Archify: a 2×2 of prose cells with depth meters
+            reads better as real HTML than as a node graph, and it can reflow
+            into a single column on a phone. The arrows are small inline SVGs. */}
+        <figure class="lm" aria-describedby="s2s-lm-summary">
+          <p id="s2s-lm-summary" class="lm__summary">
+            {THEM}'s developer-agents harness is thin and its in-product harness is deep. Lossless is the mirror
+            image: deep developer harness, moderate in-product harness. So {THEM} can easily adopt our
+            developer-agents techniques, and we can learn from their in-product harness to take ours to the next level.
+          </p>
+          <div class="lm__grid">
+            <div class="lm__corner" aria-hidden="true"></div>
+            <div class="lm__colhead lm__colhead--ours">Lossless</div>
+            <div class="lm__colgap" aria-hidden="true"></div>
+            <div class="lm__colhead lm__colhead--them">{THEM}</div>
+            {layers.map((L, i) => (
+              <Fragment>
+                <div class={`lm__rowhead lm__rowhead--${i}`}>
+                  <span class="lm__layer">{L.name}</span>
+                  <span class="lm__what">{L.what}</span>
+                </div>
+                {[{ who: 'Lossless', side: 'ours', cell: L.ours, col: 2 }, { arrow: true }, { who: THEM, side: 'them', cell: L.them, col: 4 }].map((c) =>
+                  'arrow' in c ? (
+                    <div class={`lm__arrow lm__arrow--${L.arrow.dir}`} style={`grid-row:${i + 2};grid-column:3`}>
+                      <svg viewBox="0 0 100 24" aria-hidden="true" focusable="false">
+                        {L.arrow.dir === 'right'
+                          ? <path d="M4 12 H90 M80 4 L92 12 L80 20" />
+                          : <path d="M96 12 H10 M20 4 L8 12 L20 20" />}
+                      </svg>
+                      <span class="lm__arrowlabel">{L.arrow.label}</span>
+                      <span class="lm__arrowsub">{L.arrow.sub}</span>
+                    </div>
+                  ) : (
+                    <article class={`lm__cell lm__cell--${c.side} lm__cell--d${c.cell!.depth.level}`} style={`grid-row:${i + 2};grid-column:${c.col}`}>
+                      <h3 class="lm__cellhead">
+                        <span class="lm__who">{c.who} · {L.name.replace(' harness', '')}</span>
+                        <span class="lm__depth">
+                          <span class="lm__meter" aria-hidden="true">{[1, 2, 3].map((n) => <span class={n <= c.cell!.depth.level ? 'on' : ''}></span>)}</span>
+                          {c.cell!.depth.word}
+                        </span>
+                      </h3>
+                      <p>{c.cell!.why}</p>
+                    </article>
+                  )
+                )}
+              </Fragment>
+            ))}
+          </div>
+          <figcaption class="lm__caveats">
+            <p><strong>Caveat one.</strong> {THEM} adopting our dev techniques is easy because the pieces they need are the small ones: one instruction file, one CI job, a permission policy, a handoff habit. Our big pieces (pseudomonorepo rules, the skills library, the corpus) answer problems a single repo doesn't have, and they shouldn't adopt them.</p>
+            <p><strong>Caveat two.</strong> Our learning from their product harness is real but not cheap. Replay and preflights are a few hundred lines each. A tiered synthetic-input harness is harder for memos than for exams: a "weak deal" is harder to fabricate convincingly than a weak candidate.</p>
+            <p><strong>Exceptions</strong> run the other way in both layers. They are labelled in the recommendations.</p>
+          </figcaption>
+        </figure>
+        <aside class="prototype" aria-labelledby="s2s-prototype">
+          <h3 id="s2s-prototype"><span class="pill pill--signal">Second story</span> The dev harness is the product's prototype</h3>
+          <p>{THEM}'s <code>/exam-build</code> began as a coding-agent command and became the in-product <code>/studio</code> ten days later. augment-it's in-app agent runs on prompt slabs condensed from Claude Code <code>SKILL.md</code> files. Both silos prototype product agents in the coding harness, and neither has a check that keeps the source and the runtime copy in sync (ours has a written "update together" rule, theirs has none). Their template already "lags the shipped papers".</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 3 · Highlights ──────────────────────────────────────────────── -->
+    <section class="highlights" aria-labelledby="s2s-highlights">
+      <div class="container">
+        <p class="eyebrow">ch · highlights</p>
+        <h2 id="s2s-highlights">Highlights</h2>
+        <div class="cards">
+          <article class="bench-card">
+            <span class="bench-card__label">for them · dev layer</span>
+            <div class="bench-card__body">
+              <h3>Their dev gaps are cheap to close.</h3>
+              <p>No repo-wide instruction file, no CI, no changelog, and an allowlist of about 210 click-approvals that lets an agent push and deploy without asking. Each fix is small for a single-app repo, and none needs our tree machinery.</p>
+            </div>
+          </article>
+          <article class="bench-card">
+            <span class="bench-card__label">for lossless · product layer</span>
+            <div class="bench-card__body">
+              <h3>Our product gap is measurement.</h3>
+              <p>memopop-orchestrator has real structure, but no run-to-run replay, no synthetic inputs in tiers, no preflight against the live model and no error bars. {THEM} has all four.</p>
+            </div>
+          </article>
+          <article class="bench-card">
+            <span class="bench-card__label">convergence · product layer</span>
+            <div class="bench-card__body">
+              <h3>Same ideas, reached apart.</h3>
+              <p>Both assemble rather than generate, keep a runtime rulebook with addressable rules, write every run step to disk, route several providers behind one module, and gate generation on human sign-off.</p>
+            </div>
+          </article>
+          <article class="bench-card">
+            <span class="bench-card__label">thin ≠ careless · dev layer</span>
+            <div class="bench-card__body">
+              <h3>Thin in structure, not in discipline.</h3>
+              <p>Their design docs carry sign-off gates and dated "what shipped" sections, and their commits read like a measured lab notebook. What's missing is structure and discoverability.</p>
+            </div>
+          </article>
+        </div>
+        <ul class="tiles" role="list">
+          {[{ key: 'dev', name: 'Developer layer', total: DEV_ROWS, note: 'Dominated by different: our machinery for scale, which one repo doesn’t need.' },
+            { key: 'product', name: 'In-product layer', total: PRODUCT_ROWS, note: 'Dominated by similar; the missing rows mostly run one way, toward us.' }].map((t) => (
+            <li class="tile">
+              <span class="tile__label">{t.name}</span>
+              <span class="tile__of">{t.total} ledger rows</span>
+              <span class="stackbar" aria-hidden="true">
+                {BUCKETS.map((b) => <span class={`stackbar__seg stackbar__seg--${b.key}`} style={`flex:${b[t.key as 'dev' | 'product']}`}></span>)}
+              </span>
+              <ul class="tile__counts" role="list">
+                {BUCKETS.map((b) => <li><span class={`swatch swatch--${b.key}`} aria-hidden="true"></span>{b.label} <strong>{b[t.key as 'dev' | 'product']}</strong></li>)}
+              </ul>
+              <span class="tile__gist">{t.note}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4 · Harness maps ────────────────────────────────────────────── -->
+    <section class="map" aria-labelledby="s2s-map">
+      <div class="container">
+        <p class="eyebrow">ch · the harness maps</p>
+        <h2 id="s2s-map">The harness maps, one per layer</h2>
+        <p class="section-lede">Every artifact either side keeps, grouped by category and compared only within its layer. Lines join pairs, and each line names its bucket in words.</p>
+        <ul class="line-key" role="list" aria-label="Line key">
+          <li><span class="swatch swatch--shared" aria-hidden="true"></span>shared: solid amber</li>
+          <li><span class="swatch swatch--similar" aria-hidden="true"></span>similar: dashed cyan</li>
+          <li><span class="swatch swatch--missing" aria-hidden="true"></span>missing on one side: dashed plum</li>
+          <li><span class="swatch swatch--different" aria-hidden="true"></span>no counterpart</li>
+        </ul>
+        {[{ h: 'Developer-agents harness', svg: mapDevSvg, stack: stacks.dev, cap: 'Lossless deep on the left, ' + THEM + ' thin on the right. Three missing lines, all on their side.' },
+          { h: 'In-product-agents harness', svg: mapProductSvg, stack: stacks.product, cap: 'Lossless moderate on the left, ' + THEM + ' deep on the right. Three missing lines on our side, one on theirs.' }].map((m) => (
+          <figure class="s2s-figure s2s-figure--map">
+            <h3 class="s2s-figure__h">{m.h}</h3>
+            <div class="s2s-figure__svg s2s-figure__svg--wide" set:html={m.svg} />
+            <div class="map-stack">
+              {m.stack.map((c) => (
+                <div class="map-stack__group">
+                  <h4 class="map-stack__cat">{c.cat}</h4>
+                  <ul role="list">
+                    {c.rows.map((p) => (
+                      <li class={`pair pair--${bucketClass(p.bucket)}`}>
+                        <span class="pair__side"><span class="pair__who">Lossless</span>{p.ours.label}<small>{p.ours.sublabel}</small></span>
+                        <span class="pair__bucket">{p.bucket}</span>
+                        <span class="pair__side"><span class="pair__who">{THEM}</span>{p.them ? p.them.label : '—'}{p.them && <small>{p.them.sublabel}</small>}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <figcaption>{m.cap} On a narrow screen the map stacks into pairs.</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- 5 · Loops per layer ─────────────────────────────────────────── -->
+    <section class="loops" aria-labelledby="s2s-loops">
+      <div class="container">
+        <p class="eyebrow">ch · the loops</p>
+        <h2 id="s2s-loops">The loops, per layer</h2>
+        <p class="section-lede">Same four lanes in every diagram. The two layers cross in one place: on {THEM}'s side, a finding from the in-product loop often becomes a platform change in the developer loop.</p>
+
+        <h3 class="loops__h">Developer loops</h3>
+        <div class="loop-notes">
+          <p><strong>{THEM}.</strong> A design doc is signed off first, but the session starts cold: there is no instruction file. The agent implements, checks with the <code>verify</code> skill, node tests and an ad-hoc browser drive, and commits with a measured message. Memory is the git log, and sometimes a "what shipped" section.</p>
+          <p><strong>Lossless.</strong> A signed-off spec, a plan per phase re-grounded on the code, an agent loaded with layered instructions and skills, then a proof ladder. A red proof stops it. A green one leads to a changelog entry, a commit with CI, a handoff, and a corpus the next session queries.</p>
+        </div>
+        <figure class="s2s-figure">
+          <figcaption class="s2s-figure__title">{THEM} · developer loop</figcaption>
+          <div class="s2s-figure__svg s2s-scroll" tabindex="0" role="region" aria-label={`${THEM}'s developer loop, scrollable`} set:html={loopDevThemSvg} />
+        </figure>
+        <figure class="s2s-figure">
+          <figcaption class="s2s-figure__title">Lossless · developer loop</figcaption>
+          <div class="s2s-figure__svg s2s-scroll" tabindex="0" role="region" aria-label="The Lossless developer loop, scrollable" set:html={loopDevOursSvg} />
+        </figure>
+
+        <h3 class="loops__h">In-product loops</h3>
+        <div class="loop-notes">
+          <p><strong>{THEM}: generating an exam.</strong> Source text and notes go to an agent that reads the rulebook and the craft ledger. <code>/exam-build</code>, or its in-product twin <code>/studio</code>, drafts a sketch and stops for sign-off. The exam is assembled from a skeleton and validated, then run through simulated candidates with error bars and preflights. Every change must name the defect it fixes; findings go to the ledger. Then a human sits the exam.</p>
+          <p><strong>Lossless: generating a memo.</strong> Deal inputs, an outline YAML and runtime rules, section writers working from a closed corpus, then citation and fact-checking agents. The memo is evaluated and scored once. An analyst revises or exports, and lessons land in issue-resolution files or an <code>AGENTS.md</code> rule. Replay, tiered inputs and error bars are the missing step.</p>
+        </div>
+        <figure class="s2s-figure">
+          <figcaption class="s2s-figure__title">{THEM} · in-product loop</figcaption>
+          <div class="s2s-figure__svg s2s-scroll" tabindex="0" role="region" aria-label={`${THEM}'s in-product loop, scrollable`} set:html={loopProductThemSvg} />
+        </figure>
+        <figure class="s2s-figure">
+          <figcaption class="s2s-figure__title">Lossless · in-product loop</figcaption>
+          <div class="s2s-figure__svg s2s-scroll" tabindex="0" role="region" aria-label="The Lossless in-product loop, scrollable" set:html={loopProductOursSvg} />
+        </figure>
+      </div>
+    </section>
+
+    <!-- 6 · Shape against harness ───────────────────────────────────── -->
+    <section class="shape" aria-labelledby="s2s-shape">
+      <div class="container">
+        <p class="eyebrow">ch · shape against harness</p>
+        <h2 id="s2s-shape">Shape against harness</h2>
+        <p class="section-lede">Where dev instructions live follows where the boundaries are. One repo needs one entry point; a tree needs a rule for each level and a way to share across levels. The product harness sits inside one app on both sides.</p>
+        <figure class="s2s-figure">
+          <div class="s2s-figure__svg s2s-scroll" tabindex="0" role="region" aria-label="Monolith and pseudomonorepo, scrollable" set:html={shapeSvg} />
+        </figure>
+        <div class="two-col">
+          <p><strong>A monolith.</strong> {THEM} keeps one repo with one app: a static front end and an Express API on Firebase, in plain JavaScript. Its in-product harness is a deliberate chain; its developer work has no entry point.</p>
+          <p><strong>A pseudomonorepo.</strong> augment-it is a pnpm workspace with 20 federated front ends; memopop-ai is a Bun workspace that mounts a Python and LangGraph orchestrator, which mounts firm-private submodules. Both sit under ai-labs, under the anchor monorepo. Most dev-layer differences follow from that shape.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · The four comparisons, by layer ──────────────────────────── -->
+    <section class="buckets" aria-labelledby="s2s-buckets">
+      <div class="container">
+        <p class="eyebrow">ch · the four comparisons</p>
+        <h2 id="s2s-buckets">Shared, similar, different, missing, by layer</h2>
+        <p class="section-lede">Every artifact from both inventories sits in exactly one row, and no row pairs across layers: {DEV_ROWS} rows in the developer layer, {PRODUCT_ROWS} in the in-product layer.</p>
+
+        {BUCKETS.map((b) => (
+          <article class="bucket" id={b.key}>
+            <header class="bucket__head">
+              <h3>{b.label}</h3>
+              <span class="bucket__badge"><span class={`swatch swatch--${b.key}`} aria-hidden="true"></span>dev {b.dev} of {DEV_ROWS} · product {b.product} of {PRODUCT_ROWS}</span>
+            </header>
+            <div class="minibars" aria-hidden="true">
+              <span class="minibar"><span class="minibar__k">dev</span><span class="meter"><span class={`meter__fill meter__fill--${b.key}`} style={`width:${(b.dev / DEV_ROWS) * 100}%`}></span></span></span>
+              <span class="minibar"><span class="minibar__k">product</span><span class="meter"><span class={`meter__fill meter__fill--${b.key}`} style={`width:${(b.product / PRODUCT_ROWS) * 100}%`}></span></span></span>
+            </div>
+            {b.key === 'shared' && (
+              <Fragment>
+                <p class="bucket__summary">Both sides keep the same kind of artifact; the interest is in how differently each is written and kept up.</p>
+                <h4>Developer layer</h4>
+                <div class="prose">
+                  <p><strong>Permission files.</strong> Both sides commit a Claude Code settings file, and neither treats it as a policy. Theirs is about 210 <code>allow</code> entries saved from click-approvals, committed once on 2026-08-20, granting push, deploy and credential commands; the permission allowlist held credentials. Ours are tiny but tracked in git, though <code>settings.local.json</code> is meant to stay on one machine. They got that right: their local file stayed local. Neither side has a <code>deny</code> list or a hook.</p>
+                  <p><strong>Dev skills.</strong> Their <code>verify</code> skill is a lesson learned the hard way: <q><code>--only functions</code> alone leaves Firestore calls pointed at production</q>. Our <code>decile-hub-interface</code> is the same kind of guide for a system where a careless agent touches real data. Theirs sits where Claude Code finds it with no setup; ours are found only once linked, and at the snapshot none of augment-it's or memopop's project skills was. On discoverability, their simple path wins.</p>
+                  <p><strong>Commit history</strong> is the closest match. 220 of their 263 non-merge commits carry a Claude trailer, with subjects that state findings (<q>Fix the check, not the briefs: five of eight preflight failures were mine</q>). They got lab-notebook commits without a written convention; we wrote <code>git-conventions</code> down so it holds across 27 repos.</p>
+                </div>
+                <h4>In-product layer</h4>
+                <div class="prose">
+                  <p><strong>Runtime prompt builders</strong> on both sides pin behaviour in comments next to the prompt. Their grader runs three passes and averages; our writer is pinned to temperature 0. Two answers to the same worry about variance: theirs measures it, ours suppresses it.</p>
+                  <p><strong>Model routing</strong> sits behind one module on both sides; they keep the choice in runtime config, we keep it in code. <strong>Run records</strong> converge: the flight recorder and our artifact trail both write every step to disk. <q>Don't tune on reasoning alone. Get the flight-recorder data first.</q></p>
+                  <p><strong>Tests of the LLM machinery</strong> exist on both sides. Their fixtures README, <q>exam-craft edits must never break platform tests</q>, marks the boundary between the two layers better than anything on our side.</p>
+                </div>
+              </Fragment>
+            )}
+            {b.key === 'similar' && (
+              <Fragment>
+                <p class="bucket__summary">Same job, different form: in the product layer, this is where most of the learning sits.</p>
+                <h4>Developer layer</h4>
+                <div class="prose">
+                  <p><strong>Specs.</strong> Their dev layer is not spec-less: <q>Design doc for review. Nothing gets built until this is signed off.</q> The architecture doc has dated "what shipped" sections, a "Start here in a fresh session" section and epistemic tags. The discipline matches ours; the difference is structure. Their <code>docs/</code> is flat and unindexed, and nothing points an agent at it.</p>
+                  <p><strong>Handoffs, browser drives, to-do lists.</strong> Their session opener carries platform to-dos but exists for exam sessions. Their browser drives run from the scratchpad and are thrown away; we codified ours in a blueprint and committed proof scripts. Both sides let to-do lists rot.</p>
+                </div>
+                <h4>In-product layer</h4>
+                <div class="prose">
+                  <p><strong>Runtime rulebooks.</strong> Their rulebook names itself the single source of truth (<q>revise this section, not individual exams</q>). The orchestrator's <code>AGENTS.md</code> has numbered principles that the code cites. Ours carries a naming hazard: in the tree, <code>AGENTS.md</code> also means coding-agent instructions.</p>
+                  <p><strong>Craft ledgers.</strong> Their <code>EXAM_CRAFT.md</code> is one 2,163-line file: stable IDs, an evidence line per finding, a part for <q>candidate principles, not yet distilled</q>, an append-only build log, a checked index. Our product craft is spread across 36 issue-resolution and reminder files. Ours is easier to publish; theirs does the job a ledger exists for.</p>
+                  <p><strong>Assemble, don't generate</strong>, the strongest convergence. They copy structure from a skeleton and validate invariants that <q>are silently violable</q>. The orchestrator fixes section taxonomy in an outline YAML with a schema because drift <q>made merging seven ChromaDB runs produce 26 best-of catalogs instead of 9</q>.</p>
+                  <p><strong>Generation commands and human gates.</strong> <code>/exam-build</code> enforces its tool list and two stops (<q>Do not deploy, commit, or import anything into the builder. The user does that.</q>); our memo skills cover more situations but only describe their stops. Both sides gate generation on a human, at different points.</p>
+                  <p><strong>Grading the output.</strong> Their audits check whether the model did what it was told; our five checking agents and scorers check whether the output is true and good. What we lack is their next step: running the checks many times and reporting the spread.</p>
+                </div>
+              </Fragment>
+            )}
+            {b.key === 'different' && (
+              <Fragment>
+                <p class="bucket__summary">On one side only, where the absence fits the other side's context, so nobody should "fix" it.</p>
+                <h4>Developer layer</h4>
+                <div class="prose">
+                  <p><strong>Pseudomonorepo rules, the shared skills library, the Chroma corpus</strong> exist because of our shape: 27 projects, nested submodules, parallel sessions. In one repo with 280 commits, <code>git log</code> does what the corpus does. <strong>Spec Kit</strong> is different but a candidate overbuild on our side. <strong>Legacy per-harness files</strong> are leftovers, not a choice; their single place for instructions is the better state.</p>
+                  <p><strong>Deny-all database rules</strong>, on their side, force every write, an agent's included, through the API: a structural guardrail where we would use a prose rule.</p>
+                </div>
+                <h4>In-product layer</h4>
+                <div class="prose">
+                  <p><strong>Firm-private submodules</strong> fence each client's inputs and outputs in its own repo. Their customer content lives in the app repo, which is fine for one customer.</p>
+                </div>
+              </Fragment>
+            )}
+            {b.key === 'missing' && (
+              <Fragment>
+                <p class="bucket__summary">On one side only, where the other would benefit. In the dev layer every gap is theirs; in the product layer the gaps run mostly toward us.</p>
+                <h4>Developer layer (all on their side)</h4>
+                <div class="prose">
+                  <p><strong>A repo-wide instruction file.</strong> Nothing maps the API routes, libraries or the 23 ordered front-end scripts, and nothing says the old 12,897-line script is dead. With 220 agent-trailered commits, the cost of a cold start recurs. <strong>CI:</strong> their dev gates run only when remembered. <strong>A changelog</strong>, low priority: commit bodies are their only running dev memory, and one commit folded 16 days of work done "outside git".</p>
+                </div>
+                <h4>In-product layer</h4>
+                <div class="prose">
+                  <p><strong>On our side, the main lesson.</strong> A simulator plays 18 personas, from <code>native-phd</code> down to <code>stalled</code>, through a real exam and reports a matrix, the correlation with tier, a standard error per candidate and a resolution floor. A gate replay measures how often a decision flips on identical input (<q>flip rate 2% (1/63)</q>). Preflights check that a persona plays its brief and run the shipped prompt against the live model: <q>A result here is a statement about production.</q> None of this exists for memos.</p>
+                  <p><strong>On their side, an exception.</strong> <code>/exam-build</code> and <code>/studio</code> implement the same flow twice with no declared source of truth. augment-it wrote that rule at the point of use: <q>the SKILL.md is the source of truth, this slab is its always-loaded condensation; update together</q>.</p>
+                </div>
+              </Fragment>
+            )}
+            <details class="ledger"><summary>Ledger rows: {b.label.toLowerCase()}</summary>
+              <table>
+                <thead><tr><th scope="col">ID</th><th scope="col">{THEM}</th><th scope="col">Lossless</th></tr></thead>
+                <tbody>
+                  {ledger[b.key].dev.map((r) => <tr><td>{r.id}</td><td>{r.them}</td><td>{r.ours}</td></tr>)}
+                  {ledger[b.key].product.map((r) => <tr><td>{r.id}</td><td>{r.them}</td><td>{r.ours}</td></tr>)}
+                </tbody>
+              </table>
+              <p class="ledger__note">D- rows are the developer layer, P- rows the in-product layer.</p>
+            </details>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- 8 · Insights and recommendations ────────────────────────────── -->
+    <section class="recs" aria-labelledby="s2s-recs">
+      <div class="container">
+        <p class="eyebrow">ch · insights and recommendations</p>
+        <h2 id="s2s-recs">Insights and recommendations</h2>
+        <p class="section-lede">Each item is labelled by layer. Items marked <span class="tag-exc">exception</span> run against the headline: the side that is thin in a layer still teaching something there.</p>
+        <div class="recs__cols">
+          {[{ id: 's2s-for-lossless', side: 'ours', title: 'For Lossless', pill: 'pill--accent', insights: insightsOurs, recs: recsOurs, note: 'Recommendations 1–7 come from their product layer; 8–10 are dev-layer exceptions where their thinner setup still teaches us.' },
+            { id: 's2s-for-them', side: 'theirs', title: `For ${THEM}`, pill: 'pill--signal', insights: insightsThem, recs: recsThem, note: 'Five on purpose: four from our dev harness, one labelled exception from our product harness, each the smallest version that helps.' }].map((col) => (
+            <article class={`recs__col recs__col--${col.side}`} aria-labelledby={col.id}>
+              <h3 id={col.id}><span class={`pill ${col.pill}`}>{col.title}</span></h3>
+              <h4>Insights</h4>
+              <ol class="insights">{col.insights.map((x) => (
+                <li><span class={`pill ${layerPill(x.layer)} tag-layer`}>{layerWord(x.layer)}</span>{x.exception && <span class="tag-exc">exception</span>} <strong>{x.t}</strong> {x.d}</li>
+              ))}</ol>
+              <h4>Recommendations, ranked by payoff</h4>
+              <ol class="ranked">{col.recs.map((x) => (
+                <li><span class={`pill ${layerPill(x.layer)} tag-layer`}>{layerWord(x.layer)}</span>{x.exception && <span class="tag-exc">exception</span>} <strong>{x.t}</strong> {x.d} <span class="ranked__meta">{x.from} <span class="chip">effort {x.size}</span></span></li>
+              ))}</ol>
+              <p class="recs__note">{col.note}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 · Method and sources ──────────────────────────────────────── -->
+    <section class="method" aria-labelledby="s2s-method">
+      <div class="container">
+        <p class="eyebrow">ch · method and sources</p>
+        <h2 id="s2s-method">Method and sources</h2>
+        <div class="two-col">
+          <div>
+            <p>This is a <strong>collaboration study</strong>: one friend's codebase beside ours, read both ways, as described in the exploration <a href={EXPLORATION_URL}>Explore Collaborator Codebases for Insights: Comparative Highlights</a>, including its section "Two harnesses, not one". It ran in three steps.</p>
+            <ol class="steps">
+              <li><strong>Harness evidence.</strong> An inventory of every sign of how {THEM} works with coding agents, read at one commit (last commit 2026-10-01; about 280 commits, 251 tracked files), each artifact tagged dev, product or both.</li>
+              <li><strong>Compare and contrast, by layer.</strong> The Lossless side inventoried across augment-it, memopop-ai, memopop-orchestrator, ai-labs and the anchor layer, then every artifact sorted into one bucket within its own layer. A first draft compared everything in one pool, which made depth in one layer look like parity in the other.</li>
+              <li><strong>This page,</strong> built only from those two steps, on 2026-10-03. No finding here is new.</li>
+            </ol>
+          </div>
+          <div>
+            <p><strong>Anonymized on purpose.</strong> {THEM} is a friend's private project. This page names no repo, account, product or person on their side, and quoted paths are trimmed of anything that would identify it. Lossless projects are named freely.</p>
+            <p><strong>Limits.</strong> The Chroma server was down during the comparison, so our corpus is described from its README, not queried. Client and firm-private submodules on our side were not read.</p>
+            <p><strong>Diagrams.</strong> The harness maps, loops and shape diagram were authored as Archify sources from the comparison's Mermaid, validated, and re-themed with this site's tokens. The layer map is hand-built HTML.</p>
+            <p><a href={`${base}studies/`}>← All studies</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ─── Layer map (centerpiece) ─────────────────────────────────────── */
+  .lm { margin: 0; }
+  .lm__summary { font-family: var(--font__display); font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.45; color: var(--color-text); max-width: 70ch; margin-bottom: var(--space-6); }
+  .lm__grid {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr) 9rem minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+  .lm__colhead { font-family: var(--font__mono); font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text); padding-bottom: var(--space-2); border-bottom: 2px solid var(--color-accent); }
+  .lm__colhead--them { border-bottom-color: var(--color-signal); }
+  .lm__rowhead { display: grid; align-content: center; gap: var(--space-1); padding-right: var(--space-2); }
+  .lm__rowhead--0 { grid-row: 2; grid-column: 1; }
+  .lm__rowhead--1 { grid-row: 3; grid-column: 1; }
+  .lm__layer { font-family: var(--font__display); font-weight: 600; font-size: 1.05rem; color: var(--color-text); line-height: 1.2; }
+  .lm__what { font-size: 0.82rem; color: var(--color-text-dim); }
+  .lm__cell {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+  }
+  .lm__cell--d3 { border-width: 2px; border-color: var(--color-text-soft); }
+  .lm__cell--d1 { border-style: dashed; }
+  .lm__cell p { color: var(--color-text-soft); font-size: 0.9rem; margin: 0; }
+  .lm__cellhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-3); font-size: 1rem; }
+  .lm__who { font-family: var(--font__mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-dim); }
+  .lm__depth { display: inline-flex; align-items: center; gap: var(--space-2); font-family: var(--font__display); font-size: 1.35rem; color: var(--color-text); }
+  .lm__meter { display: inline-flex; gap: 3px; }
+  .lm__meter span { width: 10px; height: 18px; border: 1.5px solid var(--color-text-dim); border-radius: 1px; }
+  .lm__meter span.on { background: var(--color-text); border-color: var(--color-text); }
+  .lm__cell--d3 .lm__depth { color: var(--color-accent); }
+  .lm__cell--d3 .lm__meter span.on { background: var(--color-accent); border-color: var(--color-accent); }
+  .lm__cell--d1 .lm__depth { color: var(--color-text-dim); }
+  .lm__arrow { display: grid; align-content: center; justify-items: center; text-align: center; gap: var(--space-1); }
+  .lm__arrow svg { width: 100%; max-width: 8rem; height: 1.6rem; overflow: visible; }
+  .lm__arrow path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .lm__arrow--right { color: var(--color-accent); }
+  .lm__arrow--left { color: var(--color-signal); }
+  .lm__arrow path { stroke: currentColor; }
+  .lm__arrowlabel { font-family: var(--font__mono); font-size: 0.72rem; color: currentColor; line-height: 1.3; }
+  .lm__arrowsub { font-size: 0.74rem; color: var(--color-text-dim); line-height: 1.3; }
+  .lm__caveats { margin-top: var(--space-6); display: grid; gap: var(--space-2) var(--space-6); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); font-size: 0.9rem; color: var(--color-text-dim); }
+  .lm__caveats p { margin: 0; }
+  .lm__caveats strong { color: var(--color-text-soft); }
+  @media (max-width: 52rem) {
+    .lm__grid { grid-template-columns: minmax(0, 1fr); }
+    .lm__corner, .lm__colhead, .lm__colgap { display: none; }
+    .lm__grid > * { grid-row: auto !important; grid-column: 1 !important; }
+    .lm__rowhead { padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
+    /* Stacked order per layer: head, Lossless cell, arrow, their cell. */
+    .lm__arrow svg { transform: rotate(90deg); width: 2.4rem; height: 2.4rem; }
+  }
+
+  .prototype { margin-top: var(--space-8); padding: var(--space-5) var(--space-6); border: 1px solid var(--color-border-strong); border-left: 3px solid var(--color-signal); border-radius: var(--radius-md); background: var(--color-bg-soft); max-width: 72rem; }
+  .prototype h3 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); font-size: 1.1rem; margin-bottom: var(--space-3); }
+  .prototype p { color: var(--color-text-soft); margin: 0; }
+
+  .stackbar { display: flex; height: 10px; border-radius: var(--radius-sm); overflow: hidden; gap: 2px; margin: var(--space-2) 0; }
+  .stackbar__seg--shared { background: var(--color-accent); }
+  .stackbar__seg--similar { background: var(--color-thread); }
+  .stackbar__seg--different { background: var(--color-text-dimmer); }
+  .stackbar__seg--missing { background: var(--color-signal); }
+  .tile__counts { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); font-family: var(--font__mono); font-size: 0.74rem; color: var(--color-text-dim); }
+  .tile__counts strong { color: var(--color-text); }
+  .tile__counts .swatch { width: 1.2rem; margin-right: var(--space-1); }
+  .tile__counts .swatch--different { width: 0.7rem; height: 0.7rem; }
+  .highlights .cards { margin-bottom: var(--space-6); }
+
+  .s2s-figure__h { font-size: 1.2rem; margin-bottom: var(--space-3); }
+  .loops__h { font-size: 1.3rem; margin: var(--space-8) 0 var(--space-4); }
+  .minibars { display: grid; gap: var(--space-1); max-width: 24rem; margin-bottom: var(--space-4); }
+  .minibar { display: grid; grid-template-columns: 4.5rem 1fr; align-items: center; gap: var(--space-2); font-family: var(--font__mono); font-size: 0.7rem; color: var(--color-text-dim); }
+  .minibar .meter { margin: 0; }
+  .meter__fill { display: block; height: 100%; background: var(--color-text-dim); }
+  .meter__fill--shared { background: var(--color-accent); }
+  .meter__fill--similar { background: var(--color-thread); }
+  .meter__fill--missing { background: var(--color-signal); }
+  .bucket h4 { font-family: var(--font__mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dim); margin: var(--space-5) 0 var(--space-2); }
+  .ledger__note { font-family: var(--font__mono); font-size: 0.72rem; color: var(--color-text-dim); margin-top: var(--space-2); }
+  .tag-layer { margin-right: var(--space-1); font-size: 0.62rem; }
+  .tag-exc { display: inline-block; font-family: var(--font__mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 1px 6px; border: 1px dashed var(--color-signal); color: var(--color-signal); border-radius: var(--radius-sm); }
+  .hero { padding: var(--space-16) 0 var(--space-10); }
+  .hero h1 { margin: var(--space-3) 0 var(--space-5); }
+  .hero .lede { max-width: 62ch; margin-bottom: var(--space-6); }
+  .audience {
+    display: grid;
+    gap: var(--space-3) var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    margin: 0 0 var(--space-6);
+    max-width: 62rem;
+  }
+  .audience div { border-left: 2px solid var(--color-accent); padding: var(--space-1) var(--space-4); background: var(--color-bg-soft); }
+  .audience div + div { border-left-color: var(--color-signal); }
+  .audience dt { font-family: var(--font__mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dim); }
+  .audience dd { margin: 0; color: var(--color-text-soft); }
+
+  section { padding: var(--space-12) 0; }
+  h2 { margin: var(--space-2) 0 var(--space-4); }
+  .section-lede { color: var(--color-text-soft); max-width: 68ch; margin-bottom: var(--space-6); }
+
+  /* Highlights */
+  .tiles {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .tile {
+    position: relative;
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-5);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .tile__label { font-family: var(--font__mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text-dim); }
+  .tile__count { font-family: var(--font__display); font-size: 2.6rem; font-weight: 600; line-height: 1; color: var(--color-text); }
+  .tile__of { font-family: var(--font__mono); font-size: 0.74rem; color: var(--color-text-dim); }
+  .tile__gist { color: var(--color-text-soft); font-size: 0.92rem; }
+  .tile .swatch { position: absolute; top: var(--space-5); right: var(--space-5); }
+  .meter { display: block; height: 4px; background: var(--color-border); border-radius: var(--radius-pill); overflow: hidden; margin: var(--space-2) 0; }
+  .meter span { display: block; height: 100%; background: var(--color-text-dim); }
+  .tile--shared .meter span { background: var(--color-accent); }
+  .tile--similar .meter span { background: var(--color-thread); }
+  .tile--missing .meter span { background: var(--color-signal); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: var(--space-5); }
+
+  /* Line swatches: the same line language as the diagrams. Never the only
+     signal: every swatch sits next to the bucket's name. */
+  .swatch { display: inline-block; width: 2.2rem; height: 0; border-top: 3px solid var(--color-text-dim); vertical-align: middle; margin-right: var(--space-2); }
+  .swatch--shared { border-top: 3px solid var(--color-accent); }
+  .swatch--similar { border-top: 2px dashed var(--color-thread); }
+  .swatch--missing { border-top: 2px dashed var(--color-signal); }
+  .swatch--different { width: 0.9rem; height: 0.9rem; border: 1.5px solid var(--color-text-dim); border-radius: 2px; }
+
+  .line-key {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    font-family: var(--font__mono);
+    font-size: 0.76rem;
+    color: var(--color-text-dim);
+    margin-bottom: var(--space-4);
+  }
+
+  /* Figures */
+  .s2s-figure { margin: 0 0 var(--space-8); }
+  .s2s-figure__svg {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+  }
+  .s2s-figure__title {
+    font-family: var(--font__mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+    margin-bottom: var(--space-2);
+  }
+  .s2s-figure figcaption:not(.s2s-figure__title) {
+    margin-top: var(--space-3);
+    font-size: 0.86rem;
+    color: var(--color-text-dim);
+  }
+  .s2s-figure--map .s2s-figure__svg--wide { max-width: 60rem; margin: 0 auto; }
+
+  /* Diagrams that can't stack scroll sideways inside their own box on a
+     phone; the page itself never scrolls horizontally. */
+  .s2s-scroll { overflow-x: auto; }
+  .s2s-scroll :global(svg) { min-width: 44rem; }
+  .s2s-scroll :global(svg[data-diagram='shape']) { min-width: 60rem; }
+
+  /* Harness map: SVG on wide screens, stacked pairs on narrow ones. */
+  .map-stack { display: none; }
+  @media (max-width: 47.99rem) {
+    .s2s-figure__svg--wide { display: none; }
+    .map-stack { display: grid; gap: var(--space-5); }
+  }
+  .map-stack__cat { font-family: var(--font__mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dim); margin-bottom: var(--space-2); }
+  .map-stack ul { list-style: none; display: grid; gap: var(--space-2); }
+  .pair {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-text-dim);
+    border-radius: var(--radius-md);
+  }
+  .pair--shared { border-left: 3px solid var(--color-accent); }
+  .pair--similar { border-left: 3px dashed var(--color-thread); }
+  .pair--missing { border-left: 3px dashed var(--color-signal); }
+  .pair__side { display: grid; font-size: 0.92rem; color: var(--color-text); }
+  .pair__side small { font-family: var(--font__mono); font-size: 0.72rem; color: var(--color-text-dim); }
+  .pair__who { font-family: var(--font__mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dimmer); }
+  .pair__bucket { font-family: var(--font__mono); font-size: 0.72rem; color: var(--color-text-soft); }
+  .pair--shared .pair__bucket { color: var(--color-accent); }
+  .pair--similar .pair__bucket { color: var(--color-thread); }
+  .pair--missing .pair__bucket { color: var(--color-signal); }
+
+  .loop-notes, .two-col { display: grid; gap: var(--space-4) var(--space-8); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); margin-bottom: var(--space-6); }
+  .loop-notes p, .two-col p { color: var(--color-text-soft); }
+
+  /* Buckets */
+  .bucket { padding: var(--space-8) 0; border-top: 1px dashed var(--color-border); }
+  .bucket:first-of-type { border-top: none; }
+  .bucket__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3) var(--space-5); margin-bottom: var(--space-3); }
+  .bucket__head h3 { font-size: 1.5rem; }
+  .bucket__badge { font-family: var(--font__mono); font-size: 0.78rem; color: var(--color-text-dim); }
+  .bucket__summary { font-family: var(--font__display); font-size: 1.08rem; color: var(--color-text); max-width: 68ch; }
+  .prose { max-width: 72ch; }
+  .prose p { color: var(--color-text-soft); }
+  .prose code, .two-col code, .loop-notes code { color: var(--color-text); overflow-wrap: anywhere; }
+  q { quotes: '\201C' '\201D'; color: var(--color-text); }
+
+  .ledger { margin-top: var(--space-4); max-width: 72rem; }
+  .ledger summary { cursor: pointer; font-family: var(--font__mono); font-size: 0.8rem; color: var(--color-thread); }
+  .ledger table { width: 100%; border-collapse: collapse; margin-top: var(--space-3); font-size: 0.86rem; table-layout: fixed; }
+  .ledger th, .ledger td { text-align: left; vertical-align: top; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border); overflow-wrap: anywhere; }
+  .ledger th { font-family: var(--font__mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-dim); font-weight: 500; }
+  .ledger th:first-child, .ledger td:first-child { width: 4.2rem; font-family: var(--font__mono); color: var(--color-text-dim); }
+  .ledger td { color: var(--color-text-soft); }
+
+  /* Recommendations */
+  .recs__cols { display: grid; gap: var(--space-8); grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
+  .recs__col { padding: var(--space-6); background: var(--color-bg-card); border: 1px solid var(--color-border); border-top: 3px solid var(--color-accent); border-radius: var(--radius-md); }
+  .recs__col--theirs { border-top-color: var(--color-signal); }
+  .recs__col h3 { margin-bottom: var(--space-4); }
+  .recs__col h3 .pill { font-size: 0.82rem; }
+  .recs__col h4 { font-family: var(--font__mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dim); margin: var(--space-5) 0 var(--space-3); }
+  .insights, .ranked { padding-left: 1.4rem; display: grid; gap: var(--space-3); color: var(--color-text-soft); font-size: 0.94rem; }
+  .insights strong, .ranked strong { color: var(--color-text); }
+  .ranked li::marker { font-family: var(--font__mono); color: var(--color-accent); }
+  .recs__col--theirs .ranked li::marker { color: var(--color-signal); }
+  .ranked__meta { display: block; margin-top: var(--space-1); font-family: var(--font__mono); font-size: 0.74rem; color: var(--color-text-dim); }
+  .recs__note { margin-top: var(--space-4); font-size: 0.86rem; color: var(--color-text-dim); }
+
+  .steps { padding-left: 1.4rem; display: grid; gap: var(--space-2); color: var(--color-text-soft); margin-bottom: var(--space-4); }
+
+  /* 16px gutter on phones */
+  @media (max-width: 40rem) {
+    .container { padding: 0 16px; }
+    .recs__col { padding: var(--space-4); }
+    .recs__cols { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+
+<style is:global>
+  /* ─── Archify class → splash token mapping ───────────────────────────
+     Archify emits semantic classes; these rules bind them to theme.css
+     tokens so the diagrams follow dark / light / vibrant. Category hues:
+     instructions = thread, config = signal, context = accent,
+     verification = neutral, git = accent-deep, people/shape = dim. */
+  .s2s-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: var(--font__mono);
+    --k-frontend: var(--color-thread);
+    --k-security: var(--color-signal);
+    --k-database: var(--color-accent);
+    --k-backend: var(--color-text-soft);
+    --k-messagebus: var(--color-accent-deep);
+    --k-external: var(--color-text-dim);
+    --k-cloud: var(--color-text-soft);
+  }
+  .s2s-svg .c-grid { display: none; }
+  .s2s-svg .c-mask { fill: var(--color-bg-elevated); stroke: none; }
+  .s2s-svg .c-region { fill: color-mix(in oklab, var(--color-text) 3%, transparent); stroke: var(--color-border-strong); stroke-dasharray: 8 4; }
+  .s2s-svg .c-security-group { fill: transparent; stroke: var(--k-security); stroke-dasharray: 4 4; }
+  .s2s-svg .c-lane { fill: color-mix(in oklab, var(--color-text) 3%, transparent); stroke: var(--color-border-strong); stroke-dasharray: 6 6; }
+
+  .s2s-svg .c-frontend   { fill: color-mix(in oklab, var(--k-frontend) 14%, var(--color-bg-elevated));   stroke: var(--k-frontend); }
+  .s2s-svg .c-security   { fill: color-mix(in oklab, var(--k-security) 14%, var(--color-bg-elevated));   stroke: var(--k-security); }
+  .s2s-svg .c-database   { fill: color-mix(in oklab, var(--k-database) 14%, var(--color-bg-elevated));   stroke: var(--k-database); }
+  .s2s-svg .c-backend    { fill: color-mix(in oklab, var(--k-backend) 10%, var(--color-bg-elevated));    stroke: var(--k-backend); }
+  .s2s-svg .c-messagebus { fill: color-mix(in oklab, var(--k-messagebus) 16%, var(--color-bg-elevated)); stroke: var(--k-messagebus); }
+  .s2s-svg .c-external   { fill: var(--color-bg-elevated); stroke: var(--k-external); }
+  .s2s-svg .c-cloud      { fill: var(--color-bg-elevated); stroke: var(--k-cloud); }
+
+  .s2s-svg .t-primary { fill: var(--color-text); }
+  .s2s-svg .t-muted   { fill: var(--color-text-dim); }
+  .s2s-svg .t-dim     { fill: var(--color-text-dim); }
+  .s2s-svg .t-frontend   { fill: var(--k-frontend); }
+  .s2s-svg .t-security   { fill: var(--k-security); }
+  .s2s-svg .t-database   { fill: var(--k-database); }
+  .s2s-svg .t-backend    { fill: var(--k-backend); }
+  .s2s-svg .t-messagebus { fill: var(--k-messagebus); }
+  .s2s-svg .t-external   { fill: var(--k-external); }
+  .s2s-svg .t-cloud      { fill: var(--color-text-soft); }
+
+  .s2s-svg .semantic-sigil { fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; }
+  .s2s-svg .semantic-sigil > * { vector-effect: non-scaling-stroke; }
+  .s2s-svg .semantic-sigil .sigil-fill { fill: currentColor; stroke: none; }
+  .s2s-svg .s-frontend   { color: var(--k-frontend); }
+  .s2s-svg .s-security   { color: var(--k-security); }
+  .s2s-svg .s-database   { color: var(--k-database); }
+  .s2s-svg .s-backend    { color: var(--k-backend); }
+  .s2s-svg .s-messagebus { color: var(--k-messagebus); }
+  .s2s-svg .s-external   { color: var(--k-external); }
+  .s2s-svg .s-cloud      { color: var(--k-cloud); }
+
+  /* Relationships. In the harness map: emphasis = shared, dashed = similar,
+     security = missing on one side. Patterns differ as well as hues. */
+  .s2s-svg .a-default  { stroke: var(--color-text-dim); fill: none; }
+  .s2s-svg .a-emphasis { stroke: var(--color-accent); fill: none; }
+  .s2s-svg .a-dashed   { stroke: var(--color-thread); fill: none; stroke-dasharray: 4 4; }
+  .s2s-svg .a-security { stroke: var(--color-signal); fill: none; stroke-dasharray: 7 4; }
+  .s2s-svg[data-diagram^='harness-map'] .a-emphasis { stroke-width: 3; }
+  .s2s-svg .m-default  { fill: var(--color-text-dim); }
+  .s2s-svg .m-emphasis { fill: var(--color-accent); }
+  .s2s-svg .m-dashed   { fill: var(--color-thread); }
+  .s2s-svg .m-security { fill: var(--color-signal); }
+
+  /* Relationship labels reuse t-* classes by variant, not by node kind. */
+  .s2s-svg g[data-edge-from] text.t-backend    { fill: var(--color-accent); }
+  .s2s-svg g[data-edge-from] text.t-messagebus { fill: var(--color-thread); }
+  .s2s-svg g[data-edge-from] text.t-security   { fill: var(--color-signal); }
+  .s2s-svg g[data-edge-from] text.t-muted      { fill: var(--color-text-dim); }
+  .s2s-svg g[data-edge-from] text { font-weight: 600; }
+</style>

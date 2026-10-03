@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "The Collaborator: developer loop",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": { "mode": "auto", "entries": {
+      "external": { "label": "Person or trigger" }, "frontend": { "label": "Instructions and context" },
+      "backend": { "label": "Agent work and checks" }, "messagebus": { "label": "Commit" }, "database": { "label": "Memory" } } }
+  },
+  "lanes": [
+    { "id": "human", "label": "Human" }, { "id": "agent", "label": "Agent" },
+    { "id": "checks", "label": "Checks" }, { "id": "memory", "label": "Memory" }
+  ],
+  "phases": [
+    { "id": "p-idea", "label": "Idea", "fromCol": 0, "toCol": 0 },
+    { "id": "p-context", "label": "Context", "fromCol": 1, "toCol": 1 },
+    { "id": "p-work", "label": "Agent work", "fromCol": 2, "toCol": 2 },
+    { "id": "p-verify", "label": "Verify", "fromCol": 3, "toCol": 3 },
+    { "id": "p-commit", "label": "Commit and memory", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["design", "cold", "build", "verify", "commit", "gitlog"],
+  "nodes": [
+    { "id": "design", "lane": "human", "col": 0, "type": "frontend", "label": "Design doc", "sublabel": "signed off first", "width": 132 },
+    { "id": "cold", "lane": "agent", "col": 1, "type": "frontend", "label": "Session starts cold", "sublabel": "no instruction file", "width": 132 },
+    { "id": "build", "lane": "agent", "col": 2, "type": "backend", "label": "Implement", "sublabel": "branch or main", "width": 132 },
+    { "id": "verify", "lane": "checks", "col": 3, "type": "backend", "label": "verify skill", "sublabel": "node tests, ad-hoc drive", "width": 132 },
+    { "id": "commit", "lane": "agent", "col": 4, "type": "messagebus", "label": "Commit", "sublabel": "measured + trailer", "width": 132 },
+    { "id": "deploy", "lane": "human", "col": 4, "type": "external", "label": "Merge + deploy", "sublabel": "PR or local merge", "width": 132 },
+    { "id": "shipped", "lane": "human", "col": 5, "type": "database", "label": "Doc: what shipped", "sublabel": "sometimes", "width": 132 },
+    { "id": "gitlog", "lane": "memory", "col": 5, "type": "database", "label": "git log", "sublabel": "the dev memory", "width": 132 }
+  ],
+  "edges": [
+    { "id": "design-cold", "from": "design", "to": "cold", "variant": "emphasis" },
+    { "id": "cold-build", "from": "cold", "to": "build", "variant": "emphasis" },
+    { "id": "build-verify", "from": "build", "to": "verify", "variant": "emphasis" },
+    { "id": "verify-commit", "from": "verify", "to": "commit", "variant": "emphasis", "toSide": "bottom" },
+    { "id": "commit-deploy", "from": "commit", "to": "deploy" },
+    { "id": "deploy-shipped", "from": "deploy", "to": "shipped", "variant": "dashed" },
+    { "id": "commit-gitlog", "from": "commit", "to": "gitlog", "variant": "emphasis" }
+  ]
+}

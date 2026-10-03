@@ -1,0 +1,174 @@
+<svg class="s2s-svg" data-diagram="loop-dev-collaborator" focusable="false" viewBox="0 0 884 652" role="img" lang="en" aria-labelledby="s2s-loop-dev-collaborator-archify-diagram-title s2s-loop-dev-collaborator-archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="s2s-loop-dev-collaborator-archify-diagram-title">The Collaborator: developer loop</title>
+        <desc id="s2s-loop-dev-collaborator-archify-diagram-description">The Collaborator's developer loop in four lanes. A signed-off design doc, a session that starts cold with no instruction file, implementation, the verify skill with node tests and an ad-hoc browser drive, a measured commit, then merge and deploy. Memory is the git log, and sometimes a what-shipped section in the design doc.</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="s2s-loop-dev-collaborator-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="s2s-loop-dev-collaborator-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="s2s-loop-dev-collaborator-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="s2s-loop-dev-collaborator-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="s2s-loop-dev-collaborator-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <!-- Swimlanes -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-dev-collaborator-lane-0" x="40" y="52" width="828" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Human</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-dev-collaborator-lane-1" x="40" y="176" width="828" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Agent</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-dev-collaborator-lane-2" x="40" y="300" width="828" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Checks</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-dev-collaborator-lane-3" x="40" y="424" width="828" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Memory</text>
+        <!-- Phase headers -->
+        <line x1="68" y1="35" x2="160" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="68" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="114" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Idea</text>
+        <line x1="188" y1="35" x2="280" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="188" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="234" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Context</text>
+        <line x1="348" y1="35" x2="440" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="348" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="394" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Agent work</text>
+        <line x1="468" y1="35" x2="560" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="468" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="514" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Verify</text>
+        <line x1="588" y1="35" x2="840" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="588" y="27" width="252" height="16" rx="4" class="c-mask"/>
+        <text x="714" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Commit and memory</text>
+        <!-- Workflow groups -->
+        <!-- Edge paths -->
+        <path data-edge-from="build" data-edge-to="verify" data-edge-key="0" data-edge-id="s2s-loop-dev-collaborator-build-verify" data-composition-points="394,269;394,367;448,367" d="M 394 269 L 394 367 L 448 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-collaborator-arrowhead-emphasis)"/>
+        <path data-edge-from="cold" data-edge-to="build" data-edge-key="1" data-edge-id="s2s-loop-dev-collaborator-cold-build" data-composition-points="300,243;328,243" d="M 300 243 L 328 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-collaborator-arrowhead-emphasis)"/>
+        <path data-edge-from="commit" data-edge-to="deploy" data-edge-key="2" data-edge-id="s2s-loop-dev-collaborator-commit-deploy" data-composition-points="634,217;634,145" d="M 634 217 L 634 145" class="a-default" stroke-width="1.4" marker-end="url(#s2s-loop-dev-collaborator-arrowhead)"/>
+        <path data-edge-from="commit" data-edge-to="gitlog" data-edge-key="3" data-edge-id="s2s-loop-dev-collaborator-commit-gitlog" data-composition-points="641,269;641,491;728,491" d="M 641 269 L 641 491 L 728 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-collaborator-arrowhead-emphasis)"/>
+        <path data-edge-from="deploy" data-edge-to="shipped" data-edge-key="4" data-edge-id="s2s-loop-dev-collaborator-deploy-shipped" data-composition-points="700,119;728,119" d="M 700 119 L 728 119" class="a-dashed" stroke-width="1.4" marker-end="url(#s2s-loop-dev-collaborator-arrowhead-dashed)"/>
+        <path data-edge-from="design" data-edge-to="cold" data-edge-key="5" data-edge-id="s2s-loop-dev-collaborator-design-cold" data-composition-points="180,119;234,119;234,217" d="M 180 119 L 234 119 L 234 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-collaborator-arrowhead-emphasis)"/>
+        <path data-edge-from="verify" data-edge-to="commit" data-edge-key="6" data-edge-id="s2s-loop-dev-collaborator-verify-commit" data-composition-points="580,367;627,367;627,269" d="M 580 367 L 627 367 L 627 269" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-collaborator-arrowhead-emphasis)"/>
+        <!-- Nodes -->
+        <g id="s2s-loop-dev-collaborator-node-design" data-node-id="s2s-loop-dev-collaborator-design" data-node-label="Design doc" data-node-kind="frontend" data-node-sublabel="signed off first" data-node-context="Human › Idea">
+          <title>Design doc · signed off first · Human › Idea</title>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(54 99) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Design doc</text>
+          <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">signed off first</text>
+        </g>
+        <g id="s2s-loop-dev-collaborator-node-deploy" data-node-id="s2s-loop-dev-collaborator-deploy" data-node-label="Merge + deploy" data-node-kind="external" data-node-sublabel="PR or local merge" data-node-context="Human › Commit and memory">
+          <title>Merge + deploy · PR or local merge · Human › Commit and memory</title>
+          <rect x="568" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="568" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(574 99) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="634" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Merge + deploy</text>
+          <text data-detail="context" x="634" y="131" class="t-muted" font-size="8" text-anchor="middle">PR or local merge</text>
+        </g>
+        <g id="s2s-loop-dev-collaborator-node-shipped" data-node-id="s2s-loop-dev-collaborator-shipped" data-node-label="Doc: what shipped" data-node-kind="database" data-node-sublabel="sometimes" data-node-context="Human › Commit and memory">
+          <title>Doc: what shipped · sometimes · Human › Commit and memory</title>
+          <rect x="728" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="728" y="93" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(734 99) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="794" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Doc: what shipped</text>
+          <text data-detail="context" x="794" y="131" class="t-muted" font-size="8" text-anchor="middle">sometimes</text>
+        </g>
+        <g id="s2s-loop-dev-collaborator-node-cold" data-node-id="s2s-loop-dev-collaborator-cold" data-node-label="Session starts cold" data-node-kind="frontend" data-node-sublabel="no instruction file" data-node-context="Agent › Context">
+          <title>Session starts cold · no instruction file · Agent › Context</title>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(174 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="234" y="238" class="t-primary" font-size="10.8" font-weight="600" text-anchor="middle">Session starts cold</text>
+          <text data-detail="context" x="234" y="255" class="t-muted" font-size="8" text-anchor="middle">no instruction file</text>
+        </g>
+        <g id="s2s-loop-dev-collaborator-node-build" data-node-id="s2s-loop-dev-collaborator-build" data-node-label="Implement" data-node-kind="backend" data-node-sublabel="branch or main" data-node-context="Agent › Agent work">
+          <title>Implement · branch or main · Agent › Agent work</title>
+          <rect x="328" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="328" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(334 223) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="394" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Implement</text>
+          <text data-detail="context" x="394" y="255" class="t-muted" font-size="8" text-anchor="middle">branch or main</text>
+        </g>
+        <g id="s2s-loop-dev-collaborator-node-commit" data-node-id="s2s-loop-dev-collaborator-commit" data-node-label="Commit" data-node-kind="messagebus" data-node-sublabel="measured + trailer" data-node-context="Agent › Commit and memory">
+          <title>Commit · measured + trailer · Agent › Commit and memory</title>
+          <rect x="568" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="568" y="217" width="132" height="52" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(574 223) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="634" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Commit</text>
+          <text data-detail="context" x="634" y="255" class="t-muted" font-size="8" text-anchor="middle">measured + trailer</text>
+        </g>
+        <g id="s2s-loop-dev-collaborator-node-verify" data-node-id="s2s-loop-dev-collaborator-verify" data-node-label="verify skill" data-node-kind="backend" data-node-sublabel="node tests, ad-hoc drive" data-node-context="Checks › Verify">
+          <title>verify skill · node tests, ad-hoc drive · Checks › Verify</title>
+          <rect x="448" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="448" y="341" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(454 347) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="514" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">verify skill</text>
+          <text data-detail="context" x="514" y="379" class="t-muted" font-size="8" text-anchor="middle">node tests, ad-hoc drive</text>
+        </g>
+        <g id="s2s-loop-dev-collaborator-node-gitlog" data-node-id="s2s-loop-dev-collaborator-gitlog" data-node-label="git log" data-node-kind="database" data-node-sublabel="the dev memory" data-node-context="Memory › Commit and memory">
+          <title>git log · the dev memory · Memory › Commit and memory</title>
+          <rect x="728" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="728" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(734 471) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="794" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">git log</text>
+          <text data-detail="context" x="794" y="503" class="t-muted" font-size="8" text-anchor="middle">the dev memory</text>
+        </g>
+        <!-- Edge labels -->
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="20" y="552" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Instructions and context" data-legend-x="20" data-legend-baseline="572" data-legend-width="148">
+            <rect x="20" y="564" width="14" height="9" rx="2" class="c-frontend" stroke-width="1"/>
+            <text x="42" y="572" class="t-muted" font-size="7.5" font-weight="500">Instructions and context</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Agent work and checks" data-legend-x="175" data-legend-baseline="572" data-legend-width="135">
+            <rect x="175" y="564" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+            <text x="197" y="572" class="t-muted" font-size="7.5" font-weight="500">Agent work and checks</text>
+          </g>
+          <g data-legend-semantic-kind="messagebus" data-legend-kind="messagebus" data-legend-label="Commit" data-legend-x="317" data-legend-baseline="572" data-legend-width="70">
+            <rect x="317" y="564" width="14" height="9" rx="2" class="c-messagebus" stroke-width="1"/>
+            <text x="339" y="572" class="t-muted" font-size="7.5" font-weight="500">Commit</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Memory" data-legend-x="394" data-legend-baseline="572" data-legend-width="70">
+            <rect x="394" y="564" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+            <text x="416" y="572" class="t-muted" font-size="7.5" font-weight="500">Memory</text>
+          </g>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Person or trigger" data-legend-x="471" data-legend-baseline="572" data-legend-width="117">
+            <rect x="471" y="564" width="14" height="9" rx="2" class="c-external" stroke-width="1"/>
+            <text x="493" y="572" class="t-muted" font-size="7.5" font-weight="500">Person or trigger</text>
+          </g>
+        </g>
+      </svg>

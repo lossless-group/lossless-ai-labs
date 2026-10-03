@@ -1,0 +1,239 @@
+<svg class="s2s-svg" data-diagram="shape" focusable="false" viewBox="0 0 1350 720" role="img" lang="en" aria-labelledby="s2s-shape-archify-diagram-title s2s-shape-archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="s2s-shape-archify-diagram-title">Shape against harness: monolith and pseudomonorepo</title>
+        <desc id="s2s-shape-archify-diagram-description">Left: the monolith. One repo with one app branches into its in-product exam chain (ledger, validator, simulator), developer work with no entry point, and a .claude folder with one skill, one command and an allowlist. Right: the pseudomonorepo. The anchor AGENTS.md leads to the ai-labs CLAUDE.md, then the augment-it and memopop-ai instruction files and the orchestrator, whose product harness (runtime AGENTS.md, outlines, agents) sits below it. A shared skills library is linked into both; context-v and changelog sit at every level and are ingested into a Chroma corpus.</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="s2s-shape-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="s2s-shape-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="s2s-shape-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="s2s-shape-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="s2s-shape-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <!-- Boundaries (behind everything) -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="s2s-shape-0" data-composition-frame-label="Monolith: The Collaborator" x="10" y="70" width="580" height="232" rx="12" class="c-region" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="s2s-shape-1" data-composition-frame-label="Pseudomonorepo: Lossless" x="610" y="70" width="700" height="582" rx="12" class="c-region" stroke-width="1"/>
+        <!-- Connection paths (before components for correct z-order) -->
+        <path data-edge-from="m-repo" data-edge-to="m-exam" data-edge-key="0" data-edge-id="s2s-shape-m-repo-exam" data-composition-points="220,126;120,126;120,230" d="M 220 126 L 128 126 Q 120 126 120 134 L 120 230" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="m-repo" data-edge-to="m-platform" data-edge-key="1" data-edge-id="s2s-shape-m-repo-platform" data-composition-points="300,152;300,230" d="M 300 152 L 300 230" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="m-repo" data-edge-to="m-claude" data-edge-key="2" data-edge-id="s2s-shape-m-repo-claude" data-composition-points="380,126;480,126;480,230" d="M 380 126 L 472 126 Q 480 126 480 134 L 480 230" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="t-anchor" data-edge-to="t-ailabs" data-edge-key="3" data-edge-id="s2s-shape-t-anchor-ailabs" data-composition-points="960,152;960,210" d="M 960 152 L 960 210" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="t-ailabs" data-edge-to="t-memopop" data-edge-key="4" data-edge-id="s2s-shape-t-ailabs-memopop" data-composition-points="1040,236;1120,236" d="M 1040 236 L 1120 236" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="t-ailabs" data-edge-to="t-augment" data-edge-key="5" data-edge-id="s2s-shape-t-ailabs-augment" data-composition-points="880,236;720,236;720,320" d="M 880 236 L 728 236 Q 720 236 720 244 L 720 320" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="t-memopop" data-edge-to="t-orch" data-edge-key="6" data-edge-id="s2s-shape-t-memopop-orch" data-composition-points="1200,262;1200,320" d="M 1200 262 L 1200 320" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="t-skills" data-edge-to="t-augment" data-edge-label="linked" data-edge-key="7" data-edge-id="s2s-shape-t-skills-augment" data-composition-points="880,346;800,346" d="M 880 346 L 800 346" class="a-dashed" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead-dashed)"/>
+        <path data-edge-from="t-skills" data-edge-to="t-orch" data-edge-label="linked" data-edge-key="8" data-edge-id="s2s-shape-t-skills-orch" data-composition-points="1040,346;1120,346" d="M 1040 346 L 1120 346" class="a-dashed" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead-dashed)"/>
+        <path data-edge-from="t-augment" data-edge-to="t-contextv" data-edge-key="9" data-edge-id="s2s-shape-t-augment-contextv" data-composition-points="720,372;720,396;856,396;856,466;880,466" d="M 720 372 L 720 388 Q 720 396 728 396 L 848 396 Q 856 396 856 404 L 856 458 Q 856 466 864 466 L 880 466" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="t-orch" data-edge-to="t-contextv" data-edge-key="10" data-edge-id="s2s-shape-t-orch-contextv" data-composition-points="1193,372;1193,396;1064,396;1064,466;1040,466" d="M 1193 372 L 1193 388 Q 1193 396 1185 396 L 1072 396 Q 1064 396 1064 404 L 1064 458 Q 1064 466 1056 466 L 1040 466" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="t-contextv" data-edge-to="t-corpus" data-edge-label="ingest" data-edge-key="11" data-edge-id="s2s-shape-t-contextv-corpus" data-composition-points="960,492;960,580" d="M 960 492 L 960 580" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <path data-edge-from="t-orch" data-edge-to="t-product" data-edge-key="12" data-edge-id="s2s-shape-t-orch-product" data-composition-points="1207,372;1207,580" d="M 1207 372 L 1207 580" class="a-default" stroke-width="1.5" marker-end="url(#s2s-shape-arrowhead)"/>
+        <!-- Components -->
+        <g id="s2s-shape-node-m-repo" data-node-id="s2s-shape-m-repo" data-node-label="One repo, one app" data-node-kind="external" data-node-sublabel="one developer" data-node-context="Monolith: The Collaborator">
+          <title>One repo, one app · one developer · Monolith: The Collaborator</title>
+          <rect x="220" y="100" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="220" y="100" width="160" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(226 106) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="300" y="124" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">One repo, one app</text>
+        <text data-detail="context" x="300" y="140" class="t-muted" font-size="9" text-anchor="middle">one developer</text>
+        </g>
+        <g id="s2s-shape-node-m-exam" data-node-id="s2s-shape-m-exam" data-node-label="Product: exam chain" data-node-kind="backend" data-node-sublabel="ledger, validator, sim" data-node-context="Monolith: The Collaborator">
+          <title>Product: exam chain · ledger, validator, sim · Monolith: The Collaborator</title>
+          <rect x="40" y="230" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="40" y="230" width="160" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 236) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="120" y="254" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Product: exam chain</text>
+        <text data-detail="context" x="120" y="270" class="t-muted" font-size="9" text-anchor="middle">ledger, validator, sim</text>
+        </g>
+        <g id="s2s-shape-node-m-platform" data-node-id="s2s-shape-m-platform" data-node-label="Dev: no entry point" data-node-kind="frontend" data-node-sublabel="sessions start cold" data-node-context="Monolith: The Collaborator">
+          <title>Dev: no entry point · sessions start cold · Monolith: The Collaborator</title>
+          <rect x="220" y="230" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="220" y="230" width="160" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(226 236) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="300" y="254" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Dev: no entry point</text>
+        <text data-detail="context" x="300" y="270" class="t-muted" font-size="9" text-anchor="middle">sessions start cold</text>
+        </g>
+        <g id="s2s-shape-node-m-claude" data-node-id="s2s-shape-m-claude" data-node-label=".claude/" data-node-kind="security" data-node-sublabel="skill, command, allowlist" data-node-context="Monolith: The Collaborator">
+          <title>.claude/ · skill, command, allowlist · Monolith: The Collaborator</title>
+          <rect x="400" y="230" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="400" y="230" width="160" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(406 236) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="480" y="254" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">.claude/</text>
+        <text data-detail="context" x="480" y="270" class="t-muted" font-size="9" text-anchor="middle">skill, command, allowlist</text>
+        </g>
+        <g id="s2s-shape-node-t-anchor" data-node-id="s2s-shape-t-anchor" data-node-label="Anchor AGENTS.md" data-node-kind="frontend" data-node-sublabel="tree rules" data-node-context="Pseudomonorepo: Lossless">
+          <title>Anchor AGENTS.md · tree rules · Pseudomonorepo: Lossless</title>
+          <rect x="880" y="100" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="880" y="100" width="160" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(886 106) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="960" y="124" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Anchor AGENTS.md</text>
+        <text data-detail="context" x="960" y="140" class="t-muted" font-size="9" text-anchor="middle">tree rules</text>
+        </g>
+        <g id="s2s-shape-node-t-ailabs" data-node-id="s2s-shape-t-ailabs" data-node-label="ai-labs CLAUDE.md" data-node-kind="frontend" data-node-sublabel="uv, MCP scope, corpus" data-node-context="Pseudomonorepo: Lossless">
+          <title>ai-labs CLAUDE.md · uv, MCP scope, corpus · Pseudomonorepo: Lossless</title>
+          <rect x="880" y="210" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="880" y="210" width="160" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(886 216) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="960" y="234" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">ai-labs CLAUDE.md</text>
+        <text data-detail="context" x="960" y="250" class="t-muted" font-size="9" text-anchor="middle">uv, MCP scope, corpus</text>
+        </g>
+        <g id="s2s-shape-node-t-memopop" data-node-id="s2s-shape-t-memopop" data-node-label="memopop-ai CLAUDE.md" data-node-kind="frontend" data-node-sublabel="workspace layout" data-node-context="Pseudomonorepo: Lossless">
+          <title>memopop-ai CLAUDE.md · workspace layout · Pseudomonorepo: Lossless</title>
+          <rect x="1120" y="210" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="1120" y="210" width="160" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(1126 216) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="1200" y="234" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">memopop-ai CLAUDE.md</text>
+        <text data-detail="context" x="1200" y="250" class="t-muted" font-size="9" text-anchor="middle">workspace layout</text>
+        </g>
+        <g id="s2s-shape-node-t-augment" data-node-id="s2s-shape-t-augment" data-node-label="augment-it CLAUDE.md" data-node-kind="frontend" data-node-sublabel="+ Spec Kit constitution" data-node-context="Pseudomonorepo: Lossless">
+          <title>augment-it CLAUDE.md · + Spec Kit constitution · Pseudomonorepo: Lossless</title>
+          <rect x="640" y="320" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="640" y="320" width="160" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(646 326) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="720" y="344" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">augment-it CLAUDE.md</text>
+        <text data-detail="context" x="720" y="360" class="t-muted" font-size="9" text-anchor="middle">+ Spec Kit constitution</text>
+        </g>
+        <g id="s2s-shape-node-t-skills" data-node-id="s2s-shape-t-skills" data-node-label="Shared skills library" data-node-kind="security" data-node-sublabel="Stow into the harness" data-node-context="Pseudomonorepo: Lossless">
+          <title>Shared skills library · Stow into the harness · Pseudomonorepo: Lossless</title>
+          <rect x="880" y="320" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="880" y="320" width="160" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(886 326) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="960" y="344" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Shared skills library</text>
+        <text data-detail="context" x="960" y="360" class="t-muted" font-size="9" text-anchor="middle">Stow into the harness</text>
+        </g>
+        <g id="s2s-shape-node-t-orch" data-node-id="s2s-shape-t-orch" data-node-label="Orchestrator CLAUDE.md" data-node-kind="frontend" data-node-sublabel="+ runtime AGENTS.md" data-node-context="Pseudomonorepo: Lossless">
+          <title>Orchestrator CLAUDE.md · + runtime AGENTS.md · Pseudomonorepo: Lossless</title>
+          <rect x="1120" y="320" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="1120" y="320" width="160" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(1126 326) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="1200" y="344" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Orchestrator CLAUDE.md</text>
+        <text data-detail="context" x="1200" y="360" class="t-muted" font-size="9" text-anchor="middle">+ runtime AGENTS.md</text>
+        </g>
+        <g id="s2s-shape-node-t-contextv" data-node-id="s2s-shape-t-contextv" data-node-label="context-v + changelog" data-node-kind="database" data-node-sublabel="at every level" data-node-context="Pseudomonorepo: Lossless">
+          <title>context-v + changelog · at every level · Pseudomonorepo: Lossless</title>
+          <rect x="880" y="440" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="880" y="440" width="160" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(886 446) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="960" y="464" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">context-v + changelog</text>
+        <text data-detail="context" x="960" y="480" class="t-muted" font-size="9" text-anchor="middle">at every level</text>
+        </g>
+        <g id="s2s-shape-node-t-corpus" data-node-id="s2s-shape-t-corpus" data-node-label="Chroma corpus" data-node-kind="database" data-node-sublabel="across the tree" data-node-context="Pseudomonorepo: Lossless">
+          <title>Chroma corpus · across the tree · Pseudomonorepo: Lossless</title>
+          <rect x="880" y="580" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="880" y="580" width="160" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(886 586) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="960" y="604" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Chroma corpus</text>
+        <text data-detail="context" x="960" y="620" class="t-muted" font-size="9" text-anchor="middle">across the tree</text>
+        </g>
+        <g id="s2s-shape-node-t-product" data-node-id="s2s-shape-t-product" data-node-label="Product harness" data-node-kind="backend" data-node-sublabel="AGENTS.md, outlines, agents" data-node-context="Pseudomonorepo: Lossless">
+          <title>Product harness · AGENTS.md, outlines, agents · Pseudomonorepo: Lossless</title>
+          <rect x="1120" y="580" width="160" height="52" rx="6" class="c-mask"/>
+          <rect x="1120" y="580" width="160" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(1126 586) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="1200" y="604" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Product harness</text>
+        <text data-detail="context" x="1200" y="620" class="t-muted" font-size="9" text-anchor="middle">AGENTS.md, outlines, agents</text>
+        </g>
+        <!-- Connection labels -->
+        <g data-detail="context" data-edge-from="t-skills" data-edge-to="t-augment" data-edge-label="linked" data-edge-key="7" data-edge-id="s2s-shape-t-skills-augment">
+          <rect x="820.6" y="326" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="840" y="336" class="t-messagebus" font-size="8" text-anchor="middle">linked</text>
+        </g>
+        <g data-detail="context" data-edge-from="t-skills" data-edge-to="t-orch" data-edge-label="linked" data-edge-key="8" data-edge-id="s2s-shape-t-skills-orch">
+          <rect x="1060.6" y="326" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="1080" y="336" class="t-messagebus" font-size="8" text-anchor="middle">linked</text>
+        </g>
+        <g data-detail="context" data-edge-from="t-contextv" data-edge-to="t-corpus" data-edge-label="ingest" data-edge-key="11" data-edge-id="s2s-shape-t-contextv-corpus">
+          <rect x="940.6" y="526" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="960" y="536" class="t-muted" font-size="8" text-anchor="middle">ingest</text>
+        </g>
+        <!-- Boundary labels (foreground masks keep routes out of titles) -->
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="s2s-shape-0" data-composition-frame-kind="region" data-composition-frame-label="Monolith: The Collaborator">
+          <rect data-graph-role="structural-frame-label-mask" x="14" y="80" width="150.4" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="18" y="93" class="t-cloud" font-size="9" font-weight="600">Monolith: The Collaborator</text>
+        </g>
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="s2s-shape-1" data-composition-frame-kind="region" data-composition-frame-label="Pseudomonorepo: Lossless">
+          <rect data-graph-role="structural-frame-label-mask" x="614" y="80" width="139.6" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="618" y="93" class="t-cloud" font-size="9" font-weight="600">Pseudomonorepo: Lossless</text>
+        </g>
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="40" y="684" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Instructions" data-legend-x="40" data-legend-baseline="704" data-legend-width="103">
+            <rect x="40" y="695" width="16" height="10" rx="2.5" class="c-frontend" stroke-width="1"/>
+            <text x="62" y="704" class="t-muted" font-size="10" font-weight="500">Instructions</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="In-product harness" data-legend-x="165" data-legend-baseline="704" data-legend-width="133">
+            <rect x="165" y="695" width="16" height="10" rx="2.5" class="c-backend" stroke-width="1"/>
+            <text x="187" y="704" class="t-muted" font-size="10" font-weight="500">In-product harness</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Context and memory" data-legend-x="320" data-legend-baseline="704" data-legend-width="133">
+            <rect x="320" y="695" width="16" height="10" rx="2.5" class="c-database" stroke-width="1"/>
+            <text x="342" y="704" class="t-muted" font-size="10" font-weight="500">Context and memory</text>
+          </g>
+          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Config, skills, commands" data-legend-x="475" data-legend-baseline="704" data-legend-width="163">
+            <rect x="475" y="695" width="16" height="10" rx="2.5" class="c-security" stroke-width="1"/>
+            <text x="497" y="704" class="t-muted" font-size="10" font-weight="500">Config, skills, commands</text>
+          </g>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Repo shape" data-legend-x="660" data-legend-baseline="704" data-legend-width="93">
+            <rect x="660" y="695" width="16" height="10" rx="2.5" class="c-external" stroke-width="1"/>
+            <text x="682" y="704" class="t-muted" font-size="10" font-weight="500">Repo shape</text>
+          </g>
+        </g>
+      </svg>

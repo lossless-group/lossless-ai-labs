@@ -1,0 +1,216 @@
+<svg class="s2s-svg" data-diagram="loop-dev-lossless" focusable="false" viewBox="0 0 953 652" role="img" lang="en" aria-labelledby="s2s-loop-dev-lossless-archify-diagram-title s2s-loop-dev-lossless-archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="s2s-loop-dev-lossless-archify-diagram-title">Lossless: developer loop</title>
+        <desc id="s2s-loop-dev-lossless-archify-diagram-description">The Lossless developer loop in the same four lanes. An exploration or issue becomes a signed-off spec and a plan per phase; the agent implements with layered instructions and skills. A red proof stops it; a green one leads to a changelog entry, a commit with CI, a handoff and submodule bump, and ingest into the Chroma corpus the next session queries.</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="s2s-loop-dev-lossless-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="s2s-loop-dev-lossless-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="s2s-loop-dev-lossless-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="s2s-loop-dev-lossless-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="s2s-loop-dev-lossless-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <!-- Swimlanes -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-dev-lossless-lane-0" x="40" y="52" width="868" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Human</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-dev-lossless-lane-1" x="40" y="176" width="868" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Agent</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-dev-lossless-lane-2" x="40" y="300" width="868" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Checks</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="s2s-loop-dev-lossless-lane-3" x="40" y="424" width="868" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Memory</text>
+        <!-- Phase headers -->
+        <line x1="68" y1="35" x2="160" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="68" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="114" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Idea</text>
+        <line x1="228" y1="35" x2="320" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="228" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="274" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Context</text>
+        <line x1="388" y1="35" x2="480" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="388" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="434" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Agent work</text>
+        <line x1="508" y1="35" x2="600" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="508" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="554" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Verify</text>
+        <line x1="628" y1="35" x2="880" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="628" y="27" width="252" height="16" rx="4" class="c-mask"/>
+        <text x="754" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Commit and memory</text>
+        <!-- Workflow groups -->
+        <!-- Edge paths -->
+        <path data-edge-from="build" data-edge-to="proof" data-edge-key="0" data-edge-id="s2s-loop-dev-lossless-build-proof" data-composition-points="434,269;434,367;488,367" d="M 434 269 L 434 367 L 488 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-lossless-arrowhead-emphasis)"/>
+        <path data-edge-from="changelog" data-edge-to="commit" data-edge-key="1" data-edge-id="s2s-loop-dev-lossless-changelog-commit" data-composition-points="674,465;674,269" d="M 674 465 L 674 269" class="a-default" stroke-width="1.4" marker-end="url(#s2s-loop-dev-lossless-arrowhead)"/>
+        <path data-edge-from="commit" data-edge-to="handoff" data-edge-key="2" data-edge-id="s2s-loop-dev-lossless-commit-handoff" data-composition-points="740,243;768,243" d="M 740 243 L 768 243" class="a-default" stroke-width="1.4" marker-end="url(#s2s-loop-dev-lossless-arrowhead)"/>
+        <path data-edge-from="handoff" data-edge-to="corpus" data-edge-label="ingest" data-edge-key="3" data-edge-id="s2s-loop-dev-lossless-handoff-corpus" data-composition-points="900,243;934.8,243;934.8,491;900,491" d="M 900 243 L 934.8 243 L 934.8 491 L 900 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-lossless-arrowhead-emphasis)"/>
+        <path data-edge-from="idea" data-edge-to="spec" data-edge-key="4" data-edge-id="s2s-loop-dev-lossless-idea-spec" data-composition-points="180,119;208,119" d="M 180 119 L 208 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-lossless-arrowhead-emphasis)"/>
+        <path data-edge-from="plan" data-edge-to="build" data-edge-key="5" data-edge-id="s2s-loop-dev-lossless-plan-build" data-composition-points="340,243;368,243" d="M 340 243 L 368 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-lossless-arrowhead-emphasis)"/>
+        <path data-edge-from="proof" data-edge-to="changelog" data-edge-label="yes" data-edge-key="6" data-edge-id="s2s-loop-dev-lossless-proof-changelog" data-composition-points="554,393;554,491;608,491" d="M 554 393 L 554 491 L 608 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-lossless-arrowhead-emphasis)"/>
+        <path data-edge-from="proof" data-edge-to="stop" data-edge-label="no" data-edge-key="7" data-edge-id="s2s-loop-dev-lossless-proof-stop" data-composition-points="554,341;554,145" d="M 554 341 L 554 145" class="a-security" stroke-width="1.4" marker-end="url(#s2s-loop-dev-lossless-arrowhead-security)"/>
+        <path data-edge-from="spec" data-edge-to="plan" data-edge-key="8" data-edge-id="s2s-loop-dev-lossless-spec-plan" data-composition-points="274,145;274,217" d="M 274 145 L 274 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#s2s-loop-dev-lossless-arrowhead-emphasis)"/>
+        <!-- Nodes -->
+        <g id="s2s-loop-dev-lossless-node-idea" data-node-id="s2s-loop-dev-lossless-idea" data-node-label="Exploration or issue" data-node-kind="external" data-node-sublabel="in context-v" data-node-context="Human › Idea">
+          <title>Exploration or issue · in context-v · Human › Idea</title>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(54 99) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="10.3" font-weight="600" text-anchor="middle">Exploration or issue</text>
+          <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">in context-v</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-spec" data-node-id="s2s-loop-dev-lossless-spec" data-node-label="Spec" data-node-kind="frontend" data-node-sublabel="status: Signed-Off" data-node-context="Human › Context">
+          <title>Spec · status: Signed-Off · Human › Context</title>
+          <rect x="208" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="208" y="93" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(214 99) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="274" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Spec</text>
+          <text data-detail="context" x="274" y="131" class="t-muted" font-size="8" text-anchor="middle">status: Signed-Off</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-stop" data-node-id="s2s-loop-dev-lossless-stop" data-node-label="Stop, surface it" data-node-kind="security" data-node-sublabel="red proof" data-node-context="Human › Verify">
+          <title>Stop, surface it · red proof · Human › Verify</title>
+          <rect x="488" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="488" y="93" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(494 99) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="554" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Stop, surface it</text>
+          <text data-detail="context" x="554" y="131" class="t-muted" font-size="8" text-anchor="middle">red proof</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-plan" data-node-id="s2s-loop-dev-lossless-plan" data-node-label="Plan per phase" data-node-kind="frontend" data-node-sublabel="re-grounded on code" data-node-context="Agent › Context">
+          <title>Plan per phase · re-grounded on code · Agent › Context</title>
+          <rect x="208" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="208" y="217" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(214 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="274" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Plan per phase</text>
+          <text data-detail="context" x="274" y="255" class="t-muted" font-size="8" text-anchor="middle">re-grounded on code</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-build" data-node-id="s2s-loop-dev-lossless-build" data-node-label="Implement" data-node-kind="backend" data-node-sublabel="CLAUDE.md layers, skills" data-node-context="Agent › Agent work">
+          <title>Implement · CLAUDE.md layers, skills · Agent › Agent work</title>
+          <rect x="368" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="368" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(374 223) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="434" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Implement</text>
+          <text data-detail="context" x="434" y="255" class="t-muted" font-size="8" text-anchor="middle">CLAUDE.md layers, skills</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-commit" data-node-id="s2s-loop-dev-lossless-commit" data-node-label="Commit + CI" data-node-kind="messagebus" data-node-sublabel="git-conventions" data-node-context="Agent › Commit and memory">
+          <title>Commit + CI · git-conventions · Agent › Commit and memory</title>
+          <rect x="608" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="608" y="217" width="132" height="52" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(614 223) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="674" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Commit + CI</text>
+          <text data-detail="context" x="674" y="255" class="t-muted" font-size="8" text-anchor="middle">git-conventions</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-handoff" data-node-id="s2s-loop-dev-lossless-handoff" data-node-label="Handoff" data-node-kind="frontend" data-node-sublabel="+ submodule bump" data-node-context="Agent › Commit and memory">
+          <title>Handoff · + submodule bump · Agent › Commit and memory</title>
+          <rect x="768" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="768" y="217" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(774 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="834" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Handoff</text>
+          <text data-detail="context" x="834" y="255" class="t-muted" font-size="8" text-anchor="middle">+ submodule bump</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-proof" data-node-id="s2s-loop-dev-lossless-proof" data-node-label="Proof green?" data-node-kind="backend" data-node-sublabel="prove, tests, drive" data-node-context="Checks › Verify">
+          <title>Proof green? · prove, tests, drive · Checks › Verify</title>
+          <rect x="488" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="488" y="341" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(494 347) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="554" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Proof green?</text>
+          <text data-detail="context" x="554" y="379" class="t-muted" font-size="8" text-anchor="middle">prove, tests, drive</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-changelog" data-node-id="s2s-loop-dev-lossless-changelog" data-node-label="Changelog" data-node-kind="database" data-node-sublabel="+ status flip" data-node-context="Memory › Commit and memory">
+          <title>Changelog · + status flip · Memory › Commit and memory</title>
+          <rect x="608" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="608" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(614 471) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="674" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Changelog</text>
+          <text data-detail="context" x="674" y="503" class="t-muted" font-size="8" text-anchor="middle">+ status flip</text>
+        </g>
+        <g id="s2s-loop-dev-lossless-node-corpus" data-node-id="s2s-loop-dev-lossless-corpus" data-node-label="Chroma corpus" data-node-kind="database" data-node-sublabel="next session queries" data-node-context="Memory › Commit and memory">
+          <title>Chroma corpus · next session queries · Memory › Commit and memory</title>
+          <rect x="768" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="768" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(774 471) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="834" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Chroma corpus</text>
+          <text data-detail="context" x="834" y="503" class="t-muted" font-size="8" text-anchor="middle">next session queries</text>
+        </g>
+        <!-- Edge labels -->
+        <g data-detail="context" data-edge-from="handoff" data-edge-to="corpus" data-edge-label="ingest" data-edge-key="3" data-edge-id="s2s-loop-dev-lossless-handoff-corpus">
+          <rect x="898" y="223" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="917.4" y="233" class="t-backend" font-size="8" text-anchor="middle">ingest</text>
+        </g>
+        <g data-detail="context" data-edge-from="proof" data-edge-to="changelog" data-edge-label="yes" data-edge-key="6" data-edge-id="s2s-loop-dev-lossless-proof-changelog">
+          <rect x="566" y="471" width="30" height="14" rx="3" class="c-mask"/>
+          <text x="581" y="481" class="t-backend" font-size="8" text-anchor="middle">yes</text>
+        </g>
+        <g data-detail="context" data-edge-from="proof" data-edge-to="stop" data-edge-label="no" data-edge-key="7" data-edge-id="s2s-loop-dev-lossless-proof-stop">
+          <rect x="539" y="321" width="30" height="14" rx="3" class="c-mask"/>
+          <text x="554" y="331" class="t-security" font-size="8" text-anchor="middle">no</text>
+        </g>
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="20" y="552" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Instructions and context" data-legend-x="20" data-legend-baseline="572" data-legend-width="148">
+            <rect x="20" y="564" width="14" height="9" rx="2" class="c-frontend" stroke-width="1"/>
+            <text x="42" y="572" class="t-muted" font-size="7.5" font-weight="500">Instructions and context</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Agent work and checks" data-legend-x="175" data-legend-baseline="572" data-legend-width="135">
+            <rect x="175" y="564" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+            <text x="197" y="572" class="t-muted" font-size="7.5" font-weight="500">Agent work and checks</text>
+          </g>
+          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Human stop" data-legend-x="317" data-legend-baseline="572" data-legend-width="87">
+            <rect x="317" y="564" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
+            <text x="339" y="572" class="t-muted" font-size="7.5" font-weight="500">Human stop</text>
+          </g>
+          <g data-legend-semantic-kind="messagebus" data-legend-kind="messagebus" data-legend-label="Commit" data-legend-x="411" data-legend-baseline="572" data-legend-width="70">
+            <rect x="411" y="564" width="14" height="9" rx="2" class="c-messagebus" stroke-width="1"/>
+            <text x="433" y="572" class="t-muted" font-size="7.5" font-weight="500">Commit</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Memory" data-legend-x="488" data-legend-baseline="572" data-legend-width="70">
+            <rect x="488" y="564" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+            <text x="510" y="572" class="t-muted" font-size="7.5" font-weight="500">Memory</text>
+          </g>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Person or trigger" data-legend-x="565" data-legend-baseline="572" data-legend-width="117">
+            <rect x="565" y="564" width="14" height="9" rx="2" class="c-external" stroke-width="1"/>
+            <text x="587" y="572" class="t-muted" font-size="7.5" font-weight="500">Person or trigger</text>
+          </g>
+        </g>
+      </svg>

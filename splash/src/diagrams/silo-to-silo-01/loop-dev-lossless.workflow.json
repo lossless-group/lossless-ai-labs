@@ -1,0 +1,48 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Lossless: developer loop",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": { "mode": "auto", "entries": {
+      "external": { "label": "Person or trigger" }, "frontend": { "label": "Instructions and context" },
+      "backend": { "label": "Agent work and checks" }, "security": { "label": "Human stop" },
+      "messagebus": { "label": "Commit" }, "database": { "label": "Memory" } } }
+  },
+  "lanes": [
+    { "id": "human", "label": "Human" }, { "id": "agent", "label": "Agent" },
+    { "id": "checks", "label": "Checks" }, { "id": "memory", "label": "Memory" }
+  ],
+  "phases": [
+    { "id": "p-idea", "label": "Idea", "fromCol": 0, "toCol": 0 },
+    { "id": "p-context", "label": "Context", "fromCol": 1, "toCol": 1 },
+    { "id": "p-work", "label": "Agent work", "fromCol": 2, "toCol": 2 },
+    { "id": "p-verify", "label": "Verify", "fromCol": 3, "toCol": 3 },
+    { "id": "p-commit", "label": "Commit and memory", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["idea", "spec", "plan", "build", "proof", "changelog", "commit", "handoff", "corpus"],
+  "nodes": [
+    { "id": "idea", "lane": "human", "col": 0, "type": "external", "label": "Exploration or issue", "sublabel": "in context-v", "width": 132 },
+    { "id": "spec", "lane": "human", "col": 1, "type": "frontend", "label": "Spec", "sublabel": "status: Signed-Off", "width": 132 },
+    { "id": "plan", "lane": "agent", "col": 1, "type": "frontend", "label": "Plan per phase", "sublabel": "re-grounded on code", "width": 132 },
+    { "id": "build", "lane": "agent", "col": 2, "type": "backend", "label": "Implement", "sublabel": "CLAUDE.md layers, skills", "width": 132 },
+    { "id": "proof", "lane": "checks", "col": 3, "type": "backend", "label": "Proof green?", "sublabel": "prove, tests, drive", "width": 132 },
+    { "id": "stop", "lane": "human", "col": 3, "type": "security", "label": "Stop, surface it", "sublabel": "red proof", "width": 132 },
+    { "id": "changelog", "lane": "memory", "col": 4, "type": "database", "label": "Changelog", "sublabel": "+ status flip", "width": 132 },
+    { "id": "commit", "lane": "agent", "col": 4, "type": "messagebus", "label": "Commit + CI", "sublabel": "git-conventions", "width": 132 },
+    { "id": "handoff", "lane": "agent", "col": 5, "type": "frontend", "label": "Handoff", "sublabel": "+ submodule bump", "width": 132 },
+    { "id": "corpus", "lane": "memory", "col": 5, "type": "database", "label": "Chroma corpus", "sublabel": "next session queries", "width": 132 }
+  ],
+  "edges": [
+    { "id": "idea-spec", "from": "idea", "to": "spec", "variant": "emphasis" },
+    { "id": "spec-plan", "from": "spec", "to": "plan", "variant": "emphasis" },
+    { "id": "plan-build", "from": "plan", "to": "build", "variant": "emphasis" },
+    { "id": "build-proof", "from": "build", "to": "proof", "variant": "emphasis" },
+    { "id": "proof-stop", "from": "proof", "to": "stop", "label": "no", "variant": "security", "role": "error" },
+    { "id": "proof-changelog", "from": "proof", "to": "changelog", "label": "yes", "variant": "emphasis" },
+    { "id": "changelog-commit", "from": "changelog", "to": "commit" },
+    { "id": "commit-handoff", "from": "commit", "to": "handoff" },
+    { "id": "handoff-corpus", "from": "handoff", "to": "corpus", "label": "ingest", "variant": "emphasis" }
+  ]
+}

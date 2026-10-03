@@ -1,0 +1,404 @@
+<svg class="s2s-svg" data-diagram="harness-map-dev" focusable="false" viewBox="0 0 950 1082" role="img" lang="en" aria-labelledby="s2s-harness-map-dev-archify-diagram-title s2s-harness-map-dev-archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="s2s-harness-map-dev-archify-diagram-title">Harness map: developer-agents layer</title>
+        <desc id="s2s-harness-map-dev-archify-diagram-description">Developer-agents harness. Lossless on the left, The Collaborator on the right, artifacts grouped by category. Each line joins a pair and is labelled shared, similar, or missing on their side. Three Lossless pieces (a root instruction file, CI and a changelog convention) have no counterpart on their side; the tree machinery (Stow-linked skills, the Chroma corpus, Spec Kit) has none either, and needs none.</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="s2s-harness-map-dev-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="s2s-harness-map-dev-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="s2s-harness-map-dev-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="s2s-harness-map-dev-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="s2s-harness-map-dev-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <!-- Boundaries (behind everything) -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="s2s-harness-map-dev-0" data-composition-frame-label="Lossless: developer harness (deep)" x="10" y="66" width="290" height="948" rx="12" class="c-region" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="s2s-harness-map-dev-1" data-composition-frame-label="The Collaborator: developer harness (thin)" x="620" y="66" width="290" height="862" rx="12" class="c-region" stroke-width="1"/>
+        <!-- Connection paths (before components for correct z-order) -->
+        <path data-edge-from="l-claude" data-edge-to="c-noclaude" data-edge-label="missing on their side" data-edge-key="0" data-edge-id="s2s-harness-map-dev-l-claude--c-noclaude" data-composition-points="270,120;650,120" d="M 270 120 L 650 120" class="a-security" stroke-width="1.5"/>
+        <path data-edge-from="l-settings" data-edge-to="c-settings" data-edge-label="shared" data-edge-key="1" data-edge-id="s2s-harness-map-dev-l-settings--c-settings" data-composition-points="270,206;650,206" d="M 270 206 L 650 206" class="a-emphasis" stroke-width="1.8"/>
+        <path data-edge-from="l-skill" data-edge-to="c-verify" data-edge-label="shared" data-edge-key="2" data-edge-id="s2s-harness-map-dev-l-skill--c-verify" data-composition-points="270,266;650,266" d="M 270 266 L 650 266" class="a-emphasis" stroke-width="1.8"/>
+        <path data-edge-from="l-specs" data-edge-to="c-docs" data-edge-label="similar" data-edge-key="3" data-edge-id="s2s-harness-map-dev-l-specs--c-docs" data-composition-points="270,352;650,352" d="M 270 352 L 650 352" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-handoff" data-edge-to="c-opener" data-edge-label="similar" data-edge-key="4" data-edge-id="s2s-harness-map-dev-l-handoff--c-opener" data-composition-points="270,412;650,412" d="M 270 412 L 650 412" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-issues" data-edge-to="c-todo" data-edge-label="similar" data-edge-key="5" data-edge-id="s2s-harness-map-dev-l-issues--c-todo" data-composition-points="270,472;650,472" d="M 270 472 L 650 472" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-tests" data-edge-to="c-tests" data-edge-label="shared" data-edge-key="6" data-edge-id="s2s-harness-map-dev-l-tests--c-tests" data-composition-points="270,558;650,558" d="M 270 558 L 650 558" class="a-emphasis" stroke-width="1.8"/>
+        <path data-edge-from="l-drives" data-edge-to="c-drives" data-edge-label="similar" data-edge-key="7" data-edge-id="s2s-harness-map-dev-l-drives--c-drives" data-composition-points="270,618;650,618" d="M 270 618 L 650 618" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-watch" data-edge-to="c-drift" data-edge-label="similar" data-edge-key="8" data-edge-id="s2s-harness-map-dev-l-watch--c-drift" data-composition-points="270,678;650,678" d="M 270 678 L 650 678" class="a-dashed" stroke-width="1.5"/>
+        <path data-edge-from="l-ci" data-edge-to="c-noci" data-edge-label="missing on their side" data-edge-key="9" data-edge-id="s2s-harness-map-dev-l-ci--c-noci" data-composition-points="270,738;650,738" d="M 270 738 L 650 738" class="a-security" stroke-width="1.5"/>
+        <path data-edge-from="l-git" data-edge-to="c-commits" data-edge-label="shared" data-edge-key="10" data-edge-id="s2s-harness-map-dev-l-git--c-commits" data-composition-points="270,824;650,824" d="M 270 824 L 650 824" class="a-emphasis" stroke-width="1.8"/>
+        <path data-edge-from="l-changelog" data-edge-to="c-nochangelog" data-edge-label="missing on their side" data-edge-key="11" data-edge-id="s2s-harness-map-dev-l-changelog--c-nochangelog" data-composition-points="270,884;650,884" d="M 270 884 L 650 884" class="a-security" stroke-width="1.5"/>
+        <!-- Components -->
+        <g id="s2s-harness-map-dev-node-l-claude" data-node-id="s2s-harness-map-dev-l-claude" data-node-label="CLAUDE.md in layers" data-node-kind="frontend" data-node-sublabel="anchor to app" data-node-context="Lossless: developer harness (deep)">
+          <title>CLAUDE.md in layers · anchor to app · Lossless: developer harness (deep)</title>
+          <rect x="40" y="96" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="96" width="230" height="48" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(46 102) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="118" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">CLAUDE.md in layers</text>
+        <text data-detail="context" x="155" y="134" class="t-muted" font-size="9" text-anchor="middle">anchor to app</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-noclaude" data-node-id="s2s-harness-map-dev-c-noclaude" data-node-label="No repo-wide CLAUDE.md" data-node-kind="frontend" data-node-sublabel="nothing at any commit" data-node-context="The Collaborator: developer harness (thin)">
+          <title>No repo-wide CLAUDE.md · nothing at any commit · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="96" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="96" width="230" height="48" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(656 102) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="118" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">No repo-wide CLAUDE.md</text>
+        <text data-detail="context" x="765" y="134" class="t-muted" font-size="9" text-anchor="middle">nothing at any commit</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-settings" data-node-id="s2s-harness-map-dev-l-settings" data-node-label="settings.local.json" data-node-kind="security" data-node-sublabel="two entries, tracked" data-node-context="Lossless: developer harness (deep)">
+          <title>settings.local.json · two entries, tracked · Lossless: developer harness (deep)</title>
+          <rect x="40" y="182" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="182" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(46 188) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="204" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">settings.local.json</text>
+        <text data-detail="context" x="155" y="220" class="t-muted" font-size="9" text-anchor="middle">two entries, tracked</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-settings" data-node-id="s2s-harness-map-dev-c-settings" data-node-label=".claude/settings.json" data-node-kind="security" data-node-sublabel="~210 allow entries" data-node-context="The Collaborator: developer harness (thin)">
+          <title>.claude/settings.json · ~210 allow entries · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="182" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="182" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(656 188) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="204" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">.claude/settings.json</text>
+        <text data-detail="context" x="765" y="220" class="t-muted" font-size="9" text-anchor="middle">~210 allow entries</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-skill" data-node-id="s2s-harness-map-dev-l-skill" data-node-label="decile-hub-interface skill" data-node-kind="security" data-node-sublabel="real-data operating guide" data-node-context="Lossless: developer harness (deep)">
+          <title>decile-hub-interface skill · real-data operating guide · Lossless: developer harness (deep)</title>
+          <rect x="40" y="242" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="242" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(46 248) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="264" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">decile-hub-interface skill</text>
+        <text data-detail="context" x="155" y="280" class="t-muted" font-size="9" text-anchor="middle">real-data operating guide</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-verify" data-node-id="s2s-harness-map-dev-c-verify" data-node-label="verify skill" data-node-kind="security" data-node-sublabel="emulators, real routes" data-node-context="The Collaborator: developer harness (thin)">
+          <title>verify skill · emulators, real routes · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="242" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="242" width="230" height="48" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(656 248) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="264" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">verify skill</text>
+        <text data-detail="context" x="765" y="280" class="t-muted" font-size="9" text-anchor="middle">emulators, real routes</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-specs" data-node-id="s2s-harness-map-dev-l-specs" data-node-label="context-v specs + plans" data-node-kind="database" data-node-sublabel="roles, status frontmatter" data-node-context="Lossless: developer harness (deep)">
+          <title>context-v specs + plans · roles, status frontmatter · Lossless: developer harness (deep)</title>
+          <rect x="40" y="328" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="328" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(46 334) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="350" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">context-v specs + plans</text>
+        <text data-detail="context" x="155" y="366" class="t-muted" font-size="9" text-anchor="middle">roles, status frontmatter</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-docs" data-node-id="s2s-harness-map-dev-c-docs" data-node-label="docs/ design docs" data-node-kind="database" data-node-sublabel="signed off, flat" data-node-context="The Collaborator: developer harness (thin)">
+          <title>docs/ design docs · signed off, flat · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="328" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="328" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(656 334) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="350" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">docs/ design docs</text>
+        <text data-detail="context" x="765" y="366" class="t-muted" font-size="9" text-anchor="middle">signed off, flat</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-handoff" data-node-id="s2s-harness-map-dev-l-handoff" data-node-label="Handoffs + Pickup files" data-node-kind="database" data-node-sublabel="git state first" data-node-context="Lossless: developer harness (deep)">
+          <title>Handoffs + Pickup files · git state first · Lossless: developer harness (deep)</title>
+          <rect x="40" y="388" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="388" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(46 394) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="410" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Handoffs + Pickup files</text>
+        <text data-detail="context" x="155" y="426" class="t-muted" font-size="9" text-anchor="middle">git state first</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-opener" data-node-id="s2s-harness-map-dev-c-opener" data-node-label="Session opener TODOs" data-node-kind="database" data-node-sublabel="carried-over platform work" data-node-context="The Collaborator: developer harness (thin)">
+          <title>Session opener TODOs · carried-over platform work · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="388" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="388" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(656 394) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="410" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Session opener TODOs</text>
+        <text data-detail="context" x="765" y="426" class="t-muted" font-size="9" text-anchor="middle">carried-over platform work</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-issues" data-node-id="s2s-harness-map-dev-l-issues" data-node-label="Issues + Tasks.md" data-node-kind="database" data-node-sublabel="separate pile" data-node-context="Lossless: developer harness (deep)">
+          <title>Issues + Tasks.md · separate pile · Lossless: developer harness (deep)</title>
+          <rect x="40" y="448" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="448" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(46 454) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="470" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Issues + Tasks.md</text>
+        <text data-detail="context" x="155" y="486" class="t-muted" font-size="9" text-anchor="middle">separate pile</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-todo" data-node-id="s2s-harness-map-dev-c-todo" data-node-label="TODO.md" data-node-kind="database" data-node-sublabel="stale since July" data-node-context="The Collaborator: developer harness (thin)">
+          <title>TODO.md · stale since July · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="448" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="448" width="230" height="48" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(656 454) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="470" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">TODO.md</text>
+        <text data-detail="context" x="765" y="486" class="t-muted" font-size="9" text-anchor="middle">stale since July</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-tests" data-node-id="s2s-harness-map-dev-l-tests" data-node-label="vitest, pytest" data-node-kind="backend" data-node-sublabel="platform tests" data-node-context="Lossless: developer harness (deep)">
+          <title>vitest, pytest · platform tests · Lossless: developer harness (deep)</title>
+          <rect x="40" y="534" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="534" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 540) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="556" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">vitest, pytest</text>
+        <text data-detail="context" x="155" y="572" class="t-muted" font-size="9" text-anchor="middle">platform tests</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-tests" data-node-id="s2s-harness-map-dev-c-tests" data-node-label="functions/test" data-node-kind="backend" data-node-sublabel="platform half" data-node-context="The Collaborator: developer harness (thin)">
+          <title>functions/test · platform half · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="534" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="534" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(656 540) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="556" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">functions/test</text>
+        <text data-detail="context" x="765" y="572" class="t-muted" font-size="9" text-anchor="middle">platform half</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-drives" data-node-id="s2s-harness-map-dev-l-drives" data-node-label="Browser-drive blueprint" data-node-kind="backend" data-node-sublabel="e2e harness, prove scripts" data-node-context="Lossless: developer harness (deep)">
+          <title>Browser-drive blueprint · e2e harness, prove scripts · Lossless: developer harness (deep)</title>
+          <rect x="40" y="594" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="594" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 600) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="616" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Browser-drive blueprint</text>
+        <text data-detail="context" x="155" y="632" class="t-muted" font-size="9" text-anchor="middle">e2e harness, prove scripts</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-drives" data-node-id="s2s-harness-map-dev-c-drives" data-node-label="Ad-hoc browser drives" data-node-kind="backend" data-node-sublabel="scratchpad, not kept" data-node-context="The Collaborator: developer harness (thin)">
+          <title>Ad-hoc browser drives · scratchpad, not kept · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="594" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="594" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(656 600) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="616" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Ad-hoc browser drives</text>
+        <text data-detail="context" x="765" y="632" class="t-muted" font-size="9" text-anchor="middle">scratchpad, not kept</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-watch" data-node-id="s2s-harness-map-dev-l-watch" data-node-label="deploy-watch.yml" data-node-kind="backend" data-node-sublabel="did the deploy happen?" data-node-context="Lossless: developer harness (deep)">
+          <title>deploy-watch.yml · did the deploy happen? · Lossless: developer harness (deep)</title>
+          <rect x="40" y="654" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="654" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 660) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="676" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">deploy-watch.yml</text>
+        <text data-detail="context" x="155" y="692" class="t-muted" font-size="9" text-anchor="middle">did the deploy happen?</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-drift" data-node-id="s2s-harness-map-dev-c-drift" data-node-label="check-deploy-drift.sh" data-node-kind="backend" data-node-sublabel="is prod what I think?" data-node-context="The Collaborator: developer harness (thin)">
+          <title>check-deploy-drift.sh · is prod what I think? · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="654" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="654" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(656 660) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="676" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">check-deploy-drift.sh</text>
+        <text data-detail="context" x="765" y="692" class="t-muted" font-size="9" text-anchor="middle">is prod what I think?</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-ci" data-node-id="s2s-harness-map-dev-l-ci" data-node-label="ci.yml" data-node-kind="backend" data-node-sublabel="runs on every push" data-node-context="Lossless: developer harness (deep)">
+          <title>ci.yml · runs on every push · Lossless: developer harness (deep)</title>
+          <rect x="40" y="714" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="714" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 720) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="736" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">ci.yml</text>
+        <text data-detail="context" x="155" y="752" class="t-muted" font-size="9" text-anchor="middle">runs on every push</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-noci" data-node-id="s2s-harness-map-dev-c-noci" data-node-label="No CI" data-node-kind="backend" data-node-sublabel="gates run when remembered" data-node-context="The Collaborator: developer harness (thin)">
+          <title>No CI · gates run when remembered · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="714" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="714" width="230" height="48" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(656 720) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="736" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">No CI</text>
+        <text data-detail="context" x="765" y="752" class="t-muted" font-size="9" text-anchor="middle">gates run when remembered</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-git" data-node-id="s2s-harness-map-dev-l-git" data-node-label="git-conventions" data-node-kind="messagebus" data-node-sublabel="written convention" data-node-context="Lossless: developer harness (deep)">
+          <title>git-conventions · written convention · Lossless: developer harness (deep)</title>
+          <rect x="40" y="800" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="800" width="230" height="48" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(46 806) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="822" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">git-conventions</text>
+        <text data-detail="context" x="155" y="838" class="t-muted" font-size="9" text-anchor="middle">written convention</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-commits" data-node-id="s2s-harness-map-dev-c-commits" data-node-label="Lab-notebook commits" data-node-kind="messagebus" data-node-sublabel="measured, why-first" data-node-context="The Collaborator: developer harness (thin)">
+          <title>Lab-notebook commits · measured, why-first · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="800" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="800" width="230" height="48" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(656 806) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="822" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Lab-notebook commits</text>
+        <text data-detail="context" x="765" y="838" class="t-muted" font-size="9" text-anchor="middle">measured, why-first</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-changelog" data-node-id="s2s-harness-map-dev-l-changelog" data-node-label="changelog-conventions" data-node-kind="messagebus" data-node-sublabel="~206 entries" data-node-context="Lossless: developer harness (deep)">
+          <title>changelog-conventions · ~206 entries · Lossless: developer harness (deep)</title>
+          <rect x="40" y="860" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="860" width="230" height="48" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(46 866) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="882" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">changelog-conventions</text>
+        <text data-detail="context" x="155" y="898" class="t-muted" font-size="9" text-anchor="middle">~206 entries</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-c-nochangelog" data-node-id="s2s-harness-map-dev-c-nochangelog" data-node-label="No changelog" data-node-kind="messagebus" data-node-sublabel="commit bodies only" data-node-context="The Collaborator: developer harness (thin)">
+          <title>No changelog · commit bodies only · The Collaborator: developer harness (thin)</title>
+          <rect x="650" y="860" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="650" y="860" width="230" height="48" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(656 866) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="765" y="882" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">No changelog</text>
+        <text data-detail="context" x="765" y="898" class="t-muted" font-size="9" text-anchor="middle">commit bodies only</text>
+        </g>
+        <g id="s2s-harness-map-dev-node-l-tree" data-node-id="s2s-harness-map-dev-l-tree" data-node-label="Stow skills, Chroma, Spec Kit" data-node-kind="external" data-node-sublabel="machinery for scale" data-node-context="Lossless: developer harness (deep)">
+          <title>Stow skills, Chroma, Spec Kit · machinery for scale · Lossless: developer harness (deep)</title>
+          <rect x="40" y="946" width="230" height="48" rx="6" class="c-mask"/>
+          <rect x="40" y="946" width="230" height="48" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(46 952) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="968" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Stow skills, Chroma, Spec Kit</text>
+        <text data-detail="context" x="155" y="984" class="t-muted" font-size="9" text-anchor="middle">machinery for scale</text>
+        </g>
+        <!-- Connection labels -->
+        <g data-detail="context" data-edge-from="l-claude" data-edge-to="c-noclaude" data-edge-label="missing on their side" data-edge-key="0" data-edge-id="s2s-harness-map-dev-l-claude--c-noclaude">
+          <rect x="404.6" y="100" width="110.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="110" class="t-security" font-size="8" text-anchor="middle">missing on their side</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-settings" data-edge-to="c-settings" data-edge-label="shared" data-edge-key="1" data-edge-id="s2s-harness-map-dev-l-settings--c-settings">
+          <rect x="440.6" y="186" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="196" class="t-backend" font-size="8" text-anchor="middle">shared</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-skill" data-edge-to="c-verify" data-edge-label="shared" data-edge-key="2" data-edge-id="s2s-harness-map-dev-l-skill--c-verify">
+          <rect x="440.6" y="246" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="256" class="t-backend" font-size="8" text-anchor="middle">shared</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-specs" data-edge-to="c-docs" data-edge-label="similar" data-edge-key="3" data-edge-id="s2s-harness-map-dev-l-specs--c-docs">
+          <rect x="438.2" y="332" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="342" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-handoff" data-edge-to="c-opener" data-edge-label="similar" data-edge-key="4" data-edge-id="s2s-harness-map-dev-l-handoff--c-opener">
+          <rect x="438.2" y="392" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="402" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-issues" data-edge-to="c-todo" data-edge-label="similar" data-edge-key="5" data-edge-id="s2s-harness-map-dev-l-issues--c-todo">
+          <rect x="438.2" y="452" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="462" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-tests" data-edge-to="c-tests" data-edge-label="shared" data-edge-key="6" data-edge-id="s2s-harness-map-dev-l-tests--c-tests">
+          <rect x="440.6" y="538" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="548" class="t-backend" font-size="8" text-anchor="middle">shared</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-drives" data-edge-to="c-drives" data-edge-label="similar" data-edge-key="7" data-edge-id="s2s-harness-map-dev-l-drives--c-drives">
+          <rect x="438.2" y="598" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="608" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-watch" data-edge-to="c-drift" data-edge-label="similar" data-edge-key="8" data-edge-id="s2s-harness-map-dev-l-watch--c-drift">
+          <rect x="438.2" y="658" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="668" class="t-messagebus" font-size="8" text-anchor="middle">similar</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-ci" data-edge-to="c-noci" data-edge-label="missing on their side" data-edge-key="9" data-edge-id="s2s-harness-map-dev-l-ci--c-noci">
+          <rect x="404.6" y="718" width="110.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="728" class="t-security" font-size="8" text-anchor="middle">missing on their side</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-git" data-edge-to="c-commits" data-edge-label="shared" data-edge-key="10" data-edge-id="s2s-harness-map-dev-l-git--c-commits">
+          <rect x="440.6" y="804" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="814" class="t-backend" font-size="8" text-anchor="middle">shared</text>
+        </g>
+        <g data-detail="context" data-edge-from="l-changelog" data-edge-to="c-nochangelog" data-edge-label="missing on their side" data-edge-key="11" data-edge-id="s2s-harness-map-dev-l-changelog--c-nochangelog">
+          <rect x="404.6" y="864" width="110.8" height="14" rx="3" class="c-mask"/>
+          <text x="460" y="874" class="t-security" font-size="8" text-anchor="middle">missing on their side</text>
+        </g>
+        <!-- Boundary labels (foreground masks keep routes out of titles) -->
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="s2s-harness-map-dev-0" data-composition-frame-kind="region" data-composition-frame-label="Lossless: developer harness (deep)">
+          <rect data-graph-role="structural-frame-label-mask" x="14" y="76" width="193.6" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="18" y="89" class="t-cloud" font-size="9" font-weight="600">Lossless: developer harness (deep)</text>
+        </g>
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="s2s-harness-map-dev-1" data-composition-frame-kind="region" data-composition-frame-label="The Collaborator: developer harness (thin)">
+          <rect data-graph-role="structural-frame-label-mask" x="624" y="76" width="236.79999999999998" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="628" y="89" class="t-cloud" font-size="9" font-weight="600">The Collaborator: developer harness (thin)</text>
+        </g>
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="40" y="1046" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Instructions" data-legend-x="40" data-legend-baseline="1066" data-legend-width="103">
+            <rect x="40" y="1057" width="16" height="10" rx="2.5" class="c-frontend" stroke-width="1"/>
+            <text x="62" y="1066" class="t-muted" font-size="10" font-weight="500">Instructions</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Verification" data-legend-x="165" data-legend-baseline="1066" data-legend-width="103">
+            <rect x="165" y="1057" width="16" height="10" rx="2.5" class="c-backend" stroke-width="1"/>
+            <text x="187" y="1066" class="t-muted" font-size="10" font-weight="500">Verification</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Context and memory" data-legend-x="290" data-legend-baseline="1066" data-legend-width="133">
+            <rect x="290" y="1057" width="16" height="10" rx="2.5" class="c-database" stroke-width="1"/>
+            <text x="312" y="1066" class="t-muted" font-size="10" font-weight="500">Context and memory</text>
+          </g>
+          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Config and skills" data-legend-x="445" data-legend-baseline="1066" data-legend-width="128">
+            <rect x="445" y="1057" width="16" height="10" rx="2.5" class="c-security" stroke-width="1"/>
+            <text x="467" y="1066" class="t-muted" font-size="10" font-weight="500">Config and skills</text>
+          </g>
+          <g data-legend-semantic-kind="messagebus" data-legend-kind="messagebus" data-legend-label="Git and history" data-legend-x="595" data-legend-baseline="1066" data-legend-width="118">
+            <rect x="595" y="1057" width="16" height="10" rx="2.5" class="c-messagebus" stroke-width="1"/>
+            <text x="617" y="1066" class="t-muted" font-size="10" font-weight="500">Git and history</text>
+          </g>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Tree machinery" data-legend-x="735" data-legend-baseline="1066" data-legend-width="113">
+            <rect x="735" y="1057" width="16" height="10" rx="2.5" class="c-external" stroke-width="1"/>
+            <text x="757" y="1066" class="t-muted" font-size="10" font-weight="500">Tree machinery</text>
+          </g>
+        </g>
+      </svg>

@@ -1,0 +1,533 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Harness map: developer-agents layer",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "frontend": {
+          "label": "Instructions"
+        },
+        "security": {
+          "label": "Config and skills"
+        },
+        "database": {
+          "label": "Context and memory"
+        },
+        "backend": {
+          "label": "Verification"
+        },
+        "messagebus": {
+          "label": "Git and history"
+        },
+        "external": {
+          "label": "Tree machinery"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "l-claude",
+      "type": "frontend",
+      "label": "CLAUDE.md in layers",
+      "sublabel": "anchor to app",
+      "pos": [
+        40,
+        96
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-noclaude",
+      "type": "frontend",
+      "label": "No repo-wide CLAUDE.md",
+      "sublabel": "nothing at any commit",
+      "pos": [
+        650,
+        96
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-settings",
+      "type": "security",
+      "label": "settings.local.json",
+      "sublabel": "two entries, tracked",
+      "pos": [
+        40,
+        182
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-settings",
+      "type": "security",
+      "label": ".claude/settings.json",
+      "sublabel": "~210 allow entries",
+      "pos": [
+        650,
+        182
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-skill",
+      "type": "security",
+      "label": "decile-hub-interface skill",
+      "sublabel": "real-data operating guide",
+      "pos": [
+        40,
+        242
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-verify",
+      "type": "security",
+      "label": "verify skill",
+      "sublabel": "emulators, real routes",
+      "pos": [
+        650,
+        242
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-specs",
+      "type": "database",
+      "label": "context-v specs + plans",
+      "sublabel": "roles, status frontmatter",
+      "pos": [
+        40,
+        328
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-docs",
+      "type": "database",
+      "label": "docs/ design docs",
+      "sublabel": "signed off, flat",
+      "pos": [
+        650,
+        328
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-handoff",
+      "type": "database",
+      "label": "Handoffs + Pickup files",
+      "sublabel": "git state first",
+      "pos": [
+        40,
+        388
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-opener",
+      "type": "database",
+      "label": "Session opener TODOs",
+      "sublabel": "carried-over platform work",
+      "pos": [
+        650,
+        388
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-issues",
+      "type": "database",
+      "label": "Issues + Tasks.md",
+      "sublabel": "separate pile",
+      "pos": [
+        40,
+        448
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-todo",
+      "type": "database",
+      "label": "TODO.md",
+      "sublabel": "stale since July",
+      "pos": [
+        650,
+        448
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-tests",
+      "type": "backend",
+      "label": "vitest, pytest",
+      "sublabel": "platform tests",
+      "pos": [
+        40,
+        534
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-tests",
+      "type": "backend",
+      "label": "functions/test",
+      "sublabel": "platform half",
+      "pos": [
+        650,
+        534
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-drives",
+      "type": "backend",
+      "label": "Browser-drive blueprint",
+      "sublabel": "e2e harness, prove scripts",
+      "pos": [
+        40,
+        594
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-drives",
+      "type": "backend",
+      "label": "Ad-hoc browser drives",
+      "sublabel": "scratchpad, not kept",
+      "pos": [
+        650,
+        594
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-watch",
+      "type": "backend",
+      "label": "deploy-watch.yml",
+      "sublabel": "did the deploy happen?",
+      "pos": [
+        40,
+        654
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-drift",
+      "type": "backend",
+      "label": "check-deploy-drift.sh",
+      "sublabel": "is prod what I think?",
+      "pos": [
+        650,
+        654
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-ci",
+      "type": "backend",
+      "label": "ci.yml",
+      "sublabel": "runs on every push",
+      "pos": [
+        40,
+        714
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-noci",
+      "type": "backend",
+      "label": "No CI",
+      "sublabel": "gates run when remembered",
+      "pos": [
+        650,
+        714
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-git",
+      "type": "messagebus",
+      "label": "git-conventions",
+      "sublabel": "written convention",
+      "pos": [
+        40,
+        800
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-commits",
+      "type": "messagebus",
+      "label": "Lab-notebook commits",
+      "sublabel": "measured, why-first",
+      "pos": [
+        650,
+        800
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-changelog",
+      "type": "messagebus",
+      "label": "changelog-conventions",
+      "sublabel": "~206 entries",
+      "pos": [
+        40,
+        860
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-nochangelog",
+      "type": "messagebus",
+      "label": "No changelog",
+      "sublabel": "commit bodies only",
+      "pos": [
+        650,
+        860
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-tree",
+      "type": "external",
+      "label": "Stow skills, Chroma, Spec Kit",
+      "sublabel": "machinery for scale",
+      "pos": [
+        40,
+        946
+      ],
+      "size": [
+        230,
+        48
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Lossless: developer harness (deep)",
+      "wraps": [
+        "l-claude",
+        "l-settings",
+        "l-skill",
+        "l-specs",
+        "l-handoff",
+        "l-issues",
+        "l-tests",
+        "l-drives",
+        "l-watch",
+        "l-ci",
+        "l-git",
+        "l-changelog",
+        "l-tree"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "The Collaborator: developer harness (thin)",
+      "wraps": [
+        "c-noclaude",
+        "c-settings",
+        "c-verify",
+        "c-docs",
+        "c-opener",
+        "c-todo",
+        "c-tests",
+        "c-drives",
+        "c-drift",
+        "c-noci",
+        "c-commits",
+        "c-nochangelog"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "l-claude--c-noclaude",
+      "from": "l-claude",
+      "to": "c-noclaude",
+      "label": "missing on their side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-settings--c-settings",
+      "from": "l-settings",
+      "to": "c-settings",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-skill--c-verify",
+      "from": "l-skill",
+      "to": "c-verify",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-specs--c-docs",
+      "from": "l-specs",
+      "to": "c-docs",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-handoff--c-opener",
+      "from": "l-handoff",
+      "to": "c-opener",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-issues--c-todo",
+      "from": "l-issues",
+      "to": "c-todo",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-tests--c-tests",
+      "from": "l-tests",
+      "to": "c-tests",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-drives--c-drives",
+      "from": "l-drives",
+      "to": "c-drives",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-watch--c-drift",
+      "from": "l-watch",
+      "to": "c-drift",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-ci--c-noci",
+      "from": "l-ci",
+      "to": "c-noci",
+      "label": "missing on their side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-git--c-commits",
+      "from": "l-git",
+      "to": "c-commits",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-changelog--c-nochangelog",
+      "from": "l-changelog",
+      "to": "c-nochangelog",
+      "label": "missing on their side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ]
+}

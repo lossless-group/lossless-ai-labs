@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Shape against harness: monolith and pseudomonorepo",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {
+          "label": "Repo shape"
+        },
+        "frontend": {
+          "label": "Instructions"
+        },
+        "security": {
+          "label": "Config, skills, commands"
+        },
+        "database": {
+          "label": "Context and memory"
+        },
+        "backend": {
+          "label": "In-product harness"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "m-repo",
+      "type": "external",
+      "label": "One repo, one app",
+      "sublabel": "one developer",
+      "pos": [
+        220,
+        100
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "m-exam",
+      "type": "backend",
+      "label": "Product: exam chain",
+      "sublabel": "ledger, validator, sim",
+      "pos": [
+        40,
+        230
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "m-platform",
+      "type": "frontend",
+      "label": "Dev: no entry point",
+      "sublabel": "sessions start cold",
+      "pos": [
+        220,
+        230
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "m-claude",
+      "type": "security",
+      "label": ".claude/",
+      "sublabel": "skill, command, allowlist",
+      "pos": [
+        400,
+        230
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-anchor",
+      "type": "frontend",
+      "label": "Anchor AGENTS.md",
+      "sublabel": "tree rules",
+      "pos": [
+        880,
+        100
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-ailabs",
+      "type": "frontend",
+      "label": "ai-labs CLAUDE.md",
+      "sublabel": "uv, MCP scope, corpus",
+      "pos": [
+        880,
+        210
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-memopop",
+      "type": "frontend",
+      "label": "memopop-ai CLAUDE.md",
+      "sublabel": "workspace layout",
+      "pos": [
+        1120,
+        210
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-augment",
+      "type": "frontend",
+      "label": "augment-it CLAUDE.md",
+      "sublabel": "+ Spec Kit constitution",
+      "pos": [
+        640,
+        320
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-skills",
+      "type": "security",
+      "label": "Shared skills library",
+      "sublabel": "Stow into the harness",
+      "pos": [
+        880,
+        320
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-orch",
+      "type": "frontend",
+      "label": "Orchestrator CLAUDE.md",
+      "sublabel": "+ runtime AGENTS.md",
+      "pos": [
+        1120,
+        320
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-contextv",
+      "type": "database",
+      "label": "context-v + changelog",
+      "sublabel": "at every level",
+      "pos": [
+        880,
+        440
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-corpus",
+      "type": "database",
+      "label": "Chroma corpus",
+      "sublabel": "across the tree",
+      "pos": [
+        880,
+        580
+      ],
+      "size": [
+        160,
+        52
+      ]
+    },
+    {
+      "id": "t-product",
+      "type": "backend",
+      "label": "Product harness",
+      "sublabel": "AGENTS.md, outlines, agents",
+      "pos": [
+        1120,
+        580
+      ],
+      "size": [
+        160,
+        52
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Monolith: The Collaborator",
+      "wraps": [
+        "m-repo",
+        "m-exam",
+        "m-platform",
+        "m-claude"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Pseudomonorepo: Lossless",
+      "wraps": [
+        "t-anchor",
+        "t-ailabs",
+        "t-memopop",
+        "t-augment",
+        "t-skills",
+        "t-orch",
+        "t-contextv",
+        "t-corpus",
+        "t-product"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "m-repo-exam",
+      "from": "m-repo",
+      "to": "m-exam",
+      "fromSide": "left",
+      "toSide": "top"
+    },
+    {
+      "id": "m-repo-platform",
+      "from": "m-repo",
+      "to": "m-platform",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "m-repo-claude",
+      "from": "m-repo",
+      "to": "m-claude",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "t-anchor-ailabs",
+      "from": "t-anchor",
+      "to": "t-ailabs",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "t-ailabs-memopop",
+      "from": "t-ailabs",
+      "to": "t-memopop",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t-ailabs-augment",
+      "from": "t-ailabs",
+      "to": "t-augment",
+      "fromSide": "left",
+      "toSide": "top"
+    },
+    {
+      "id": "t-memopop-orch",
+      "from": "t-memopop",
+      "to": "t-orch",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "t-skills-augment",
+      "from": "t-skills",
+      "to": "t-augment",
+      "label": "linked",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "t-skills-orch",
+      "from": "t-skills",
+      "to": "t-orch",
+      "label": "linked",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t-augment-contextv",
+      "from": "t-augment",
+      "to": "t-contextv",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "t-orch-contextv",
+      "from": "t-orch",
+      "to": "t-contextv",
+      "fromSide": "bottom",
+      "toSide": "right"
+    },
+    {
+      "id": "t-contextv-corpus",
+      "from": "t-contextv",
+      "to": "t-corpus",
+      "label": "ingest",
+      "labelAt": [
+        960,
+        536
+      ],
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "t-orch-product",
+      "from": "t-orch",
+      "to": "t-product",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}
