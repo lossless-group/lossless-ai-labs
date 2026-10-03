@@ -62,3 +62,10 @@
 	path = hope-ai
 	url = https://github.com/lossless-group/hope-ai.git
 	branch = main
+# dialogiq: a friend's app (jdema-io/pub-interface, private). Mounted only so
+# Michael can review its code, architecture, and agent-harness setup.
+# Read-only from this tree: never commit or push inside it.
+[submodule "dialogiq"]
+	path = dialogiq
+	url = https://github.com/jdema-io/pub-interface.git
+	branch = main

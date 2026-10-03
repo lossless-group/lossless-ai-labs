@@ -27,6 +27,7 @@ list — this is a snapshot):
 | `memopop-ai/` | multi-agent investment-memo orchestration (LangGraph) |
 | `context-vigilance-kit/` | the installable context-v plugin, templates, and starters (fresh repo, 2026-10-01). The tree-wide corpus, Chroma DB, and ingesters moved to `../context-v-corpus/` at the anchor root |
 | `hope-ai/` | agent skill, templates, and scripts for the ChoiceCenter 100-day Personal Strategic Plan (PSP); not an app (fresh repo, 2026-10-02) |
+| `dialogiq/` | **a friend's app, not ours** (`jdema-io/pub-interface`, private). Mounted only so Michael can review its code, architecture, and harness setup. Read-only: never commit, push, or refactor inside it. |
 | `studies/` | pinned upstream repos as reference collections (memory-layers, open-specs, etc.); read upstream code, do not paraphrase from training data |
 | `splash/` | GitHub-Pages-deployed showcase for the tree |
 | `packages/` | packages graduating toward independent publication |
