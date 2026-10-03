@@ -69,3 +69,7 @@
 	path = studies/collaborations/dialogiq/dialogiq-codebase
 	url = https://github.com/jdema-io/pub-interface.git
 	branch = main
+[submodule "studies/collaborations/phoenixcapera/instadeck-v2"]
+	path = studies/collaborations/phoenixcapera/instadeck-v2
+	url = https://github.com/acpcareconnectdev-ui/deck-v2.git
+	branch = main
