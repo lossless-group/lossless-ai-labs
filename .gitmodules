@@ -66,6 +66,6 @@
 # Michael can review its code, architecture, and agent-harness setup.
 # Read-only from this tree: never commit or push inside it.
 [submodule "dialogiq"]
-	path = dialogiq
+	path = studies/collaborations/dialogiq/dialogiq-codebase
 	url = https://github.com/jdema-io/pub-interface.git
 	branch = main
