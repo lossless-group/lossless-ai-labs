@@ -67,9 +67,26 @@ publish: true
   Don't inventory the whole tree. Stop at what actually reaches
   `{lossless_projects}`, and keep the tree layer to a page.
 
+## Two layers first
+
+Before bucketing, split both inventories by layer (see "Two harnesses, not
+one" in the exploration):
+
+- **Developer-agents harness:** how coding agents help build the software.
+- **In-product-agents harness:** how the product's own agents generate its
+  output. For Lossless, that means memopop-orchestrator's memo pipeline
+  (and augment-it's in-product agents, if any).
+
+**Compare only within a layer.** Never pair one side's product artifact
+with the other side's dev artifact. A content-generation ledger is not a
+counterpart to an issues folder. Then produce a **layer map**: for each
+side and each layer, a depth rating (thin, moderate or deep) with a
+one-line justification. The layer map is the headline of the whole study.
+
 ## The four comparisons
 
-Sort every artifact from both sides into exactly one bucket. Then write a
+Run the four comparisons **inside each layer**. Sort every artifact from
+both sides into exactly one bucket within its layer. Then write a
 narrative for each bucket. Prose, with paths on both sides, not just a table.
 
 1. **Shared.** Both sides have essentially the same artifact (for example,
@@ -91,6 +108,10 @@ give your reasoning.
 Four separate sections. Keep them separate, because they'll be shown to
 different readers.
 
+Organize each of the four by layer. Expect the strongest lessons to flow
+across layers: each side teaches from the layer where it's deep and learns
+in the layer where it's thin. Say so plainly if the evidence shows that.
+
 - **Insights for Lossless.** What their silo shows us about our own. Include
   where we may be overbuilt.
 - **Insights for the Collaborator.** What our silo shows about theirs.
@@ -109,14 +130,15 @@ Use Mermaid by default. If the vendored `archify` skill is available
 (`../context-v/agent-skills/archify/`, a git submodule that may not be
 initialized), you may use it for architecture views instead. At least these:
 
-1. **Side-by-side harness map.** Each side's artifacts grouped by category,
-   with shared and similar pairs linked across.
-2. **Two workflow loops.** Idea to agent work to commit to memory, for each
-   side. Use step 1's diagram for theirs, and draw ours for
-   `{lossless_projects}`.
-3. **Shape against harness.** How monolith and monorepo architecture each
+1. **Layer map.** Two sides by two layers, showing depth in each cell.
+2. **Side-by-side harness maps, one per layer.** Each side's artifacts
+   grouped by category, with shared and similar pairs linked across.
+3. **Workflow loops per layer.** The developer loop for each side, and the
+   in-product generation loop for each side (their exam pipeline, our memo
+   pipeline). Use step 1's diagrams for theirs.
+4. **Shape against harness.** How monolith and monorepo architecture each
    shape where the instructions and context live.
-4. **(Optional) A bucket overview.** Counts or a quadrant of
+5. **(Optional) A bucket overview.** Counts or a quadrant of
    shared, similar, different, and missing.
 
 Every diagram must be valid Mermaid that renders on GitHub. Step 3 will
@@ -128,13 +150,15 @@ One file: `{notes}/02-Compare-Contrast-Harness-Artifacts__{collaborator}.md`,
 with frontmatter like this plan's (`status: Draft`, `publish: true`). Section
 order:
 
-1. **Highlights.** Five to eight bullets a busy reader could stop after.
+1. **Highlights.** Five to eight bullets a busy reader could stop after,
+   led by the layer map's headline.
 2. Snapshot (both SHAs, and what was compared).
-3. The diagrams.
-4. Shared, Similar, Different, Missing (the narratives).
-5. Insights for Lossless, then Insights for the Collaborator.
-6. Recommendations for Lossless, then Recommendations for the Collaborator.
-7. Open questions to ask them.
+3. **Layer map.**
+4. The diagrams.
+5. Shared, Similar, Different, Missing (the narratives), within each layer.
+6. Insights for Lossless, then Insights for the Collaborator.
+7. Recommendations for Lossless, then Recommendations for the Collaborator.
+8. Open questions to ask them.
 
 ## Guardrails
 
@@ -152,7 +176,9 @@ order:
 ## Done when
 
 - [ ] Every artifact in step 1's inventory, and every Lossless artifact you
-      inventoried, sits in exactly one bucket.
+      inventoried, has a layer and sits in exactly one bucket within it.
+- [ ] No pairing crosses layers.
+- [ ] The layer map rates all four cells, each with a justification.
 - [ ] All four insight and recommendation sections exist. Collaborator
       recommendations are five or fewer.
 - [ ] At least three Mermaid diagrams, all valid.

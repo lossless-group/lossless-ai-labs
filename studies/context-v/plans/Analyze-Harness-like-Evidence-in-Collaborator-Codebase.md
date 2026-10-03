@@ -56,6 +56,21 @@ everything the agent work has left behind. Treat the repo as an archaeological
 site. Some evidence is deliberate (an instruction file). Some is incidental
 (a commit message that reads like an agent wrote it).
 
+**Two layers.** Tag every artifact with the harness it serves (see "Two
+harnesses, not one" in the exploration):
+
+- **Developer-agents harness (dev):** how coding agents help *build the
+  software*. Examples: instruction files, dev skills, specs, changelogs,
+  handoffs, CI.
+- **In-product-agents harness (product):** how the product's own agents
+  *generate its output*. Examples: runtime prompts, output skeletons and
+  validators, generation commands, evaluation suites, craft ledgers.
+
+Sort by what an artifact is *for*, not its file type. A slash command that
+drives content generation is product. A skill for running the dev
+emulators is dev. If an artifact truly serves both, tag it "both" and say
+why.
+
 ## What to look for
 
 Search widely. Most of these won't exist, and an absence is a finding too.
@@ -116,13 +131,17 @@ like this plan's (`status: Draft`, `publish: true`). Sections:
 
 1. **Snapshot.** SHA, last commit date, commit count, branch count, and a
    one-paragraph description of what the system is.
-2. **Inventory table.** One row per artifact: category, path, size (lines),
-   first and last commit date, and a one-line description.
+2. **Inventory table.** One row per artifact: layer (dev, product or both),
+   category, path, size (lines), first and last commit date, and a one-line
+   description.
 3. **Category findings.** One subsection per category above. What exists,
    with paths and short quotes (a few lines at most). What's absent.
-4. **How they work: the inferred workflow.** A narrative of their loop, as
+4. **How they work: the inferred workflow.** A narrative of their loops, as
    best the evidence shows: how an idea becomes agent work becomes a commit.
-   Include one Mermaid diagram of that loop. Label every claim **observed**
+   Keep the developer loop and the in-product loop distinct, and include a
+   Mermaid diagram for each (or one diagram with the two clearly separated).
+   Close with a short **layer profile**: how deep each harness is, in a
+   sentence or two each. Label every claim **observed**
    (cited) or **inferred** (reasoning shown).
 5. **Standouts.** Three to seven things that look unusually good, unusual, or
    worth a closer look in step 2.

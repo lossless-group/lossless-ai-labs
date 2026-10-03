@@ -90,7 +90,31 @@ studies/collaborations/<name>/
 The submodule's `.gitmodules` entry carries a comment marking it as not
 ours and read-only.
 
+## Two harnesses, not one
+
+Any team building an AI product with coding agents runs **two harnesses**.
+Compare them separately, or depth in one hides thinness in the other.
+
+| Layer | What it's for | Typical artifacts |
+|---|---|---|
+| **Developer-agents harness** | How coding agents help *build the software*: get oriented, plan, implement, verify, remember across sessions | `CLAUDE.md` / `AGENTS.md`, `context-v/` or Spec Kit, changelogs, handoffs, dev skills and commands, permission policy, CI, git conventions |
+| **In-product-agents harness** | How the product's own agents *generate the product's output*: prompts, contracts, pipelines, evaluation | Runtime prompts and rulebooks, output skeletons and validators, generation commands, simulation and evaluation suites, craft or findings ledgers |
+
+The two can share a tool (a slash command can drive either) and still be
+different layers. Sort each artifact by **what it's for**, not by its
+file type.
+
+The first case showed why this matters. Each silo built depth where its
+pain was. A friend focused on content quality built a rigorous
+in-product harness on top of a thin developer harness. We built a deep
+developer harness across many repos, while our in-product harness
+(memopop's memo pipeline, for example) measures far less. The most
+useful lessons flow **across** the layers: each side teaches from its
+strong layer and learns in its thin one.
+
 ## The comparison: dimensions to walk
+
+Walk these for **each layer separately**.
 
 These are prompts, not a checklist to fill in mechanically. Skip any that
 don't apply. For each one, note what **they** do, what **we** do, and
@@ -131,6 +155,8 @@ roughly like this:
 
 - **Snapshot.** What the codebase is, the commit we read (SHA + date), and
   which parts we looked at.
+- **Layer map.** Each side's depth in the developer-agents harness and the
+  in-product-agents harness, at a glance. This usually *is* the headline.
 - **Convergences.** Places where both silos arrived at the same idea on
   their own. These are the most trustworthy patterns.
 - **What we could take from them.** Concrete, each with a file path in

@@ -84,21 +84,27 @@ use:
 
 1. **Hero.** A title and a lede about silo against silo, and two short lines
    on who this is for (us, and them).
-2. **Highlights band.** Step 2's highlights as five to eight cards or stat
-   tiles: counts per bucket, the single biggest lesson each way.
-3. **The harness map.** Step 2's side-by-side map, rebuilt as a visual: two
-   columns (Lossless and `{public_name}`), with artifacts grouped by category
-   and lines joining shared and similar pairs. This is the centerpiece.
-4. **Two loops.** Each side's workflow loop (idea → agent work → commit →
-   memory), drawn in parallel so the differences show at a glance.
-5. **Shape against harness.** Monolith against monorepo, and where the
+2. **The layer map (the centerpiece).** A 2×2: Lossless and `{public_name}`
+   across, the developer-agents harness and the in-product-agents harness
+   down, with depth shown in each cell. Arrows show the main lesson flowing
+   from each side's deep layer to the other side's thin one. A reader who
+   sees only this should get the takeaway.
+3. **Highlights band.** Step 2's highlights as five to eight cards or stat
+   tiles: the biggest lesson each way, then counts per bucket.
+4. **The harness maps.** Step 2's side-by-side maps, one per layer, rebuilt
+   as visuals: two columns (Lossless and `{public_name}`), with artifacts
+   grouped by category and lines joining shared and similar pairs.
+5. **The loops, per layer.** Each side's developer loop, then each side's
+   in-product generation loop, drawn in parallel so the differences show at
+   a glance.
+6. **Shape against harness.** Monolith against monorepo, and where the
    instructions and context sit in each.
-6. **Shared / Similar / Different / Missing.** Four sections, each opening
+7. **Shared / Similar / Different / Missing, by layer.** Four sections, each opening
    with a one-sentence summary and a small visual, then the narrative.
-7. **Insights and recommendations.** Two clearly separated columns or tabs,
+8. **Insights and recommendations.** Two clearly separated columns or tabs,
    "For Lossless" and "For `{public_name}`", each with insights then ranked
-   recommendations.
-8. **Method and sources.** How the study ran, the date, a link to the
+   recommendations, labelled by layer.
+9. **Method and sources.** How the study ran, the date, a link to the
    exploration, and a note that the collaborator is anonymized on purpose.
 
 Above the fold, a reader should get the whole story from visuals and short
@@ -158,8 +164,8 @@ text alone. Everything below rewards someone who keeps scrolling.
 ## Done when
 
 - [ ] The page builds and passes every check in Verify.
-- [ ] The highlights, harness map and two loops all appear above the
-      detailed narrative.
+- [ ] The layer map appears right after the hero, and the highlights,
+      harness maps and loops all come before the detailed narrative.
 - [ ] Every claim on the page traces back to step 1 or step 2 (no new
       findings invented for the page).
 - [ ] The anonymity grep over `dist/` comes back empty.
