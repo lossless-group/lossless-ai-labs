@@ -1,0 +1,176 @@
+<svg class="dvi-svg" data-diagram="loop-dev-dididecks" focusable="false" viewBox="0 0 884 652" role="img" lang="en" aria-labelledby="dvi-loop-dev-dididecks-archify-diagram-title dvi-loop-dev-dididecks-archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="dvi-loop-dev-dididecks-archify-diagram-title">dididecks-ai: developer loop</title>
+        <desc id="dvi-loop-dev-dididecks-archify-diagram-description">The dididecks-ai developer loop in the same four lanes. An exploration or spec in context-v, a plan per phase, Claude Code implementing with layered CLAUDE.md files and skills, a browser walk with no automated tests, a changelog entry and sitemap status flip, a commit to development, submodule pointer bumps and a shell release, then Vercel and Pages deploys.</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="dvi-loop-dev-dididecks-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="dvi-loop-dev-dididecks-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="dvi-loop-dev-dididecks-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="dvi-loop-dev-dididecks-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="dvi-loop-dev-dididecks-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <!-- Swimlanes -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="dvi-loop-dev-dididecks-lane-0" x="40" y="52" width="828" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Human</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="dvi-loop-dev-dididecks-lane-1" x="40" y="176" width="828" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Agent</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="dvi-loop-dev-dididecks-lane-2" x="40" y="300" width="828" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Checks</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="dvi-loop-dev-dididecks-lane-3" x="40" y="424" width="828" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Memory</text>
+        <!-- Phase headers -->
+        <line x1="68" y1="35" x2="160" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="68" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="114" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Idea</text>
+        <line x1="188" y1="35" x2="280" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="188" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="234" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Plan</text>
+        <line x1="348" y1="35" x2="440" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="348" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="394" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Agent work</text>
+        <line x1="468" y1="35" x2="560" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="468" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="514" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Verify</text>
+        <line x1="588" y1="35" x2="840" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="588" y="27" width="252" height="16" rx="4" class="c-mask"/>
+        <text x="714" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Record, commit, deploy</text>
+        <!-- Workflow groups -->
+        <!-- Edge paths -->
+        <path data-edge-from="build" data-edge-to="walk" data-edge-key="0" data-edge-id="dvi-loop-dev-dididecks-build-walk" data-composition-points="394,269;394,367;448,367" d="M 394 269 L 394 367 L 448 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-dev-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="bump" data-edge-to="deploy" data-edge-key="1" data-edge-id="dvi-loop-dev-dididecks-bump-deploy" data-composition-points="794,217;794,145" d="M 794 217 L 794 145" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-dev-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="changelog" data-edge-to="commit" data-edge-key="2" data-edge-id="dvi-loop-dev-dididecks-changelog-commit" data-composition-points="634,465;634,269" d="M 634 465 L 634 269" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-dev-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="commit" data-edge-to="bump" data-edge-key="3" data-edge-id="dvi-loop-dev-dididecks-commit-bump" data-composition-points="700,243;728,243" d="M 700 243 L 728 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-dev-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="idea" data-edge-to="plan" data-edge-key="4" data-edge-id="dvi-loop-dev-dididecks-idea-plan" data-composition-points="180,119;234,119;234,217" d="M 180 119 L 234 119 L 234 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-dev-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="plan" data-edge-to="build" data-edge-key="5" data-edge-id="dvi-loop-dev-dididecks-plan-build" data-composition-points="300,243;328,243" d="M 300 243 L 328 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-dev-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="walk" data-edge-to="changelog" data-edge-key="6" data-edge-id="dvi-loop-dev-dididecks-walk-changelog" data-composition-points="514,393;514,491;568,491" d="M 514 393 L 514 491 L 568 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-dev-dididecks-arrowhead-emphasis)"/>
+        <!-- Nodes -->
+        <g id="dvi-loop-dev-dididecks-node-idea" data-node-id="dvi-loop-dev-dididecks-idea" data-node-label="Exploration or spec" data-node-kind="frontend" data-node-sublabel="in context-v" data-node-context="Human › Idea">
+          <title>Exploration or spec · in context-v · Human › Idea</title>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(54 99) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="10.8" font-weight="600" text-anchor="middle">Exploration or spec</text>
+          <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">in context-v</text>
+        </g>
+        <g id="dvi-loop-dev-dididecks-node-deploy" data-node-id="dvi-loop-dev-dididecks-deploy" data-node-label="Vercel, Pages" data-node-kind="external" data-node-sublabel="each site, the splash" data-node-context="Human › Record, commit, deploy">
+          <title>Vercel, Pages · each site, the splash · Human › Record, commit, deploy</title>
+          <rect x="728" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="728" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(734 99) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="794" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Vercel, Pages</text>
+          <text data-detail="context" x="794" y="131" class="t-muted" font-size="8" text-anchor="middle">each site, the splash</text>
+        </g>
+        <g id="dvi-loop-dev-dididecks-node-plan" data-node-id="dvi-loop-dev-dididecks-plan" data-node-label="Plan per phase" data-node-kind="frontend" data-node-sublabel="context-v/plans" data-node-context="Agent › Plan">
+          <title>Plan per phase · context-v/plans · Agent › Plan</title>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(174 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="234" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Plan per phase</text>
+          <text data-detail="context" x="234" y="255" class="t-muted" font-size="8" text-anchor="middle">context-v/plans</text>
+        </g>
+        <g id="dvi-loop-dev-dididecks-node-build" data-node-id="dvi-loop-dev-dididecks-build" data-node-label="Implement" data-node-kind="backend" data-node-sublabel="CLAUDE.md layers, skills" data-node-context="Agent › Agent work">
+          <title>Implement · CLAUDE.md layers, skills · Agent › Agent work</title>
+          <rect x="328" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="328" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(334 223) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="394" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Implement</text>
+          <text data-detail="context" x="394" y="255" class="t-muted" font-size="8" text-anchor="middle">CLAUDE.md layers, skills</text>
+        </g>
+        <g id="dvi-loop-dev-dididecks-node-commit" data-node-id="dvi-loop-dev-dididecks-commit" data-node-label="Commit" data-node-kind="messagebus" data-node-sublabel="to development" data-node-context="Agent › Record, commit, deploy">
+          <title>Commit · to development · Agent › Record, commit, deploy</title>
+          <rect x="568" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="568" y="217" width="132" height="52" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(574 223) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="634" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Commit</text>
+          <text data-detail="context" x="634" y="255" class="t-muted" font-size="8" text-anchor="middle">to development</text>
+        </g>
+        <g id="dvi-loop-dev-dididecks-node-bump" data-node-id="dvi-loop-dev-dididecks-bump" data-node-label="Bump pointers" data-node-kind="messagebus" data-node-sublabel="publish the shell" data-node-context="Agent › Record, commit, deploy">
+          <title>Bump pointers · publish the shell · Agent › Record, commit, deploy</title>
+          <rect x="728" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="728" y="217" width="132" height="52" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(734 223) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="794" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Bump pointers</text>
+          <text data-detail="context" x="794" y="255" class="t-muted" font-size="8" text-anchor="middle">publish the shell</text>
+        </g>
+        <g id="dvi-loop-dev-dididecks-node-walk" data-node-id="dvi-loop-dev-dididecks-walk" data-node-label="Browser walk" data-node-kind="backend" data-node-sublabel="no automated tests" data-node-context="Checks › Verify">
+          <title>Browser walk · no automated tests · Checks › Verify</title>
+          <rect x="448" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="448" y="341" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(454 347) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="514" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Browser walk</text>
+          <text data-detail="context" x="514" y="379" class="t-muted" font-size="8" text-anchor="middle">no automated tests</text>
+        </g>
+        <g id="dvi-loop-dev-dididecks-node-changelog" data-node-id="dvi-loop-dev-dididecks-changelog" data-node-label="Changelog entry" data-node-kind="database" data-node-sublabel="sitemap status flip" data-node-context="Memory › Record, commit, deploy">
+          <title>Changelog entry · sitemap status flip · Memory › Record, commit, deploy</title>
+          <rect x="568" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="568" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(574 471) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="634" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Changelog entry</text>
+          <text data-detail="context" x="634" y="503" class="t-muted" font-size="8" text-anchor="middle">sitemap status flip</text>
+        </g>
+        <!-- Edge labels -->
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="20" y="552" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Context" data-legend-x="20" data-legend-baseline="572" data-legend-width="74">
+            <rect x="20" y="564" width="14" height="9" rx="2" class="c-frontend" stroke-width="1"/>
+            <text x="42" y="572" class="t-muted" font-size="7.5" font-weight="500">Context</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Agent work and checks" data-legend-x="101" data-legend-baseline="572" data-legend-width="135">
+            <rect x="101" y="564" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+            <text x="123" y="572" class="t-muted" font-size="7.5" font-weight="500">Agent work and checks</text>
+          </g>
+          <g data-legend-semantic-kind="messagebus" data-legend-kind="messagebus" data-legend-label="Commit and deploy" data-legend-x="243" data-legend-baseline="572" data-legend-width="117">
+            <rect x="243" y="564" width="14" height="9" rx="2" class="c-messagebus" stroke-width="1"/>
+            <text x="265" y="572" class="t-muted" font-size="7.5" font-weight="500">Commit and deploy</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Memory" data-legend-x="367" data-legend-baseline="572" data-legend-width="70">
+            <rect x="367" y="564" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+            <text x="389" y="572" class="t-muted" font-size="7.5" font-weight="500">Memory</text>
+          </g>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Person or trigger" data-legend-x="444" data-legend-baseline="572" data-legend-width="117">
+            <rect x="444" y="564" width="14" height="9" rx="2" class="c-external" stroke-width="1"/>
+            <text x="466" y="572" class="t-muted" font-size="7.5" font-weight="500">Person or trigger</text>
+          </g>
+        </g>
+      </svg>

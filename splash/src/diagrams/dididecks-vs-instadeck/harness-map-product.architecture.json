@@ -1,0 +1,686 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Harness map: in-product-agents layer",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "security": {
+          "label": "Skills and prompts"
+        },
+        "database": {
+          "label": "Documents and knowledge"
+        },
+        "backend": {
+          "label": "Generator and render"
+        },
+        "messagebus": {
+          "label": "Judgement and evaluation"
+        },
+        "external": {
+          "label": "Memory and runtime"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "l-1",
+      "type": "security",
+      "label": "Deck skills",
+      "sublabel": "theme, DESIGN, ingest",
+      "pos": [
+        40,
+        96
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-1",
+      "type": "security",
+      "label": "19 product SKILL.md",
+      "sublabel": "registry, tool whitelist",
+      "pos": [
+        650,
+        96
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-2",
+      "type": "security",
+      "label": "deck-iteration-workflow",
+      "sublabel": "Scroll first, then Play",
+      "pos": [
+        40,
+        156
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-2",
+      "type": "security",
+      "label": "Canonical prompt",
+      "sublabel": "kept equal to the spec",
+      "pos": [
+        650,
+        156
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-3",
+      "type": "security",
+      "label": "slide-target",
+      "sublabel": "first of a slide-* family",
+      "pos": [
+        40,
+        216
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-3",
+      "type": "security",
+      "label": "Prompt packages",
+      "sublabel": "nine, with schemas",
+      "pos": [
+        650,
+        216
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-4",
+      "type": "security",
+      "label": "Skill pack copies",
+      "sublabel": "five have drifted",
+      "pos": [
+        40,
+        276
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-4",
+      "type": "security",
+      "label": "Prompt pin test",
+      "sublabel": "plus LLM machinery tests",
+      "pos": [
+        650,
+        276
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-5",
+      "type": "database",
+      "label": "Narratives NN-slug.md",
+      "sublabel": "plus DESIGN.md per client",
+      "pos": [
+        40,
+        362
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-5",
+      "type": "database",
+      "label": "01-source to 06-DESIGN",
+      "sublabel": "then slides/sNN.md",
+      "pos": [
+        650,
+        362
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-6",
+      "type": "database",
+      "label": "Slide archetype corpus",
+      "sublabel": "27 archetypes, data/",
+      "pos": [
+        40,
+        422
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-6",
+      "type": "database",
+      "label": "llm_knowledge",
+      "sublabel": "195 files",
+      "pos": [
+        650,
+        422
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-7",
+      "type": "database",
+      "label": "Spec row to component",
+      "sublabel": "June exploration",
+      "pos": [
+        40,
+        482
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-7",
+      "type": "database",
+      "label": "DeckSpec plus compiler",
+      "sublabel": "built, left unmounted",
+      "pos": [
+        650,
+        482
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-8",
+      "type": "backend",
+      "label": "Claude Code + deck-shell",
+      "sublabel": "an operator drives it",
+      "pos": [
+        40,
+        568
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-8",
+      "type": "backend",
+      "label": "Whole-deck HTML service",
+      "sublabel": "runs unattended",
+      "pos": [
+        650,
+        568
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-9",
+      "type": "backend",
+      "label": "deck-export",
+      "sublabel": "the browser produces",
+      "pos": [
+        40,
+        628
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-9",
+      "type": "backend",
+      "label": "Chromium proof",
+      "sublabel": "the browser checks",
+      "pos": [
+        650,
+        628
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-10",
+      "type": "backend",
+      "label": "Play-UI step",
+      "sublabel": "nothing measures it",
+      "pos": [
+        40,
+        688
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-10",
+      "type": "backend",
+      "label": "Measured repair skills",
+      "sublabel": "failure to bounded fix",
+      "pos": [
+        650,
+        688
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-11",
+      "type": "messagebus",
+      "label": "Rank pill, DeckMatrix",
+      "sublabel": "continuous, in place",
+      "pos": [
+        40,
+        774
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-11",
+      "type": "messagebus",
+      "label": "Visual audit scorecard",
+      "sublabel": "eight dimensions, once",
+      "pos": [
+        650,
+        774
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-12",
+      "type": "messagebus",
+      "label": "DD citation popover",
+      "sublabel": "sources on the slide",
+      "pos": [
+        40,
+        834
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-12",
+      "type": "messagebus",
+      "label": "Due Diligence runtime",
+      "sublabel": "off the investor slides",
+      "pos": [
+        650,
+        834
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-13",
+      "type": "messagebus",
+      "label": "No frozen corpus",
+      "sublabel": "51 exported slides",
+      "pos": [
+        40,
+        894
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-13",
+      "type": "messagebus",
+      "label": "Frozen corpus, evidence",
+      "sublabel": "provider-free",
+      "pos": [
+        650,
+        894
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-14",
+      "type": "messagebus",
+      "label": "Human walk-through",
+      "sublabel": "acceptance by eye",
+      "pos": [
+        40,
+        954
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-14",
+      "type": "messagebus",
+      "label": "Offline and live runners",
+      "sublabel": "11 conditions",
+      "pos": [
+        650,
+        954
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-15",
+      "type": "messagebus",
+      "label": "Variants per slot",
+      "sublabel": "ranked by a human",
+      "pos": [
+        40,
+        1014
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-15",
+      "type": "messagebus",
+      "label": "One result per run",
+      "sublabel": "per upload",
+      "pos": [
+        650,
+        1014
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-16",
+      "type": "external",
+      "label": "The repo is the memory",
+      "sublabel": "the client folder",
+      "pos": [
+        40,
+        1100
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-16",
+      "type": "external",
+      "label": "Operation-scoped memory",
+      "sublabel": "walled from dev notes",
+      "pos": [
+        650,
+        1100
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-17",
+      "type": "external",
+      "label": "Embedded chat, planned",
+      "sublabel": "local-first app",
+      "pos": [
+        40,
+        1160
+      ],
+      "size": [
+        230,
+        48
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "dididecks-ai: product harness (moderate)",
+      "wraps": [
+        "l-1",
+        "l-2",
+        "l-3",
+        "l-4",
+        "l-5",
+        "l-6",
+        "l-7",
+        "l-8",
+        "l-9",
+        "l-10",
+        "l-11",
+        "l-12",
+        "l-13",
+        "l-14",
+        "l-15",
+        "l-16",
+        "l-17"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Instadeck: product harness (deep)",
+      "wraps": [
+        "c-1",
+        "c-2",
+        "c-3",
+        "c-4",
+        "c-5",
+        "c-6",
+        "c-7",
+        "c-8",
+        "c-9",
+        "c-10",
+        "c-11",
+        "c-12",
+        "c-13",
+        "c-14",
+        "c-15",
+        "c-16"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "l-1--c-1",
+      "from": "l-1",
+      "to": "c-1",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-2--c-2",
+      "from": "l-2",
+      "to": "c-2",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-3--c-3",
+      "from": "l-3",
+      "to": "c-3",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-4--c-4",
+      "from": "l-4",
+      "to": "c-4",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-5--c-5",
+      "from": "l-5",
+      "to": "c-5",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-6--c-6",
+      "from": "l-6",
+      "to": "c-6",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-7--c-7",
+      "from": "l-7",
+      "to": "c-7",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-8--c-8",
+      "from": "l-8",
+      "to": "c-8",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-9--c-9",
+      "from": "l-9",
+      "to": "c-9",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-10--c-10",
+      "from": "l-10",
+      "to": "c-10",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-11--c-11",
+      "from": "l-11",
+      "to": "c-11",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-12--c-12",
+      "from": "l-12",
+      "to": "c-12",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-13--c-13",
+      "from": "l-13",
+      "to": "c-13",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-14--c-14",
+      "from": "l-14",
+      "to": "c-14",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-15--c-15",
+      "from": "l-15",
+      "to": "c-15",
+      "label": "missing on her side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-16--c-16",
+      "from": "l-16",
+      "to": "c-16",
+      "label": "different by design",
+      "variant": "default",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ]
+}

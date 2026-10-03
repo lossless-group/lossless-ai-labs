@@ -1,0 +1,44 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "dididecks-ai: in-product loop (operator drives Claude Code)",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": { "mode": "auto", "entries": {
+      "external": { "label": "Person" }, "frontend": { "label": "Inputs and research" },
+      "backend": { "label": "Generation and checks" }, "security": { "label": "Variant" }, "database": { "label": "Files in the repo" } } }
+  },
+  "lanes": [
+    { "id": "human", "label": "Operator" }, { "id": "agent", "label": "Claude Code" },
+    { "id": "checks", "label": "Review" }, { "id": "memory", "label": "Repo" }
+  ],
+  "phases": [
+    { "id": "p-source", "label": "Source", "fromCol": 0, "toCol": 0 },
+    { "id": "p-research", "label": "Brand, research", "fromCol": 1, "toCol": 1 },
+    { "id": "p-docs", "label": "Documents", "fromCol": 2, "toCol": 2 },
+    { "id": "p-render", "label": "Whole deck", "fromCol": 3, "toCol": 3 },
+    { "id": "p-close", "label": "Rank, then recreate", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["source", "brand", "narrative", "scroll", "rank", "play"],
+  "nodes": [
+    { "id": "source", "lane": "human", "col": 0, "type": "external", "label": "Source material", "sublabel": "deck, brief, call notes", "width": 132 },
+    { "id": "brand", "lane": "agent", "col": 1, "type": "frontend", "label": "DESIGN.md, ingest", "sublabel": "brand, people, companies", "width": 132 },
+    { "id": "narrative", "lane": "memory", "col": 2, "type": "database", "label": "Narratives", "sublabel": "NN-slug.md per slide", "width": 132 },
+    { "id": "scroll", "lane": "agent", "col": 3, "type": "backend", "label": "Scroll-UI page", "sublabel": "whole deck first", "width": 132 },
+    { "id": "rank", "lane": "checks", "col": 4, "type": "backend", "label": "Human ranks slot?", "sublabel": "in place, as read", "width": 132 },
+    { "id": "variant", "lane": "agent", "col": 4, "type": "security", "label": "New variant", "sublabel": "slide-target pass", "width": 132 },
+    { "id": "play", "lane": "memory", "col": 5, "type": "database", "label": "Play-UI files", "sublabel": "16:9, recreated", "width": 132 },
+    { "id": "export", "lane": "human", "col": 5, "type": "external", "label": "deck-export", "sublabel": "PNG, PDF, PPTX, Keynote", "width": 132 }
+  ],
+  "edges": [
+    { "id": "source-brand", "from": "source", "to": "brand", "variant": "emphasis" },
+    { "id": "brand-narrative", "from": "brand", "to": "narrative", "variant": "emphasis" },
+    { "id": "narrative-scroll", "from": "narrative", "to": "scroll", "variant": "emphasis" },
+    { "id": "scroll-rank", "from": "scroll", "to": "rank", "variant": "emphasis" },
+    { "id": "rank-variant", "from": "rank", "to": "variant", "label": "weak", "variant": "security" },
+    { "id": "variant-scroll", "from": "variant", "to": "scroll", "label": "retry", "variant": "dashed" },
+    { "id": "rank-play", "from": "rank", "to": "play", "label": "strong", "variant": "emphasis" },
+    { "id": "play-export", "from": "play", "to": "export" }
+  ]
+}

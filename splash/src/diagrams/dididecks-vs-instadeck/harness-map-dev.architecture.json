@@ -1,0 +1,797 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Harness map: developer-agents layer",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "frontend": {
+          "label": "Instructions"
+        },
+        "security": {
+          "label": "Config and deploy"
+        },
+        "database": {
+          "label": "Context and memory"
+        },
+        "backend": {
+          "label": "Verification"
+        },
+        "messagebus": {
+          "label": "Git and coding agent"
+        },
+        "external": {
+          "label": "Tree machinery"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "l-1",
+      "type": "frontend",
+      "label": "AGENTS.md, CLAUDE.md",
+      "sublabel": "layered: anchor to app",
+      "pos": [
+        40,
+        96
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-1",
+      "type": "frontend",
+      "label": "AGENTS.md ×3, then reset",
+      "sublabel": "none on main since 09-29",
+      "pos": [
+        650,
+        96
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-2",
+      "type": "frontend",
+      "label": "README.md",
+      "sublabel": "specs, sites, skills",
+      "pos": [
+        40,
+        156
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-2",
+      "type": "frontend",
+      "label": "README.md",
+      "sublabel": "routes to product/",
+      "pos": [
+        650,
+        156
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-3",
+      "type": "security",
+      "label": ".gitignore",
+      "sublabel": ".claude/ kept out",
+      "pos": [
+        40,
+        242
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-3",
+      "type": "security",
+      "label": ".gitignore",
+      "sublabel": ".codex*, Bitácora kept out",
+      "pos": [
+        650,
+        242
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-4",
+      "type": "security",
+      "label": "vercel.json, pages.yml",
+      "sublabel": "static sites",
+      "pos": [
+        40,
+        302
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-4",
+      "type": "security",
+      "label": "railway.toml ×4",
+      "sublabel": "migrations before start",
+      "pos": [
+        650,
+        302
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-5",
+      "type": "security",
+      "label": "Deployment gate, rollback",
+      "sublabel": "dated release records",
+      "pos": [
+        650,
+        362
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-6",
+      "type": "database",
+      "label": "context-v/specs",
+      "sublabel": "north star, Draft",
+      "pos": [
+        40,
+        448
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-6",
+      "type": "database",
+      "label": "product/ spec of record",
+      "sublabel": "change control, ledger",
+      "pos": [
+        650,
+        448
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-7",
+      "type": "database",
+      "label": "context-v/plans (15)",
+      "sublabel": "status in frontmatter",
+      "pos": [
+        40,
+        508
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-7",
+      "type": "database",
+      "label": "Plans, status line first",
+      "sublabel": "render repair: six slices",
+      "pos": [
+        650,
+        508
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-8",
+      "type": "database",
+      "label": "Explorations, reminders",
+      "sublabel": "reasoning, loose ends",
+      "pos": [
+        40,
+        568
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-8",
+      "type": "database",
+      "label": "Decision, recovery records",
+      "sublabel": "say what they withhold",
+      "pos": [
+        650,
+        568
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-9",
+      "type": "database",
+      "label": "Sitemap (29), FILEMAP",
+      "sublabel": "a file per route",
+      "pos": [
+        40,
+        628
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-9",
+      "type": "database",
+      "label": "Runtime inventory",
+      "sublabel": "the mounted customer path",
+      "pos": [
+        650,
+        628
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-10",
+      "type": "database",
+      "label": "context-v/models (9)",
+      "sublabel": "written for her",
+      "pos": [
+        40,
+        688
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-10",
+      "type": "database",
+      "label": "Codex knowledge pack",
+      "sublabel": "build briefs from ours",
+      "pos": [
+        650,
+        688
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-11",
+      "type": "database",
+      "label": "changelog/ (17)",
+      "sublabel": "checked in, rolled up",
+      "pos": [
+        40,
+        748
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-11",
+      "type": "database",
+      "label": "Bitácora",
+      "sublabel": "local only since 09-18",
+      "pos": [
+        650,
+        748
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-12",
+      "type": "database",
+      "label": "context-v conventions",
+      "sublabel": "the repo is the memory",
+      "pos": [
+        40,
+        808
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-12",
+      "type": "database",
+      "label": "Adopted, then removed",
+      "sublabel": "a test forbids them",
+      "pos": [
+        650,
+        808
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-13",
+      "type": "backend",
+      "label": "Browser-drive blueprint",
+      "sublabel": "tree-wide rules",
+      "pos": [
+        40,
+        894
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-13",
+      "type": "backend",
+      "label": "Live acceptance runbook",
+      "sublabel": "exit zero or not done",
+      "pos": [
+        650,
+        894
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-14",
+      "type": "backend",
+      "label": "No test CI",
+      "sublabel": "CI deploys the splash",
+      "pos": [
+        40,
+        954
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-14",
+      "type": "backend",
+      "label": "CI: ~27 test files",
+      "sublabel": "no paid calls",
+      "pos": [
+        650,
+        954
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-15",
+      "type": "backend",
+      "label": "No tests",
+      "sublabel": "typecheck only",
+      "pos": [
+        40,
+        1014
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-15",
+      "type": "backend",
+      "label": "120 backend test files",
+      "sublabel": "~21.5k lines",
+      "pos": [
+        650,
+        1014
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-16",
+      "type": "backend",
+      "label": "No doc-pinning tests",
+      "sublabel": "discipline, frontmatter",
+      "pos": [
+        40,
+        1074
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-16",
+      "type": "backend",
+      "label": "Spec and prompt pins",
+      "sublabel": "asserted by tests",
+      "pos": [
+        650,
+        1074
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-17",
+      "type": "backend",
+      "label": "No review packet",
+      "sublabel": "no handoff folder",
+      "pos": [
+        40,
+        1134
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-17",
+      "type": "backend",
+      "label": "Independent review packet",
+      "sublabel": "unfinished, do not merge",
+      "pos": [
+        650,
+        1134
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-18",
+      "type": "messagebus",
+      "label": "git-conventions, 3 tiers",
+      "sublabel": "bodies, Claude trailers",
+      "pos": [
+        40,
+        1220
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-18",
+      "type": "messagebus",
+      "label": "Branch per concern, PRs",
+      "sublabel": "squash merges",
+      "pos": [
+        650,
+        1220
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-19",
+      "type": "messagebus",
+      "label": "Claude Code",
+      "sublabel": "skills by description",
+      "pos": [
+        40,
+        1280
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-19",
+      "type": "messagebus",
+      "label": "Codex",
+      "sublabel": "one prompt at a time",
+      "pos": [
+        650,
+        1280
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "c-20",
+      "type": "messagebus",
+      "label": "Archive branches",
+      "sublabel": "plus CI patch transport",
+      "pos": [
+        650,
+        1340
+      ],
+      "size": [
+        230,
+        48
+      ]
+    },
+    {
+      "id": "l-21",
+      "type": "external",
+      "label": "Pseudomonorepo rules",
+      "sublabel": "Stow skills, corpus, splash",
+      "pos": [
+        40,
+        1426
+      ],
+      "size": [
+        230,
+        48
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "dididecks-ai: developer harness (deep in context)",
+      "wraps": [
+        "l-1",
+        "l-2",
+        "l-3",
+        "l-4",
+        "l-6",
+        "l-7",
+        "l-8",
+        "l-9",
+        "l-10",
+        "l-11",
+        "l-12",
+        "l-13",
+        "l-14",
+        "l-15",
+        "l-16",
+        "l-17",
+        "l-18",
+        "l-19",
+        "l-21"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Instadeck: developer harness (moderate)",
+      "wraps": [
+        "c-1",
+        "c-2",
+        "c-3",
+        "c-4",
+        "c-5",
+        "c-6",
+        "c-7",
+        "c-8",
+        "c-9",
+        "c-10",
+        "c-11",
+        "c-12",
+        "c-13",
+        "c-14",
+        "c-15",
+        "c-16",
+        "c-17",
+        "c-18",
+        "c-19",
+        "c-20"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "l-1--c-1",
+      "from": "l-1",
+      "to": "c-1",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-2--c-2",
+      "from": "l-2",
+      "to": "c-2",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-3--c-3",
+      "from": "l-3",
+      "to": "c-3",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-4--c-4",
+      "from": "l-4",
+      "to": "c-4",
+      "label": "shared",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-6--c-6",
+      "from": "l-6",
+      "to": "c-6",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-7--c-7",
+      "from": "l-7",
+      "to": "c-7",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-8--c-8",
+      "from": "l-8",
+      "to": "c-8",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-9--c-9",
+      "from": "l-9",
+      "to": "c-9",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-10--c-10",
+      "from": "l-10",
+      "to": "c-10",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-11--c-11",
+      "from": "l-11",
+      "to": "c-11",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-12--c-12",
+      "from": "l-12",
+      "to": "c-12",
+      "label": "different by design",
+      "variant": "default",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-13--c-13",
+      "from": "l-13",
+      "to": "c-13",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-14--c-14",
+      "from": "l-14",
+      "to": "c-14",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-15--c-15",
+      "from": "l-15",
+      "to": "c-15",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-16--c-16",
+      "from": "l-16",
+      "to": "c-16",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-17--c-17",
+      "from": "l-17",
+      "to": "c-17",
+      "label": "missing on our side",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-18--c-18",
+      "from": "l-18",
+      "to": "c-18",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "l-19--c-19",
+      "from": "l-19",
+      "to": "c-19",
+      "label": "similar",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ]
+}

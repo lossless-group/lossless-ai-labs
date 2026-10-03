@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Instadeck: developer loop",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": { "mode": "auto", "entries": {
+      "external": { "label": "Person or trigger" }, "frontend": { "label": "Spec and brief" },
+      "backend": { "label": "Agent work and checks" }, "messagebus": { "label": "Merge and deploy" }, "database": { "label": "Records" } } }
+  },
+  "lanes": [
+    { "id": "human", "label": "Human" }, { "id": "agent", "label": "Agent" },
+    { "id": "checks", "label": "Checks" }, { "id": "memory", "label": "Records" }
+  ],
+  "phases": [
+    { "id": "p-spec", "label": "Spec", "fromCol": 0, "toCol": 0 },
+    { "id": "p-brief", "label": "Brief", "fromCol": 1, "toCol": 1 },
+    { "id": "p-work", "label": "Agent work", "fromCol": 2, "toCol": 2 },
+    { "id": "p-verify", "label": "Verify", "fromCol": 3, "toCol": 3 },
+    { "id": "p-ship", "label": "Merge, record, deploy", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["spec", "brief", "branch", "tests", "pr", "deploy"],
+  "nodes": [
+    { "id": "spec", "lane": "human", "col": 0, "type": "frontend", "label": "Spec or decision", "sublabel": "product/ or dated docs/", "width": 132 },
+    { "id": "brief", "lane": "agent", "col": 1, "type": "frontend", "label": "Brief Codex", "sublabel": "prompt pack or one-off", "width": 132 },
+    { "id": "branch", "lane": "agent", "col": 2, "type": "backend", "label": "Branch per concern", "sublabel": "one narrow job", "width": 132 },
+    { "id": "tests", "lane": "checks", "col": 3, "type": "backend", "label": "Tests and CI", "sublabel": "contracts, frozen corpus", "width": 132 },
+    { "id": "pr", "lane": "human", "col": 4, "type": "messagebus", "label": "PR, squash merge", "sublabel": "to main", "width": 132 },
+    { "id": "records", "lane": "memory", "col": 4, "type": "database", "label": "Gate, rollback", "sublabel": "review records", "width": 132 },
+    { "id": "deploy", "lane": "human", "col": 5, "type": "messagebus", "label": "Railway deploy", "sublabel": "migrations first", "width": 132 },
+    { "id": "titles", "lane": "memory", "col": 5, "type": "database", "label": "PR titles, docs/", "sublabel": "where the why lives", "width": 132 }
+  ],
+  "edges": [
+    { "id": "spec-brief", "from": "spec", "to": "brief", "variant": "emphasis" },
+    { "id": "brief-branch", "from": "brief", "to": "branch", "variant": "emphasis" },
+    { "id": "branch-tests", "from": "branch", "to": "tests", "variant": "emphasis" },
+    { "id": "tests-pr", "from": "tests", "to": "pr", "variant": "emphasis" },
+    { "id": "pr-records", "from": "pr", "to": "records" },
+    { "id": "pr-deploy", "from": "pr", "to": "deploy", "variant": "emphasis" },
+    { "id": "records-titles", "from": "records", "to": "titles", "variant": "dashed" }
+  ]
+}

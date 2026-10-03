@@ -1,0 +1,44 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Instadeck: in-product loop (customer uploads, pipeline generates)",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": { "mode": "auto", "entries": {
+      "external": { "label": "Person" }, "frontend": { "label": "Inputs and research" },
+      "backend": { "label": "Generation and checks" }, "security": { "label": "Repair" }, "database": { "label": "Documents and versions" } } }
+  },
+  "lanes": [
+    { "id": "human", "label": "Customer" }, { "id": "agent", "label": "Pipeline" },
+    { "id": "checks", "label": "Checks" }, { "id": "memory", "label": "Records" }
+  ],
+  "phases": [
+    { "id": "p-source", "label": "Source", "fromCol": 0, "toCol": 0 },
+    { "id": "p-research", "label": "Review, research", "fromCol": 1, "toCol": 1 },
+    { "id": "p-docs", "label": "Documents", "fromCol": 2, "toCol": 2 },
+    { "id": "p-render", "label": "Whole deck", "fromCol": 3, "toCol": 3 },
+    { "id": "p-close", "label": "Prove, then publish", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["upload", "research", "chain", "html", "proof", "publish"],
+  "nodes": [
+    { "id": "upload", "lane": "human", "col": 0, "type": "external", "label": "Upload a deck", "sublabel": "PDF or PPTX", "width": 132 },
+    { "id": "research", "lane": "agent", "col": 1, "type": "frontend", "label": "Review, research", "sublabel": "BrandDNA, AI-VC skills", "width": 132 },
+    { "id": "chain", "lane": "memory", "col": 2, "type": "database", "label": "Document chain", "sublabel": "01-source to 06-DESIGN", "width": 132 },
+    { "id": "html", "lane": "agent", "col": 3, "type": "backend", "label": "Whole-deck HTML", "sublabel": "from slides/sNN.md", "width": 132 },
+    { "id": "proof", "lane": "checks", "col": 4, "type": "backend", "label": "Chromium proof?", "sublabel": "geometry, assets", "width": 132 },
+    { "id": "repair", "lane": "agent", "col": 4, "type": "security", "label": "Repair skill", "sublabel": "for the measured failure", "width": 132 },
+    { "id": "publish", "lane": "memory", "col": 5, "type": "database", "label": "DesignVersion", "sublabel": "immutable, exported", "width": 132 },
+    { "id": "result", "lane": "human", "col": 5, "type": "external", "label": "One result", "sublabel": "per run", "width": 132 }
+  ],
+  "edges": [
+    { "id": "upload-research", "from": "upload", "to": "research", "variant": "emphasis" },
+    { "id": "research-chain", "from": "research", "to": "chain", "variant": "emphasis" },
+    { "id": "chain-html", "from": "chain", "to": "html", "variant": "emphasis" },
+    { "id": "html-proof", "from": "html", "to": "proof", "variant": "emphasis" },
+    { "id": "proof-repair", "from": "proof", "to": "repair", "label": "fail", "variant": "security" },
+    { "id": "repair-html", "from": "repair", "to": "html", "label": "retry", "variant": "dashed" },
+    { "id": "proof-publish", "from": "proof", "to": "publish", "label": "pass", "variant": "emphasis" },
+    { "id": "publish-result", "from": "publish", "to": "result" }
+  ]
+}

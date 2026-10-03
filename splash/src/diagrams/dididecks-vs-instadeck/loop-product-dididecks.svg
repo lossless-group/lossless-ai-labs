@@ -1,0 +1,183 @@
+<svg class="dvi-svg" data-diagram="loop-product-dididecks" focusable="false" viewBox="0 0 858 652" role="img" lang="en" aria-labelledby="dvi-loop-product-dididecks-archify-diagram-title dvi-loop-product-dididecks-archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="dvi-loop-product-dididecks-archify-diagram-title">dididecks-ai: in-product loop (operator drives Claude Code)</title>
+        <desc id="dvi-loop-product-dididecks-archify-diagram-description">The dididecks-ai in-product loop. An operator brings source material; Claude Code writes the DESIGN.md and ingests people and companies, writes a narrative file per slide, and builds the whole deck as one Scroll-UI page. A human ranks each slot in place: a weak slot gets a new variant and goes back, a strong one is recreated as a 16:9 Play-UI file and exported.</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="dvi-loop-product-dididecks-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="dvi-loop-product-dididecks-arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="dvi-loop-product-dididecks-arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="dvi-loop-product-dididecks-arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="dvi-loop-product-dididecks-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <!-- Swimlanes -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="dvi-loop-product-dididecks-lane-0" x="40" y="52" width="802" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Operator</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="dvi-loop-product-dididecks-lane-1" x="40" y="176" width="802" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Claude Code</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="dvi-loop-product-dididecks-lane-2" x="40" y="300" width="802" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Review</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="dvi-loop-product-dididecks-lane-3" x="40" y="424" width="802" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Repo</text>
+        <!-- Phase headers -->
+        <line x1="68" y1="35" x2="160" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="68" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="114" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Source</text>
+        <line x1="188" y1="35" x2="280" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="188" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="234" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Brand, research</text>
+        <line x1="308" y1="35" x2="400" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="308" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="354" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Documents</text>
+        <line x1="428" y1="35" x2="520" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="428" y="27" width="92" height="16" rx="4" class="c-mask"/>
+        <text x="474" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Whole deck</text>
+        <line x1="602" y1="35" x2="814" y2="35" class="a-default" stroke-width="1.1"/>
+        <rect x="602" y="27" width="212" height="16" rx="4" class="c-mask"/>
+        <text x="708" y="39" class="t-muted" font-size="8" font-weight="600" text-anchor="middle">Rank, then recreate</text>
+        <!-- Workflow groups -->
+        <!-- Edge paths -->
+        <path data-edge-from="brand" data-edge-to="narrative" data-edge-key="0" data-edge-id="dvi-loop-product-dididecks-brand-narrative" data-composition-points="234,269;234,491;288,491" d="M 234 269 L 234 491 L 288 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-product-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="narrative" data-edge-to="scroll" data-edge-key="1" data-edge-id="dvi-loop-product-dididecks-narrative-scroll" data-composition-points="354,465;354,243;408,243" d="M 354 465 L 354 243 L 408 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-product-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="play" data-edge-to="export" data-edge-key="2" data-edge-id="dvi-loop-product-dididecks-play-export" data-composition-points="768,465;768,145" d="M 768 465 L 768 145" class="a-default" stroke-width="1.4" marker-end="url(#dvi-loop-product-dididecks-arrowhead)"/>
+        <path data-edge-from="rank" data-edge-to="play" data-edge-label="strong" data-edge-key="3" data-edge-id="dvi-loop-product-dididecks-rank-play" data-composition-points="648,393;648,491;702,491" d="M 648 393 L 648 491 L 702 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-product-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="rank" data-edge-to="variant" data-edge-label="weak" data-edge-key="4" data-edge-id="dvi-loop-product-dididecks-rank-variant" data-composition-points="648,341;648,269" d="M 648 341 L 648 269" class="a-security" stroke-width="1.4" marker-end="url(#dvi-loop-product-dididecks-arrowhead-security)"/>
+        <path data-edge-from="scroll" data-edge-to="rank" data-edge-key="5" data-edge-id="dvi-loop-product-dididecks-scroll-rank" data-composition-points="474,269;474,367;582,367" d="M 474 269 L 474 367 L 582 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-product-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="source" data-edge-to="brand" data-edge-key="6" data-edge-id="dvi-loop-product-dididecks-source-brand" data-composition-points="180,119;234,119;234,217" d="M 180 119 L 234 119 L 234 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#dvi-loop-product-dididecks-arrowhead-emphasis)"/>
+        <path data-edge-from="variant" data-edge-to="scroll" data-edge-label="retry" data-edge-key="7" data-edge-id="dvi-loop-product-dididecks-variant-scroll" data-composition-points="582,243;540,243" d="M 582 243 L 540 243" class="a-dashed" stroke-width="1.4" marker-end="url(#dvi-loop-product-dididecks-arrowhead-dashed)"/>
+        <!-- Nodes -->
+        <g id="dvi-loop-product-dididecks-node-source" data-node-id="dvi-loop-product-dididecks-source" data-node-label="Source material" data-node-kind="external" data-node-sublabel="deck, brief, call notes" data-node-context="Operator › Source">
+          <title>Source material · deck, brief, call notes · Operator › Source</title>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="48" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(54 99) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Source material</text>
+          <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">deck, brief, call notes</text>
+        </g>
+        <g id="dvi-loop-product-dididecks-node-export" data-node-id="dvi-loop-product-dididecks-export" data-node-label="deck-export" data-node-kind="external" data-node-sublabel="PNG, PDF, PPTX, Keynote" data-node-context="Operator › Rank, then recreate">
+          <title>deck-export · PNG, PDF, PPTX, Keynote · Operator › Rank, then recreate</title>
+          <rect x="702" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="702" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(708 99) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="768" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">deck-export</text>
+          <text data-detail="context" x="768" y="131" class="t-muted" font-size="8" text-anchor="middle">PNG, PDF, PPTX, Keynote</text>
+        </g>
+        <g id="dvi-loop-product-dididecks-node-brand" data-node-id="dvi-loop-product-dididecks-brand" data-node-label="DESIGN.md, ingest" data-node-kind="frontend" data-node-sublabel="brand, people, companies" data-node-context="Claude Code › Brand, research">
+          <title>DESIGN.md, ingest · brand, people, companies · Claude Code › Brand, research</title>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(174 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="234" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">DESIGN.md, ingest</text>
+          <text data-detail="context" x="234" y="255" class="t-muted" font-size="8" text-anchor="middle">brand, people, companies</text>
+        </g>
+        <g id="dvi-loop-product-dididecks-node-scroll" data-node-id="dvi-loop-product-dididecks-scroll" data-node-label="Scroll-UI page" data-node-kind="backend" data-node-sublabel="whole deck first" data-node-context="Claude Code › Whole deck">
+          <title>Scroll-UI page · whole deck first · Claude Code › Whole deck</title>
+          <rect x="408" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="408" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(414 223) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="474" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Scroll-UI page</text>
+          <text data-detail="context" x="474" y="255" class="t-muted" font-size="8" text-anchor="middle">whole deck first</text>
+        </g>
+        <g id="dvi-loop-product-dididecks-node-variant" data-node-id="dvi-loop-product-dididecks-variant" data-node-label="New variant" data-node-kind="security" data-node-sublabel="slide-target pass" data-node-context="Claude Code › Rank, then recreate">
+          <title>New variant · slide-target pass · Claude Code › Rank, then recreate</title>
+          <rect x="582" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="582" y="217" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(588 223) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="648" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">New variant</text>
+          <text data-detail="context" x="648" y="255" class="t-muted" font-size="8" text-anchor="middle">slide-target pass</text>
+        </g>
+        <g id="dvi-loop-product-dididecks-node-rank" data-node-id="dvi-loop-product-dididecks-rank" data-node-label="Human ranks slot?" data-node-kind="backend" data-node-sublabel="in place, as read" data-node-context="Review › Rank, then recreate">
+          <title>Human ranks slot? · in place, as read · Review › Rank, then recreate</title>
+          <rect x="582" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="582" y="341" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(588 347) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="648" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Human ranks slot?</text>
+          <text data-detail="context" x="648" y="379" class="t-muted" font-size="8" text-anchor="middle">in place, as read</text>
+        </g>
+        <g id="dvi-loop-product-dididecks-node-narrative" data-node-id="dvi-loop-product-dididecks-narrative" data-node-label="Narratives" data-node-kind="database" data-node-sublabel="NN-slug.md per slide" data-node-context="Repo › Documents">
+          <title>Narratives · NN-slug.md per slide · Repo › Documents</title>
+          <rect x="288" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="288" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(294 471) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="354" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Narratives</text>
+          <text data-detail="context" x="354" y="503" class="t-muted" font-size="8" text-anchor="middle">NN-slug.md per slide</text>
+        </g>
+        <g id="dvi-loop-product-dididecks-node-play" data-node-id="dvi-loop-product-dididecks-play" data-node-label="Play-UI files" data-node-kind="database" data-node-sublabel="16:9, recreated" data-node-context="Repo › Rank, then recreate">
+          <title>Play-UI files · 16:9, recreated · Repo › Rank, then recreate</title>
+          <rect x="702" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="702" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(708 471) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="768" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Play-UI files</text>
+          <text data-detail="context" x="768" y="503" class="t-muted" font-size="8" text-anchor="middle">16:9, recreated</text>
+        </g>
+        <!-- Edge labels -->
+        <g data-detail="context" data-edge-from="rank" data-edge-to="play" data-edge-label="strong" data-edge-key="3" data-edge-id="dvi-loop-product-dididecks-rank-play">
+          <rect x="655.6" y="471" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="675" y="481" class="t-backend" font-size="8" text-anchor="middle">strong</text>
+        </g>
+        <g data-detail="context" data-edge-from="rank" data-edge-to="variant" data-edge-label="weak" data-edge-key="4" data-edge-id="dvi-loop-product-dididecks-rank-variant">
+          <rect x="633" y="321" width="30" height="14" rx="3" class="c-mask"/>
+          <text x="648" y="331" class="t-security" font-size="8" text-anchor="middle">weak</text>
+        </g>
+        <g data-detail="context" data-edge-from="variant" data-edge-to="scroll" data-edge-label="retry" data-edge-key="7" data-edge-id="dvi-loop-product-dididecks-variant-scroll">
+          <rect x="544" y="223" width="34" height="14" rx="3" class="c-mask"/>
+          <text x="561" y="233" class="t-database" font-size="8" text-anchor="middle">retry</text>
+        </g>
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="20" y="552" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Inputs and research" data-legend-x="20" data-legend-baseline="572" data-legend-width="126">
+            <rect x="20" y="564" width="14" height="9" rx="2" class="c-frontend" stroke-width="1"/>
+            <text x="42" y="572" class="t-muted" font-size="7.5" font-weight="500">Inputs and research</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Generation and checks" data-legend-x="153" data-legend-baseline="572" data-legend-width="135">
+            <rect x="153" y="564" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+            <text x="175" y="572" class="t-muted" font-size="7.5" font-weight="500">Generation and checks</text>
+          </g>
+          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Variant" data-legend-x="295" data-legend-baseline="572" data-legend-width="74">
+            <rect x="295" y="564" width="14" height="9" rx="2" class="c-security" stroke-width="1"/>
+            <text x="317" y="572" class="t-muted" font-size="7.5" font-weight="500">Variant</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Files in the repo" data-legend-x="376" data-legend-baseline="572" data-legend-width="117">
+            <rect x="376" y="564" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+            <text x="398" y="572" class="t-muted" font-size="7.5" font-weight="500">Files in the repo</text>
+          </g>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Person" data-legend-x="500" data-legend-baseline="572" data-legend-width="70">
+            <rect x="500" y="564" width="14" height="9" rx="2" class="c-external" stroke-width="1"/>
+            <text x="522" y="572" class="t-muted" font-size="7.5" font-weight="500">Person</text>
+          </g>
+        </g>
+      </svg>

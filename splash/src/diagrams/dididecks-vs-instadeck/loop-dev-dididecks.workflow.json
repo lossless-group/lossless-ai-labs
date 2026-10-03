@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "dididecks-ai: developer loop",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": { "mode": "auto", "entries": {
+      "external": { "label": "Person or trigger" }, "frontend": { "label": "Context" },
+      "backend": { "label": "Agent work and checks" }, "messagebus": { "label": "Commit and deploy" }, "database": { "label": "Memory" } } }
+  },
+  "lanes": [
+    { "id": "human", "label": "Human" }, { "id": "agent", "label": "Agent" },
+    { "id": "checks", "label": "Checks" }, { "id": "memory", "label": "Memory" }
+  ],
+  "phases": [
+    { "id": "p-idea", "label": "Idea", "fromCol": 0, "toCol": 0 },
+    { "id": "p-plan", "label": "Plan", "fromCol": 1, "toCol": 1 },
+    { "id": "p-work", "label": "Agent work", "fromCol": 2, "toCol": 2 },
+    { "id": "p-verify", "label": "Verify", "fromCol": 3, "toCol": 3 },
+    { "id": "p-ship", "label": "Record, commit, deploy", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["idea", "plan", "build", "walk", "changelog", "commit", "bump", "deploy"],
+  "nodes": [
+    { "id": "idea", "lane": "human", "col": 0, "type": "frontend", "label": "Exploration or spec", "sublabel": "in context-v", "width": 132 },
+    { "id": "plan", "lane": "agent", "col": 1, "type": "frontend", "label": "Plan per phase", "sublabel": "context-v/plans", "width": 132 },
+    { "id": "build", "lane": "agent", "col": 2, "type": "backend", "label": "Implement", "sublabel": "CLAUDE.md layers, skills", "width": 132 },
+    { "id": "walk", "lane": "checks", "col": 3, "type": "backend", "label": "Browser walk", "sublabel": "no automated tests", "width": 132 },
+    { "id": "changelog", "lane": "memory", "col": 4, "type": "database", "label": "Changelog entry", "sublabel": "sitemap status flip", "width": 132 },
+    { "id": "commit", "lane": "agent", "col": 4, "type": "messagebus", "label": "Commit", "sublabel": "to development", "width": 132 },
+    { "id": "bump", "lane": "agent", "col": 5, "type": "messagebus", "label": "Bump pointers", "sublabel": "publish the shell", "width": 132 },
+    { "id": "deploy", "lane": "human", "col": 5, "type": "external", "label": "Vercel, Pages", "sublabel": "each site, the splash", "width": 132 }
+  ],
+  "edges": [
+    { "id": "idea-plan", "from": "idea", "to": "plan", "variant": "emphasis" },
+    { "id": "plan-build", "from": "plan", "to": "build", "variant": "emphasis" },
+    { "id": "build-walk", "from": "build", "to": "walk", "variant": "emphasis" },
+    { "id": "walk-changelog", "from": "walk", "to": "changelog", "variant": "emphasis" },
+    { "id": "changelog-commit", "from": "changelog", "to": "commit", "variant": "emphasis" },
+    { "id": "commit-bump", "from": "commit", "to": "bump", "variant": "emphasis" },
+    { "id": "bump-deploy", "from": "bump", "to": "deploy", "variant": "emphasis" }
+  ]
+}

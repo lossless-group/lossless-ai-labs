@@ -1,0 +1,375 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Shape against harness: one repo against a tree",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {
+          "label": "Repo shape"
+        },
+        "frontend": {
+          "label": "Instructions and spec"
+        },
+        "security": {
+          "label": "Tests and skills"
+        },
+        "database": {
+          "label": "Context and memory"
+        },
+        "backend": {
+          "label": "In-product harness"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "i-readme",
+      "type": "external",
+      "label": "README.md",
+      "sublabel": "routes to product/",
+      "pos": [
+        220,
+        100
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "i-spec",
+      "type": "frontend",
+      "label": "product/",
+      "sublabel": "spec of record",
+      "pos": [
+        30,
+        230
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "i-fe",
+      "type": "external",
+      "label": "frontend/",
+      "sublabel": "SvelteKit",
+      "pos": [
+        220,
+        230
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "i-be",
+      "type": "external",
+      "label": "backend/",
+      "sublabel": "FastAPI, workers, renderer",
+      "pos": [
+        410,
+        230
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "i-tests",
+      "type": "security",
+      "label": "Tests pin the docs",
+      "sublabel": "spec, prompt, genesis",
+      "pos": [
+        30,
+        370
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "i-pk",
+      "type": "backend",
+      "label": "Product harness",
+      "sublabel": "prompts, skills, knowledge",
+      "pos": [
+        410,
+        370
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "i-wall",
+      "type": "database",
+      "label": "The wall",
+      "sublabel": "no context-v or Bitácora",
+      "pos": [
+        410,
+        510
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "t-anchor",
+      "type": "frontend",
+      "label": "Anchor AGENTS.md",
+      "sublabel": "tree-wide rules",
+      "pos": [
+        900,
+        100
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "t-ailabs",
+      "type": "frontend",
+      "label": "ai-labs CLAUDE.md",
+      "sublabel": "pseudomonorepo level",
+      "pos": [
+        900,
+        210
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "t-dd",
+      "type": "frontend",
+      "label": "dididecks-ai CLAUDE.md",
+      "sublabel": "Scroll-UI vs Play-UI",
+      "pos": [
+        900,
+        320
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "t-skills",
+      "type": "security",
+      "label": "Shared skills",
+      "sublabel": "Stow, plus a snapshot",
+      "pos": [
+        1140,
+        320
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "t-shell",
+      "type": "external",
+      "label": "deck-shell",
+      "sublabel": "one package",
+      "pos": [
+        680,
+        440
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "t-sites",
+      "type": "external",
+      "label": "7 client sites",
+      "sublabel": "submodules",
+      "pos": [
+        900,
+        440
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "t-client",
+      "type": "database",
+      "label": "Per client",
+      "sublabel": "narratives, DESIGN.md",
+      "pos": [
+        900,
+        560
+      ],
+      "size": [
+        170,
+        52
+      ]
+    },
+    {
+      "id": "t-gen",
+      "type": "backend",
+      "label": "Claude Code",
+      "sublabel": "reads it all to generate",
+      "pos": [
+        900,
+        680
+      ],
+      "size": [
+        170,
+        52
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Instadeck: one repo, two apps, four services",
+      "wraps": [
+        "i-readme",
+        "i-spec",
+        "i-fe",
+        "i-be",
+        "i-tests",
+        "i-pk",
+        "i-wall"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "dididecks-ai: a pseudomonorepo inside a tree",
+      "wraps": [
+        "t-anchor",
+        "t-ailabs",
+        "t-dd",
+        "t-skills",
+        "t-shell",
+        "t-sites",
+        "t-client",
+        "t-gen"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "r-spec",
+      "from": "i-readme",
+      "to": "i-spec",
+      "fromSide": "left",
+      "toSide": "top"
+    },
+    {
+      "id": "r-fe",
+      "from": "i-readme",
+      "to": "i-fe",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "r-be",
+      "from": "i-readme",
+      "to": "i-be",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "spec-tests",
+      "from": "i-spec",
+      "to": "i-tests",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "be-pk",
+      "from": "i-be",
+      "to": "i-pk",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "wall-pk",
+      "from": "i-wall",
+      "to": "i-pk",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "kept out",
+      "variant": "security"
+    },
+    {
+      "id": "a-ai",
+      "from": "t-anchor",
+      "to": "t-ailabs",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "ai-dd",
+      "from": "t-ailabs",
+      "to": "t-dd",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "dd-shell",
+      "from": "t-dd",
+      "to": "t-shell",
+      "fromSide": "left",
+      "toSide": "top"
+    },
+    {
+      "id": "dd-sites",
+      "from": "t-dd",
+      "to": "t-sites",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "sites-client",
+      "from": "t-sites",
+      "to": "t-client",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "client-gen",
+      "from": "t-client",
+      "to": "t-gen",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "variant": "emphasis"
+    },
+    {
+      "id": "sk-dd",
+      "from": "t-skills",
+      "to": "t-dd",
+      "fromSide": "left",
+      "toSide": "right",
+      "variant": "dashed"
+    },
+    {
+      "id": "sk-client",
+      "from": "t-skills",
+      "to": "t-client",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "variant": "dashed"
+    }
+  ]
+}

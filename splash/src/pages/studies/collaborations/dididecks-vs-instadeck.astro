@@ -1,0 +1,1316 @@
+---
+/**
+ * /studies/collaborations/dididecks-vs-instadeck/
+ *
+ * Step 3 of a collaboration study: one page built only from the study's
+ * step 1 (harness evidence) and step 2 (compare and contrast, by layer).
+ * Instadeck is phoenixcap's full-stack derivative of dididecks-ai; both
+ * generate decks. The headline is the layer map: each side put its depth
+ * where its generator lives.
+ *
+ * FRAMING: differences between two approaches, never a ranking. For each
+ * difference, say what each choice makes easier and harder.
+ *
+ * NAMING: phoenixcap, Instadeck and dididecks-ai may be named. Never add her
+ * GitHub org, the repo owner path or repo name, any other person's name, or a
+ * link to her repo or to the study notes. Never mention credentials.
+ *
+ * Diagrams: Archify sources + generated SVG live in
+ * src/diagrams/dididecks-vs-instadeck/ (regenerate with build.mjs there). The
+ * SVGs carry Archify's semantic classes; the token mapping at the bottom of
+ * this file re-themes them for the three splash modes. The layer map and the
+ * lineage timeline are hand-built HTML. Structure and styles follow
+ * silo-to-silo-01.astro, the first page built from the same plan.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { SITE_REPO } from '@lib/seo';
+import mapDevSvg from '../../../diagrams/dididecks-vs-instadeck/harness-map-dev.svg?raw';
+import mapProductSvg from '../../../diagrams/dididecks-vs-instadeck/harness-map-product.svg?raw';
+import loopDevThemSvg from '../../../diagrams/dididecks-vs-instadeck/loop-dev-instadeck.svg?raw';
+import loopDevOursSvg from '../../../diagrams/dididecks-vs-instadeck/loop-dev-dididecks.svg?raw';
+import loopProductThemSvg from '../../../diagrams/dididecks-vs-instadeck/loop-product-instadeck.svg?raw';
+import loopProductOursSvg from '../../../diagrams/dididecks-vs-instadeck/loop-product-dididecks.svg?raw';
+import shapeSvg from '../../../diagrams/dididecks-vs-instadeck/shape.svg?raw';
+import mapDev from '../../../diagrams/dididecks-vs-instadeck/harness-map-dev.architecture.json';
+import mapProduct from '../../../diagrams/dididecks-vs-instadeck/harness-map-product.architecture.json';
+
+const base = import.meta.env.BASE_URL;
+const OURS = 'dididecks-ai';
+const THEM = 'Instadeck';
+
+const CHAPTERS = [
+  { id: 'ch-layermap', short: 'Layer map', title: 'Each side put its depth where its generator lives', summary: 'The 2×2: two products, two harnesses, opposite depths.' },
+  { id: 'ch-highlights', short: 'Highlights', title: 'Highlights', summary: 'The main stories, then the counts.' },
+  { id: 'ch-map', short: 'Harness maps', title: 'The harness maps, one per layer', summary: 'Every artifact, grouped and paired across sides.' },
+  { id: 'ch-loops', short: 'Loops', title: 'The loops, per layer', summary: 'Same spine; one closes on a machine, one on a person.' },
+  { id: 'ch-shape', short: 'Shape', title: 'Shape against harness', summary: 'One repo of services against a tree of client sites.' },
+  { id: 'ch-stack', short: 'Stacks', title: 'The stacks answer different users', summary: 'The author signs in, or the reader does.' },
+  { id: 'ch-tradeoffs', short: 'Trade-offs', title: 'Data, architecture, failure', summary: 'Postgres records against files in git, and where each can fail.' },
+  { id: 'ch-lineage', short: 'Lineage', title: 'What she carried over, and what she changed', summary: 'From a June knowledge pack to a September spec.' },
+  { id: 'ch-buckets', short: 'Comparisons', title: 'Shared, similar, different, missing', summary: 'The full ledger, by layer.' },
+  { id: 'ch-recs', short: 'Recommendations', title: 'Insights and recommendations', summary: 'What each side could borrow, ranked.' },
+  { id: 'ch-method', short: 'Method', title: 'Method and sources', summary: 'How the study ran, and its limits.' },
+].map((c, i) => ({ ...c, num: String(i + 1).padStart(2, '0') }));
+const EXPLORATION_URL = `${SITE_REPO}/blob/main/studies/context-v/explorations/Explore-Collaborator-Codebases-for-Insights-Comparative-Highlights.md`;
+
+// ─── Layer map (step 2 §3, §4.1) ──────────────────────────────────────────
+type Depth = { word: string; level: 1 | 2 | 3 };
+const MODERATE: Depth = { word: 'Moderate', level: 2 };
+const DEEP: Depth = { word: 'Deep', level: 3 };
+const layers = [
+  {
+    name: 'Developer-agents harness',
+    what: 'How coding agents help build the software.',
+    ours: { depth: { word: 'Deep in context', level: 3 } as Depth, why: 'Inherits the tree’s layered AGENTS.md and CLAUDE.md, shared skills, context-v, changelog and git conventions, and the corpus. Its own 133-line CLAUDE.md, 70 context-v files (15 plans, 9 data models, a 29-file living sitemap) and 17 changelog entries. Thin in verification: no tests, and CI only deploys the splash.' },
+    them: { depth: MODERATE, why: 'Rigorous where it bears on correctness: a spec of record with change control, contract tests that pin docs and the runtime prompt, one CI workflow running about 27 test files, dated gate, rollback and review records, one branch per concern. Thin on orientation: no instruction file on main since 09-29.' },
+    arrows: [
+      { dir: 'right', main: true, label: 'context and orientation', sub: `${OURS} to ${THEM}` },
+      { dir: 'left', main: false, label: 'tests that pin docs', sub: `${THEM} to ${OURS}` },
+    ],
+  },
+  {
+    name: 'In-product-agents harness',
+    what: 'How the product’s own agents generate decks.',
+    ours: { depth: MODERATE, why: 'The generator is Claude Code, run by an operator. Its method is written down: deck-iteration-workflow, slide-target, the Scroll-UI and Play-UI rule, per-slide narratives and a DESIGN.md per client, a shell with an in-place rank pill and a review matrix, an export CLI. Nothing runs without an operator, and nothing measures output.' },
+    them: { depth: DEEP, why: 'A canonical prompt that a test keeps identical to the spec, a persisted Markdown document chain with hashes, 19 product SKILL.md files and two typed catalogues, failure-driven repair skills, a frozen render corpus, offline and live acceptance runners, durable jobs with lineage, and a written rule that technical validity is not creative success.' },
+    arrows: [
+      { dir: 'left', main: true, label: 'measurement, proof, repair', sub: `${THEM} to ${OURS}` },
+      { dir: 'right', main: false, label: 'variants, human rank', sub: `${OURS} to ${THEM}` },
+    ],
+  },
+];
+
+// ─── Buckets per layer (step 2 §4.12) ─────────────────────────────────────
+type BucketKey = 'shared' | 'similar' | 'different' | 'missing';
+const BUCKETS: { key: BucketKey; label: string; dev: number; product: number; gist: string }[] = [
+  { key: 'shared', label: 'Shared', dev: 3, product: 2, gist: 'Same kind of artifact on both sides.' },
+  { key: 'similar', label: 'Similar', dev: 10, product: 8, gist: 'Same job, different form.' },
+  { key: 'different', label: 'Different', dev: 8, product: 2, gist: 'One side only, and right for its context.' },
+  { key: 'missing', label: 'Missing', dev: 4, product: 5, gist: 'One side only, and the other could borrow it.' },
+];
+const DEV_ROWS = BUCKETS.reduce((a, b) => a + b.dev, 0);
+const PRODUCT_ROWS = BUCKETS.reduce((a, b) => a + b.product, 0);
+
+// ─── Harness maps stacked for narrow screens ──────────────────────────────
+// Derived from the same Archify sources as the SVGs, so the two never drift.
+// Unlike silo-to-silo-01, some rows here have a box on one side only.
+type Comp = { id: string; type: string; label: string; sublabel?: string; pos: number[] };
+type MapDoc = { meta: { legend: { entries: Record<string, { label: string }> } }; components: Comp[]; connections: { from: string; to: string; label?: string }[] };
+function stackFrom(doc: MapDoc) {
+  const rows = new Map<number, { y: number; category: string; ours?: Comp; them?: Comp; bucket: string }>();
+  for (const c of doc.components) {
+    const y = c.pos[1];
+    const row = rows.get(y) ?? { y, category: doc.meta.legend.entries[c.type]?.label ?? '', bucket: 'different, no counterpart' };
+    if (c.id.startsWith('l-')) row.ours = c;
+    else row.them = c;
+    rows.set(y, row);
+  }
+  for (const k of doc.connections) {
+    const from = doc.components.find((c) => c.id === k.from);
+    if (from) rows.get(from.pos[1])!.bucket = k.label ?? '';
+  }
+  const pairs = [...rows.values()].sort((a, b) => a.y - b.y);
+  return [...new Set(pairs.map((p) => p.category))].map((cat) => ({ cat, rows: pairs.filter((p) => p.category === cat) }));
+}
+const stacks = { dev: stackFrom(mapDev as MapDoc), product: stackFrom(mapProduct as MapDoc) };
+const bucketClass = (b: string) =>
+  b === 'shared' ? 'shared' : b === 'similar' ? 'similar' : b.startsWith('missing') ? 'missing' : 'different';
+
+// ─── Ledger (step 2 §5.0), trimmed ────────────────────────────────────────
+type Row = { id: string; them: string; ours: string };
+const ledger: Record<BucketKey, { dev: Row[]; product: Row[] }> = {
+  shared: {
+    dev: [
+      { id: 'D-SH1', them: 'README.md', ours: 'dididecks-ai/README.md' },
+      { id: 'D-SH2', them: '.gitignore: .codex*, /.local-work/, Bitácora logs', ours: '.gitignore: .claude/; context-v/extra/ (gitignored)' },
+      { id: 'D-SH3', them: 'railway.toml for API, worker, renderer, frontend', ours: 'vercel.json (root and client sites), package.json, pnpm-workspace.yaml, pages.yml' },
+    ],
+    product: [
+      { id: 'P-SH1', them: '19 product SKILL.md files (AI-VC analyst)', ours: 'Deck skills: theme-system, maintain-design-md, crawl-fetch-ingest, generate-consistent-og-images, overlay-svg-text' },
+      { id: 'P-SH2', them: 'Chromium proof and renderer', ours: 'packages/deck-export (Playwright), the Play print route, SlideCanvas' },
+    ],
+  },
+  similar: {
+    dev: [
+      { id: 'D-SI1', them: 'AGENTS.md at root, backend/, frontend/ (to 09-29); a shorter reset set on a branch', ours: '../AGENTS.md, ai-labs/CLAUDE.md, dididecks-ai/CLAUDE.md (dev facet)' },
+      { id: 'D-SI2', them: 'product/ spec of record, genesis, surface specs', ours: 'context-v/specs/ (6), the business-model exploration, client-site specs' },
+      { id: 'D-SI3', them: 'Offline foundation, render-repair plan, plan.md', ours: 'context-v/plans/ (15); chroma-decks plans (3)' },
+      { id: 'D-SI4', them: 'Pre-merge decision, recovered-fix audit, PR39 recovery, prompt-system decision', ours: 'Explorations, reminders (2), blueprints (2)' },
+      { id: 'D-SI5', them: 'Runtime inventory', ours: 'context-v/sitemap/ (29), FILEMAP.md, maintain-filemap loop' },
+      { id: 'D-SI6', them: 'Live acceptance runbook, audit and acceptance runners (dev facet)', ours: 'Browser-drive verification blueprint, the browser-drive block in CLAUDE.md' },
+      { id: 'D-SI7', them: 'Bitácora (tracked to 09-18, now local)', ours: 'changelog/ (17); calmstorm-decks (21), chroma-decks (7)' },
+      { id: 'D-SI8', them: 'Codex knowledge pack: prompts, HOW_TO_USE_WITH_CODEX.md', ours: 'context-v/models/ (9), architecture/, apps/frontend/docs/ (the last two authored by phoenixcap)' },
+      { id: 'D-SI9', them: 'About 70 single-purpose branches, PRs to #64, 34 of 329 commits with bodies', ours: 'git-conventions; development → main → master; 111 commits, 99 Claude co-author trailers' },
+      { id: 'D-SI10', them: 'Codex as the coding agent', ours: 'Claude Code, skills via ~/.claude/skills' },
+    ],
+    product: [
+      { id: 'P-SI1', them: 'Spec (canonical prompt, stage contracts), instant_deck_mvp_policy.py', ours: 'deck-iteration-workflow; CLAUDE.md “Scroll-UI vs. Play-UI”' },
+      { id: 'P-SI2', them: 'Prompt packages (nine), typed stage catalogue (about 30 roles)', ours: 'slide-target; setup-new-dddecks-workspace (stub)' },
+      { id: 'P-SI3', them: 'working_documents.py, redesign_documents.py, source_design_review.py', ours: 'Client narratives (17 for calmstorm) and DESIGN.md (592 lines)' },
+      { id: 'P-SI4', them: 'full_html_generation_service.py (10,982 lines)', ours: 'Claude Code under the deck skills, plus apps/deck-shell' },
+      { id: 'P-SI5', them: 'llm_knowledge/ (195 files)', ours: 'corpus submodule (27 slide archetypes); client data/; /data-assets/* routes' },
+      { id: 'P-SI6', them: 'Prompt-system decision (DeckSpec plus compiler), offline foundation', ours: 'Bridging-PLG exploration (spec row compiled to a component); /api/slide-decompose' },
+      { id: 'P-SI7', them: 'Seven-primitive visual audit', ours: 'SlideRankPill, DeckMatrix, data/audits/slides.json, /api/slide-rank' },
+      { id: 'P-SI8', them: 'Due Diligence runtime and non-blocking warnings', ours: 'DD-ready citation spec; shell citation popover' },
+    ],
+  },
+  different: {
+    dev: [
+      { id: 'D-DF1', them: 'Test that forbids context-v/ and changelog/ (adopted 09-23, removed 09-29); Bitácora boundary test', ours: 'context-vigilance and changelog-conventions themselves' },
+      { id: 'D-DF2', them: 'Deployment gate, rollback record', ours: '—' },
+      { id: 'D-DF3', them: 'Patch transport through CI', ours: '—' },
+      { id: 'D-DF4', them: 'Archive branches', ours: '—' },
+      { id: 'D-DF5', them: '—', ours: 'Pseudomonorepo rules: branch tiers, the relocation hard stop, submodule bumps' },
+      { id: 'D-DF6', them: '—', ours: 'Shared skills library, Stow linking, the in-repo snapshot' },
+      { id: 'D-DF7', them: '—', ours: 'Chroma corpus over context, changelogs and past sessions' },
+      { id: 'D-DF8', them: '—', ours: 'Publishing frontmatter, splash/' },
+    ],
+    product: [
+      { id: 'P-DF1', them: 'Loader excludes operator logs; operation-scoped memory', ours: 'By design, the generator’s context is the repo' },
+      { id: 'P-DF2', them: '—', ours: 'Embedded Claude chat in a local-first native app (planned); cloud-workspace spec' },
+    ],
+  },
+  missing: {
+    dev: [
+      { id: 'D-MI1', them: 'CI workflow running tests', ours: 'Missing (only pages.yml)' },
+      { id: 'D-MI2', them: 'backend/tests/ (platform half)', ours: 'Missing (typecheck only)' },
+      { id: 'D-MI3', them: 'Spec pin test; instruction-contract test (branch)', ours: 'Missing' },
+      { id: 'D-MI4', them: 'Independent review packet', ours: 'Missing' },
+    ],
+    product: [
+      { id: 'P-MI1', them: 'docs/evidence/, frozen corpus.v1.json, agent regression services', ours: 'Missing' },
+      { id: 'P-MI2', them: 'Live acceptance (11 conditions), acceptance runners', ours: 'Missing' },
+      { id: 'P-MI3', them: 'Render-repair design, repair skills chosen from measured failures', ours: 'Missing' },
+      { id: 'P-MI4', them: 'LLM-machinery tests, prompt pin', ours: 'Missing' },
+      { id: 'P-MI5', them: 'Missing: one result per run', ours: 'Variants kept side by side per slot' },
+    ],
+  },
+};
+
+// ─── Insights and recommendations (step 2 §6, §7) ─────────────────────────
+type Layer = 'Dev' | 'Product' | 'Both';
+const insightsOurs: { layer: Layer; t: string; d: string }[] = [
+  { layer: 'Product', t: 'We never wrote down what “good” means for a deck.', d: 'Her spec does: a result “must be materially better than the original deck … not merely valid, complete, or render-safe.” Our design principles describe the job without defining success or failure.' },
+  { layer: 'Product', t: 'Our “prompt” is our skill pack, and it has drifted.', d: 'Her test keeps the prompt of record and the runtime prompt identical. Our snapshot exists to keep collaborators in sync and is out of sync in five places.' },
+  { layer: 'Product', t: 'The step we call hardest is the one we don’t measure.', d: 'Play-UI conversion is where CLAUDE.md says Claude is “bad”. Her pipeline shows how to make that step self-checking: measure the render, name the failure, repair only what failed.' },
+  { layer: 'Product', t: 'She validated our method by trying to leave it.', d: 'PR 40 simplified the pipeline; PR 47 restored “the DidiDecks-style authoring kernel”. Markdown per slide, a design contract, whole deck first: a silo under different pressure kept all three.' },
+  { layer: 'Product', t: 'She stated the principle behind our narratives.', d: 'Markdown for creative coordination, strong types only at safety boundaries (spec §8), and a rule against overbuilding: prove the Markdown can’t hold it before adding a schema.' },
+  { layer: 'Dev', t: 'Context without checks drifts.', d: 'dididecks-ai gives an agent more orientation than her repo does, and has more drift: a stale submodule list and skill path, a README claim about a mock, broken architecture links, a four-month-old filemap.' },
+  { layer: 'Dev', t: 'Our status lines say what’s done, not what’s withheld.', d: '“Not approved for merge”, “not deployment authorization”: cheap lines that stop an agent treating a plan as permission.' },
+  { layer: 'Dev', t: 'The real interface between our silos was translation documents.', d: 'We wrote context-v/models/ for her; she wrote a Codex pack from ours. The pattern is worth naming in context-vigilance.' },
+  { layer: 'Both', t: 'Our dev harness is our product harness, and that is a choice with a cost.', d: 'Because Claude Code generates the decks, everything in context-v is potential generator input. Her wall makes the cost visible: we have no line between method, history and a client’s confidential notes.' },
+];
+const recsOurs: { layer: Layer; t: string; d: string; from: string; size: string }[] = [
+  { layer: 'Product', t: 'Pin the deck skill pack.', d: 'A check that fails when a skill in the dididecks-ai snapshot differs from the anchor copy, or retire the snapshot and link instead. Upstream setup-new-dddecks-workspace and link it.', from: 'From her spec-and-prompt pin test.', size: 'S' },
+  { layer: 'Product', t: 'Write a quality invariant, an acceptance contract and a conformance ledger into the deck spec.', d: 'Name what counts as failure (“only reformatted”), what evidence counts as acceptance, and mark each requirement Implemented, Partial or Not proven.', from: 'From her spec §2.1, §21, §22.', size: 'S' },
+  { layer: 'Dev', t: 'A first CI for dididecks-ai.', d: 'Typecheck the shell and frontend, run the skill-pack check, build one client site against the local shell.', from: 'From her one CI workflow.', size: 'S' },
+  { layer: 'Product', t: 'A render-proof tier in deck-export.', d: 'For each Play-UI slide at 1920×1080, fail on overflow, clipping, missing assets and off-canvas elements, and write a diagnostic an agent can act on. Later, map failure shapes to repair instructions.', from: 'From her render-repair plan and repair skills.', size: 'M' },
+  { layer: 'Product', t: 'A frozen slide corpus.', d: 'Snapshot a few dozen shipped Play-UI slides with their render metrics, and run the render-proof tier against them when the shell changes.', from: 'From her provider-free corpus.v1.json.', size: 'M' },
+  { layer: 'Product', t: 'Name the document chain.', d: 'Add the early stages as files per engagement (source notes, research, investor story, redesign plan) ahead of the narratives and DESIGN.md, and state that Markdown is creative coordination, not factual authority.', from: 'From her working documents and spec §7–8.', size: 'M' },
+  { layer: 'Dev', t: 'Say what a doc does not authorize.', d: 'One line under the title of plans and explorations: “plan only”, “not approved to ship”.', from: 'From her gate and pre-merge records.', size: 'S' },
+  { layer: 'Both', t: 'Draw a line between method, history and client-confidential notes', d: 'in what the deck agent reads, with a precedence order like hers (“Git history … as historical evidence only”).', from: 'From her genesis doc, spec §1 and boundary test.', size: 'S' },
+  { layer: 'Dev', t: 'A pruning pass on dididecks-ai drift,', d: 'in its own session.', from: 'Prompted by her reset of AGENTS.md, by contrast.', size: 'S' },
+];
+const insightsThem: { layer: Layer; t: string; d: string }[] = [
+  { layer: 'Dev', t: 'main has no front door for a coding agent right now.', d: 'Since 09-29 an agent starting on main gets README.md and product/, which say a lot about what and little about how to work in the repo. The reset set exists, is shorter, and is pinned by a test.' },
+  { layer: 'Dev', t: 'The “why” of development has thinned out.', d: 'With changelog/ removed and the Bitácora local, the checked-in reasons for a change are mostly in dated docs/ and PR titles; 34 of 329 non-merge commits have a body. Thin for the next agent or collaborator.' },
+  { layer: 'Dev', t: 'Two workflows look active and aren’t.', d: 'They sit under frontend/.github/ and backend/.github/, where GitHub doesn’t look, and call scripts that no longer exist.' },
+  { layer: 'Dev', t: 'Layered instruction files need a rule for which level wins.', d: 'The old set contradicted itself on the default provider and where to push. Tests now keep the reset honest; ours need the same rule.' },
+  { layer: 'Product', t: 'The product harness kept the creative method.', d: 'It keeps what made the original workflow work, and the acceptance contract and conformance ledger say “Not complete” where something isn’t.' },
+  { layer: 'Product', t: 'The last mile of acceptance is a human, and the verdict has no home.', d: '§21.2 needs three live decks judged by a person; §22 records “No current evidence”. Our in-place rank pill is a small, continuous way to capture that verdict per slide.' },
+  { layer: 'Product', t: 'One result per run makes every run carry the whole quality risk.', d: 'Your genesis names inconsistency as the reason the product exists. A second treatment for the weakest slides turns inconsistency into choice.' },
+  { layer: 'Product', t: 'The wall, and the door you left in it.', d: 'Spec §12 keeps a bounded, provenance-bearing design memory (prior DESIGN.md artifacts, redesign decisions). That is the part of our context-v that compounds across clients.' },
+];
+const recsThem: { layer: Layer; t: string; d: string; from: string; size: string }[] = [
+  { layer: 'Dev', t: 'Land the reset instruction set on main, with its test.', d: 'Merge the three short AGENTS.md files, or just the root one, and add a “read these first” list in order and a short “why we work this way” paragraph for the rule an agent is most likely to break.', from: 'Worked example: dididecks-ai/CLAUDE.md, minus its tree rules and skills lists.', size: 'S' },
+  { layer: 'Dev', t: 'Move or delete the two nested workflows.', d: 'Move them to the root .github/workflows/ with paths: filters for frontend/** and backend/**, and fix or drop the missing scripts.', from: 'Worked example: dididecks-ai pages.yml, scoped with paths: [splash/**].', size: 'S' },
+  { layer: 'Dev', t: 'Put the “why” in squash-merge bodies.', d: 'A pull-request template with three headings (Why, Evidence, What this does not authorize). Squash merges carry the body into main, without reviving changelog/.', from: 'Worked example: the body structure in git-conventions.', size: 'S' },
+  { layer: 'Product', t: 'Give the human verdict a home.', d: 'A per-slide verdict on a published DesignVersion (four states plus a note), stored with lineage, and a ledger row in §22 that counts verdicts from the three-deck acceptance runs.', from: 'Worked example: the shell’s slide-rank route and the slide-audit data model.', size: 'M' },
+  { layer: 'Product', t: 'Offer a second treatment for the weakest slides.', d: 'After Chromium proof, generate one alternate for the two or three weakest slides from the same 06-DESIGN.md and slide document, and let the user pick. Count it against the run budget; off by default for paid runs.', from: 'Worked example: a client site’s variant registry and the DeckMatrix view.', size: 'M' },
+];
+const layerPill = (l: Layer) => (l === 'Dev' ? 'pill--thread' : l === 'Product' ? 'pill--accent' : 'pill--soft');
+const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? 'Product layer' : 'Both layers');
+
+// ─── Lineage (step 2 §2 "A shared history", §4.11) ────────────────────────
+const timeline: { date: string; side: 'ours' | 'them' | 'both'; t: string; d: string }[] = [
+  { date: '2026-06-07', side: 'ours', t: 'Data models written for her', d: 'context-v/models/ added because “a collaborator is designing a remote database and has been guessing at shapes”. An exploration the same day records “slide = row in a database” against “slide = .astro component file” and proposes a hybrid.' },
+  { date: '06-08 to 06-09', side: 'them', t: 'She commits a SvelteKit shell into dididecks-ai', d: 'apps/frontend/ (308 files, an in-memory mock backend), packages/shared/ and a frontend/backend split document.' },
+  { date: '2026-06-20', side: 'them', t: 'A Codex knowledge pack', d: 'The dididecks model restated as build briefs, with schemas, a SQL blueprint, drift rules and status templates.' },
+  { date: '2026-08-24', side: 'them', t: 'Instadeck’s main begins', d: 'An import of two earlier repos.' },
+  { date: '2026-08-25', side: 'them', t: 'DeckSpec plus a deterministic compiler', d: 'Proposed, built offline, left “disabled and unmounted”: the same hybrid our June exploration proposed, reached separately.' },
+  { date: '2026-09-23', side: 'both', t: 'Instant Core, reversed', d: 'PR 40 simplified the pipeline; PR 47 restored “the DidiDecks-style authoring kernel”. The same day, context-v and changelog were adopted.' },
+  { date: '2026-09-29', side: 'them', t: 'Memory productized; a spec of record', d: '“refactor: productize creative memory” removes context-v and changelog in favour of operation-scoped database records. The Instant Deck spec of record is written.' },
+];
+const lineage: { idea: string; ours: string; pack: string; them: string; kind: 'carried' | 'changed' | 'new' | 'reconverged' }[] = [
+  { idea: 'Scroll and Play as coupled implementations', ours: '“Naming is fuzzy here” in CLAUDE.md', pack: 'Carried over: “coordinated implementations, not the same implementation rendered twice”', them: 'Changed: one render path, whole-deck HTML proven in Chromium', kind: 'changed' },
+  { idea: 'Review matrix, no “vacuous ready”', ours: 'DeckMatrix; “vacuous-Ready bug fixed”', pack: 'Carried over almost word for word', them: 'Changed: a visual scorecard and a conformance ledger', kind: 'changed' },
+  { idea: 'Status taxonomy', ours: 'Sitemap status discipline', pack: 'Carried over: Draft, Implementing, Partially-Shipped, Shipped', them: 'Changed: Implemented, Partial, Not proven', kind: 'changed' },
+  { idea: 'People and companies as data', ours: '/data-assets/* routes, crawl-fetch-ingest', pack: 'Carried over', them: 'Changed: “real people remain real” as an acceptance check', kind: 'changed' },
+  { idea: 'Gated access to private decks', ours: 'Reader gating per deck site', pack: 'Carried over', them: 'Changed: author accounts and workspaces', kind: 'changed' },
+  { idea: 'Frontend and backend split', ours: 'Her architecture doc inside dididecks-ai', pack: 'Carried over', them: 'Built: SvelteKit plus FastAPI on Railway', kind: 'carried' },
+  { idea: 'Storage', ours: 'Filesystem as database', pack: 'Changed: “a database-backed deck operating system”', them: 'Postgres, records per operation', kind: 'changed' },
+  { idea: 'Business fields', ours: 'None', pack: 'New: blocks bound to persistent fields, rebuild jobs', them: 'Not in Instant Deck’s canonical path', kind: 'new' },
+  { idea: 'Authoring method', ours: 'Holistic first, Markdown narratives, DESIGN.md', pack: 'Not in the pack', them: 'Re-converged: the Markdown document chain and 06-DESIGN.md', kind: 'reconverged' },
+  { idea: 'Memory', ours: 'context-v, changelogs, prior sessions', pack: 'Not in the pack', them: 'Changed on purpose: operation-scoped database records', kind: 'changed' },
+  { idea: 'Agents', ours: 'Claude Code, skills', pack: 'Codex prompts, one at a time', them: 'Codex for dev; OpenAI for the product; 19 product SKILL.md', kind: 'changed' },
+];
+---
+
+<BaseLayout
+  title="Dididecks vs Instadeck"
+  description="Two deck generators from one lineage, compared layer by layer: dididecks-ai generates decks inside a Claude Code session, Instadeck inside a server pipeline. Not a ranking: what each approach makes easier and harder for agents and users."
+>
+  <div class="dvi" data-pagefind-body>
+    <!-- 1 · Hero ────────────────────────────────────────────────────── -->
+    <section class="hero" aria-labelledby="dvi-title">
+      <div class="container">
+        <p class="eyebrow">study · collaboration · 02</p>
+        <h1 id="dvi-title">Dididecks vs Instadeck. <br /><span class="gradient-text">One product, two approaches.</span></h1>
+        <p class="lede">
+          Instadeck is phoenixcap’s own full-stack derivative of dididecks-ai. We asked for a version people
+          could log into and use, and she built one. Both generate investor decks, so the comparison is direct.
+          Most of the differences follow from one choice: where the generator runs.
+        </p>
+        <dl class="audience">
+          <div>
+            <dt>For Lossless</dt>
+            <dd>What a server-side generator shows about measuring a deck, and what our own drift looks like from outside.</dd>
+          </div>
+          <div>
+            <dt>For phoenixcap</dt>
+            <dd>The small developer-harness pieces that would orient the next agent, and two ideas from our review surface.</dd>
+          </div>
+        </dl>
+        <p class="notranking"><strong>Not a ranking.</strong> Depth below means how much harness exists in a layer, not how good either product is. Each difference is shown with what it makes easier and what it makes harder.</p>
+        <nav class="chapter-cards" id="dvi-contents" aria-label="Chapters">
+          {CHAPTERS.map((c) => (
+            <a class="chapter-card" href={`#${c.id}`}>
+              <span class="chapter-card__num">{c.num}</span>
+              <span class="chapter-card__title">{c.title}</span>
+              <span class="chapter-card__summary">{c.summary}</span>
+            </a>
+          ))}
+        </nav>
+      </div>
+    </section>
+
+    <nav class="chapter-rail" aria-label="Chapter navigation" data-chapter-rail>
+      <div class="chapter-rail__inner">
+        {CHAPTERS.map((c) => (
+          <a class="chapter-rail__item" href={`#${c.id}`} data-rail-target={c.id}>
+            <span class="chapter-rail__num">{c.num}</span>
+            <span>{c.short}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+
+    <!-- 2 · Layer map (centerpiece) ─────────────────────────────────── -->
+    <section class="layermap" id="ch-layermap" aria-labelledby="dvi-layermap">
+      <div class="container">
+        <p class="eyebrow">ch · the layer map</p>
+        <h2 id="dvi-layermap">Each side put its depth where its generator lives</h2>
+        {/* Hand-authored, as on silo-to-silo-01: a 2×2 of prose cells with
+            depth meters, reflowing to one column on a phone. Each row carries
+            two arrows here, because lessons run both ways in both layers. */}
+        <figure class="lm" aria-describedby="dvi-lm-summary">
+          <p id="dvi-lm-summary" class="lm__summary">
+            dididecks-ai generates decks inside an operator’s Claude Code session, so its developer harness doubles as its
+            product harness: deep in context, moderate in the product. Instadeck generates decks in a server pipeline a customer
+            starts, so its product harness is deep, and its developer harness is moderate and walled off from the product on purpose.
+          </p>
+          <div class="lm__grid">
+            <div class="lm__corner" aria-hidden="true"></div>
+            <div class="lm__colhead lm__colhead--ours">dididecks-ai</div>
+            <div class="lm__colgap" aria-hidden="true"></div>
+            <div class="lm__colhead lm__colhead--them">Instadeck</div>
+            {layers.map((L, i) => (
+              <Fragment>
+                <div class={`lm__rowhead lm__rowhead--${i}`}>
+                  <span class="lm__layer">{L.name}</span>
+                  <span class="lm__what">{L.what}</span>
+                </div>
+                <article class={`lm__cell lm__cell--ours lm__cell--d${L.ours.depth.level}`} style={`grid-row:${i + 2};grid-column:2`}>
+                  <h3 class="lm__cellhead">
+                    <span class="lm__who">dididecks-ai · {L.name.replace(' harness', '')}</span>
+                    <span class="lm__depth">
+                      <span class="lm__meter" aria-hidden="true">{[1, 2, 3].map((n) => <span class={n <= L.ours.depth.level ? 'on' : ''}></span>)}</span>
+                      {L.ours.depth.word}
+                    </span>
+                  </h3>
+                  <p>{L.ours.why}</p>
+                </article>
+                <div class="lm__arrows" style={`grid-row:${i + 2};grid-column:3`}>
+                  {L.arrows.map((a) => (
+                    <div class={`lm__arrow lm__arrow--${a.dir} ${a.main ? 'lm__arrow--main' : 'lm__arrow--minor'}`}>
+                      <svg viewBox="0 0 100 24" aria-hidden="true" focusable="false">
+                        {a.dir === 'right'
+                          ? <path d="M4 12 H90 M80 4 L92 12 L80 20" />
+                          : <path d="M96 12 H10 M20 4 L8 12 L20 20" />}
+                      </svg>
+                      <span class="lm__arrowlabel">{a.label}</span>
+                      <span class="lm__arrowsub">{a.sub}</span>
+                    </div>
+                  ))}
+                </div>
+                <article class={`lm__cell lm__cell--them lm__cell--d${L.them.depth.level}`} style={`grid-row:${i + 2};grid-column:4`}>
+                  <h3 class="lm__cellhead">
+                    <span class="lm__who">Instadeck · {L.name.replace(' harness', '')}</span>
+                    <span class="lm__depth">
+                      <span class="lm__meter" aria-hidden="true">{[1, 2, 3].map((n) => <span class={n <= L.them.depth.level ? 'on' : ''}></span>)}</span>
+                      {L.them.depth.word}
+                    </span>
+                  </h3>
+                  <p>{L.them.why}</p>
+                </article>
+              </Fragment>
+            ))}
+          </div>
+          <figcaption class="lm__caveats">
+            <p><strong>The bold arrow</strong> in each row runs from the deeper side: context and orientation from dididecks-ai in the developer layer, measurement, proof and repair from Instadeck in the product layer. <strong>The thin arrow</strong> runs back: tests that pin documents, and variants a human ranks.</p>
+            <p><strong>Why “moderate” for our product layer.</strong> dididecks-ai has no runtime prompt, no model call, no evaluation and no tests in the product. By an automated pipeline’s standard it is thin. But its product is a coding-agent session with about 4,500 lines of skills, a design contract per deck, a review surface and an export path. A reader who counts only automation should read it as thin.</p>
+            <p><strong>Two carriers, or one.</strong> On our side Claude Code, the skills and context-v serve both the developer and the deck generator. On hers the layers are separated by design, down to a test that keeps operator notes out of product context.</p>
+          </figcaption>
+        </figure>
+        <div class="stories">
+          <aside class="prototype" aria-labelledby="dvi-story-memory">
+            <h3 id="dvi-story-memory"><span class="pill pill--signal">Second story</span> She turned our memory into product</h3>
+            <p>Instadeck adopted Lossless’s <code>context-v/</code> and <code>changelog/</code> on 2026-09-23 and removed them on 09-29 in <q>refactor: productize creative memory</q>. The useful part, persistent creative memory, became operation-scoped database records, and a test now forbids the folders. Her reason: Instant Deck <q>inherits the spirit of AI Labs’ context discipline, not its full local-agent infrastructure</q>. Ours makes memory cheap to grow and easy for an agent to read; hers makes it per customer, typed and safe to expose to strangers.</p>
+          </aside>
+          <aside class="prototype prototype--thread" aria-labelledby="dvi-story-skills">
+            <h3 id="dvi-story-skills"><span class="pill pill--thread">Third story</span> Skills cross layers in opposite directions</h3>
+            <p>We write <code>SKILL.md</code> files for the dev layer, and they also steer deck generation because the generator is Claude Code. She runs 19 <code>SKILL.md</code> files inside the product, loaded by her own registry, which caps size, matches names to folders and whitelists five tools. Same format, different runtime: hers can’t wander, ours can adapt to a request nobody planned for.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · Highlights ──────────────────────────────────────────────── -->
+    <section class="highlights" id="ch-highlights" aria-labelledby="dvi-highlights">
+      <div class="container">
+        <p class="eyebrow">ch · highlights</p>
+        <h2 id="dvi-highlights">Highlights</h2>
+        <div class="cards">
+          <article class="bench-card">
+            <span class="bench-card__label">convergence · product layer</span>
+            <div class="bench-card__body">
+              <h3>Markdown first, and a DESIGN.md per deck.</h3>
+              <p>Both write the deck as Markdown before rendering it: per-slide files with typed frontmatter, plus a per-deck design contract (ours via <code>maintain-design-md</code>, hers as <code>06-DESIGN.md</code>). Both reason about the whole deck before any slide. She tried a simpler path in PR 40 and reversed it in PR 47.</p>
+            </div>
+          </article>
+          <article class="bench-card">
+            <span class="bench-card__label">instadeck goes deeper · verification</span>
+            <div class="bench-card__body">
+              <h3>Verification, in both layers.</h3>
+              <p>120 backend test files, tests that pin the spec and the runtime prompt byte for byte, a frozen render corpus, a read-only live acceptance runner, and a written rule that “technically valid” is not success. dididecks-ai has no tests; its one workflow deploys the splash.</p>
+            </div>
+          </article>
+          <article class="bench-card">
+            <span class="bench-card__label">dididecks-ai goes deeper · context</span>
+            <div class="bench-card__body">
+              <h3>Context, for the next agent.</h3>
+              <p>A 133-line CLAUDE.md, 9 data-model docs written for her, a 29-file living sitemap, 15 plans and 17 changelog entries, plus the tree’s shared skills and corpus. Instadeck’s main has had no instruction file since 09-29; a shorter reset set waits on a branch.</p>
+            </div>
+          </article>
+          <article class="bench-card">
+            <span class="bench-card__label">different users · stack</span>
+            <div class="bench-card__body">
+              <h3>The author signs in, or the reader does.</h3>
+              <p>Instadeck is a multi-tenant web product where the author signs in. dididecks-ai is a set of per-client Astro sites where the reader signs in and git is the content store.</p>
+            </div>
+          </article>
+          <article class="bench-card">
+            <span class="bench-card__label">our own drift · dev layer</span>
+            <div class="bench-card__body">
+              <h3>Her prompt test answers our drift.</h3>
+              <p>Five of the 18 skills in dididecks-ai’s in-repo snapshot differ from the anchor copies, and one exists only in the snapshot. A pin like hers is the first recommendation for us.</p>
+            </div>
+          </article>
+        </div>
+        <ul class="tiles" role="list">
+          {[{ key: 'dev', name: 'Developer layer', total: DEV_ROWS, note: 'Dominated by similar, which fits a shared lineage. Different rows split four each way.' },
+            { key: 'product', name: 'In-product layer', total: PRODUCT_ROWS, note: 'Also mostly similar. Of nine missing rows across both layers, eight run toward us, all about verification.' }].map((t) => (
+            <li class="tile">
+              <span class="tile__label">{t.name}</span>
+              <span class="tile__of">{t.total} ledger rows</span>
+              <span class="stackbar" aria-hidden="true">
+                {BUCKETS.map((b) => <span class={`stackbar__seg stackbar__seg--${b.key}`} style={`flex:${b[t.key as 'dev' | 'product']}`}></span>)}
+              </span>
+              <ul class="tile__counts" role="list">
+                {BUCKETS.map((b) => <li><span class={`swatch swatch--${b.key}`} aria-hidden="true"></span>{b.label} <strong>{b[t.key as 'dev' | 'product']}</strong></li>)}
+              </ul>
+              <span class="tile__gist">{t.note}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4 · Harness maps ────────────────────────────────────────────── -->
+    <section class="map" id="ch-map" aria-labelledby="dvi-map">
+      <div class="container">
+        <p class="eyebrow">ch · the harness maps</p>
+        <h2 id="dvi-map">The harness maps, one per layer</h2>
+        <p class="section-lede">Every artifact either side keeps, grouped by category and compared only within its layer. Lines join pairs, and each line names its bucket in words. A box with no line has no counterpart on the other side.</p>
+        <ul class="line-key" role="list" aria-label="Line key">
+          <li><span class="swatch swatch--shared" aria-hidden="true"></span>shared: solid amber</li>
+          <li><span class="swatch swatch--similar" aria-hidden="true"></span>similar: dashed cyan</li>
+          <li><span class="swatch swatch--missing" aria-hidden="true"></span>missing on one side: dashed plum</li>
+          <li><span class="swatch swatch--plain" aria-hidden="true"></span>different by design: plain</li>
+        </ul>
+        {[{ h: 'Developer-agents harness', svg: mapDevSvg, stack: stacks.dev, cap: 'dididecks-ai on the left, Instadeck on the right. All four missing lines are verification, and all are on our side.' },
+          { h: 'In-product-agents harness', svg: mapProductSvg, stack: stacks.product, cap: 'dididecks-ai on the left, Instadeck on the right. Four missing lines on our side, one on hers: variants per slot.' }].map((m) => (
+          <figure class="dvi-figure dvi-figure--map">
+            <h3 class="dvi-figure__h">{m.h}</h3>
+            <div class="dvi-figure__svg dvi-figure__svg--wide" set:html={m.svg} />
+            <div class="map-stack">
+              {m.stack.map((c) => (
+                <div class="map-stack__group">
+                  <h4 class="map-stack__cat">{c.cat}</h4>
+                  <ul role="list">
+                    {c.rows.map((p) => (
+                      <li class={`pair pair--${bucketClass(p.bucket)}`}>
+                        <span class="pair__side"><span class="pair__who">dididecks-ai</span>{p.ours ? p.ours.label : '—'}{p.ours && <small>{p.ours.sublabel}</small>}</span>
+                        <span class="pair__bucket">{p.bucket}</span>
+                        <span class="pair__side"><span class="pair__who">Instadeck</span>{p.them ? p.them.label : '—'}{p.them && <small>{p.them.sublabel}</small>}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <figcaption>{m.cap} On a narrow screen the map stacks into pairs.</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- 5 · Loops per layer ─────────────────────────────────────────── -->
+    <section class="loops" id="ch-loops" aria-labelledby="dvi-loops">
+      <div class="container">
+        <p class="eyebrow">ch · the loops</p>
+        <h2 id="dvi-loops">The loops, per layer</h2>
+        <p class="section-lede">Same four lanes in every diagram. The two in-product loops share a spine: source, brand, research, narrative, design contract, whole deck, per-slide files, render, export. They differ in who closes the loop.</p>
+
+        <h3 class="loops__h">Developer loops</h3>
+        <div class="loop-notes">
+          <p><strong>Instadeck.</strong> A spec or dated decision, then a Codex brief (a prompt pack or a one-off), one branch per concern, contract tests and CI, a pull request squash-merged to main, gate, rollback and review records, then a Railway deploy with migrations first. When a direction doesn’t hold, the loop goes back to the spec to simplify or restore.</p>
+          <p><strong>dididecks-ai.</strong> An exploration or spec in context-v, a plan per phase, Claude Code loading the layered CLAUDE.md files and skills, a browser walk with no automated tests, a changelog entry and sitemap status flip, a commit to development, then pointer bumps, a shell release and per-site deploys. 111 commits, 99 with a Claude co-author trailer, no PR merges.</p>
+        </div>
+        <figure class="dvi-figure">
+          <figcaption class="dvi-figure__title">Instadeck · developer loop</figcaption>
+          <div class="dvi-figure__svg dvi-scroll" tabindex="0" role="region" aria-label="Instadeck's developer loop, scrollable" set:html={loopDevThemSvg} />
+        </figure>
+        <figure class="dvi-figure">
+          <figcaption class="dvi-figure__title">dididecks-ai · developer loop</figcaption>
+          <div class="dvi-figure__svg dvi-scroll" tabindex="0" role="region" aria-label="The dididecks-ai developer loop, scrollable" set:html={loopDevOursSvg} />
+        </figure>
+
+        <h3 class="loops__h">In-product loops: two deck generators</h3>
+        <div class="loop-notes">
+          <p><strong>Instadeck: the customer uploads, the pipeline generates.</strong> Deterministic extraction, source design review and BrandDNA, bounded research, an investor story and redesign plan, <code>06-DESIGN.md</code>, then <code>slides/sNN.md</code> and whole-deck HTML. Chromium proves the render. A failure is measured and handed to a repair skill; a pass publishes an immutable <code>DesignVersion</code>. The loop closes on a machine measurement.</p>
+          <p><strong>dididecks-ai: the operator drives Claude Code.</strong> Source deck, brief and call notes; a brand import and <code>DESIGN.md</code>; people and companies ingested; a narrative per slide; then phase 1, the whole deck as one Scroll-UI page. A human ranks each slot in place. A weak slot gets a new variant; a strong one is recreated as a 16:9 Play-UI file and exported. The loop closes on a human verdict.</p>
+        </div>
+        <figure class="dvi-figure">
+          <figcaption class="dvi-figure__title">Instadeck · in-product loop</figcaption>
+          <div class="dvi-figure__svg dvi-scroll" tabindex="0" role="region" aria-label="Instadeck's in-product loop, scrollable" set:html={loopProductThemSvg} />
+        </figure>
+        <figure class="dvi-figure">
+          <figcaption class="dvi-figure__title">dididecks-ai · in-product loop</figcaption>
+          <div class="dvi-figure__svg dvi-scroll" tabindex="0" role="region" aria-label="The dididecks-ai in-product loop, scrollable" set:html={loopProductOursSvg} />
+        </figure>
+      </div>
+    </section>
+
+    <!-- 6 · Shape against harness ───────────────────────────────────── -->
+    <section class="shape" id="ch-shape" aria-labelledby="dvi-shape">
+      <div class="container">
+        <p class="eyebrow">ch · shape against harness</p>
+        <h2 id="dvi-shape">Shape against harness</h2>
+        <p class="section-lede">On her side, instructions converge on one file of record per surface, and tests keep code and documents from drifting apart. On ours, instructions are layered by tree level, and the per-client folders are both documentation and the generator’s working memory.</p>
+        <figure class="dvi-figure">
+          <div class="dvi-figure__svg dvi-scroll" tabindex="0" role="region" aria-label="One repo against a tree, scrollable" set:html={shapeSvg} />
+        </figure>
+        <div class="two-col">
+          <p><strong>One repo, two apps, four services.</strong> Instadeck holds a SvelteKit <code>frontend/</code> and a FastAPI <code>backend/</code> with workers and a renderer, deployed as separate Railway services. README routes readers to <code>product/</code>; the product harness sits in the backend, behind a wall that keeps repo memory out.</p>
+          <p><strong>A pseudomonorepo inside a tree.</strong> dididecks-ai is a pnpm workspace inside ai-labs, inside the anchor monorepo. It holds an Astro integration (the deck shell, v0.4.0), her SvelteKit shell, an export CLI, and seven client deck sites as submodules, each its own repo and Vercel deploy.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6b · Stack against harness ──────────────────────────────────── -->
+    <section class="stack" id="ch-stack" aria-labelledby="dvi-stack">
+      <div class="container">
+        <p class="eyebrow">ch · stack against harness</p>
+        <h2 id="dvi-stack">The stacks answer different users</h2>
+        <p class="section-lede">Instadeck is a multi-tenant web product where the author signs in. dididecks-ai is a set of per-client sites where the reader signs in and git is the content store. Each stack shapes what users can do alone, and what an agent has to hold in its head.</p>
+        <div class="stack__scroll" tabindex="0" role="region" aria-label="Stack comparison table, scrollable">
+          <table class="stack__table">
+            <thead><tr><th scope="col"></th><th scope="col">dididecks-ai</th><th scope="col">Instadeck</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Shape</th><td>pnpm workspace: Astro integration, SvelteKit shell, export CLI, shared types, seven client sites as submodules</td><td>One repo, two apps; API, worker, renderer and frontend as separate Railway services</td></tr>
+              <tr><th scope="row">Front end</th><td>Client sites: Astro 6, Tailwind 4 on Vercel. The shell: an Astro 7 integration on a package registry. Her <code>apps/frontend</code>: SvelteKit 2 with an in-memory mock backend</td><td>SvelteKit 2, Svelte 5, <code>adapter-node</code>, zod; routes for sign-up, dashboard, decks, versions, export, shared decks</td></tr>
+              <tr><th scope="row">Back end</th><td><strong>None as a service.</strong> Dev-only Astro routes (<code>/api/slide-rank</code>, <code>/api/slide-decompose</code>) write into the client site’s working tree</td><td>FastAPI, SQLAlchemy 2, Pydantic 2, two Alembic lineages, LangGraph and LangChain, PyMuPDF, Playwright, OpenTelemetry</td></tr>
+              <tr><th scope="row">Data</th><td><strong>Git is the content store:</strong> TypeScript registries, Markdown with frontmatter, an audits JSON. Reader access and telemetry in <code>astro:db</code> (libSQL, Turso); a migration off it is planned</td><td>Postgres with pgvector; a job queue on Postgres; S3-compatible object storage</td></tr>
+              <tr><th scope="row">Who signs in</th><td>The <strong>reader</strong>, per deck: access tiers, single-use links, OAuth, magic links. Authors are operators with repo access</td><td>The <strong>author</strong>: accounts, workspaces, an admin</td></tr>
+              <tr><th scope="row">Deploy</th><td>Vercel per client site from a git push; GitHub Pages for the splash; shell versions published and bumped per consumer</td><td>Railway: pre-deploy runs both migration lineages, a product-ready health check, restart on failure; a written gate and rollback record</td></tr>
+              <tr><th scope="row">Models</th><td>Claude through Claude Code, at author time. The spec plans an embedded Claude chat</td><td>OpenAI as the single product provider (reset instructions); earlier routing across four providers kept on an archive branch</td></tr>
+              <tr><th scope="row">Export</th><td><code>deck-export</code>: Playwright drives a running site to @2x PNG, outlined SVG, vector-text PDF, PPTX and real Keynote</td><td>Render-proven HTML, publication of an exact <code>DesignVersion</code>, an export service</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="stack__grid">
+          <article class="stack__card stack__card--them">
+            <h3>What Instadeck’s stack makes easier</h3>
+            <ul>
+              <li><strong>For users:</strong> anyone can sign up, upload a deck and come back to it. Results persist per account and per version; nobody needs a repo, a terminal or an operator.</li>
+              <li><strong>For agents:</strong> typed boundaries everywhere (Pydantic <code>extra="forbid"</code>, JSON Schemas for model output, versioned contract names) give an agent contracts to read and tests to run. A migration history tells it what the data looks like.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--them">
+            <h3>What it makes harder</h3>
+            <ul>
+              <li><strong>For users:</strong> the product decides the pipeline. A user who wants a slide no stage contract anticipates waits for Smart Edit or Smart Deck.</li>
+              <li><strong>For agents:</strong> four services, two migration lineages and a coordinated deploy order are a lot to hold at once, which is why the gate and rollback record exist. A 10,982-line generation service is expensive to load. Every change has to be safe for strangers’ data.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--ours">
+            <h3>What dididecks-ai’s stack makes easier</h3>
+            <ul>
+              <li><strong>For users:</strong> each deck is its own site, with its own brand, URL and access rules; a reader gets a link, not an account. Anything a designer can build in Astro can appear on a slide.</li>
+              <li><strong>For agents:</strong> Astro components and Markdown are what models write well. The whole deck is plain files an agent can read, diff and revert, with no content migrations and no shared database to break.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--ours">
+            <h3>What it makes harder</h3>
+            <ul>
+              <li><strong>For users:</strong> nobody outside the team can make a deck alone. The spec says the managing partner <q>will not open a terminal</q>. Authoring needs an operator and a build.</li>
+              <li><strong>For agents:</strong> seven consumers of one shell across Astro 6 and 7, pointers to bump, a package to version. And Play-UI, the surface that ships, is the one CLAUDE.md says Claude is <q>bad at</q>.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6c · Data, architecture, failure ────────────────────────────── -->
+    <section class="tradeoffs" id="ch-tradeoffs" aria-labelledby="dvi-tradeoffs">
+      <div class="container">
+        <p class="eyebrow">ch · three trade-offs</p>
+        <h2 id="dvi-tradeoffs">Data, architecture, failure</h2>
+        <p class="section-lede">Three choices where each side fits the content it holds and the people it serves. Hers is multi-tenant: many users, private uploads, immutable versions with lineage. Ours is engagement-shaped: a handful of clients, each team iterating on a few decks for weeks.</p>
+
+        <h3 class="tradeoff__title">Postgres records against files in git</h3>
+        <div class="stack__scroll" tabindex="0" role="region" aria-label="Data comparison table, scrollable">
+          <table class="stack__table">
+            <thead><tr><th scope="col"></th><th scope="col">Files in git (dididecks-ai)</th><th scope="col">Postgres records (Instadeck)</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Unit of content</th><td>A file: a slot in <code>slides.ts</code>, a narrative <code>NN-slug.md</code>, a slide component per variant</td><td>A row: deck, operation, working document (with a SHA-256 of its Markdown), <code>DesignVersion</code></td></tr>
+              <tr><th scope="row">History</th><td>Git history; variants kept side by side; <code>/api/slide-decompose</code> refuses to overwrite</td><td>Explicit lineage records; publication never rewrites a prior version</td></tr>
+              <tr><th scope="row">Isolation</th><td>One repo and one deploy per client</td><td>Workspaces in one database</td></tr>
+              <tr><th scope="row">What an agent sees</th><td>Everything in the client folder, including prior decisions</td><td>Whatever the API and tests expose; production data is out of reach by design</td></tr>
+              <tr><th scope="row">Search</th><td>The Chroma corpus, outside the product, for the operator’s agent</td><td>pgvector in the same database; a bounded design-memory retrieval is specified</td></tr>
+              <tr><th scope="row">Cost of change</th><td>Edit a file, commit, push</td><td>Migrations, deploy order, rollback planning</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="stack__grid">
+          <article class="stack__card stack__card--ours">
+            <h3>Files make easier</h3>
+            <ul>
+              <li><strong>Cheap iteration</strong>, and an agent that works with full context.</li>
+              <li><strong>Every abandoned idea</strong> is one <code>git log</code> away.</li>
+            </ul>
+            <h3 class="stack__card-sub">Files make harder</h3>
+            <ul>
+              <li><strong>Multi-tenancy, self-serve and access control</strong>, which is why our reader access already lives in a database and <code>context-v/models/</code> sketches a remote one.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--them">
+            <h3>Records make easier</h3>
+            <ul>
+              <li><strong>Per-user persistence, sharing, quotas and audit</strong> come naturally.</li>
+              <li><strong>Provenance:</strong> it is possible to prove what produced a given slide.</li>
+            </ul>
+            <h3 class="stack__card-sub">Records make harder</h3>
+            <ul>
+              <li><strong>Ad hoc creative work:</strong> every new kind of artifact needs a schema, a migration and a test. Her own spec warns: <q>prove that the same requirement cannot be represented clearly in the working Markdown documents</q>.</li>
+            </ul>
+          </article>
+        </div>
+
+        <h3 class="tradeoff__title">One repo of services against a tree of client sites</h3>
+        <p class="tradeoff__lede">Her repo is a modular monolith in source and a set of services at runtime. Ours is a tree: a shared shell, many thin client repos, conventions above.</p>
+        <div class="stack__grid">
+          <article class="stack__card stack__card--them">
+            <h3>One repo makes easier</h3>
+            <ul>
+              <li><strong>One place to look,</strong> one spec of record, one CI, and one PR that shows everything a change touched.</li>
+              <li><strong>Tests that reach across</strong> the front-end and back-end boundary: one test reads specs, routes and services.</li>
+            </ul>
+            <h3 class="stack__card-sub">One repo makes harder</h3>
+            <ul>
+              <li><strong>Some files grow without a natural boundary</strong>, like the 10,982-line generation service.</li>
+              <li><strong>Copied-in workflows stopped running</strong> without anyone noticing, because GitHub reads only the root workflows folder.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--ours">
+            <h3>A tree makes easier</h3>
+            <ul>
+              <li><strong>Client work stays isolated:</strong> separate repos, access and deploys.</li>
+              <li><strong>Generic parts are lifted into the shell</strong> only after a second client needs them.</li>
+              <li><strong>An agent on one client</strong> loads only that client.</li>
+            </ul>
+            <h3 class="stack__card-sub">A tree makes harder</h3>
+            <ul>
+              <li><strong>A shell change reaches seven consumers</strong> through a package version and seven pointer bumps.</li>
+              <li><strong>Instructions repeat at each level and drift.</strong></li>
+              <li><strong>Cross-cutting checks have no single home</strong>, which is part of why there are none.</li>
+            </ul>
+          </article>
+        </div>
+
+        <h3 class="tradeoff__title">Failure isolation</h3>
+        <div class="stack__grid">
+          <article class="stack__card stack__card--them">
+            <h3>Instadeck</h3>
+            <ul>
+              <li><strong>API, worker and renderer are separate services.</strong></li>
+              <li><strong>Durable jobs survive restarts</strong>, a stale-job rescuer exists, and the spec requires terminal failures to be visible.</li>
+              <li><strong>The shared trunk is Postgres:</strong> API, queue and lineage all depend on it.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--ours">
+            <h3>dididecks-ai</h3>
+            <ul>
+              <li><strong>Each client site is its own deploy</strong>, so one client’s outage or bad build doesn’t touch another. Each consumer pins a shell version.</li>
+              <li><strong>No server-side generator to fail.</strong> The failure mode is human: generation stops when no operator is at the keyboard, and a deck is only as current as the last session.</li>
+              <li><strong>Reader access depends on libSQL</strong> per site.</li>
+            </ul>
+          </article>
+        </div>
+        <p class="tradeoff__verdict"><strong>For both sides:</strong> her trunk risk is one database; ours is one operator. Neither is wrong for its stage, and each side’s next step is the other’s strength. Her product could keep a “last good” static export per deck that serves when the API is down, as our Vercel sites do by construction. Ours could let a reader-facing deck regenerate a slide without an operator, as her pipeline does by construction.</p>
+      </div>
+    </section>
+
+    <!-- 6d · Lineage ────────────────────────────────────────────────── -->
+    <section class="lineage" id="ch-lineage" aria-labelledby="dvi-lineage">
+      <div class="container">
+        <p class="eyebrow">ch · lineage</p>
+        <h2 id="dvi-lineage">What she carried over, and what she changed</h2>
+        <p class="section-lede">The two codebases are not strangers. Part of “the Lossless side” is her work, and part of hers restates ours. The arc is the most interesting finding of the study: the data model she designed in June is not what Instant Deck runs. What it runs is closer to how dididecks decks are actually made, and she arrived there by building the simpler path, measuring it, and reversing it.</p>
+        <ol class="timeline" role="list">
+          {timeline.map((e) => (
+            <li class={`timeline__item timeline__item--${e.side}`}>
+              <span class="timeline__date">{e.date}</span>
+              <span class="timeline__side">{e.side === 'ours' ? 'Lossless' : e.side === 'them' ? 'phoenixcap' : 'both'}</span>
+              <strong class="timeline__t">{e.t}</strong>
+              <span class="timeline__d">{e.d}</span>
+            </li>
+          ))}
+        </ol>
+        <div class="stack__scroll" tabindex="0" role="region" aria-label="Lineage table, scrollable">
+          <table class="stack__table lineage__table">
+            <thead><tr><th scope="col">Idea</th><th scope="col">dididecks-ai</th><th scope="col">Knowledge pack (June)</th><th scope="col">Instadeck (September)</th></tr></thead>
+            <tbody>
+              {lineage.map((r) => (
+                <tr class={`lineage__row--${r.kind}`}><th scope="row">{r.idea}</th><td>{r.ours}</td><td>{r.pack}</td><td>{r.them}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="tradeoff__verdict"><strong>Carried over</strong> into the June pack: the Scroll and Play split, the review matrix, the status taxonomy, data assets, gated access, the front-end and back-end split. <strong>Changed</strong> by September: one render path, author accounts, Postgres. <strong>Re-converged</strong> after PR 47: Markdown per slide, a design contract per deck, whole-deck reasoning first.</p>
+      </div>
+    </section>
+
+    <!-- 7 · The four comparisons, by layer ──────────────────────────── -->
+    <section class="buckets" id="ch-buckets" aria-labelledby="dvi-buckets">
+      <div class="container">
+        <p class="eyebrow">ch · the four comparisons</p>
+        <h2 id="dvi-buckets">Shared, similar, different, missing, by layer</h2>
+        <p class="section-lede">Every artifact from both inventories sits in exactly one row, and no row pairs across layers: {DEV_ROWS} rows in the developer layer, {PRODUCT_ROWS} in the in-product layer.</p>
+
+        {BUCKETS.map((b) => (
+          <article class="bucket" id={b.key}>
+            <header class="bucket__head">
+              <h3>{b.label}</h3>
+              <span class="bucket__badge"><span class={`swatch swatch--${b.key}`} aria-hidden="true"></span>dev {b.dev} of {DEV_ROWS} · product {b.product} of {PRODUCT_ROWS}</span>
+            </header>
+            <div class="minibars" aria-hidden="true">
+              <span class="minibar"><span class="minibar__k">dev</span><span class="meter"><span class={`meter__fill meter__fill--${b.key}`} style={`width:${(b.dev / DEV_ROWS) * 100}%`}></span></span></span>
+              <span class="minibar"><span class="minibar__k">product</span><span class="meter"><span class={`meter__fill meter__fill--${b.key}`} style={`width:${(b.product / PRODUCT_ROWS) * 100}%`}></span></span></span>
+            </div>
+            {b.key === 'shared' && (
+              <Fragment>
+                <p class="bucket__summary">Few, because the two sides use different tools and stacks. The interest is in how each is used.</p>
+                <h4>Developer layer</h4>
+                <div class="prose">
+                  <p><strong>READMEs</strong> on both sides route the reader elsewhere quickly: hers to <code>product/</code>, with a release-safety rule; ours to the specs, the splash, the client sites and the skills snapshot. Ours has drifted: it calls a mock-backed shell “active”.</p>
+                  <p><strong>Agent scratch kept out of git.</strong> Both ignore the coding agent’s local folder. Hers also ignores <code>/docs</code> and <code>/scripts</code> by default, force-adding only the records she wants tracked, and labels Bitácora logs <q>not product or agent context</q>: an explicit line between notes and record that ours doesn’t draw.</p>
+                  <p><strong>Deploy config.</strong> Hers carries policy in the config (<q>API startup must not race migration</q>); ours is small because static sites need little.</p>
+                </div>
+                <h4>In-product layer</h4>
+                <div class="prose">
+                  <p><strong>Agent Skills as domain know-how.</strong> Both use <code>SKILL.md</code> for craft rather than plumbing: hers for VC analysis and slide craft (<code>ic-critique</code>, <code>why-now</code>), ours for brand, design contract, ingest and imagery. Hers are short (271 lines for 19) and imperative; ours are long and explain why.</p>
+                  <p><strong>Chromium as the judge of a slide.</strong> Hers proves every render before publication and measures geometry and asset visibility. Ours drives a running site to PNG, SVG, PDF, PPTX and Keynote, and the Play-UI rule (<q>No responsive CSS. No JS in the slide itself</q>) exists so export is faithful. Hers uses the browser to check; ours uses it to produce.</p>
+                </div>
+              </Fragment>
+            )}
+            {b.key === 'similar' && (
+              <Fragment>
+                <p class="bucket__summary">Same job, different form. Both layers are dominated by this bucket, which fits a shared lineage.</p>
+                <h4>Developer layer</h4>
+                <div class="prose">
+                  <p><strong>Instruction files.</strong> Both built three levels: hers root, <code>backend/</code> and <code>frontend/</code>; ours anchor, ai-labs and dididecks-ai. Hers contradicted itself, so she removed it from main and wrote a shorter reset pinned by a test. Ours contradicts itself differently, with stale skill paths. Ours orients a cold agent in one read, including why; hers can’t silently drift.</p>
+                  <p><strong>Specs.</strong> Her spec of record has a precedence order for authority, change control, a conformance ledger rating each requirement Implemented, Partial or Not proven, and a definition of done. Our main spec is a north-star document, still Draft. Ours keeps questions open while the product is being discovered across engagements; hers closes them so an agent can’t reopen them by accident. Hers costs earlier reasoning, which survives only on archive branches; ours costs an agent knowing what has been decided.</p>
+                  <p><strong>Decision records.</strong> Her dated records open by saying what they do not authorize: <q>not approved for merge</q>, <q>not deployment authorization</q>. Ours record reasoning and loose ends. Her PR 39 recovery note is a candid account of a reversal.</p>
+                  <p><strong>Living maps, runbooks, session memory.</strong> Our sitemap has a file per route with typed frontmatter; her runtime inventory says it <q>does not claim browser acceptance</q>. Our browser-drive blueprint is tree-wide; her live runbook is stricter: <q>Do not call the release complete unless the command exits zero.</q> Her Bitácora stays close to the operator and out of every agent’s context; our changelog is shared, searchable, and read by the deck agent.</p>
+                  <p><strong>Briefs for a builder</strong>, a mirror image. We wrote data models so she “stops guessing at shapes”; she wrote a Codex pack to brief Codex on the dididecks model. These documents were the real interface between the two silos. <strong>Git:</strong> hers makes a change reviewable as a unit; ours makes the reasoning readable in <code>git log</code>. <strong>Coding agent:</strong> Codex and Claude Code; neither side’s artifacts are tied to its tool.</p>
+                </div>
+                <h4>In-product layer</h4>
+                <div class="prose">
+                  <p><strong>The Markdown document chain</strong>, the strongest convergence. Hers: <code>01-source.md</code> through <code>06-DESIGN.md</code>, then <code>slides/sNN.md</code>, each <q>creative source plus typed front matter</q>. Ours: narrative files with typed frontmatter and a 592-line <code>DESIGN.md</code> for one client. Hers adds earlier stages as named files, hashes and evidence IDs; ours keeps files across weeks of iteration and many variants. Her spec names a principle we never wrote down: <q>Markdown is not factual authority … Strong typing is required at safety/execution boundaries</q>.</p>
+                  <p><strong>The generator.</strong> Hers is a service that runs unattended for any customer at any hour, in a large file that is hard to load. Ours can do anything Astro can render, and needs an operator for every change. <strong>The contract:</strong> her canonical prompt is fixed per release and customer-safe (default intent: <q>Make this deck much better.</q>); ours is a method an operator adapts per client, and it explains its reasons.</p>
+                  <p><strong>Spec row to component.</strong> In June our exploration proposed a structured spec row compiled deterministically into a component. In August her prompt-system decision proposed a DeckSpec plus a deterministic compiler and left it unmounted. Both reached the same hybrid separately; neither has made it the main path.</p>
+                  <p><strong>Judgement, knowledge, diligence.</strong> Her visual audit scored slides on eight dimensions, once; our rank pill records a four-state verdict per slot, continuously. Her knowledge is broad and pre-written (195 files); ours is narrower and grows from engagements. Her Due Diligence findings stay off the investor slides; our citation popover keeps sources one click away on the slide.</p>
+                </div>
+              </Fragment>
+            )}
+            {b.key === 'different' && (
+              <Fragment>
+                <p class="bucket__summary">On one side only, where the choice fits that side’s context, so nobody should “fix” it.</p>
+                <h4>Developer layer</h4>
+                <div class="prose">
+                  <p><strong>Repo memory as product memory, refused</strong>, the deliberate counter-choice of the study. <em>Hers makes easier:</em> customer runs can’t be steered by operator notes; memory is per customer and typed; a new agent can’t mistake history for authority. <em>Harder:</em> development reasoning lives in PR titles, dated docs and a local log, so a cold agent has less to read. <em>Ours makes easier:</em> one place for both kinds of memory, cheap to add, readable by any agent, compounding across clients. <em>Harder:</em> an agent can treat an old exploration as current, and nothing separates a client’s confidential notes from the method.</p>
+                  <p><strong>Hers:</strong> release paperwork for migrations and four services against customer data; patch transport through CI as a workaround for her agent environment; pivots kept as archive branches. <strong>Ours:</strong> pseudomonorepo rules, the shared skills library, the corpus and publishing, which exist because of seven client repos inside a 27-project tree.</p>
+                </div>
+                <h4>In-product layer</h4>
+                <div class="prose">
+                  <p><strong>Where the generator’s memory lives.</strong> Her knowledge loader excludes operator notes from <q>every product knowledge lane</q>; our generator reads the client folder, because it is the operator’s agent. <strong>Where generation will run</strong>, the deepest strategic difference: our spec bets on a local-first native app with embedded Claude chat, because the paying user won’t open a terminal and confidential material stays local; hers bets on a hosted web app. Ours keeps the agent’s flexibility and moves it closer to the user; hers keeps the user’s simplicity and constrains the agent.</p>
+                </div>
+              </Fragment>
+            )}
+            {b.key === 'missing' && (
+              <Fragment>
+                <p class="bucket__summary">On one side only, where the other could borrow it. Eight of nine run toward us, and all of those concern verification.</p>
+                <h4>Developer layer (all on our side)</h4>
+                <div class="prose">
+                  <p><strong>CI that runs tests, and tests at all.</strong> The shell has shipped at least four versions to seven consumers with typecheck as the only automated check; her one workflow runs about 27 test files with <q>no paid calls</q>. <strong>Tests that pin documents:</strong> hers assert that the spec and genesis still say what they must, and that the spec’s prompt equals the runtime prompt; we rely on discipline and frontmatter. <strong>A review packet</strong>, headed <q>unfinished implementation. Do not merge or deploy this snapshot</q>: low priority, but it matters when someone else picks up unfinished work.</p>
+                  <p><strong>Drift noted in dididecks-ai</strong> (not fixed here): CLAUDE.md lists two submodules where there are seven client sites and a corpus, and an old skills path; a README claim about a mock; architecture links to files that don’t exist; five skills in the snapshot differ from the anchor, and one isn’t linked anywhere a session can load it; a filemap last regenerated 2026-06-07.</p>
+                </div>
+                <h4>In-product layer</h4>
+                <div class="prose">
+                  <p><strong>On our side, the main lesson of this layer.</strong> A frozen, provider-free corpus of past passes and failure shapes, where we have 51 exported slides and nothing that checks a shell change against them. Acceptance runners with 11 conditions, where ours is a human walk-through. Measured failure, then a bounded repair, at exactly the Play-UI step CLAUDE.md calls hardest. Tests that keep the runtime prompt equal to the spec, where our equivalent, the skill pack, has drifted.</p>
+                  <p><strong>On her side, a flow from ours.</strong> Variants side by side. Her genesis names the problem: <q>Sometimes the LLM produced an excellent redesign. Sometimes it produced generic layouts</q>. Her answer is constraint and measurement around one result per run; ours is optionality, every slot with several variants ranked by a human. Since her §21.2 acceptance is a human judgement, two or three treatments for the weakest slides would give it something to choose between. The cost is paid model calls, which her spec guards.</p>
+                </div>
+              </Fragment>
+            )}
+            <details class="ledger"><summary>Ledger rows: {b.label.toLowerCase()}</summary>
+              <table>
+                <thead><tr><th scope="col">ID</th><th scope="col">Instadeck</th><th scope="col">dididecks-ai</th></tr></thead>
+                <tbody>
+                  {ledger[b.key].dev.map((r) => <tr><td>{r.id}</td><td>{r.them}</td><td>{r.ours}</td></tr>)}
+                  {ledger[b.key].product.map((r) => <tr><td>{r.id}</td><td>{r.them}</td><td>{r.ours}</td></tr>)}
+                </tbody>
+              </table>
+              <p class="ledger__note">D- rows are the developer layer, P- rows the in-product layer. Rows with several files are trimmed to their gist.</p>
+            </details>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- 8 · Insights and recommendations ────────────────────────────── -->
+    <section class="recs" id="ch-recs" aria-labelledby="dvi-recs">
+      <div class="container">
+        <p class="eyebrow">ch · insights and recommendations</p>
+        <h2 id="dvi-recs">Insights and recommendations</h2>
+        <p class="section-lede">Each item is labelled by layer and framed as something one side could borrow from the other. Neither column is a verdict on the other product.</p>
+        <div class="recs__cols">
+          {[{ id: 'dvi-for-lossless', side: 'ours', title: 'For Lossless', pill: 'pill--accent', insights: insightsOurs, recs: recsOurs, note: 'Most come from her product layer, where her harness is deep and ours is thin on measurement. Two come from her developer layer, where her verification habits run deeper; one crosses layers.' },
+            { id: 'dvi-for-them', side: 'theirs', title: 'For Instadeck', pill: 'pill--signal', insights: insightsThem, recs: recsThem, note: 'Five on purpose, ranked by payoff for one repo with two apps, one product owner and many Codex sessions. Each is the smallest version that helps.' }].map((col) => (
+            <article class={`recs__col recs__col--${col.side}`} aria-labelledby={col.id}>
+              <h3 id={col.id}><span class={`pill ${col.pill}`}>{col.title}</span></h3>
+              <h4>Insights</h4>
+              <ol class="insights">{col.insights.map((x) => (
+                <li><span class={`pill ${layerPill(x.layer)} tag-layer`}>{layerWord(x.layer)}</span> <strong>{x.t}</strong> {x.d}</li>
+              ))}</ol>
+              <h4>Recommendations, ranked by payoff</h4>
+              <ol class="ranked">{col.recs.map((x) => (
+                <li><span class={`pill ${layerPill(x.layer)} tag-layer`}>{layerWord(x.layer)}</span> <strong>{x.t}</strong> {x.d} <span class="ranked__meta">{x.from} <span class="chip">effort {x.size}</span></span></li>
+              ))}</ol>
+              <p class="recs__note">{col.note}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 · Method and sources ──────────────────────────────────────── -->
+    <section class="method" id="ch-method" aria-labelledby="dvi-method">
+      <div class="container">
+        <p class="eyebrow">ch · method and sources</p>
+        <h2 id="dvi-method">Method and sources</h2>
+        <div class="two-col">
+          <div>
+            <p>This is a <strong>collaboration study</strong>: one collaborator’s codebase beside ours, read both ways, as described in the exploration <a href={EXPLORATION_URL}>Explore Collaborator Codebases for Insights: Comparative Highlights</a>, including its section “Two harnesses, not one”. It ran in three steps.</p>
+            <ol class="steps">
+              <li><strong>Harness evidence.</strong> An inventory of every sign of how Instadeck is built with coding agents and how its own agents produce decks, read at one commit (2026-10-02; 364 commits on main, 1,453 tracked files), each artifact tagged dev, product or both.</li>
+              <li><strong>Compare and contrast, by layer.</strong> dididecks-ai, two of its client sites, ai-labs and the anchor layer inventoried on our side, then every artifact sorted into one bucket within its own layer.</li>
+              <li><strong>This page,</strong> built only from those two steps, on 2026-10-03. No finding here is new.</li>
+            </ol>
+          </div>
+          <div>
+            <p><strong>Named, not linked.</strong> This page names phoenixcap, Instadeck and dididecks-ai. It does not link to her repository or to the study notes.</p>
+            <p><strong>Limits.</strong> The Chroma server was down during the comparison, so our corpus of past sessions is described, not queried. Five of dididecks-ai’s seven client sites and its corpus submodule were not read.</p>
+            <p><strong>Diagrams.</strong> The harness maps, loops and shape diagram were authored as Archify sources from the comparison’s Mermaid, validated, and re-themed with this site’s tokens. The layer map and the lineage timeline are hand-built HTML.</p>
+            <p><a href="#dvi-contents">↑ Back to contents</a> · <a href={`${base}studies/`}>← All studies</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Scroll-spy for the chapter rail (same as silo-to-silo-01): mark the
+    // topmost section in view, and keep the active item scrolled into sight
+    // when the rail overflows on narrow screens.
+    const rail = document.querySelector<HTMLElement>('[data-chapter-rail]');
+    if (rail) {
+      const strip = rail.querySelector<HTMLElement>('.chapter-rail__inner') ?? rail;
+      const items = new Map<string, HTMLAnchorElement>();
+      rail.querySelectorAll<HTMLAnchorElement>('[data-rail-target]').forEach((el) => {
+        const id = el.dataset.railTarget;
+        if (id) items.set(id, el);
+      });
+      let current: string | null = null;
+      const setCurrent = (id: string) => {
+        if (id === current) return;
+        current = id;
+        for (const [key, el] of items) {
+          const active = key === id;
+          el.setAttribute('aria-current', active ? 'true' : 'false');
+          if (active && strip.scrollWidth > strip.clientWidth) {
+            el.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+          }
+        }
+      };
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          if (visible[0]?.target.id) setCurrent(visible[0].target.id);
+        },
+        { rootMargin: '-25% 0px -60% 0px', threshold: 0 },
+      );
+      for (const id of items.keys()) {
+        const section = document.getElementById(id);
+        if (section) observer.observe(section);
+      }
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  /* ─── Layer map (centerpiece) ─────────────────────────────────────── */
+  .lm { margin: 0; }
+  .lm__summary { font-family: var(--font__display); font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.45; color: var(--color-text); max-width: 70ch; margin-bottom: var(--space-6); }
+  .lm__grid {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr) 9rem minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+  .lm__colhead { font-family: var(--font__mono); font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text); padding-bottom: var(--space-2); border-bottom: 2px solid var(--color-accent); }
+  .lm__colhead--them { border-bottom-color: var(--color-signal); }
+  .lm__rowhead { display: grid; align-content: center; gap: var(--space-1); padding-right: var(--space-2); }
+  .lm__rowhead--0 { grid-row: 2; grid-column: 1; }
+  .lm__rowhead--1 { grid-row: 3; grid-column: 1; }
+  .lm__layer { font-family: var(--font__display); font-weight: 600; font-size: 1.05rem; color: var(--color-text); line-height: 1.2; }
+  .lm__what { font-size: 0.82rem; color: var(--color-text-dim); }
+  .lm__cell {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+  }
+  .lm__cell--d3 { border-width: 2px; border-color: var(--color-text-soft); }
+  .lm__cell--d1 { border-style: dashed; }
+  .lm__cell p { color: var(--color-text-soft); font-size: 0.9rem; margin: 0; }
+  .lm__cellhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-3); font-size: 1rem; }
+  .lm__who { font-family: var(--font__mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-dim); }
+  .lm__depth { display: inline-flex; align-items: center; gap: var(--space-2); font-family: var(--font__display); font-size: 1.35rem; color: var(--color-text); }
+  .lm__meter { display: inline-flex; gap: 3px; }
+  .lm__meter span { width: 10px; height: 18px; border: 1.5px solid var(--color-text-dim); border-radius: 1px; }
+  .lm__meter span.on { background: var(--color-text); border-color: var(--color-text); }
+  .lm__cell--d3 .lm__depth { color: var(--color-accent); }
+  .lm__cell--d3 .lm__meter span.on { background: var(--color-accent); border-color: var(--color-accent); }
+  .lm__cell--d1 .lm__depth { color: var(--color-text-dim); }
+  .lm__arrow { display: grid; align-content: center; justify-items: center; text-align: center; gap: var(--space-1); }
+  .lm__arrow svg { width: 100%; max-width: 8rem; height: 1.6rem; overflow: visible; }
+  .lm__arrow path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .lm__arrow--right { color: var(--color-accent); }
+  .lm__arrow--left { color: var(--color-signal); }
+  .lm__arrow path { stroke: currentColor; }
+  .lm__arrowlabel { font-family: var(--font__mono); font-size: 0.72rem; color: currentColor; line-height: 1.3; }
+  .lm__arrowsub { font-size: 0.74rem; color: var(--color-text-dim); line-height: 1.3; }
+  .lm__caveats { margin-top: var(--space-6); display: grid; gap: var(--space-2) var(--space-6); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); font-size: 0.9rem; color: var(--color-text-dim); }
+  .lm__caveats p { margin: 0; }
+  .lm__caveats strong { color: var(--color-text-soft); }
+  @media (max-width: 52rem) {
+    .lm__grid { grid-template-columns: minmax(0, 1fr); }
+    .lm__corner, .lm__colhead, .lm__colgap { display: none; }
+    .lm__grid > * { grid-row: auto !important; grid-column: 1 !important; }
+    .lm__rowhead { padding-top: var(--space-4); border-top: 1px solid var(--color-border); }
+    /* Stacked order per layer: head, Lossless cell, arrow, their cell. */
+    .lm__arrow svg { transform: rotate(90deg); width: 2.4rem; height: 2.4rem; }
+  }
+
+  .prototype { margin-top: var(--space-8); padding: var(--space-5) var(--space-6); border: 1px solid var(--color-border-strong); border-left: 3px solid var(--color-signal); border-radius: var(--radius-md); background: var(--color-bg-soft); max-width: 72rem; }
+  .prototype h3 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); font-size: 1.1rem; margin-bottom: var(--space-3); }
+  .prototype p { color: var(--color-text-soft); margin: 0; }
+
+  .stackbar { display: flex; height: 10px; border-radius: var(--radius-sm); overflow: hidden; gap: 2px; margin: var(--space-2) 0; }
+  .stackbar__seg--shared { background: var(--color-accent); }
+  .stackbar__seg--similar { background: var(--color-thread); }
+  .stackbar__seg--different { background: var(--color-text-dimmer); }
+  .stackbar__seg--missing { background: var(--color-signal); }
+  .tile__counts { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); font-family: var(--font__mono); font-size: 0.74rem; color: var(--color-text-dim); }
+  .tile__counts strong { color: var(--color-text); }
+  .tile__counts .swatch { width: 1.2rem; margin-right: var(--space-1); }
+  .tile__counts .swatch--different { width: 0.7rem; height: 0.7rem; }
+  .highlights .cards { margin-bottom: var(--space-6); }
+
+  .dvi-figure__h { font-size: 1.2rem; margin-bottom: var(--space-3); }
+  .loops__h { font-size: 1.3rem; margin: var(--space-8) 0 var(--space-4); }
+  .minibars { display: grid; gap: var(--space-1); max-width: 24rem; margin-bottom: var(--space-4); }
+  .minibar { display: grid; grid-template-columns: 4.5rem 1fr; align-items: center; gap: var(--space-2); font-family: var(--font__mono); font-size: 0.7rem; color: var(--color-text-dim); }
+  .minibar .meter { margin: 0; }
+  .meter__fill { display: block; height: 100%; background: var(--color-text-dim); }
+  .meter__fill--shared { background: var(--color-accent); }
+  .meter__fill--similar { background: var(--color-thread); }
+  .meter__fill--missing { background: var(--color-signal); }
+  .bucket h4 { font-family: var(--font__mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dim); margin: var(--space-5) 0 var(--space-2); }
+  .ledger__note { font-family: var(--font__mono); font-size: 0.72rem; color: var(--color-text-dim); margin-top: var(--space-2); }
+  .tag-layer { margin-right: var(--space-1); font-size: 0.62rem; }
+  .tag-exc { display: inline-block; font-family: var(--font__mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 1px 6px; border: 1px dashed var(--color-signal); color: var(--color-signal); border-radius: var(--radius-sm); }
+  .hero { padding: var(--space-16) 0 var(--space-10); }
+  .hero h1 { margin: var(--space-3) 0 var(--space-5); }
+  .hero .lede { max-width: 62ch; margin-bottom: var(--space-6); }
+  .audience {
+    display: grid;
+    gap: var(--space-3) var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    margin: 0 0 var(--space-6);
+    max-width: 62rem;
+  }
+  .audience div { border-left: 2px solid var(--color-accent); padding: var(--space-1) var(--space-4); background: var(--color-bg-soft); }
+  .audience div + div { border-left-color: var(--color-signal); }
+  .audience dt { font-family: var(--font__mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dim); }
+  .audience dd { margin: 0; color: var(--color-text-soft); }
+
+  section { padding: var(--space-12) 0; }
+  h2 { margin: var(--space-2) 0 var(--space-4); }
+  .section-lede { color: var(--color-text-soft); max-width: 68ch; margin-bottom: var(--space-6); }
+
+  /* Highlights */
+  .tiles {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .tile {
+    position: relative;
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-5);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .tile__label { font-family: var(--font__mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text-dim); }
+  .tile__count { font-family: var(--font__display); font-size: 2.6rem; font-weight: 600; line-height: 1; color: var(--color-text); }
+  .tile__of { font-family: var(--font__mono); font-size: 0.74rem; color: var(--color-text-dim); }
+  .tile__gist { color: var(--color-text-soft); font-size: 0.92rem; }
+  .tile .swatch { position: absolute; top: var(--space-5); right: var(--space-5); }
+  .meter { display: block; height: 4px; background: var(--color-border); border-radius: var(--radius-pill); overflow: hidden; margin: var(--space-2) 0; }
+  .meter span { display: block; height: 100%; background: var(--color-text-dim); }
+  .tile--shared .meter span { background: var(--color-accent); }
+  .tile--similar .meter span { background: var(--color-thread); }
+  .tile--missing .meter span { background: var(--color-signal); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: var(--space-5); }
+
+  /* Line swatches: the same line language as the diagrams. Never the only
+     signal: every swatch sits next to the bucket's name. */
+  .swatch { display: inline-block; width: 2.2rem; height: 0; border-top: 3px solid var(--color-text-dim); vertical-align: middle; margin-right: var(--space-2); }
+  .swatch--shared { border-top: 3px solid var(--color-accent); }
+  .swatch--similar { border-top: 2px dashed var(--color-thread); }
+  .swatch--missing { border-top: 2px dashed var(--color-signal); }
+  .swatch--different { width: 0.9rem; height: 0.9rem; border: 1.5px solid var(--color-text-dim); border-radius: 2px; }
+
+  .line-key {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    font-family: var(--font__mono);
+    font-size: 0.76rem;
+    color: var(--color-text-dim);
+    margin-bottom: var(--space-4);
+  }
+
+  /* Figures */
+  .dvi-figure { margin: 0 0 var(--space-8); }
+  .dvi-figure__svg {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+  }
+  .dvi-figure__title {
+    font-family: var(--font__mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+    margin-bottom: var(--space-2);
+  }
+  .dvi-figure figcaption:not(.dvi-figure__title) {
+    margin-top: var(--space-3);
+    font-size: 0.86rem;
+    color: var(--color-text-dim);
+  }
+  .dvi-figure--map .dvi-figure__svg--wide { max-width: 60rem; margin: 0 auto; }
+
+  /* Diagrams that can't stack scroll sideways inside their own box on a
+     phone; the page itself never scrolls horizontally. */
+  /* ─── Stack comparison ────────────────────────────────────────────── */
+  .stack__scroll { overflow-x: auto; margin-bottom: var(--space-6); }
+  .stack__table { width: 100%; min-width: 44rem; border-collapse: collapse; font-size: 0.86rem; }
+  .stack__table th, .stack__table td { text-align: left; vertical-align: top; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border-strong); color: var(--color-text-soft); }
+  .stack__table thead th { font-family: var(--font__mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text); border-bottom: 2px solid var(--color-accent); }
+  .stack__table thead th:nth-child(2) { border-bottom-color: var(--color-signal); }
+  .stack__table tbody th { font-family: var(--font__mono); font-size: 0.75rem; color: var(--color-text); white-space: nowrap; }
+  .stack__table strong { color: var(--color-text); }
+  .stack__grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); margin-bottom: var(--space-6); }
+  .stack__card { background: var(--color-bg-card); border: 1px solid var(--color-border-strong); border-left-width: 3px; border-radius: var(--radius-md); padding: var(--space-5); }
+  .stack__card--them { border-left-color: var(--color-signal); }
+  .stack__card--ours { border-left-color: var(--color-accent); }
+  .stack__card h3 { font-size: 1rem; margin: 0 0 var(--space-3); color: var(--color-text); }
+  .stack__card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: var(--space-2); }
+  .stack__card li { color: var(--color-text-soft); font-size: 0.9rem; }
+  .stack__card strong { color: var(--color-text); }
+  .tradeoff__title { font-size: 1.15rem; margin: var(--space-8) 0 var(--space-2); color: var(--color-text); }
+  .tradeoff__lede { color: var(--color-text-soft); max-width: 72ch; margin-bottom: var(--space-4); }
+  .tradeoff__verdict { color: var(--color-text-soft); max-width: 72ch; margin-bottom: var(--space-4); }
+  .tradeoff__verdict strong, .tradeoff__verdict code { color: var(--color-text); }
+  /* ─── Chapter cards + rail (from mpstaton-site's proposal pattern) ─── */
+  .chapter-cards { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); margin-top: var(--space-8); }
+  .chapter-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); background: color-mix(in oklab, var(--color-bg-card) 60%, transparent); text-decoration: none; transition: border-color 0.15s, background-color 0.15s, transform 0.15s; }
+  .chapter-card:hover { border-color: color-mix(in oklab, var(--color-accent) 50%, var(--color-border-strong)); background: var(--color-bg-card); transform: translateY(-1px); }
+  .chapter-card__num { font-family: var(--font__mono); font-size: 0.68rem; letter-spacing: 0.18em; color: var(--color-accent); font-variant-numeric: tabular-nums; }
+  .chapter-card__title { font-family: var(--font__display); font-weight: 600; font-size: 1rem; line-height: 1.25; color: var(--color-text); text-wrap: balance; }
+  .chapter-card__summary { font-size: 0.8rem; line-height: 1.5; color: var(--color-text-dim); text-wrap: pretty; }
+  .chapter-rail { position: sticky; top: 64px; z-index: 20; background: color-mix(in oklab, var(--color-bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-border); }
+  .chapter-rail__inner { display: flex; gap: var(--space-1); overflow-x: auto; scrollbar-width: none; max-width: 76rem; margin: 0 auto; padding: var(--space-2) var(--space-6); }
+  .chapter-rail__inner::-webkit-scrollbar { display: none; }
+  .chapter-rail__item { flex: 0 0 auto; display: inline-flex; align-items: baseline; gap: var(--space-2); padding: 0.3rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.75rem; line-height: 1.2; color: var(--color-text-dim); text-decoration: none; white-space: nowrap; transition: color 0.15s, background-color 0.15s; }
+  .chapter-rail__item:hover { color: var(--color-text); background: color-mix(in oklab, var(--color-text) 8%, transparent); }
+  .chapter-rail__item[aria-current='true'] { color: var(--color-text); background: color-mix(in oklab, var(--color-accent) 16%, transparent); }
+  .chapter-rail__num { font-family: var(--font__mono); font-size: 0.68rem; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: var(--color-accent); }
+  .dvi > section[id^='ch-'] { scroll-margin-top: calc(64px + 3.25rem); }
+  .dvi-scroll { overflow-x: auto; }
+  .dvi-scroll :global(svg) { min-width: 44rem; }
+  .dvi-scroll :global(svg[data-diagram='shape']) { min-width: 60rem; }
+
+  /* Harness map: SVG on wide screens, stacked pairs on narrow ones. */
+  .map-stack { display: none; }
+  @media (max-width: 47.99rem) {
+    .dvi-figure__svg--wide { display: none; }
+    .map-stack { display: grid; gap: var(--space-5); }
+  }
+  .map-stack__cat { font-family: var(--font__mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dim); margin-bottom: var(--space-2); }
+  .map-stack ul { list-style: none; display: grid; gap: var(--space-2); }
+  .pair {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-text-dim);
+    border-radius: var(--radius-md);
+  }
+  .pair--shared { border-left: 3px solid var(--color-accent); }
+  .pair--similar { border-left: 3px dashed var(--color-thread); }
+  .pair--missing { border-left: 3px dashed var(--color-signal); }
+  .pair__side { display: grid; font-size: 0.92rem; color: var(--color-text); }
+  .pair__side small { font-family: var(--font__mono); font-size: 0.72rem; color: var(--color-text-dim); }
+  .pair__who { font-family: var(--font__mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dimmer); }
+  .pair__bucket { font-family: var(--font__mono); font-size: 0.72rem; color: var(--color-text-soft); }
+  .pair--shared .pair__bucket { color: var(--color-accent); }
+  .pair--similar .pair__bucket { color: var(--color-thread); }
+  .pair--missing .pair__bucket { color: var(--color-signal); }
+
+  .loop-notes, .two-col { display: grid; gap: var(--space-4) var(--space-8); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); margin-bottom: var(--space-6); }
+  .loop-notes p, .two-col p { color: var(--color-text-soft); }
+
+  /* Buckets */
+  .bucket { padding: var(--space-8) 0; border-top: 1px dashed var(--color-border); }
+  .bucket:first-of-type { border-top: none; }
+  .bucket__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3) var(--space-5); margin-bottom: var(--space-3); }
+  .bucket__head h3 { font-size: 1.5rem; }
+  .bucket__badge { font-family: var(--font__mono); font-size: 0.78rem; color: var(--color-text-dim); }
+  .bucket__summary { font-family: var(--font__display); font-size: 1.08rem; color: var(--color-text); max-width: 68ch; }
+  .prose { max-width: 72ch; }
+  .prose p { color: var(--color-text-soft); }
+  .prose code, .two-col code, .loop-notes code { color: var(--color-text); overflow-wrap: anywhere; }
+  q { quotes: '\201C' '\201D'; color: var(--color-text); }
+
+  .ledger { margin-top: var(--space-4); max-width: 72rem; }
+  .ledger summary { cursor: pointer; font-family: var(--font__mono); font-size: 0.8rem; color: var(--color-thread); }
+  .ledger table { width: 100%; border-collapse: collapse; margin-top: var(--space-3); font-size: 0.86rem; table-layout: fixed; }
+  .ledger th, .ledger td { text-align: left; vertical-align: top; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border); overflow-wrap: anywhere; }
+  .ledger th { font-family: var(--font__mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-dim); font-weight: 500; }
+  .ledger th:first-child, .ledger td:first-child { width: 4.2rem; font-family: var(--font__mono); color: var(--color-text-dim); }
+  .ledger td { color: var(--color-text-soft); }
+
+  /* Recommendations */
+  .recs__cols { display: grid; gap: var(--space-8); grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
+  .recs__col { padding: var(--space-6); background: var(--color-bg-card); border: 1px solid var(--color-border); border-top: 3px solid var(--color-accent); border-radius: var(--radius-md); }
+  .recs__col--theirs { border-top-color: var(--color-signal); }
+  .recs__col h3 { margin-bottom: var(--space-4); }
+  .recs__col h3 .pill { font-size: 0.82rem; }
+  .recs__col h4 { font-family: var(--font__mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-dim); margin: var(--space-5) 0 var(--space-3); }
+  .insights, .ranked { padding-left: 1.4rem; display: grid; gap: var(--space-3); color: var(--color-text-soft); font-size: 0.94rem; }
+  .insights strong, .ranked strong { color: var(--color-text); }
+  .ranked li::marker { font-family: var(--font__mono); color: var(--color-accent); }
+  .recs__col--theirs .ranked li::marker { color: var(--color-signal); }
+  .ranked__meta { display: block; margin-top: var(--space-1); font-family: var(--font__mono); font-size: 0.74rem; color: var(--color-text-dim); }
+  .recs__note { margin-top: var(--space-4); font-size: 0.86rem; color: var(--color-text-dim); }
+
+  .steps { padding-left: 1.4rem; display: grid; gap: var(--space-2); color: var(--color-text-soft); margin-bottom: var(--space-4); }
+
+  /* 16px gutter on phones */
+  @media (max-width: 40rem) {
+    .container { padding: 0 16px; }
+    .recs__col { padding: var(--space-4); }
+    .recs__cols { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* ─── Additions for this page ─────────────────────────────────────── */
+  .notranking { max-width: 62rem; font-size: 0.9rem; color: var(--color-text-dim); border: 1px dashed var(--color-border-strong); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); margin: 0; }
+  .notranking strong { color: var(--color-text-soft); }
+  @media (min-width: 52.01rem) { .lm__grid { grid-template-columns: 11rem minmax(0, 1fr) 10rem minmax(0, 1fr); } }
+  .lm__arrows { display: grid; align-content: center; gap: var(--space-5); }
+  .lm__arrow--minor path { stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .lm__arrow--minor .lm__arrowlabel { opacity: 0.85; }
+  .lm__arrow--main .lm__arrowlabel { font-weight: 600; }
+  @media (max-width: 52rem) {
+    .lm__arrows { grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+    .lm__arrows .lm__arrow svg { transform: none; width: 100%; height: 1.4rem; }
+  }
+  .stories { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); margin-top: var(--space-8); }
+  .stories .prototype { margin-top: 0; }
+  .prototype--thread { border-left-color: var(--color-thread); }
+  .swatch--plain { border-top: 1.5px solid var(--color-text-dim); }
+  .stack__card-sub { margin-top: var(--space-4) !important; color: var(--color-text-soft) !important; }
+  .timeline { list-style: none; display: grid; gap: 0; margin: 0 0 var(--space-8); padding: 0; border-left: 2px solid var(--color-border-strong); max-width: 64rem; }
+  .timeline__item { position: relative; display: grid; grid-template-columns: 8.5rem 7rem minmax(0, 1fr); gap: var(--space-1) var(--space-4); padding: var(--space-3) 0 var(--space-3) var(--space-5); }
+  .timeline__item::before { content: ''; position: absolute; left: -7px; top: 1.05rem; width: 12px; height: 12px; border-radius: 50%; background: var(--color-bg); border: 2px solid var(--color-text-dim); }
+  .timeline__item--ours::before { border-color: var(--color-accent); background: var(--color-accent); }
+  .timeline__item--them::before { border-color: var(--color-signal); background: var(--color-signal); }
+  .timeline__item--both::before { border-color: var(--color-thread); background: var(--color-bg); }
+  .timeline__date { font-family: var(--font__mono); font-size: 0.78rem; color: var(--color-text); font-variant-numeric: tabular-nums; }
+  .timeline__side { font-family: var(--font__mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-dim); }
+  .timeline__item--ours .timeline__side { color: var(--color-accent); }
+  .timeline__item--them .timeline__side { color: var(--color-signal); }
+  .timeline__item--both .timeline__side { color: var(--color-thread); }
+  .timeline__t { color: var(--color-text); }
+  .timeline__d { grid-column: 3; color: var(--color-text-soft); font-size: 0.9rem; }
+  @media (max-width: 40rem) {
+    .timeline__item { grid-template-columns: minmax(0, 1fr); }
+    .timeline__d { grid-column: 1; }
+  }
+  .lineage__table { min-width: 52rem; }
+  .lineage__table tbody th { white-space: normal; min-width: 9rem; }
+  .lineage__row--reconverged td:last-child { color: var(--color-text); font-weight: 600; }
+</style>
+
+<style is:global>
+  /* ─── Archify class → splash token mapping ───────────────────────────
+     Archify emits semantic classes; these rules bind them to theme.css
+     tokens so the diagrams follow dark / light / vibrant. Category hues:
+     instructions = thread, config = signal, context = accent,
+     verification = neutral, git = accent-deep, people/shape = dim. */
+  .dvi-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: var(--font__mono);
+    --k-frontend: var(--color-thread);
+    --k-security: var(--color-signal);
+    --k-database: var(--color-accent);
+    --k-backend: var(--color-text-soft);
+    --k-messagebus: var(--color-accent-deep);
+    --k-external: var(--color-text-dim);
+    --k-cloud: var(--color-text-soft);
+  }
+  .dvi-svg .c-grid { display: none; }
+  .dvi-svg .c-mask { fill: var(--color-bg-elevated); stroke: none; }
+  .dvi-svg .c-region { fill: color-mix(in oklab, var(--color-text) 3%, transparent); stroke: var(--color-border-strong); stroke-dasharray: 8 4; }
+  .dvi-svg .c-security-group { fill: transparent; stroke: var(--k-security); stroke-dasharray: 4 4; }
+  .dvi-svg .c-lane { fill: color-mix(in oklab, var(--color-text) 3%, transparent); stroke: var(--color-border-strong); stroke-dasharray: 6 6; }
+
+  .dvi-svg .c-frontend   { fill: color-mix(in oklab, var(--k-frontend) 14%, var(--color-bg-elevated));   stroke: var(--k-frontend); }
+  .dvi-svg .c-security   { fill: color-mix(in oklab, var(--k-security) 14%, var(--color-bg-elevated));   stroke: var(--k-security); }
+  .dvi-svg .c-database   { fill: color-mix(in oklab, var(--k-database) 14%, var(--color-bg-elevated));   stroke: var(--k-database); }
+  .dvi-svg .c-backend    { fill: color-mix(in oklab, var(--k-backend) 10%, var(--color-bg-elevated));    stroke: var(--k-backend); }
+  .dvi-svg .c-messagebus { fill: color-mix(in oklab, var(--k-messagebus) 16%, var(--color-bg-elevated)); stroke: var(--k-messagebus); }
+  .dvi-svg .c-external   { fill: var(--color-bg-elevated); stroke: var(--k-external); }
+  .dvi-svg .c-cloud      { fill: var(--color-bg-elevated); stroke: var(--k-cloud); }
+
+  .dvi-svg .t-primary { fill: var(--color-text); }
+  .dvi-svg .t-muted   { fill: var(--color-text-dim); }
+  .dvi-svg .t-dim     { fill: var(--color-text-dim); }
+  .dvi-svg .t-frontend   { fill: var(--k-frontend); }
+  .dvi-svg .t-security   { fill: var(--k-security); }
+  .dvi-svg .t-database   { fill: var(--k-database); }
+  .dvi-svg .t-backend    { fill: var(--k-backend); }
+  .dvi-svg .t-messagebus { fill: var(--k-messagebus); }
+  .dvi-svg .t-external   { fill: var(--k-external); }
+  .dvi-svg .t-cloud      { fill: var(--color-text-soft); }
+
+  .dvi-svg .semantic-sigil { fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; }
+  .dvi-svg .semantic-sigil > * { vector-effect: non-scaling-stroke; }
+  .dvi-svg .semantic-sigil .sigil-fill { fill: currentColor; stroke: none; }
+  .dvi-svg .s-frontend   { color: var(--k-frontend); }
+  .dvi-svg .s-security   { color: var(--k-security); }
+  .dvi-svg .s-database   { color: var(--k-database); }
+  .dvi-svg .s-backend    { color: var(--k-backend); }
+  .dvi-svg .s-messagebus { color: var(--k-messagebus); }
+  .dvi-svg .s-external   { color: var(--k-external); }
+  .dvi-svg .s-cloud      { color: var(--k-cloud); }
+
+  /* Relationships. In the harness map: emphasis = shared, dashed = similar,
+     security = missing on one side. Patterns differ as well as hues. */
+  .dvi-svg .a-default  { stroke: var(--color-text-dim); fill: none; }
+  .dvi-svg .a-emphasis { stroke: var(--color-accent); fill: none; }
+  .dvi-svg .a-dashed   { stroke: var(--color-thread); fill: none; stroke-dasharray: 4 4; }
+  .dvi-svg .a-security { stroke: var(--color-signal); fill: none; stroke-dasharray: 7 4; }
+  .dvi-svg[data-diagram^='harness-map'] .a-emphasis { stroke-width: 3; }
+  .dvi-svg .m-default  { fill: var(--color-text-dim); }
+  .dvi-svg .m-emphasis { fill: var(--color-accent); }
+  .dvi-svg .m-dashed   { fill: var(--color-thread); }
+  .dvi-svg .m-security { fill: var(--color-signal); }
+
+  /* Relationship labels reuse t-* classes by variant, not by node kind. */
+  .dvi-svg g[data-edge-from] text.t-backend    { fill: var(--color-accent); }
+  .dvi-svg g[data-edge-from] text.t-messagebus { fill: var(--color-thread); }
+  .dvi-svg g[data-edge-from] text.t-security   { fill: var(--color-signal); }
+  .dvi-svg g[data-edge-from] text.t-muted      { fill: var(--color-text-dim); }
+  .dvi-svg g[data-edge-from] text { font-weight: 600; }
+</style>
