@@ -450,6 +450,169 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
       </div>
     </section>
 
+    <!-- 6b · Stack against harness ──────────────────────────────────── -->
+    <section class="stack" aria-labelledby="s2s-stack">
+      <div class="container">
+        <p class="eyebrow">ch · stack against harness</p>
+        <h2 id="s2s-stack">The stacks, and what they do to agents</h2>
+        <p class="section-lede">{THEM} uses no front-end framework at all: plain JavaScript on Firebase, with no build step. We run typed, federated, multi-language workspaces. Each stack shapes how much structure an agent gets for free, and how much machinery someone has to keep running.</p>
+        <div class="stack__scroll" tabindex="0" role="region" aria-label="Stack comparison table, scrollable">
+          <table class="stack__table">
+            <thead><tr><th scope="col"></th><th scope="col">{THEM}</th><th scope="col">augment-it</th><th scope="col">memopop-ai</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Shape</th><td>One repo, one app</td><td>pnpm workspace: 20 front-end apps, 12 services, 7 packages, a shell</td><td>Bun workspace of 4 apps, plus a Python orchestrator as a submodule</td></tr>
+              <tr><th scope="row">Front end</th><td><strong>No framework.</strong> About 20k lines of plain JS: 23 numbered scripts loaded in order, separate HTML pages per surface</td><td>Svelte 5 built with rsbuild; apps load into the shell at runtime via Module Federation</td><td>SvelteKit 2 (web app, and a Tauri 2 desktop app); Astro 5 site</td></tr>
+              <tr><th scope="row">Back end</th><td>Express 5 on Cloud Functions (Node 22), about 20k lines</td><td>Fastify services with WebSockets, NATS as the message bus, Docker Compose</td><td>Python 3.11, LangGraph and LangChain, managed with uv</td></tr>
+              <tr><th scope="row">Data</th><td>Firestore and Cloud Storage; rules deny all direct client access</td><td>SurrealDB</td><td>Files on disk, an artifact trail per run</td></tr>
+              <tr><th scope="row">Types</th><td>None</td><td>TypeScript 6, zod</td><td>pydantic; TypeScript in the apps</td></tr>
+              <tr><th scope="row">Hosting</th><td>Firebase Hosting and Functions; SDK from Google's CDN, with App Check</td><td>Railway</td><td>Desktop app plus a web app</td></tr>
+              <tr><th scope="row">Models</th><td>One router across Gemini, DeepSeek, OpenAI and Claude; the model is <strong>runtime config</strong>, so switching needs no redeploy</td><td>Anthropic SDK, Claude Agent SDK, Composio</td><td>Anthropic via LangChain, plus search and crawl providers</td></tr>
+              <tr><th scope="row">Speech</th><td>Azure and Google TTS, Google speech-to-text, Whisper</td><td>n/a</td><td>n/a</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="stack__grid">
+          <article class="stack__card stack__card--them">
+            <h3>Where {THEM}'s stack wins</h3>
+            <ul>
+              <li><strong>No build, no toolchain.</strong> Edit a file, reload. There's no bundler, type setup or federation manifest for an agent to break.</li>
+              <li><strong>One deploy surface.</strong> One command, one region, one set of rules.</li>
+              <li><strong>Locked-down data.</strong> Deny-all rules shrink the damage an agent's mistake can do.</li>
+              <li><strong>Model routing as data.</strong> Swapping providers is a config edit, which makes their model comparisons cheap to run.</li>
+              <li><strong>Cheap to sit idle.</strong> Everything scales to zero.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--them">
+            <h3>Where it costs them</h3>
+            <ul>
+              <li><strong>No types, no imports.</strong> Twenty-three scripts share globals and depend on load order, so nothing tells an agent what depends on what. Their agents grep their way around.</li>
+              <li><strong>A 12,897-line dead file</strong> still in the repo, which agents keep reading.</li>
+              <li><strong>Locked to one vendor and region.</strong> Firestore and Functions are hard to leave.</li>
+              <li><strong>No CI</strong>, so the tests run only when someone remembers.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--ours">
+            <h3>Where our stacks win</h3>
+            <ul>
+              <li><strong>Types and boundaries.</strong> TypeScript, zod, pydantic and components give an agent contracts to read instead of greps.</li>
+              <li><strong>Swappable parts.</strong> A bus, a database and federated apps that ship on their own. Right for a multi-client platform.</li>
+              <li><strong>Python for the pipeline.</strong> LangGraph fits a 46-agent memo pipeline better than route handlers would.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--ours">
+            <h3>Where they cost us</h3>
+            <ul>
+              <li><strong>Much more to keep running.</strong> Federation, NATS, SurrealDB, Railway and Docker. Much of our dev-harness machinery exists to manage them, which is the root of the overbuilding.</li>
+              <li><strong>A slow first session.</strong> An agent has to learn the workspace, the federation contract and the bus before it can change a button.</li>
+              <li><strong>Three languages across two monorepos</strong>, each with its own tests and tools.</li>
+              <li><strong>No model routing as data.</strong> We'd need it to make replay and preflights cheap.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="two-col">
+          <p><strong>For {THEM}: add types at the API boundary.</strong> JSDoc with <code>// @ts-check</code> is enough, no build step needed. Delete the dead script. Both give an agent structure without giving up the no-build simplicity.</p>
+          <p><strong>For Lossless: make model routing runtime config.</strong> Their best stack idea, and a prerequisite for the in-product measurement we want to borrow. Then audit which moving parts earn their keep.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6c · Data, architecture, failure ────────────────────────────── -->
+    <section class="tradeoffs" aria-labelledby="s2s-tradeoffs">
+      <div class="container">
+        <p class="eyebrow">ch · three trade-offs</p>
+        <h2 id="s2s-tradeoffs">Database, architecture, failure</h2>
+        <p class="section-lede">Three choices where both sides are right for their context, and where the reasons we give for ours only partly hold up against the evidence.</p>
+
+        <h3 class="tradeoff__title">Firestore against SurrealDB</h3>
+        <p class="tradeoff__lede">{THEM}'s data is document-shaped: sessions, transcripts and exams, each owned by a user. Ours is a graph of people, organizations and affiliations shared across clients. Each database fits its data.</p>
+        <div class="stack__grid">
+          <article class="stack__card stack__card--them">
+            <h3>Firestore</h3>
+            <ul>
+              <li><strong>Fully managed</strong>, scales to zero, with a local emulator for tests.</li>
+              <li><strong>Security in the database.</strong> Their rules deny all client access; every write goes through the API.</li>
+              <li><strong>Agents know it well.</strong> Years of examples in training data.</li>
+              <li><strong>But</strong> no joins or graph, queries limited by indexes, pay per read, and high lock-in.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--ours">
+            <h3>SurrealDB: the multi-model benefits</h3>
+            <ul>
+              <li><strong>One engine, one query language</strong> for documents and relationships. No second store to keep in sync.</li>
+              <li><strong>A native graph.</strong> Affiliations are edges you traverse, not copied documents.</li>
+              <li><strong>Room to grow:</strong> vector, full-text and live queries are built in.</li>
+              <li><strong>Namespaces map onto clients</strong>, and it's open source, so lower lock-in.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--ours">
+            <h3>SurrealDB: the multi-model costs</h3>
+            <ul>
+              <li><strong>Mostly unrealized.</strong> We use two models, documents and graph edges. No vector indexes, full-text search or live queries; vector search runs in a separate Chroma store.</li>
+              <li><strong>A broad surface agents know least.</strong> We needed a blueprint, a skill and a verification pass to compensate.</li>
+              <li><strong>Less depth per model</strong> than a specialist database.</li>
+              <li><strong>One engine, one failure domain.</strong> Its outage takes documents, graph and search down together.</li>
+            </ul>
+          </article>
+        </div>
+        <p class="tradeoff__verdict"><strong>The pattern:</strong> an unusual technology choice gets paid for in harness. {THEM}'s mainstream choices need almost no explaining to an agent. For us: either use the other models (moving vector search into SurrealDB would retire a store), or stop counting them as a reason for the choice.</p>
+
+        <h3 class="tradeoff__title">One app against a monorepo of services</h3>
+        <p class="tradeoff__lede">Our rationale: as code, collaborators and agents scale, boundaries let each agent load only the context it needs, and keep parallel work from overwriting itself.</p>
+        <div class="stack__grid">
+          <article class="stack__card stack__card--ours">
+            <h3>Where the evidence supports it</h3>
+            <ul>
+              <li><strong>Less context per task.</strong> An agent changing one app reads that app and its contract. In a monolith of shared globals, any change could touch anything, and agents end up searching by line number.</li>
+              <li><strong>Fewer collisions</strong> between parallel agents.</li>
+              <li><strong>Tests, ownership and deploys</strong> per unit.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--them">
+            <h3>Where it doesn't</h3>
+            <ul>
+              <li><strong>Cross-boundary work gets harder.</strong> A change to a bus message or the federation contract needs context from several services, and errors move between them.</li>
+              <li><strong>A slower first session</strong> for every fresh agent.</li>
+              <li><strong>Overwrites are mostly a git problem.</strong> Branches, small commits and handoffs prevent them in any shape. {THEM}'s worst one came from 16 days of work outside git, not from being a monolith.</li>
+              <li><strong>Every boundary needs</strong> its own instructions, contract and checks.</li>
+            </ul>
+          </article>
+        </div>
+        <p class="tradeoff__verdict"><strong>The nuance:</strong> what helps agents is clear module boundaries with explicit contracts. Microservices are one way to get them, and the most expensive. A modular monolith gets most of the benefit. For {THEM}: ES modules with <code>// @ts-check</code> instead of 23 global scripts. For us: the services shape fits many collaborators and clients in parallel, as a deliberate cost rather than a default.</p>
+
+        <h3 class="tradeoff__title">Failure isolation</h3>
+        <p class="tradeoff__lede">Our second rationale: with microservices in containers, one part failing doesn't take the others down.</p>
+        <div class="stack__grid">
+          <article class="stack__card stack__card--ours">
+            <h3>What isolation buys</h3>
+            <ul>
+              <li><strong>A crash stays in its process.</strong> If an ingest service dies, the shell and other apps keep running.</li>
+              <li><strong>Containers restart on their own</strong>, and a bad deploy of one service leaves the rest alone.</li>
+              <li><strong>A federated app that fails to load</strong> leaves the others rendering.</li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--them">
+            <h3>Where it doesn't hold yet</h3>
+            <ul>
+              <li><strong>A shared trunk.</strong> Every app connects to one workspace service; most services share one message bus and one database. Any of the three going down takes nearly everything with it.</li>
+              <li><strong>Invisible partial failure.</strong> Our own issue log lists five different failures that all look the same to the user: <q>a dead click</q>.</li>
+              <li><strong>Isolation needs the rest</strong> to become resilience: timeouts, fallbacks, health checks, a UI that says what's down.</li>
+              <li><strong>More parts, more failures.</strong></li>
+            </ul>
+          </article>
+          <article class="stack__card stack__card--them">
+            <h3>{THEM} gets more than "monolith" suggests</h3>
+            <ul>
+              <li><strong>Pages come from a static CDN</strong>, so they load when the API is down.</li>
+              <li><strong>Seven separately deployed functions:</strong> one API plus six triggers and scheduled jobs, so a bug in integrity analysis can't stop an exam sitting.</li>
+              <li><strong>Crashes stay in one instance.</strong></li>
+              <li><strong>The weak spot:</strong> one function behind every API route, so a bad deploy takes them all down. Splitting it by surface is configuration, not microservices.</li>
+            </ul>
+          </article>
+        </div>
+        <p class="tradeoff__verdict"><strong>For both sides:</strong> we should build the live/not-live indicators, add timeouts and fallbacks on the socket and bus, and plan for the trunk. {THEM} should split the API function by surface.</p>
+      </div>
+    </section>
+
     <!-- 7 · The four comparisons, by layer ──────────────────────────── -->
     <section class="buckets" aria-labelledby="s2s-buckets">
       <div class="container">
@@ -774,6 +937,26 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
 
   /* Diagrams that can't stack scroll sideways inside their own box on a
      phone; the page itself never scrolls horizontally. */
+  /* ─── Stack comparison ────────────────────────────────────────────── */
+  .stack__scroll { overflow-x: auto; margin-bottom: var(--space-6); }
+  .stack__table { width: 100%; min-width: 44rem; border-collapse: collapse; font-size: 0.86rem; }
+  .stack__table th, .stack__table td { text-align: left; vertical-align: top; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border-strong); color: var(--color-text-soft); }
+  .stack__table thead th { font-family: var(--font__mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text); border-bottom: 2px solid var(--color-accent); }
+  .stack__table thead th:nth-child(2) { border-bottom-color: var(--color-signal); }
+  .stack__table tbody th { font-family: var(--font__mono); font-size: 0.75rem; color: var(--color-text); white-space: nowrap; }
+  .stack__table strong { color: var(--color-text); }
+  .stack__grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); margin-bottom: var(--space-6); }
+  .stack__card { background: var(--color-bg-card); border: 1px solid var(--color-border-strong); border-left-width: 3px; border-radius: var(--radius-md); padding: var(--space-5); }
+  .stack__card--them { border-left-color: var(--color-signal); }
+  .stack__card--ours { border-left-color: var(--color-accent); }
+  .stack__card h3 { font-size: 1rem; margin: 0 0 var(--space-3); color: var(--color-text); }
+  .stack__card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: var(--space-2); }
+  .stack__card li { color: var(--color-text-soft); font-size: 0.9rem; }
+  .stack__card strong { color: var(--color-text); }
+  .tradeoff__title { font-size: 1.15rem; margin: var(--space-8) 0 var(--space-2); color: var(--color-text); }
+  .tradeoff__lede { color: var(--color-text-soft); max-width: 72ch; margin-bottom: var(--space-4); }
+  .tradeoff__verdict { color: var(--color-text-soft); max-width: 72ch; margin-bottom: var(--space-4); }
+  .tradeoff__verdict strong, .tradeoff__verdict code { color: var(--color-text); }
   .s2s-scroll { overflow-x: auto; }
   .s2s-scroll :global(svg) { min-width: 44rem; }
   .s2s-scroll :global(svg[data-diagram='shape']) { min-width: 60rem; }
