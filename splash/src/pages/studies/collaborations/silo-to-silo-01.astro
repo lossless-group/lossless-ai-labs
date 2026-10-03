@@ -32,6 +32,22 @@ import mapProduct from '../../../diagrams/silo-to-silo-01/harness-map-product.ar
 
 const base = import.meta.env.BASE_URL;
 const THEM = 'The Collaborator';
+
+// Chapter navigation, adapted from the proposal pattern on mpstaton-site
+// (ChapterCards + ChapterRail): cards to choose a way in, and a sticky rail
+// with scroll-spy to stay oriented once inside a long page.
+const CHAPTERS = [
+  { id: 'ch-layermap', short: 'Layer map', title: 'Each side is deep where the other is thin', summary: 'The 2×2: two sides, two harnesses, opposite depths.' },
+  { id: 'ch-highlights', short: 'Highlights', title: 'Highlights', summary: 'The biggest lesson each way, then the counts.' },
+  { id: 'ch-map', short: 'Harness maps', title: 'The harness maps, one per layer', summary: 'Every artifact, grouped and paired across sides.' },
+  { id: 'ch-loops', short: 'Loops', title: 'The loops, per layer', summary: 'How an idea becomes agent work becomes memory.' },
+  { id: 'ch-shape', short: 'Shape', title: 'Shape against harness', summary: 'One app against a tree of repos.' },
+  { id: 'ch-stack', short: 'Stacks', title: 'The stacks, and what they do to agents', summary: 'No framework against typed, federated workspaces.' },
+  { id: 'ch-tradeoffs', short: 'Trade-offs', title: 'Database, architecture, failure', summary: 'Firestore against SurrealDB, monolith against services, failure isolation.' },
+  { id: 'ch-buckets', short: 'Comparisons', title: 'Shared, similar, different, missing', summary: 'The full ledger, by layer.' },
+  { id: 'ch-recs', short: 'Recommendations', title: 'Insights and recommendations', summary: 'What each side should take, ranked.' },
+  { id: 'ch-method', short: 'Method', title: 'Method and sources', summary: 'How the study ran, and its limits.' },
+].map((c, i) => ({ ...c, num: String(i + 1).padStart(2, '0') }));
 const EXPLORATION_URL = `${SITE_REPO}/blob/main/studies/context-v/explorations/Explore-Collaborator-Codebases-for-Insights-Comparative-Highlights.md`;
 
 // ─── Layer map (step 2 §3) ────────────────────────────────────────────────
@@ -236,11 +252,31 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
             <dd>The small developer-harness pieces worth adopting from ours, sized for one repo.</dd>
           </div>
         </dl>
+        <nav class="chapter-cards" id="s2s-contents" aria-label="Chapters">
+          {CHAPTERS.map((c) => (
+            <a class="chapter-card" href={`#${c.id}`}>
+              <span class="chapter-card__num">{c.num}</span>
+              <span class="chapter-card__title">{c.title}</span>
+              <span class="chapter-card__summary">{c.summary}</span>
+            </a>
+          ))}
+        </nav>
       </div>
     </section>
 
+    <nav class="chapter-rail" aria-label="Chapter navigation" data-chapter-rail>
+      <div class="chapter-rail__inner">
+        {CHAPTERS.map((c) => (
+          <a class="chapter-rail__item" href={`#${c.id}`} data-rail-target={c.id}>
+            <span class="chapter-rail__num">{c.num}</span>
+            <span>{c.short}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+
     <!-- 2 · Layer map (centerpiece) ─────────────────────────────────── -->
-    <section class="layermap" aria-labelledby="s2s-layermap">
+    <section class="layermap" id="ch-layermap" aria-labelledby="s2s-layermap">
       <div class="container">
         <p class="eyebrow">ch · the layer map</p>
         <h2 id="s2s-layermap">Each side is deep where the other is thin</h2>
@@ -305,7 +341,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 3 · Highlights ──────────────────────────────────────────────── -->
-    <section class="highlights" aria-labelledby="s2s-highlights">
+    <section class="highlights" id="ch-highlights" aria-labelledby="s2s-highlights">
       <div class="container">
         <p class="eyebrow">ch · highlights</p>
         <h2 id="s2s-highlights">Highlights</h2>
@@ -359,7 +395,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 4 · Harness maps ────────────────────────────────────────────── -->
-    <section class="map" aria-labelledby="s2s-map">
+    <section class="map" id="ch-map" aria-labelledby="s2s-map">
       <div class="container">
         <p class="eyebrow">ch · the harness maps</p>
         <h2 id="s2s-map">The harness maps, one per layer</h2>
@@ -398,7 +434,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 5 · Loops per layer ─────────────────────────────────────────── -->
-    <section class="loops" aria-labelledby="s2s-loops">
+    <section class="loops" id="ch-loops" aria-labelledby="s2s-loops">
       <div class="container">
         <p class="eyebrow">ch · the loops</p>
         <h2 id="s2s-loops">The loops, per layer</h2>
@@ -435,7 +471,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 6 · Shape against harness ───────────────────────────────────── -->
-    <section class="shape" aria-labelledby="s2s-shape">
+    <section class="shape" id="ch-shape" aria-labelledby="s2s-shape">
       <div class="container">
         <p class="eyebrow">ch · shape against harness</p>
         <h2 id="s2s-shape">Shape against harness</h2>
@@ -451,7 +487,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 6b · Stack against harness ──────────────────────────────────── -->
-    <section class="stack" aria-labelledby="s2s-stack">
+    <section class="stack" id="ch-stack" aria-labelledby="s2s-stack">
       <div class="container">
         <p class="eyebrow">ch · stack against harness</p>
         <h2 id="s2s-stack">The stacks, and what they do to agents</h2>
@@ -517,7 +553,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 6c · Data, architecture, failure ────────────────────────────── -->
-    <section class="tradeoffs" aria-labelledby="s2s-tradeoffs">
+    <section class="tradeoffs" id="ch-tradeoffs" aria-labelledby="s2s-tradeoffs">
       <div class="container">
         <p class="eyebrow">ch · three trade-offs</p>
         <h2 id="s2s-tradeoffs">Database, architecture, failure</h2>
@@ -614,7 +650,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 7 · The four comparisons, by layer ──────────────────────────── -->
-    <section class="buckets" aria-labelledby="s2s-buckets">
+    <section class="buckets" id="ch-buckets" aria-labelledby="s2s-buckets">
       <div class="container">
         <p class="eyebrow">ch · the four comparisons</p>
         <h2 id="s2s-buckets">Shared, similar, different, missing, by layer</h2>
@@ -709,7 +745,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 8 · Insights and recommendations ────────────────────────────── -->
-    <section class="recs" aria-labelledby="s2s-recs">
+    <section class="recs" id="ch-recs" aria-labelledby="s2s-recs">
       <div class="container">
         <p class="eyebrow">ch · insights and recommendations</p>
         <h2 id="s2s-recs">Insights and recommendations</h2>
@@ -735,7 +771,7 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
     </section>
 
     <!-- 9 · Method and sources ──────────────────────────────────────── -->
-    <section class="method" aria-labelledby="s2s-method">
+    <section class="method" id="ch-method" aria-labelledby="s2s-method">
       <div class="container">
         <p class="eyebrow">ch · method and sources</p>
         <h2 id="s2s-method">Method and sources</h2>
@@ -752,12 +788,52 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
             <p><strong>Anonymized on purpose.</strong> {THEM} is a friend's private project. This page names no repo, account, product or person on their side, and quoted paths are trimmed of anything that would identify it. Lossless projects are named freely.</p>
             <p><strong>Limits.</strong> The Chroma server was down during the comparison, so our corpus is described from its README, not queried. Client and firm-private submodules on our side were not read.</p>
             <p><strong>Diagrams.</strong> The harness maps, loops and shape diagram were authored as Archify sources from the comparison's Mermaid, validated, and re-themed with this site's tokens. The layer map is hand-built HTML.</p>
-            <p><a href={`${base}studies/`}>← All studies</a></p>
+            <p><a href="#s2s-contents">↑ Back to contents</a> · <a href={`${base}studies/`}>← All studies</a></p>
           </div>
         </div>
       </div>
     </section>
   </div>
+
+  <script>
+    // Scroll-spy for the chapter rail, adapted from mpstaton-site's
+    // ChapterRail: mark the topmost section in view, and keep the active
+    // item scrolled into sight when the rail overflows on narrow screens.
+    const rail = document.querySelector<HTMLElement>('[data-chapter-rail]');
+    if (rail) {
+      const strip = rail.querySelector<HTMLElement>('.chapter-rail__inner') ?? rail;
+      const items = new Map<string, HTMLAnchorElement>();
+      rail.querySelectorAll<HTMLAnchorElement>('[data-rail-target]').forEach((el) => {
+        const id = el.dataset.railTarget;
+        if (id) items.set(id, el);
+      });
+      let current: string | null = null;
+      const setCurrent = (id: string) => {
+        if (id === current) return;
+        current = id;
+        for (const [key, el] of items) {
+          const active = key === id;
+          el.setAttribute('aria-current', active ? 'true' : 'false');
+          if (active && strip.scrollWidth > strip.clientWidth) {
+            el.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+          }
+        }
+      };
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          if (visible[0]?.target.id) setCurrent(visible[0].target.id);
+        },
+        { rootMargin: '-25% 0px -60% 0px', threshold: 0 },
+      );
+      for (const id of items.keys()) {
+        const section = document.getElementById(id);
+        if (section) observer.observe(section);
+      }
+    }
+  </script>
 </BaseLayout>
 
 <style>
@@ -957,6 +1033,21 @@ const layerWord = (l: Layer) => (l === 'Dev' ? 'Dev layer' : l === 'Product' ? '
   .tradeoff__lede { color: var(--color-text-soft); max-width: 72ch; margin-bottom: var(--space-4); }
   .tradeoff__verdict { color: var(--color-text-soft); max-width: 72ch; margin-bottom: var(--space-4); }
   .tradeoff__verdict strong, .tradeoff__verdict code { color: var(--color-text); }
+  /* ─── Chapter cards + rail (from mpstaton-site's proposal pattern) ─── */
+  .chapter-cards { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); margin-top: var(--space-8); }
+  .chapter-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); background: color-mix(in oklab, var(--color-bg-card) 60%, transparent); text-decoration: none; transition: border-color 0.15s, background-color 0.15s, transform 0.15s; }
+  .chapter-card:hover { border-color: color-mix(in oklab, var(--color-accent) 50%, var(--color-border-strong)); background: var(--color-bg-card); transform: translateY(-1px); }
+  .chapter-card__num { font-family: var(--font__mono); font-size: 0.68rem; letter-spacing: 0.18em; color: var(--color-accent); font-variant-numeric: tabular-nums; }
+  .chapter-card__title { font-family: var(--font__display); font-weight: 600; font-size: 1rem; line-height: 1.25; color: var(--color-text); text-wrap: balance; }
+  .chapter-card__summary { font-size: 0.8rem; line-height: 1.5; color: var(--color-text-dim); text-wrap: pretty; }
+  .chapter-rail { position: sticky; top: 64px; z-index: 20; background: color-mix(in oklab, var(--color-bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-border); }
+  .chapter-rail__inner { display: flex; gap: var(--space-1); overflow-x: auto; scrollbar-width: none; max-width: 76rem; margin: 0 auto; padding: var(--space-2) var(--space-6); }
+  .chapter-rail__inner::-webkit-scrollbar { display: none; }
+  .chapter-rail__item { flex: 0 0 auto; display: inline-flex; align-items: baseline; gap: var(--space-2); padding: 0.3rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.75rem; line-height: 1.2; color: var(--color-text-dim); text-decoration: none; white-space: nowrap; transition: color 0.15s, background-color 0.15s; }
+  .chapter-rail__item:hover { color: var(--color-text); background: color-mix(in oklab, var(--color-text) 8%, transparent); }
+  .chapter-rail__item[aria-current='true'] { color: var(--color-text); background: color-mix(in oklab, var(--color-accent) 16%, transparent); }
+  .chapter-rail__num { font-family: var(--font__mono); font-size: 0.68rem; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: var(--color-accent); }
+  .s2s > section[id^='ch-'] { scroll-margin-top: calc(64px + 3.25rem); }
   .s2s-scroll { overflow-x: auto; }
   .s2s-scroll :global(svg) { min-width: 44rem; }
   .s2s-scroll :global(svg[data-diagram='shape']) { min-width: 60rem; }
