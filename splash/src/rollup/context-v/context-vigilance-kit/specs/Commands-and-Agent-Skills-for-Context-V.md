@@ -1,5 +1,7 @@
 ---
+type: Specs
 title: "Commands and Agent Skills for context-v"
+description: "The full catalog of planned commands and skills, including the Chroma-backed tiers."
 lede: "Catalog of every command, slash command, and agent skill the kit ships — surfaced natively via `.claude/commands/` and `.claude/skills/`."
 date_authored_initial_draft: 2026-06-01
 date_authored_current_draft: 2026-06-01

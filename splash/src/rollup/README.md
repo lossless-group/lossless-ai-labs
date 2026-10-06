@@ -23,6 +23,7 @@ Sources rolled up:
 - `studies/conversational-ui-and-native-shells`
 - `studies/memory-layers-for-agents`
 - `studies/open-specs-and-standards`
+- `studies/sync-and-content-version-control`
 - `studies/vector-databases`
 
 To refresh: `pnpm rollup:sync`

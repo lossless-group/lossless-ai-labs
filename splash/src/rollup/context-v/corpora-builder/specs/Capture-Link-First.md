@@ -7,7 +7,7 @@ authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-semantic_version: 0.0.0.1
+semantic_version: 0.0.1.0
 status: Draft
 spec_reference: "[[../plans/Corpora-Builder-MVP-R2-Native-With-Checkpoint-History]] — Phase 3"
 tags:
@@ -70,10 +70,18 @@ ever creates.
 5. **Nothing here writes `verdict`.** Reachability is not approval, permanently.
 6. With no `--domain`, the source lands in `live/inbox/`. The inbox is
    capture-first staging and the richest bucket, not a cleanup queue.
-7. A URL that resolves to a PDF gets a **binary sibling** sharing the markdown's
-   stem, with `sha256`, byte length, and `download_status` — recorded **even
-   when the download failed**, because absence cannot distinguish "never tried"
-   from "tried and got a 403".
+7. A URL that resolves to a PDF is **filed into the content-addressed `bin/`
+   store**, optimized where that is safe, and the markdown records a pointer to
+   it — `binary_key`, both digests, both sizes, and `download_status`. Recorded
+   **even when the download failed**, because absence cannot distinguish "never
+   tried" from "tried and got a 403".
+
+   > **Amended 2026-08-22.** Until now the PDF landed as a *sibling* beside the
+   > markdown, sharing its stem. That is what made binaries 90.5% of the corpus
+   > bytes, forced Git LFS, and through LFS let `jj` corrupt a client repo. The
+   > binary now lives once, addressed by its own hash, per
+   > [[Binary-Ingest-And-Bin-Store]]. `CAPTURE-09` is retired rather than
+   > reworded — it promised a different thing, and the promise changed.
 8. Fetching is behind an injectable interface. The test suite performs no
    network I/O; a live fetch is a gated, deliberate run like `STORE-14`.
 
@@ -89,14 +97,16 @@ ever creates.
 | `CAPTURE-06` | Given no domain, when `add` runs, then the source lands under `live/inbox/` |
 | `CAPTURE-07` | Given any fetch outcome whatsoever, when `add` runs, then `verdict` is empty — no machine result is ever promoted to an analyst verdict |
 | `CAPTURE-08` | Given a URL with tracking params and a `www.` host, when `add` runs, then `normalized_url` is the canonical form while `url` keeps exactly what was passed |
-| `CAPTURE-09` | Given a URL serving a PDF, when `add` runs, then a binary sibling sharing the markdown stem is written and `binary_asset` carries its sha256, byte length, and `download_status: ok` |
-| `CAPTURE-10` | Given a PDF URL whose download fails, when `add` runs, then `binary_asset` is still recorded with a failing `download_status` and no sibling is written |
+| `~~CAPTURE-09~~` | Retired 2026-08-22 — binaries no longer land as siblings beside their markdown. Superseded by `CAPTURE-17`; the storage model moved to [[Binary-Ingest-And-Bin-Store]] |
+| `CAPTURE-10` | Given a PDF URL whose download fails, when `add` runs, then `binary_asset` is still recorded with a failing `download_status` and **no object is stored** |
 | `CAPTURE-11` | Given a page whose body exceeds the excerpt cap, when `add` runs without `--fetch`, then the excerpt is truncated to the cap |
 | `CAPTURE-12` | Given a target already holding a file with the same name from a different URL, when `add` runs, then the new file gains a `_2` suffix rather than overwriting |
 | `CAPTURE-13` | Given a fetch that succeeds, when `add` runs, then `origin` records how the source arrived and `fetched_at` is an ISO-8601 UTC instant |
 | `CAPTURE-14` | Given Jina's real response shape, where preamble lines are blank-line separated and the body follows a `Markdown Content:` marker, when it is parsed, then the preamble keys are extracted and the body begins after the marker |
 | `CAPTURE-15` | Given a body opening with skip-links and a nav list, when an excerpt is taken, then it starts at the first real prose and carries no markdown link syntax |
 | `CAPTURE-16` | Given a newly captured source, when it is written, then it states `status` and `content_pulled` explicitly rather than relying on a reader's defaults |
+| `CAPTURE-17` | Given a URL serving a PDF, when `add` runs, then the bytes are stored once in `bin/` at their content hash and the markdown carries `binary_key`, `binary_sha256`, `binary_bytes`, `source_sha256`, `source_bytes` and `optimized` — with **no sibling written beside it** |
+| `CAPTURE-18` | Given the same PDF captured into two different domains, when both are added, then one `bin/` object exists and both markdown files point at the same `binary_key` |
 
 **Not in the automated suite, run deliberately:** a live fetch against a real
 URL, writing into the dev bucket. Gated behind `CORPORA_LIVE_FETCH=1`, like

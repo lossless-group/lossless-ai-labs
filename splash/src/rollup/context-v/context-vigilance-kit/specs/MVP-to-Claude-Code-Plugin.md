@@ -1,5 +1,7 @@
 ---
+type: Specs
 title: "MVP: context-v as a Claude Code Plugin"
+description: "The original MVP spec for packaging context-v as a Claude Code plugin; partly superseded."
 lede: "The kit's MVP is not the Chroma memory system the June specs planned — it's a plugin where `/plugin install` is the whole onboarding."
 date_authored_initial_draft: 2026-07-21
 date_authored_current_draft: 2026-08-02

@@ -55,7 +55,24 @@ deliverables cannot fail quietly. So both become loud here, with tests.
 
 **In:** the `SourceFile` dataclass and its canonical field order; frontmatter
 read/write that preserves unknown keys; stranded-content detection; the
-filename grammar; URL normalisation for dedup; the `binary_asset` block.
+filename grammar; URL normalisation for dedup; the `binary_asset` block; and
+backfilling `normalised_url` onto sources that predate it.
+
+### Why the backfill edits text rather than re-rendering
+
+Identity blocks three separate pieces of work — the multibox, the gatedbox
+sweep, and telling one source apart from another across organizations — and it is
+available today for nothing: **every one of reach-edu's 737 filed sources carries
+a `url:`**, and 511 of them lack only the normalised form, which is derivable
+with no network call. The alternatives lose: basenames collide 36 times and the
+collisions are not benign (`just-a-moment.md` in four funder folders is four
+*different* blocked fetches), and `source_uuid` covers 241 of 737.
+
+`parse` → set → `render` would round-trip 511 files in a client's corpus through
+`FIELD_ORDER`, reordering keys and reflowing values nothing asked to change. The
+backfill inserts one line beneath `url:` and leaves every other byte alone —
+which is the difference between a diff somebody can read and one they have to
+trust. `BACKFILL-03` asserts it byte for byte.
 
 **Out:** fetching anything (Phase 3); the `live/` layout and checkpointing
 (Phase 4); parsing extract *contents* — the body is carried verbatim and its
@@ -114,6 +131,12 @@ source needs to reference one.
 | `SOURCE-11` | Given a file using the Generation-A key `exact_url` (or `published_date`), when it is parsed, then the canonical `url` (or `published_at`) is populated from it |
 | `SOURCE-12` | Given such a file, when it round-trips, then it is re-emitted under its ORIGINAL key — reading a corpus never silently migrates its schema |
 | `SOURCE-13` | Given a parsed file, when it is re-rendered unmodified, then no modelled default is added that the file did not already carry |
+| `BACKFILL-01` | Given a source carrying `url` but no `normalized_url`, when a backfill is planned, then the normalised form is derived from the url with no network call |
+| `BACKFILL-02` | Given a source that already carries `normalized_url`, or carries no `url`, or has no frontmatter at all, when a backfill is planned, then it is skipped with a stated reason rather than rewritten |
+| `BACKFILL-03` | Given a source, when the backfill is applied, then exactly one line is inserted beneath `url:` and **every other byte of the file is unchanged** |
+| `BACKFILL-04` | Given a corpus, when the backfill is applied twice, then the second pass writes nothing |
+| `BACKFILL-05` | Given a dry run, when it completes, then no key in the store has changed |
+| `BACKFILL-06` | Given a source using the Generation-A key `exact_url` — or carrying both it and `url` — when the backfill runs, then the URL is found, the insertion goes beneath the key the file actually uses, the canonical key wins where both are present, and the original key is never migrated |
 | `PARSE-01` | Given a file with a stray `---` mid-frontmatter followed by more `key: value` lines, when it is parsed, then a `StrandedContent` error is raised naming the first stranded key |
 | `PARSE-02` | Given a well-formed file whose body legitimately contains `---` as a horizontal rule, when it is parsed, then no error is raised and the body is preserved |
 | `PARSE-03` | Given a file with no frontmatter at all, when it is parsed, then it yields a `SourceFile` with an empty url and the whole text as body |

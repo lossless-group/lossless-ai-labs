@@ -6,9 +6,14 @@ publish: true
 generated_with: Claude Code on Opus 5
 categories: Technical-Specification
 date_created: 2026-08-14
-date_modified: 2026-08-15
+date_modified: 2026-08-20
 lede: "The master spec. A package format (.flave) and an editor built on Lossless Flavored Markdown — a document that keeps its workings, publishes only what you choose, and is written in the languages agents already speak fluently."
-status: Draft — v0.1, pre-engineering-handoff
+status: Implementing
+implementation_note: >-
+  Phase 0 (the live render loop) landed 2026-08-20 — see
+  [[Phase-0-The-Live-Render-Loop]]. Status reflects reality: implementation has
+  begun. It does NOT indicate sign-off — §1.1's v0 slices remain unsigned by the
+  spec owner, and D-23 was resolved by the PM of record rather than the owner.
 category: Technical Specifications
 site_uuid: 8c41d7b2-59ae-4e0c-9b3d-1f7a2c6e8055
 tags: [Flave, Lossless-Flavored-Markdown, Desktop-Publishing, Document-Formats, Svelte, Agent-Native, Open-Specs]
@@ -133,7 +138,17 @@ type markdown  →  see it rendered, instantly, in your styles
 
 **Deliberately absent:** Tauri (a local web app suffices; native file access
 comes later), frames, layout, surfaces, themes-as-packages, `jj`, clearance,
-audiences, figures, DuckDB — **and the embedded agent chat.** At v0 you run
+audiences, figures, DuckDB — **and the embedded agent chat.**
+
+> [!warning] **Tauri was un-cut on 2026-08-20 (D-26).**
+> The owner brought it forward: *"Tauri wrapper should be obvious and easy, and
+> I wanna see it on Linux, let's do that first."* Recorded here because §1.1 is
+> the scope contract, and a cut that quietly reverses is how a scope discipline
+> dies. The reasoning holds — a native host makes the filesystem real
+> immediately, and §5.6's Files surface needs a real folder to show.
+> **Everything else in this list stays cut.**
+
+At v0 you run
 Claude Code in a terminal next to the editor; it writes trigger-packs into the
 project and the editor hot-reloads them. Almost no agent-integration work, and
 the loop is already real.
@@ -1069,6 +1084,119 @@ a yes — they are the same service.
 
 ---
 
+### 5.6 The workspace — persistent folders above the bundle
+
+**Requested 2026-08-20 (owner):** *"I think that there should be folders that
+are persistent, so they can be re-used. `themes/lossless.css` is one."*
+
+§5.2 describes what lives **inside one `.flave`**. §5.5 describes how a theme
+travels **between teams**. Neither describes the obvious middle: the stuff *one
+person* accumulates and reuses across their own documents, without publishing
+anything.
+
+That middle is the **workspace** — the folder you point Flave at. A `.flave`
+bundle is a folder inside it, and beside those bundles sit reusable folders the
+bundles draw from:
+
+```
+~/Documents/flave/                 ← the workspace: what the app opens
+├── themes/                        ← ★ persistent, reusable
+│   ├── lossless.css
+│   └── press-room.css
+├── components/                    ← ★ persistent trigger-packs
+│   └── metric-card.svelte
+├── Q3-Investor-Update.flave/      ← a bundle (§5.2 layout)
+│   ├── flave.yaml
+│   ├── content/
+│   └── theme/                     ← document-local overrides only
+└── Board-Deck.flave/
+```
+
+**Resolution order is the §7.2 cascade, unchanged:** `builtin < workspace <
+theme < pack < document`. The workspace slots in as the layer between what we
+ship and what a document overrides — which is exactly the layer §5.5 identified
+as missing for an individual, having filled it only for a team.
+
+**Why this is not just §5.5 with fewer steps.** A published theme package is a
+distribution artifact: versioned, licensed, adopted by copy. A workspace folder
+is a **working** artifact — edited in place, shared by every document that
+points at it, and never published. §5.5's promotion path gains a first rung:
+document → workspace → published theme. Most themes will never leave the
+workspace, and that is the point. **A person accumulates a design system by
+using one, not by deciding to author one.**
+
+> [!warning] **`themes/` (plural, named files) is not `theme/` (§5.2)**
+> They are different scopes and both exist. `theme/` is document-local and
+> singular — the overrides *this bundle* carries. `themes/` is workspace-level
+> and plural — the library documents choose **from**. A bundle's
+> `flave.yaml` names which one it uses; `theme/` then layers on top.
+> See `⟨DECIDE⟩ D-24`.
+
+#### What makes a folder "persistent"
+
+Nothing structural. A persistent folder is one that lives in the workspace
+rather than inside a bundle, so it outlives any single document. The candidates,
+in the order they earn their place:
+
+| Folder | Holds | Why it wants to be shared |
+|---|---|---|
+| `themes/` | Named `.css` files of custom properties | The reason the request was made. One brand, many documents |
+| `components/` | Trigger-packs (§6.2) | A syntax you invented once should not be re-invented per document |
+| `assets/` | Logos, headshots, recurring imagery | The same logo appears in every deck a firm makes |
+| `data/` | Recurring datasets | ⚠️ **Provenance risk.** A shared CSV whose `_sources.yaml` lives elsewhere breaks the §1 thesis. Deferred until provenance can follow the file |
+
+The first two ship first. `assets/` is easy and uncontroversial. `data/` is
+deliberately last, because "the document keeps its workings" stops being true
+the moment a document's numbers live somewhere it does not carry.
+
+#### Bringing theme work in — you should never start from an empty file
+
+**Requested 2026-08-20 (owner):** *"Maybe there are templates or something?
+There needs to be a way to bring in theme work so it doesn't need to be
+recreated over and over."*
+
+A persistent `themes/` folder only pays off if something is already in it. An
+empty workspace that asks a new user to author a design system from a blank
+`.css` is the failure mode this whole section exists to avoid — and it is worse
+than that, because the work usually **already exists somewhere else**: in a
+website's stylesheet, in a prior deck, in a brand kit.
+
+Three routes in, in ascending order of effort:
+
+1. **Ships-with starters.** The app seeds `themes/` on first run with a small,
+   opinionated set. Not neutral defaults — real, finished themes, because a
+   starter you would actually publish teaches the format better than a beige one
+   that teaches nothing. `lossless.css` is the first, lifted from the Press Room
+   identity flave's own splash already uses.
+
+2. **Import an existing stylesheet.** Any file that is a block of CSS custom
+   properties is already a flave theme; there is no proprietary wrapper to
+   convert. Copying `theme.css` out of an astro-knots site produces a working
+   flave theme with no transformation step. **That is not a coincidence — it is
+   D-20 running in the direction it was designed to run**, and it is why the
+   two-tier token model was inherited rather than invented.
+
+3. **Adopt a published theme package** (§5.5), which brings frames as well as
+   tokens.
+
+**All three are a copy, never a link** — §5.5 settled this and it matters more
+here, not less. A workspace theme is edited in place; a link would mean an
+upstream edit silently restyling documents you already published.
+
+> [!success] **A theme should arrive with its contract**
+> When a theme is imported, its `DESIGN.md` comes with it if one exists.
+> Runtime CSS is the source of truth and `DESIGN.md` is the contract that says
+> what the values *mean* — which tokens are Tier 1 raws, which are semantic, and
+> which carry rules like *"never reach for amber to add warmth."* A theme
+> without that document is a palette; a theme with it is a design system, and
+> an agent asked to extend it can only do so correctly with the second.
+
+**Templates are the same mechanism one level up.** A document template is a
+`.flave` bundle with content stubbed and everything else — theme reference,
+components, frames — already wired. "New from template" is a directory copy.
+Nothing new needs inventing to support it, which is the strongest argument that
+the bundle-is-a-folder decision (§5.1, D-03) was right.
+
 ## 6 · The language layer: LFM, extended
 
 ### 6.1 What Flave inherits from `lfm` unchanged
@@ -1389,8 +1517,8 @@ A layout entry looks like:
 
 ### 7.3 Editing surfaces in the app
 
-Four coexisting surfaces over the same document. Note that with §7.2 resolved,
-**three of the four are keyboard-or-agent driven** — the app is far closer to a
+Five coexisting surfaces over the same workspace. Note that with §7.2 resolved,
+**three of them are keyboard-or-agent driven** — the app is far closer to a
 fast text editor with a live preview than to a page-layout tool.
 
 1. **Compose** — the rendered document. Inline text editing (typing).
@@ -1406,6 +1534,17 @@ fast text editor with a live preview than to a page-layout tool.
 4. **Chat** — the agent surface (§9). Always available in a rail. For layout,
    this is often the *fastest* path: *"put the two charts side by side and move
    the commentary under them."*
+5. **Files** — the workspace tree (§5.6). *Added 2026-08-20 at the owner's
+   request.* Folders and files, including the persistent ones, so a person can
+   see what the document is made of and open any of it. This is the surface
+   that makes §1.1's *"v0 opens a folder"* literally true rather than
+   metaphorical, and the only place `themes/lossless.css` is reachable without
+   leaving the app.
+
+   **The mouse may select a file here.** That does not breach §7.2's ceiling:
+   opening a file is a read, and the write still happens through Source,
+   Compose, the palette or the agent. Navigation was never the thing the
+   ceiling was protecting against — positional CSS was.
 
 **Design consequence worth naming:** the command palette and the agent's
 Document API (§9.2) should be **the same operation set**, differing only in
@@ -2463,6 +2602,11 @@ The engineering handoff is not complete until every row is resolved.
 | **D-21** | Is `register` a fixed ladder (`verbatim`/`full`/`brief`) or an open vocabulary? | 11.1 | **OPEN — NEW.** Rec: **fixed at v1.** Open vocabularies multiply authoring burden per register and make the fallback chain undefinable — and fallback is what stops a missing variant from publishing an empty section |
 | — | Saved displays over one dataset | 7.6 | ✅ **RESOLVED 2026-08-14 — "figures," and the timing splits.** Named **Figure** per §4.2 (standard publishing word; composes with `paged` cross-refs). **Model lands v1** because clearance-safe `materialize:` is the top leak vector regardless, and retrofitting clearance into a data model poisons formats; **gallery UX lands v2**, as the owner supposed |
 | **D-22** | Do figures live in `figures/` or inside `viz/`? | 7.6 | **OPEN — NEW.** Rec: `figures/` — a figure is a document-level object with a caption and a clearance; a `.vl.json` is an implementation detail it points at |
+| **D-23** | Can a rendered element be mapped back to its source, so Compose can edit it? | 7.3, 12.1 | ✅ **RESOLVED 2026-08-20 by the PM of record — accept the asymmetry; components are select-not-edit.** Measured: `lfm` synthesizes ~21 nodes across five plugins and **none** set `position`, so callouts, citations and heading blocks are unmappable. Plain prose carries offsets and is directly editable. **Correction to the original reasoning:** user-defined directives (`:::metric-card`) DO keep their position — trigger-packs are select-not-edit **by choice, not by constraint**, because direct editing inside a component would oblige every pack to ship an inverse serializer, and "a Svelte component plus one line" is the entire v0 pitch. Both facts are standing tests. Not upstreamed to `lfm`; revisit on a use signal |
+| **D-24** | `theme/` (document, singular) vs `themes/` (workspace, plural) | 5.2, 5.6 | ✅ **RESOLVED 2026-08-20 — both, and they are different scopes.** `themes/lossless.css` is a workspace library documents choose **from**; `theme/` is the document-local layer that overrides on top. The cascade absorbs it unchanged: `builtin < workspace < theme < pack < document`. Naming them alike is a hazard, so the plural/singular distinction is load-bearing and must survive review |
+| **D-25** | §5.2 says hand-editing `theme.css` is a lint error. §1.1 says v0 ships one hand-edited `theme.css`. Which? | 1.1, 5.2, 5.5, 5.6 | ✅ **RESOLVED 2026-08-20 — the lint error is CONDITIONAL on a `tokens.yaml` existing.** The rule's whole purpose (§5.5) is preventing two sources of truth from drifting. With no `tokens.yaml`, `theme.css` **is** the single source and hand-editing it is correct, not a violation. The moment a `tokens.yaml` appears beside it, `theme.css` becomes generated and hand-edits become the lint error §5.2 describes. This reconciles the two sections without weakening the anti-drift argument — and it is what makes the owner's *"I want to see that you are doing the theme.css the way I want"* a supported workflow rather than a spec violation |
+| **D-26** | How does the app read and write the workspace before Tauri? | 1.1, 5.6 | ✅ **RESOLVED 2026-08-20 by the owner — bring Tauri forward.** *"Tauri wrapper should be obvious and easy, and I wanna see it on Linux, let's do that first."* This **reverses §1.1's explicit cut** (annotated there) and is a deliberate scope change, not drift. It collapses the problem rather than working around it: with a native host there is no dev-server bridge to build and no Chromium-only gesture gate, and the filesystem is real from day one. My prior recommendation optimised for §1.1's ordering; the owner optimised for seeing the actual product on their actual OS, which is the better objective. **The `WorkspaceFs` interface still stands** — a browser backend follows for anyone without the desktop app. Viability proven on NixOS before committing: webkit2gtk 2.52.5, gtk 3.24.52, libsoup 3.6.6, cargo 1.97 via a repo-local flake devshell |
+| **D-27** | With Files added, four columns compete for width | 7.3, 5.6 | ✅ **RESOLVED 2026-08-20 by the owner — the left rail toggles between Chat and Files.** One rail, two surfaces, never both. Follows the precedent Phase 0 set with the Source toggle, and keeps the document the widest thing on screen — correct for a tool whose claim is that you are reading a document, not operating an IDE |
 | **D-20** | Where does the `tokens.yaml` → `theme.css` + Tailwind generator live? | 12, 5.5 | ✅ **RESOLVED 2026-08-14 — in `@flave/theme`.** My "build it upstream in `@knots/tokens`" recommendation was wrong: **`@knots` was given up on**; only `lfm` was a true package and it was extracted. `astro-knots/packages/*` is starter-copy and prior art, never a dependency. **Flave originates the theme format; astro-knots sites starter-copy from it** — Flave has the stronger forcing function (frames + 3 surfaces + 2 generated outputs) |
 | — | Theme adoption model | 5.5 | ✅ **RESOLVED 2026-08-14 — adopting a theme is a *copy*, not a link.** Simpler than the fetch-and-pin framing that reached the same mechanism. Kills the `network: deny` / Principle 5 conflict outright — there was never a link |
 | — | Brand compliance enforcement | 5.5, 9.5 | ✅ **RESOLVED 2026-08-14 — none. Drift is recorded, never prevented.** `flave theme diff` reports; it does not gate. The earlier `structure: locked` / `theme: locked` draft is **removed** — it re-introduced the permission prompts D-17 deleted, wearing a design-system hat |

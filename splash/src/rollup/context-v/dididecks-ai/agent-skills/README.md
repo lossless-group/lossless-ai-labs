@@ -37,6 +37,7 @@ Sixteen skills, picked for their direct load-bearing relevance to dididecks-ai w
 | Skill | What it does |
 |---|---|
 | `setup-new-dddecks-workspace` | **Stub.** Scaffold a new `client-sites/<slug>/` end-to-end — submodule, brand import (website-parse OR source-code-copy), DESIGN.md, theme tokens, auth surface, corpus connection, starter Scroll-UI deck. Composes the other skills; first run is The Lossless Group as its own client. |
+| `remake-deck` | **Entry point for the remake pipeline.** `/remake-deck <Company> <client-site> <source-deck>` turns a source deck into N clean-room design variants that play in the Scroll-UI shell. Thin: runs `context-v/plans/Remake-Source-Deck-into-Design-Variants.md` as orchestrator, with a sequential fallback for chats without subagents. Claude Code users in this repo also get it as `.claude/commands/remake-deck.md` with no setup. |
 | `deck-iteration-workflow` | The phased workflow: single-page narrative → individual slides → componentization → features → full deck → advanced interactivity |
 | `slide-target` | Load the full working context for ONE slide (deck/variant/slot) — section file, slot registry, narrative slot, rank status, live URLs, design tokens — and scope work to it. First of the `slide-*` family (target → improve → rank → decompose); the agent-side "context broker" for slide-by-slide iteration. |
 | `maintain-design-md` | How a per-client `DESIGN.md` is authored (Google Stitch spec + Lossless extensions); the three-mode invariant |
