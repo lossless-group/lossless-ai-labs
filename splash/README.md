@@ -15,6 +15,9 @@ pnpm dev
 `--ignore-workspace` is required because the parent (`ai-labs/`) workspace
 boundaries do not include this splash; the splash installs its own deps.
 
+From the `ai-labs/` root, `pnpm rollup:sync` also works: the root
+`package.json` forwards it here with `pnpm --dir splash rollup:sync`.
+
 ## Build
 
 ```bash

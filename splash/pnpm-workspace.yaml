@@ -10,9 +10,11 @@
 #      the parent workspace. This is the "splash deploys from GitHub Pages
 #      on its own" discipline: the build runs in isolation, with its own
 #      pnpm-lock.yaml, against this file.
-#   2. The `onlyBuiltDependencies` allowlist below approves esbuild and
-#      sharp install scripts so CI runs them non-interactively (pnpm 10
-#      otherwise prompts).
+#   2. The `allowBuilds` map below approves esbuild and sharp install
+#      scripts so CI and local runs proceed non-interactively. pnpm 12
+#      replaced the older `onlyBuiltDependencies` list with `allowBuilds`
+#      and silently ignores the old key (every `pnpm <script>` then fails
+#      with ERR_PNPM_IGNORED_BUILDS).
 #
 # Matches the canonical lfm/splash pattern. See `maintain-splash-pages` skill
 # for the Locked conventions ("Splash installs deps independently" + the
@@ -20,6 +22,6 @@
 
 packages: []
 
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
+allowBuilds:
+  esbuild: true
+  sharp: true
