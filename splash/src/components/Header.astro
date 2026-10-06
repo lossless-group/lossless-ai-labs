@@ -3,9 +3,23 @@ import ModeToggle from './ModeToggle.astro';
 import SearchBox from './SearchBox.astro';
 
 const base = import.meta.env.BASE_URL;
+
+/**
+ * Site header. One set of links, two layouts.
+ *
+ * At >=64rem the links sit inline. Below that they collapse behind a
+ * hamburger and drop down as a panel. Before this, the nav was simply
+ * `display: none` on phones, so nothing past the homepage (studies,
+ * collaborations, changelog) was reachable without a direct link.
+ *
+ * Ported from astro-knots/sites/mpstaton-site/src/components/basics/Header.astro.
+ * The markup is deliberately NOT duplicated per breakpoint: a second copy of
+ * the nav is a second place to forget to add a link.
+ */
 const links = [
   { href: `${base}#products`,   label: 'Products' },
   { href: `${base}studies/`,    label: 'Studies' },
+  { href: `${base}studies/#collaborations`, label: 'Collaborations' },
   { href: `${base}changelog/`,  label: 'Changelog' },
   { href: `${base}context-v/`,  label: 'Context-V' },
   { href: `${base}search/`,     label: 'Search' },
@@ -29,7 +43,24 @@ const links = [
       </span>
     </a>
     <nav class="site-nav" aria-label="Primary">
-      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      <button
+        type="button"
+        class="nav-toggle"
+        id="nav-toggle"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        aria-label="Open menu"
+      >
+        <svg class="nav-toggle__open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        <svg class="nav-toggle__close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="5" y1="5" x2="19" y2="19" /><line x1="19" y1="5" x2="5" y2="19" />
+        </svg>
+      </button>
+      <div class="nav-menu" id="nav-menu">
+        {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      </div>
     </nav>
     <div class="site-header__actions">
       <SearchBox compact />
@@ -70,20 +101,128 @@ const links = [
   .brand-name__sep { color: var(--color-text-faint); margin: 0 2px; }
   .brand-name__labs { color: var(--color-accent); }
 
-  .site-nav {
-    display: none;
+  /* Desktop: inline row, no toggle. */
+  .site-nav { display: inline-flex; }
+  .nav-toggle { display: none; }
+  .nav-menu {
+    display: inline-flex;
     gap: var(--space-6);
     font-family: var(--font__mono);
     font-size: 0.82rem;
     letter-spacing: 0.06em;
   }
-  @media (min-width: 44rem) { .site-nav { display: inline-flex; } }
-  .site-nav a {
+  .nav-menu a {
     color: var(--color-text-dim);
     border-bottom: none;
     text-transform: lowercase;
   }
-  .site-nav a:hover { color: var(--color-text); }
+  .nav-menu a:hover { color: var(--color-text); }
 
   .site-header__actions { display: inline-flex; align-items: center; gap: var(--space-3); }
+
+  @media (max-width: 63.99rem) {
+    /* Hamburger sits at the far right, after search and mode toggle. */
+    .site-nav { order: 3; }
+    .site-header__inner { gap: var(--space-3); }
+    .site-header__actions { margin-left: auto; }
+
+    .nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-text-dim);
+      cursor: pointer;
+    }
+    .nav-toggle:hover { color: var(--color-text); }
+    .nav-toggle__close { display: none; }
+    .nav-toggle[aria-expanded='true'] .nav-toggle__open { display: none; }
+    .nav-toggle[aria-expanded='true'] .nav-toggle__close { display: block; }
+
+    /* Absolute, anchored to the sticky header: an in-flow panel would shove
+       the page down as it opens. */
+    .nav-menu {
+      position: absolute;
+      top: calc(100% + 1px);
+      left: 0;
+      right: 0;
+      z-index: 50;
+      flex-direction: column;
+      gap: 0;
+      padding: var(--space-2) var(--space-4) var(--space-4);
+      background: var(--color-bg-elevated);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-elevated);
+      font-size: 0.95rem;
+    }
+    /* `display: none` rather than a transition: closed links must leave the
+       tab order. */
+    .nav-menu:not([data-open]) { display: none; }
+    .nav-menu a {
+      display: block;
+      padding: 0.7rem 0.25rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .nav-menu a:last-child { border-bottom: none; }
+  }
+
+  /* Phone width: brand + search + mode toggle + hamburger overflow by ~40px.
+     Drop the "Lossless/" prefix; the mark and "ai-labs" still say where you are. */
+  @media (max-width: 29.99rem) {
+    .brand-name__lossless,
+    .brand-name__sep { display: none; }
+    .site-header__inner { gap: var(--space-2); }
+    .site-header__actions { gap: var(--space-2); }
+  }
 </style>
+
+<script>
+  function wireNav() {
+    const toggle = document.getElementById('nav-toggle');
+    const menu = document.getElementById('nav-menu');
+    if (!toggle || !menu || toggle.dataset.wired) return;
+    toggle.dataset.wired = 'true';
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (open) menu.setAttribute('data-open', '');
+      else menu.removeAttribute('data-open');
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Close on choosing a destination, including same-page anchors: the
+    // panel covers the content the reader just asked to see.
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (toggle.getAttribute('aria-expanded') !== 'true') return;
+      const target = e.target as HTMLElement;
+      if (!menu.contains(target) && !toggle.contains(target)) setOpen(false);
+    });
+
+    // Crossing back to desktop must clear the open state, or data-open
+    // survives and the panel reappears on the next return to mobile.
+    window.matchMedia('(min-width: 64rem)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+
+  wireNav();
+  document.addEventListener('astro:page-load', wireNav);
+</script>
