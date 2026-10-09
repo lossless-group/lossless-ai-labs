@@ -21,16 +21,19 @@ list — this is a snapshot):
 
 | Child | Purpose |
 |---|---|
-| `augment-it/` | newly added; check its own README |
+| `augment-it/` | multi-tenant AI data augmentation: federated Svelte 5 microfrontends over TypeScript services on NATS; tenant-defined columns, no hardcoded schema |
 | `id-didi-sh/` | the didi.sh identity service — one account across memos/decks/augment-it; **the tree's polyglot exception (Elixir/Phoenix)**; spec of record at `context-v/specs/Id-Didi-Sh-Identity-Service.md` |
-| `dididecks-ai/` | slide-deck operating system for due-diligence-grade content |
+| `dididecks-ai/` | slide-deck operating system for due-diligence-grade content; client engagements nested under `client-sites/`, which never roll up to any public surface |
 | `memopop-ai/` | multi-agent investment-memo orchestration (LangGraph) |
+| `flave-ai/` | flave, an agent-native document format and editor (repo: `lossless-group/flave`); early build, Tauri desktop app over LFM |
+| `corpora-builder/` | capture, triage, fetch, and quality-check source corpora (Python + FastAPI, corpora mirrored to R2); born inside augment-it, now its own product. See `context-v/reminders/Corpora-Builder-Is-Not-Augment-It-Tooling.md` |
 | `context-vigilance-kit/` | the installable context-v plugin, templates, and starters (fresh repo, 2026-10-01). The tree-wide corpus, Chroma DB, and ingesters moved to `../context-v-corpus/` at the anchor root |
 | `hope-ai/` | agent skill, templates, and scripts for the ChoiceCenter 100-day Personal Strategic Plan (PSP); not an app (fresh repo, 2026-10-02) |
 | `studies/collaborations/dialogiq/dialogiq-codebase/` | **a friend's app, not ours** (`jdema-io/pub-interface`, private). Mounted only so Michael can review its code, architecture, and harness setup. Read-only: never commit, push, or refactor inside it. Notes sit beside it in `studies/collaborations/dialogiq/`. |
-| `studies/` | pinned upstream repos as reference collections (memory-layers, open-specs, etc.); read upstream code, do not paraphrase from training data |
-| `splash/` | GitHub-Pages-deployed showcase for the tree |
-| `packages/` | packages graduating toward independent publication |
+| `studies/collaborations/phoenixcapera/instadeck-v2/` | **another developer's repo, not ours** (private): a rebuild of dididecks-ai as a full-stack product. Same rules: read-only, never commit, push, or refactor inside it. Notes sit beside it in `studies/collaborations/phoenixcapera/`. The splash names neither collaborator. |
+| `studies/` | nine pinned reference collections (open-specs, memory-layers, agent-harnesses, sync-and-content-version-control, …); read upstream code, do not paraphrase from training data. `pnpm rollup:sync` snapshots them for the splash |
+| `splash/` | GitHub-Pages showcase: product cards, studies, and every public child's changelog + context-v rolled up. `rollup-sync.ts` excludes `client-sites/`, non-public repos, and any file marked `private: true` or `publish: false` |
+| `packages/` | pinned upstream AI tooling: `mermaid-js-ai-agent`, `odysseus` |
 | `scripts/` | one-off and reusable Python/Node automation |
 | `apis/` | API integrations and clients |
 | `utils/` | shared utilities |
@@ -46,8 +49,9 @@ list — this is a snapshot):
 
 ## Skills sync — opening & closing habit
 
-Lossless skills live in `context-v/skills/<name>/` at the anchor monorepo root
-(`/Users/mpstaton/code/lossless-monorepo/context-v/skills`). Claude Code only
+Lossless skills live in `context-v/agent-skills/<name>/` at the anchor monorepo root
+(`/Users/mpstaton/code/lossless-monorepo/context-v/agent-skills`, the
+`lossless-agent-skills` submodule). Claude Code only
 discovers a skill when it has its **own** direct-child symlink at
 `~/.claude/skills/<name>` — a symlinked *parent* dir does **not** expose the
 skills nested inside it. A skill that's authored but never linked is invisible
@@ -58,10 +62,10 @@ to every session.
   skills load in the *next* session, not the current one.
 
 ```bash
-bash /Users/mpstaton/code/lossless-monorepo/context-v/skills/sync-skills-symlinks.sh
+bash /Users/mpstaton/code/lossless-monorepo/context-v/agent-skills/sync-skills-symlinks.sh
 ```
 
-Idempotent: links every `context-v/skills/*` dir with a top-level `SKILL.md`
+Idempotent: links every `context-v/agent-skills/*` dir with a top-level `SKILL.md`
 that isn't already linked; never clobbers a non-symlink. Re-run it freely.
 
 ## Branch tier model
@@ -69,7 +73,7 @@ that isn't already linked; never clobbers a non-symlink. Re-run it freely.
 Three tiers, mirrored from the root: **`development` → `main` → `master`**.
 
 Parent on tier X → all submodules on tier X. See the root `CLAUDE.md`
-and `context-v/skills/pseudomonorepos/references/branch-alignment.md` for
+and `context-v/agent-skills/pseudomonorepos/references/branch-alignment.md` for
 the FF mechanics, divergence checks, and push-to-default-branch caveats.
 
 ## MCP scope
@@ -104,7 +108,7 @@ Ingestion lives under `context-v-corpus/scripts/` at the anchor root (moved out 
 - `context-v/explorations/ChromaDB-as-Context-Improvement-Across-Everything-Everyone.md` —
   the exploration that produced the Chroma integration
 - `../context-v-corpus/README.md` — the corpus, the four collections, the ingest scripts
-- `context-v/skills/search-lossless-corpus/SKILL.md` — full querying discipline (via the parent skills tree)
+- `context-v/agent-skills/search-lossless-corpus/SKILL.md` — full querying discipline (via the parent skills tree)
 
 <!-- lossless:browser-drive:start -->
 ## Browser-drive verification (Playwright MCP + Claude Chrome)

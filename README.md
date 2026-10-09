@@ -14,7 +14,7 @@ A true monorepo: Tauri 2 desktop app, Astro marketing site, eventual SvelteKit h
 → `memopop-ai/` · [lossless-group/memopop-ai](https://github.com/lossless-group/memopop-ai)
 
 ### DidiDecks AI — code-first slide-deck OS for Due Diligence
-A code-first slide-deck operating system for receiving-side Due-Diligence-grade content. Specs + splash + five driving client engagements (`calmstorm-decks`, `chroma-decks`, `humain-vc-decks`, `lossless-decks`, `reach-edu-hub`) carried as nested submodules under `dididecks-ai/client-sites/`.
+A code-first slide-deck operating system for receiving-side Due-Diligence-grade content. A shared Scroll-UI deck shell, a canonical library of slide types, PPTX and Keynote export, and `/remake-deck`, which turns a client's PDF or PPTX into three fresh design variants with one command. The client engagements that drive the pattern are carried as nested submodules under `dididecks-ai/client-sites/` and kept out of every public rollup.
 
 → `dididecks-ai/` · [lossless-group/dididecks-ai](https://github.com/lossless-group/dididecks-ai)
 
@@ -29,16 +29,26 @@ One small, owned auth service behind `id.didi.sh`. Create an account once from i
 → `id-didi-sh/` · [lossless-group/id-didi-sh](https://github.com/lossless-group/id-didi-sh)
 
 ### flave — an agent-native document format and editor
-A document that keeps its workings. Publish a `.flave` and people see the conclusion; send the file itself and they get the evidence, the data and its sources, the reasoning, and the design vocabulary that produced it. Content, data, and assets each carry a *clearance* — private → team → LP → public — so one document yields your private notes, the team version, and a punchy public one-pager, and none of them drift. Built on [`lfm`](https://jsr.io/@lossless-group/lfm) as a direct dependency, never a fork; v0 is an editor where you define your own syntax triggers and watch them render as you type. **Pre-implementation** — spec of record at [`flave-ai/context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md`](https://github.com/lossless-group/flave/blob/main/context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md).
+A document that keeps its workings. Publish a `.flave` and people see the conclusion; send the file itself and they get the evidence, the data and its sources, the reasoning, and the design vocabulary that produced it. Content, data, and assets each carry a *clearance* — private → team → LP → public — so one document yields your private notes, the team version, and a punchy public one-pager, and none of them drift. Built on [`lfm`](https://jsr.io/@lossless-group/lfm) as a direct dependency, never a fork. **Early build:** a Tauri desktop app that opens a folder of documents and restyles them live as you edit their theme, with install docs for Linux, Ubuntu, and Nix flakes. Spec of record at [`flave-ai/context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md`](https://github.com/lossless-group/flave/blob/main/context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md).
 
 → `flave-ai/` · [lossless-group/flave](https://github.com/lossless-group/flave)
 
+### corpora-builder — deliberate source corpora
+Capture, triage, fetch, file, and quality-check the source material that grounds everything downstream: decks, memos, enriched record sets, agent answers. Corpus building had been rebuilt as a sub-feature inside three products; this is where it became its own thing. Python + FastAPI, plain markdown files as the source of truth, content-addressed PDFs mirrored to Cloudflare R2, and a change feed that shows a client what changed in their corpus and why. Shares patterns with its siblings knots-style, never as a package dependency.
+
+→ `corpora-builder/` · [lossless-group/corpora-builder](https://github.com/lossless-group/corpora-builder)
+
+### hope-ai — a Personal Strategic Plan toolkit
+Not an app: an agent skill, templates, and scripts for the 100-day Personal Strategic Plan used in ChoiceCenter's Leadership Legacy program. Give Claude the repo and it helps you write goals you can keep, score each week on what you actually did, and start again the next morning. Site: [lossless-group.github.io/hope-ai](https://lossless-group.github.io/hope-ai/).
+
+→ `hope-ai/` · [lossless-group/hope-ai](https://github.com/lossless-group/hope-ai)
+
 ### Context Vigilance Kit — the installable practice
-The `cv` Claude Code plugin: the context-vigilance skill, `/cv:*` commands, templates, a starter scaffold, and neutral examples. Install it and you have the practice, without cloning anyone's corpus. Brand site at [contextvigilance.com](https://contextvigilance.com) (forthcoming).
+The `cv` Claude Code plugin: the context-vigilance skill, `/cv:*` commands, templates, a starter scaffold, and neutral examples. Install it and you have the practice, without cloning anyone's corpus. v0.2.0 is the first tagged release and is in review for Claude's plugin directory. Site: [context-v.dev](https://context-v.dev/).
 
 → `context-vigilance-kit/` · [lossless-group/context-vigilance-kit](https://github.com/lossless-group/context-vigilance-kit)
 
-The tree-wide corpus this kit grew out of (collated `context-v/`, manifests, Chroma and Graphiti ingesters, the corpus splash) was renamed and moved to the anchor root on 2026-10-01: `../context-v-corpus/` · [lossless-group/context-v-corpus](https://github.com/lossless-group/context-v-corpus).
+The tree-wide corpus this kit grew out of (collated `context-v/`, manifests, Chroma and Graphiti ingesters, the corpus splash) was separated from the kit on 2026-10-01 and moved to the anchor root: `../context-v-corpus/` · [lossless-group/context-v-corpus](https://github.com/lossless-group/context-v-corpus). The public part of it is searchable at **[lossless-group.github.io/context-v-corpus/corpus/](https://lossless-group.github.io/context-v-corpus/corpus/)**.
 
 ## Studies — pinned reading lists, not docs
 
@@ -51,6 +61,12 @@ A *study* is a curated reference collection — a directory of upstream specs, p
 | [`data-analytics-specifications-and-standards`](./studies/data-analytics-specifications-and-standards) | Which open, machine-validatable specs converge across the analytics stack? (Data Package, Parquet, Arrow, Vega-Lite, Plot, ggsql) |
 | [`markdown-parse-serve-render`](./studies/markdown-parse-serve-render) | How do mature projects parse, serve, and render Markdown across CommonMark, GFM, Pandoc-extended, and directive/wikilink dialects — and which conventions converge at each stage? |
 | [`vector-databases`](./studies/vector-databases) | How do open-source vector/context databases structure embedding storage, recall ranking, payload schemas, filter expressivity, persistence, and ANN-algorithm choice — and what are the trade-offs migrating between them? |
+| [`agent-harnesses`](./studies/agent-harnesses) | How do coding- and conversational-agent runtimes write to disk, persist memory across sessions, log tool calls, scope their tools and MCP servers, and load or evolve skills? |
+| [`conversational-ui-and-native-shells`](./studies/conversational-ui-and-native-shells) | How do native, cross-platform chat apps (especially Tauri) structure state, switch between workspaces or agent personas, persist history locally, and talk to backend agents and MCP servers? |
+| [`sync-and-content-version-control`](./studies/sync-and-content-version-control) | For a folder of documents shared both ways between an operator and a non-technical client on blob storage, at which layer does history live: transport, store, application, or document? |
+| [`frontend-ui-kits-component-libraries`](./studies/frontend-ui-kits-component-libraries) | How do mature UI kits name, scale, and override their component APIs, and which of those conventions survive translation to Svelte 5 and CSS custom properties, with no Tailwind and no React? |
+
+**Collaborations.** [`studies/collaborations/`](./studies/collaborations) holds silo-to-silo studies: a friend's codebase built with its own agentic-coding harness, mounted read-only beside our notes on what each side can learn from the other. Collaborators stay anonymous in anything published; the [splash](https://lossless-group.github.io/lossless-ai-labs/studies/#collaborations) uses generic titles only.
 
 Full concept and add-a-new-study workflow: [`studies/README.md`](./studies/README.md) · [`studies/CLAUDE.md`](./studies/CLAUDE.md).
 
@@ -59,26 +75,33 @@ Full concept and add-a-new-study workflow: [`studies/README.md`](./studies/READM
 Earlier strands of work that started in this tree and now live in their own homes (worth knowing about before you go looking for them here):
 
 - **Content generation discipline → [Content Farm repo](https://github.com/lossless-group/content-farm).** The "generate marketing-ready, academic-integrity content at volume" toolkit adopted Obsidian wholesale and grew into a multi-plugin suite (Cite Wide, Image Gin, Perplexed, LMStud Yo, Metafetch) for professional-grade content development and management. Splash: [`lossless-group.github.io/content-farm/`](https://lossless-group.github.io/content-farm/).
-- **Image generation → [`image-gin`](https://github.com/lossless-group/image-gin) + [`lossless-skills/generate-consistent-og-images`](https://github.com/lossless-group/lossless-skills/tree/main/generate-consistent-og-images).** The Recraft / Freepik / Ideogram experiments here graduated two ways. For Obsidian users: `image-gin` is the plugin home (AI image generators for contextual images, illustrations, and stock-photo selection — starting with Ideogram and Recraft). For agent workflows: the `generate-consistent-og-images` skill covers OG banners, portraits, squares, and tall WhatsApp/iMessage cards with locked design tokens so the resulting images form a coherent visual family across every Lossless site.
+- **Image generation → [`image-gin`](https://github.com/lossless-group/image-gin) + [`lossless-agent-skills/generate-consistent-og-images`](https://github.com/lossless-group/lossless-agent-skills/tree/main/generate-consistent-og-images).** The Recraft / Freepik / Ideogram experiments here graduated two ways. For Obsidian users: `image-gin` is the plugin home (AI image generators for contextual images, illustrations, and stock-photo selection — starting with Ideogram and Recraft). For agent workflows: the `generate-consistent-og-images` skill covers OG banners, portraits, squares, and tall WhatsApp/iMessage cards with locked design tokens so the resulting images form a coherent visual family across every Lossless site.
 - **Investment-memo orchestrator → MemoPop's backend.** The Python LangGraph orchestrator was a sibling submodule here for a stretch; today it's the FastAPI backend folded into the MemoPop AI true monorepo at `memopop-ai/apps/memopop-orchestrator/`. The Tauri shell drives it over `localhost:8765`.  Backend LangChain and Python API still available at: [`investment-memo-orchestrator`](https://github.com/lossless-group/investment-memo-orchestrator)
-- **Per-provider scripts + API calls → [Lossless Skills](https://github.com/lossless-group/lossless-skills).** Many of the patterns now sitting under `apis/`, `scripts/`, and `utils/` are being re-implemented as agent-skills following the Anthropic agent-skills standard. Expect the sandbox here to keep shrinking as more of it lifts into reusable skills.
+- **Per-provider scripts + API calls → [Lossless Agent Skills](https://github.com/lossless-group/lossless-agent-skills).** Many of the patterns now sitting under `apis/`, `scripts/`, and `utils/` are being re-implemented as agent-skills following the Anthropic agent-skills standard. Expect the sandbox here to keep shrinking as more of it lifts into reusable skills.
 
 ## Topology
 
 ```
 ai-labs/                              # this repo — the pseudomonorepo
 ├── memopop-ai/                       # submodule · active product
-├── dididecks-ai/                     # submodule · active product
+├── dididecks-ai/                     # submodule · active product (client sites nested under client-sites/)
 ├── augment-it/                       # submodule · active product
 ├── id-didi-sh/                       # submodule · active product (Elixir/Phoenix, the polyglot exception)
-├── flave-ai/                         # submodule · spec of record, pre-implementation (repo: lossless-group/flave)
+├── flave-ai/                         # submodule · early build, Tauri desktop app (repo: lossless-group/flave)
+├── corpora-builder/                  # submodule · active product (Python + FastAPI, corpora on R2)
+├── hope-ai/                          # submodule · agent skill + templates for the 100-day PSP
 ├── context-vigilance-kit/            # submodule · the cv plugin (corpus moved to ../context-v-corpus)
-├── studies/                          # pinned reading lists
-│   ├── open-specs-and-standards/                     #   submodule
-│   ├── memory-layers-for-agents/                     #   submodule
-│   ├── data-analytics-specifications-and-standards/  #   submodule
-│   ├── markdown-parse-serve-render/                  #   submodule
-│   └── vector-databases/                             #   submodule
+├── studies/                          # pinned reading lists, one submodule per study
+│   ├── open-specs-and-standards/
+│   ├── memory-layers-for-agents/
+│   ├── data-analytics-specifications-and-standards/
+│   ├── markdown-parse-serve-render/
+│   ├── vector-databases/
+│   ├── agent-harnesses/
+│   ├── conversational-ui-and-native-shells/
+│   ├── sync-and-content-version-control/
+│   ├── frontend-ui-kits-component-libraries/
+│   └── collaborations/               #   silo-to-silo studies of friends' codebases (read-only)
 ├── packages/                         # vendored / upstream AI tooling
 │   ├── mermaid-js-ai-agent/          #   submodule · diagram agent
 │   └── odysseus/                     #   submodule · self-hosted AI workspace (chat/agents/research/docs)
@@ -110,14 +133,14 @@ The original scratch surface that gave this repo its name. Per-provider snippets
 
 `scripts/` carries CLI helpers — Jina site-fetchers, YouTube-to-Fabric-content generators, miscellaneous content-pipeline glue. `utils/` is tiny shared TS — currently just a yaml-frontmatter helper used by several scripts.
 
-When a sandbox experiment grows past "snippet," it either moves into one of the product submodules, earns its own repo, or — increasingly — gets re-shaped as an agent-skill in [`lossless-skills`](https://github.com/lossless-group/lossless-skills). The sandbox here is shrinking on purpose as that migration proceeds.
+When a sandbox experiment grows past "snippet," it either moves into one of the product submodules, earns its own repo, or — increasingly — gets re-shaped as an agent-skill in [`lossless-agent-skills`](https://github.com/lossless-group/lossless-agent-skills). The sandbox here is shrinking on purpose as that migration proceeds.
 
 ## Working in ai-labs
 
 ### Clone
 
 ```bash
-git clone --recurse-submodules git@github.com:lossless-group/ai-labs.git
+git clone --recurse-submodules git@github.com:lossless-group/lossless-ai-labs.git
 # or, if already cloned:
 git submodule update --init --recursive
 ```
@@ -174,12 +197,13 @@ For any analysis on NDA / FrienDA / confidential material, drop it in a `private
 
 ## Context-v and changelog discipline
 
-This repo follows the [Lossless context-vigilance practice](https://contextvigilance.com): every project carries a `context-v/` (specs · explorations · plans · reminders · ...) and a sibling `changelog/`. The parent owns the cross-cutting documents that span more than one child:
+This repo follows the [Lossless context-vigilance practice](https://context-v.dev/): every project carries a `context-v/` (specs · explorations · plans · reminders · ...) and a sibling `changelog/`. The parent owns the cross-cutting documents that span more than one child:
 
-- **`context-v/specs/`** — durable design contracts (currently empty here; sibling-spec home is each child's own `context-v/specs/`).
-- **`context-v/explorations/`** — `ChromaDB-as-Context-Improvement…`, `Collate-Context-Files-into-Context-Vigilance…`, `When-Claud-Code-and-When-Pi`.
-- **`context-v/plans/`** — Chroma local UI, Chroma ingest pipeline, custom Chroma MCP, Context Vigilance splash narrative.
-- **`context-v/reminders/`** — `Preferred-Stack.md` (uv-over-pip and friends).
+- **`context-v/specs/`** — cross-app contracts: the didi.sh identity service, the in-app agent chat core, the source-curation surface, flexible entity relationships.
+- **`context-v/blueprints/`** — patterns copied between apps rather than shared as packages: installing auth across the labs apps, per-app workspace conventions, the source-curation gate, chat as a verb surface.
+- **`context-v/explorations/`** and **`context-v/plans/`** — about fifteen of each, from the client document syncbox to corpora on R2 to agent chat inside client apps.
+- **`context-v/reminders/`** — short corrections: `Preferred-Stack.md` (uv over pip and friends), loading the theme system before touching tokens, keeping corpora-builder distinct from augment-it.
+- **`context-v/issues/`** — debugging journeys worth not repeating.
 - **`changelog/`** — narrative ship notes about structural changes across the pseudomonorepo (e.g. `2026-05-08_01.md` covers the studies pass, the investment-memo monorepo correction, and the Context Vigilance Kit seed).
 
 When working inside a submodule, **don't auto-bump the parent gitlink here** — parent pseudomonorepos get tidied deliberately, not opportunistically. The corresponding submodule-side commit + push is the part you do; the parent bump waits.
@@ -190,8 +214,10 @@ Active. The repo's center of gravity is shifting from "AI labs as in a notebook"
 
 ## See also
 
+- [ai-labs splash](https://lossless-group.github.io/lossless-ai-labs/) — every child's public changelog and context-v, rolled up and searchable in one place.
+- [context-v-corpus](https://lossless-group.github.io/context-v-corpus/corpus/) — the public slice of the tree-wide context-v corpus, searchable.
 - [The Lossless Group](https://lossless.group)
 - [`lossless-monorepo`](https://github.com/lossless-group/lossless-monorepo) — the grandparent: habits (`context-v/habits/`) and the LFM markdown package live up there.
-- [`lossless-skills`](https://github.com/lossless-group/lossless-skills) — the agent-skills home where many ai-labs script + API patterns are being re-shaped.
+- [`lossless-agent-skills`](https://github.com/lossless-group/lossless-agent-skills) — the agent-skills home where many ai-labs script + API patterns are being re-shaped.
 - [`content-farm`](https://github.com/lossless-group/content-farm) — the content-generation discipline that grew out of this tree, now an Obsidian plugin suite. Splash: [lossless-group.github.io/content-farm](https://lossless-group.github.io/content-farm/).
-- [Context Vigilance](https://contextvigilance.com) — the discipline this repo's `context-v/` is an instance of.
+- [Context Vigilance](https://context-v.dev/) — the discipline this repo's `context-v/` is an instance of.
