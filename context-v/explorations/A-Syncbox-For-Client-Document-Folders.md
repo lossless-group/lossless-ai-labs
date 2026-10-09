@@ -2,14 +2,14 @@
 title: "A Syncbox for Client Document Folders — Where Does History Actually Live?"
 lede: "The ask is one product. The prior art says it's three layers, and nothing on the shelf does all three on a bucket."
 date_created: 2026-08-22
-date_modified: 2026-08-22
+date_modified: 2026-10-09
 date_authored_initial_draft: 2026-08-22
 date_authored_current_draft: 2026-08-22
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-at_semantic_version: 0.0.0.1
+at_semantic_version: 0.0.0.2
 status: Open
 site_uuid: dfe7d586-edcf-4d9c-b6ff-e3b4362f2e06
 hex_code: 8tg9j7
@@ -104,6 +104,43 @@ Both are marked resolved. Both are defensible *for their own artifact*. And the
 syncbox as asked — one backend serving corpora and `.flave` alike — cannot
 inherit both. **This is the decision on the table**, not "how do I build a
 syncbox."
+
+### Prior-art index — everything in the tree that touches this
+
+*Added 2026-10-09.* The table above is what this doc argued from. This is the
+complete map, so nobody has to re-run the search: wikilink for Obsidian, repo
+path for agents and `grep`.
+
+**Before this doc — the threads it consolidates**
+
+| Doc | Path | Date | What it contributes |
+|---|---|---|---|
+| [[JuiceFS-Pinned-Path-Off-Local-Substrate]] | `ai-labs/augment-it/context-v/explorations/` | 2026-06-18 | Live cloud-mount tried end-to-end and rejected: "a network drive, not Dropbox." Origin of the rclone→R2 decision |
+| [[Two-Clients-One-Flow-Corpora-Auth-and-Deployment-Converge]] | `ai-labs/context-v/explorations/` | 2026-07-06 | The substrate thread this inherits from |
+| [[Instantly-Synced-Team-Folder-Nextcloud-vs-Alternatives]] | `self-host-stack/context-v/explorations/` | 2026-07-08 | Nextcloud vs. Syncthing vs. Seafile for a 3-person team folder; leaned Syncthing, Papermark for external shares; the `.git`-in-a-sync-folder footgun |
+| [[Pickup-2026-07-13]] | `ai-labs/augment-it/context-v/plans/pickups/` | 2026-07-13 | Re-confirmed rclone→R2 for backup; ruled Syncthing out of that leg (no S3/R2) |
+| [[Syncthing-For-Collaborator-Access-To-The-Corpus]] | `ai-labs/augment-it/context-v/explorations/` | 2026-07-17 | Asymmetric `Receive Only` collaborator mirrors; two of its open questions close here |
+| [[Corpora-Builder-System-Design]] | `ai-labs/corpora-builder/context-v/explorations/` | 2026-07-20 | Corpus building rebuilt three times; why it earned its own repo |
+| [[Self-Hosting-the-Vault-via-Ignis]] | `content-farm/context-v/explorations/` | 2026-07-20 | Adjacent: shared *browser* access to the vault instead of syncing files |
+| [[Corpora-Builder-MVP-R2-Native-With-Checkpoint-History]] | `ai-labs/corpora-builder/context-v/plans/` | 2026-08-08 | The HISTORY decision — hand-built CAS + checkpoints |
+| [[Master-Flave-An-Agent-Native-Document-Format-and-Publisher]] §8.2, §8.4 | `ai-labs/flave-ai/context-v/specs/` | 2026-08-14 | Every `.flave` is a `jj` repo; collaboration staged async → review → CRDT |
+
+**The study** — `ai-labs/studies/sync-and-content-version-control/` (README holds
+the full matrix). The body below cites six references; the shelf has since grown
+to eight, adding git-annex (question 6's binaries case) and Rclone-UI.
+
+[[Profile__Syncthing]] · [[Profile__Seafile]] · [[Profile__Restic]] ·
+[[Profile__Kopia]] · [[Profile__Jujutsu]] · [[Profile__Automerge]] ·
+[[Profile__Git-Annex]] · [[Profile__Rclone-UI]]
+
+**After this doc — what acted on it**
+
+| Doc | Path | Date | What it did |
+|---|---|---|---|
+| [[Sync-Corpora-to-R2-and-Show-Clients-What-Changed]] | `ai-labs/context-v/plans/` | 2026-08-22 | **The plan this exploration produced.** rclone mirror shipped; feed read side shipped; Kopia / Syncthing / Automerge parked behind named triggers |
+| [[Corpus-Change-Feed]] | `ai-labs/corpora-builder/context-v/specs/` | 2026-08-22 | The legibility layer, specced and signed off |
+| [[Sync-Dirs-in-Pseudomonorepo-Architecture]] | `context-v/explorations/` (anchor root) | 2026-08-22 | Same-day sibling, different problem: syncing dirs *inside* the tree (skills, changelogs, vault) |
+| [[Back-Up-The-Content-Ingest-Corpus-Volume]] | `ai-labs/augment-it/context-v/plans/` | 2026-09-10 | The deployed corpus on a Railway volume has no second copy — the backup leg, reopened for the hosted surface |
 
 ## The reframe: it is three layers, not one product
 
