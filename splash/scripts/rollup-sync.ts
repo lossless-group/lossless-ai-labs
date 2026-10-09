@@ -233,11 +233,28 @@ async function walkMd(dir: string): Promise<string[]> {
   }
   for (const e of entries) {
     if (e.name.startsWith('.') || e.name === 'node_modules') continue;
+    // context-v/extra/ is scratch and gitignored by convention. This walk reads
+    // the local disk, which ignores .gitignore, so it has to skip it explicitly.
+    if (e.isDirectory() && e.name === 'extra') continue;
     const full = join(dir, e.name);
     if (e.isDirectory()) out.push(...(await walkMd(full)));
     else if (e.isFile() && e.name.endsWith('.md')) out.push(full);
   }
   return out;
+}
+
+/** Per-file opt-out. A file never leaves its repo, even when the repo itself is
+ *  public, if its frontmatter says either:
+ *    - `private: true`  — same rule as context-v-corpus/scripts/collate.py
+ *    - `publish: false` — the Obsidian convention for "not for publication"
+ *  This only ever removes files. `publish: true` is still NOT a reason to
+ *  include one; see the visibility gate above. Returns the reason, or null. */
+function heldBackReason(text: string): string | null {
+  const fm = text.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
+  if (!fm) return null;
+  if (/^private:\s*["']?true["']?\s*$/m.test(fm[1])) return 'private: true';
+  if (/^publish:\s*["']?false["']?\s*$/m.test(fm[1])) return 'publish: false';
+  return null;
 }
 
 function injectProvenance(text: string, fields: Record<string, string>): string {
@@ -257,18 +274,25 @@ async function syncCollection(
   collection: 'changelog' | 'context-v',
   outRoot: string,
   sources: Source[],
-): Promise<{ total: number; perSource: Record<string, number> }> {
+): Promise<{ total: number; heldBack: number; perSource: Record<string, number> }> {
   let total = 0;
+  let heldBackCount = 0;
   const perSource: Record<string, number> = {};
 
   for (const src of sources) {
     const srcDir = resolve(PARENT_DIR, src.dir, collection);
     const files = await walkMd(srcDir);
-    perSource[src.slug] = files.length;
+    perSource[src.slug] = 0;
 
     for (const abs of files) {
       const rel = relative(srcDir, abs);
       const text = await readFile(abs, 'utf8');
+      const heldBack = heldBackReason(text);
+      if (heldBack) {
+        console.log(`[rollup-sync] EXCLUDED ${src.slug}/${collection}/${rel} — ${heldBack}`);
+        heldBackCount++;
+        continue;
+      }
       const decorated = injectProvenance(text, {
         from: src.slug,
         from_path: `${collection}/${rel}`,
@@ -276,11 +300,12 @@ async function syncCollection(
       const outAbs = resolve(outRoot, src.slug, rel);
       await mkdir(dirname(outAbs), { recursive: true });
       await writeFile(outAbs, decorated, 'utf8');
+      perSource[src.slug]++;
       total++;
     }
   }
 
-  return { total, perSource };
+  return { total, heldBack: heldBackCount, perSource };
 }
 
 async function writeMarker(sources: Source[]): Promise<void> {
@@ -319,9 +344,9 @@ async function main(): Promise<void> {
   const cl = await syncCollection('changelog', CHANGELOG_OUT, sources);
   const cv = await syncCollection('context-v', CONTEXT_V_OUT, sources);
 
-  console.log(`[rollup-sync] changelog : ${cl.total} files`);
+  console.log(`[rollup-sync] changelog : ${cl.total} files (${cl.heldBack} held back by frontmatter)`);
   for (const [slug, n] of Object.entries(cl.perSource)) console.log(`               · ${slug}: ${n}`);
-  console.log(`[rollup-sync] context-v : ${cv.total} files`);
+  console.log(`[rollup-sync] context-v : ${cv.total} files (${cv.heldBack} held back by frontmatter)`);
   for (const [slug, n] of Object.entries(cv.perSource)) console.log(`               · ${slug}: ${n}`);
 
   await writeMarker(sources);

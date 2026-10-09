@@ -143,10 +143,13 @@ function unionLoader(opts: UnionLoaderOpts) {
         try {
           for await (const file of fsGlob('**/*.md', { cwd: root })) {
             if (file.toLowerCase() === 'readme.md') continue;
+            // context-v/extra/ is gitignored scratch. CI never sees it, but a
+            // local build reads the disk, so skip it here rather than trust that.
+            if (file.split('/')[0] === 'extra') { skipped++; continue; }
             const abs = resolve(root, file);
             const text = await readFile(abs, 'utf8');
             const { data, body } = parseFrontmatter(text);
-            if (data.publish === false) { skipped++; continue; }
+            if (data.publish === false || data.private === true) { skipped++; continue; }
 
             const merged = {
               ...data,
@@ -170,7 +173,7 @@ function unionLoader(opts: UnionLoaderOpts) {
       await ingest(opts.rollupDir, 'rollup', '');
 
       logger.info?.(
-        `[${opts.collectionName}] loaded ${loaded}, skipped ${skipped} (publish:false).`,
+        `[${opts.collectionName}] loaded ${loaded}, skipped ${skipped} (publish:false, private:true, or extra/).`,
       );
     },
   };
