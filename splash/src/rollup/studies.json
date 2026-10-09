@@ -1,0 +1,602 @@
+[
+  {
+    "dir": "agent-harnesses",
+    "question": "How do coding-agent / conversational-agent runtimes organize and write to files on disk, persist memory across sessions, log traces of tool calls and reasoning, decide which tools/MCP servers are in scope at a given moment, and load or evolve skills?",
+    "pinned": [
+      {
+        "slug": "aider",
+        "url": "https://github.com/Aider-AI/aider",
+        "owner": "Aider-AI",
+        "name": "aider"
+      },
+      {
+        "slug": "autogen",
+        "url": "https://github.com/microsoft/autogen",
+        "owner": "microsoft",
+        "name": "autogen"
+      },
+      {
+        "slug": "cline",
+        "url": "https://github.com/cline/cline",
+        "owner": "cline",
+        "name": "cline"
+      },
+      {
+        "slug": "codex",
+        "url": "https://github.com/openai/codex",
+        "owner": "openai",
+        "name": "codex"
+      },
+      {
+        "slug": "continue",
+        "url": "https://github.com/continuedev/continue",
+        "owner": "continuedev",
+        "name": "continue"
+      },
+      {
+        "slug": "goose",
+        "url": "https://github.com/aaif-goose/goose",
+        "owner": "aaif-goose",
+        "name": "goose"
+      },
+      {
+        "slug": "mcp-python-sdk",
+        "url": "https://github.com/modelcontextprotocol/python-sdk",
+        "owner": "modelcontextprotocol",
+        "name": "python-sdk"
+      },
+      {
+        "slug": "opencode",
+        "url": "https://github.com/anomalyco/opencode",
+        "owner": "anomalyco",
+        "name": "opencode"
+      },
+      {
+        "slug": "OpenHands",
+        "url": "https://github.com/OpenHands/OpenHands",
+        "owner": "OpenHands",
+        "name": "OpenHands"
+      },
+      {
+        "slug": "pi",
+        "url": "https://github.com/earendil-works/pi",
+        "owner": "earendil-works",
+        "name": "pi"
+      }
+    ]
+  },
+  {
+    "dir": "conversational-ui-and-native-shells",
+    "question": "How do native, cross-platform conversational UI applications — especially ones built with Tauri (Rust backend + web frontend) — structure frontend state management, multi-conversation/multi-context switching (e.g. swapping between different \"workspaces\" or agent personas), local file persistence (chat history, settings), and integration with backend agent processes or MCP servers?",
+    "pinned": [
+      {
+        "slug": "5ire",
+        "url": "https://github.com/nanbingxyz/5ire",
+        "owner": "nanbingxyz",
+        "name": "5ire"
+      },
+      {
+        "slug": "agent-native",
+        "url": "https://github.com/BuilderIO/agent-native",
+        "owner": "BuilderIO",
+        "name": "agent-native"
+      },
+      {
+        "slug": "anything-llm",
+        "url": "https://github.com/mintplex-labs/anything-llm",
+        "owner": "mintplex-labs",
+        "name": "anything-llm"
+      },
+      {
+        "slug": "dive",
+        "url": "https://github.com/OpenAgentPlatform/Dive",
+        "owner": "OpenAgentPlatform",
+        "name": "Dive"
+      },
+      {
+        "slug": "kaas",
+        "url": "https://github.com/0xfrankz/Kaas",
+        "owner": "0xfrankz",
+        "name": "Kaas"
+      },
+      {
+        "slug": "librechat",
+        "url": "https://github.com/danny-avila/LibreChat",
+        "owner": "danny-avila",
+        "name": "LibreChat"
+      },
+      {
+        "slug": "onyx",
+        "url": "https://github.com/onyx-dot-app/onyx",
+        "owner": "onyx-dot-app",
+        "name": "onyx"
+      },
+      {
+        "slug": "open-vibe",
+        "url": "https://github.com/open-vibe/open-vibe",
+        "owner": "open-vibe",
+        "name": "open-vibe"
+      },
+      {
+        "slug": "openagent",
+        "url": "https://github.com/BANG404/openagent",
+        "owner": "BANG404",
+        "name": "openagent"
+      },
+      {
+        "slug": "portaljs",
+        "url": "https://github.com/datopian/portaljs",
+        "owner": "datopian",
+        "name": "portaljs"
+      },
+      {
+        "slug": "routa",
+        "url": "https://github.com/phodal/routa",
+        "owner": "phodal",
+        "name": "routa"
+      }
+    ]
+  },
+  {
+    "dir": "data-analytics-specifications-and-standards",
+    "question": "What conventions exist for open, machine-validatable specifications and standards across the data-analytics stack — for describing datasets, fields, dialects, columnar storage formats, in-memory data formats, and grammars of graphics — and what can we learn from the mature exemplars before designing our own?",
+    "pinned": [
+      {
+        "slug": "arrow",
+        "url": "https://github.com/apache/arrow",
+        "owner": "apache",
+        "name": "arrow"
+      },
+      {
+        "slug": "datapackage",
+        "url": "https://github.com/frictionlessdata/datapackage",
+        "owner": "frictionlessdata",
+        "name": "datapackage"
+      },
+      {
+        "slug": "ggsql",
+        "url": "https://github.com/posit-dev/ggsql",
+        "owner": "posit-dev",
+        "name": "ggsql"
+      },
+      {
+        "slug": "parquet-format",
+        "url": "https://github.com/apache/parquet-format",
+        "owner": "apache",
+        "name": "parquet-format"
+      },
+      {
+        "slug": "plot",
+        "url": "https://github.com/observablehq/plot",
+        "owner": "observablehq",
+        "name": "plot"
+      },
+      {
+        "slug": "vega-lite",
+        "url": "https://github.com/vega/vega-lite",
+        "owner": "vega",
+        "name": "vega-lite"
+      }
+    ]
+  },
+  {
+    "dir": "frontend-ui-kits-component-libraries",
+    "question": "How do mature UI kits name, scale, and override their component APIs — and which of those conventions survive translation to Svelte 5 + CSS custom properties, with no Tailwind and no React?",
+    "pinned": [
+      {
+        "slug": "ant-design",
+        "url": "https://github.com/ant-design/ant-design",
+        "owner": "ant-design",
+        "name": "ant-design"
+      },
+      {
+        "slug": "bits-ui",
+        "url": "https://github.com/huntabyte/bits-ui",
+        "owner": "huntabyte",
+        "name": "bits-ui"
+      },
+      {
+        "slug": "material-ui",
+        "url": "https://github.com/mui/material-ui",
+        "owner": "mui",
+        "name": "material-ui"
+      },
+      {
+        "slug": "melt-ui",
+        "url": "https://github.com/melt-ui/melt-ui",
+        "owner": "melt-ui",
+        "name": "melt-ui"
+      },
+      {
+        "slug": "open-props",
+        "url": "https://github.com/argyleink/open-props",
+        "owner": "argyleink",
+        "name": "open-props"
+      },
+      {
+        "slug": "primer-primitives",
+        "url": "https://github.com/primer/primitives",
+        "owner": "primer",
+        "name": "primitives"
+      },
+      {
+        "slug": "radix-primitives",
+        "url": "https://github.com/radix-ui/primitives",
+        "owner": "radix-ui",
+        "name": "primitives"
+      },
+      {
+        "slug": "shadcn-svelte",
+        "url": "https://github.com/huntabyte/shadcn-svelte",
+        "owner": "huntabyte",
+        "name": "shadcn-svelte"
+      },
+      {
+        "slug": "shadcn-ui",
+        "url": "https://github.com/shadcn-ui/ui",
+        "owner": "shadcn-ui",
+        "name": "ui"
+      },
+      {
+        "slug": "tailwindcss",
+        "url": "https://github.com/tailwindlabs/tailwindcss",
+        "owner": "tailwindlabs",
+        "name": "tailwindcss"
+      }
+    ]
+  },
+  {
+    "dir": "markdown-parse-serve-render",
+    "question": "How do mature projects parse, serve, and render Markdown — across CommonMark, GitHub-Flavored, Pandoc-extended (Quarto / R Markdown), and directive / wikilink-flavored dialects — and which conventions are converging at each of the three stages?",
+    "pinned": [
+      {
+        "slug": "markdoc",
+        "url": "https://github.com/markdoc/markdoc",
+        "owner": "markdoc",
+        "name": "markdoc"
+      },
+      {
+        "slug": "markdown-rs",
+        "url": "https://github.com/wooorm/markdown-rs",
+        "owner": "wooorm",
+        "name": "markdown-rs"
+      },
+      {
+        "slug": "marksman",
+        "url": "https://github.com/artempyanykh/marksman",
+        "owner": "artempyanykh",
+        "name": "marksman"
+      },
+      {
+        "slug": "panache",
+        "url": "https://github.com/jolars/panache",
+        "owner": "jolars",
+        "name": "panache"
+      },
+      {
+        "slug": "pandoc",
+        "url": "https://github.com/jgm/pandoc",
+        "owner": "jgm",
+        "name": "pandoc"
+      },
+      {
+        "slug": "remark",
+        "url": "https://github.com/remarkjs/remark",
+        "owner": "remarkjs",
+        "name": "remark"
+      }
+    ]
+  },
+  {
+    "dir": "memory-layers-for-agents",
+    "question": "How do production memory systems for AI agents structure recall — across vector, graph, and key-value stores; across user, session, and agent scopes; across short-term context and long-term knowledge — and which conventions are converging?",
+    "pinned": [
+      {
+        "slug": "beads",
+        "url": "https://github.com/gastownhall/beads",
+        "owner": "gastownhall",
+        "name": "beads"
+      },
+      {
+        "slug": "byterover-cli",
+        "url": "https://github.com/campfirein/byterover-cli",
+        "owner": "campfirein",
+        "name": "byterover-cli"
+      },
+      {
+        "slug": "delta-mem",
+        "url": "https://github.com/declare-lab/delta-Mem",
+        "owner": "declare-lab",
+        "name": "delta-Mem"
+      },
+      {
+        "slug": "graphify",
+        "url": "https://github.com/safishamsi/graphify",
+        "owner": "safishamsi",
+        "name": "graphify"
+      },
+      {
+        "slug": "graphiti",
+        "url": "https://github.com/getzep/graphiti",
+        "owner": "getzep",
+        "name": "graphiti"
+      },
+      {
+        "slug": "hindsight",
+        "url": "https://github.com/vectorize-io/hindsight",
+        "owner": "vectorize-io",
+        "name": "hindsight"
+      },
+      {
+        "slug": "honcho",
+        "url": "https://github.com/plastic-labs/honcho",
+        "owner": "plastic-labs",
+        "name": "honcho"
+      },
+      {
+        "slug": "letta",
+        "url": "https://github.com/letta-ai/letta",
+        "owner": "letta-ai",
+        "name": "letta"
+      },
+      {
+        "slug": "mem0",
+        "url": "https://github.com/mem0ai/mem0",
+        "owner": "mem0ai",
+        "name": "mem0"
+      },
+      {
+        "slug": "mempalace",
+        "url": "https://github.com/MemPalace/mempalace",
+        "owner": "MemPalace",
+        "name": "mempalace"
+      },
+      {
+        "slug": "neo",
+        "url": "https://github.com/Parslee-ai/neo",
+        "owner": "Parslee-ai",
+        "name": "neo"
+      },
+      {
+        "slug": "openviking",
+        "url": "https://github.com/volcengine/OpenViking",
+        "owner": "volcengine",
+        "name": "OpenViking"
+      },
+      {
+        "slug": "paxm",
+        "url": "https://github.com/pax-beehive/paxm",
+        "owner": "pax-beehive",
+        "name": "paxm"
+      },
+      {
+        "slug": "retaindb",
+        "url": "https://github.com/RetainDB/RetainDB",
+        "owner": "RetainDB",
+        "name": "RetainDB"
+      },
+      {
+        "slug": "statebench",
+        "url": "https://github.com/Parslee-ai/statebench",
+        "owner": "Parslee-ai",
+        "name": "statebench"
+      },
+      {
+        "slug": "supermemory",
+        "url": "https://github.com/supermemoryai/supermemory",
+        "owner": "supermemoryai",
+        "name": "supermemory"
+      },
+      {
+        "slug": "understand-anything",
+        "url": "https://github.com/Egonex-AI/Understand-Anything",
+        "owner": "Egonex-AI",
+        "name": "Understand-Anything"
+      },
+      {
+        "slug": "volt",
+        "url": "https://github.com/Martian-Engineering/volt",
+        "owner": "Martian-Engineering",
+        "name": "volt"
+      }
+    ]
+  },
+  {
+    "dir": "open-specs-and-standards",
+    "question": "A reading collection of open specifications, standards, and conventions that shape how humans and AI agents cooperate through files. Each entry is cloned as a git submodule under this directory.",
+    "pinned": [
+      {
+        "slug": "12-factor-agents",
+        "url": "https://github.com/humanlayer/12-factor-agents",
+        "owner": "humanlayer",
+        "name": "12-factor-agents"
+      },
+      {
+        "slug": "agent-2-agent",
+        "url": "https://github.com/a2aproject/A2A",
+        "owner": "a2aproject",
+        "name": "A2A"
+      },
+      {
+        "slug": "agents-md",
+        "url": "https://github.com/agentsmd/agents.md",
+        "owner": "agentsmd",
+        "name": "agents.md"
+      },
+      {
+        "slug": "ai-skills",
+        "url": "https://github.com/anthropics/skills",
+        "owner": "anthropics",
+        "name": "skills"
+      },
+      {
+        "slug": "design-md",
+        "url": "https://github.com/google-labs-code/design.md",
+        "owner": "google-labs-code",
+        "name": "design.md"
+      },
+      {
+        "slug": "frictionless-specs",
+        "url": "https://github.com/frictionlessdata/specs",
+        "owner": "frictionlessdata",
+        "name": "specs"
+      },
+      {
+        "slug": "get-shit-done",
+        "url": "https://github.com/gsd-build/get-shit-done",
+        "owner": "gsd-build",
+        "name": "get-shit-done"
+      },
+      {
+        "slug": "llms-txt",
+        "url": "https://github.com/AnswerDotAI/llms-txt",
+        "owner": "AnswerDotAI",
+        "name": "llms-txt"
+      },
+      {
+        "slug": "mcp-api",
+        "url": "https://github.com/Parslee-ai/mcp-api",
+        "owner": "Parslee-ai",
+        "name": "mcp-api"
+      },
+      {
+        "slug": "modelcontextprotocol",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol",
+        "owner": "modelcontextprotocol",
+        "name": "modelcontextprotocol"
+      },
+      {
+        "slug": "open-spec",
+        "url": "https://github.com/Fission-AI/OpenSpec",
+        "owner": "Fission-AI",
+        "name": "OpenSpec"
+      },
+      {
+        "slug": "openui",
+        "url": "https://github.com/lossless-group/openui",
+        "owner": "lossless-group",
+        "name": "openui"
+      },
+      {
+        "slug": "spec-kit",
+        "url": "https://github.com/github/spec-kit",
+        "owner": "github",
+        "name": "spec-kit"
+      },
+      {
+        "slug": "superpowers",
+        "url": "https://github.com/obra/superpowers",
+        "owner": "obra",
+        "name": "superpowers"
+      },
+      {
+        "slug": "symphony",
+        "url": "https://github.com/openai/symphony",
+        "owner": "openai",
+        "name": "symphony"
+      }
+    ]
+  },
+  {
+    "dir": "sync-and-content-version-control",
+    "question": "For a folder of documents shared bidirectionally between an operator and a non-technical client, backed by blob storage, at which layer does history live — the transport, the store, the application, or the document?",
+    "pinned": [
+      {
+        "slug": "automerge",
+        "url": "https://github.com/automerge/automerge",
+        "owner": "automerge",
+        "name": "automerge"
+      },
+      {
+        "slug": "git-annex",
+        "url": "https://git.joeyh.name/git/git-annex",
+        "owner": "",
+        "name": "https://git.joeyh.name/git/git-annex.git"
+      },
+      {
+        "slug": "jj",
+        "url": "https://github.com/jj-vcs/jj",
+        "owner": "jj-vcs",
+        "name": "jj"
+      },
+      {
+        "slug": "kopia",
+        "url": "https://github.com/kopia/kopia",
+        "owner": "kopia",
+        "name": "kopia"
+      },
+      {
+        "slug": "rclone-ui",
+        "url": "https://github.com/rclone-ui/rclone-ui",
+        "owner": "rclone-ui",
+        "name": "rclone-ui"
+      },
+      {
+        "slug": "restic",
+        "url": "https://github.com/restic/restic",
+        "owner": "restic",
+        "name": "restic"
+      },
+      {
+        "slug": "seafile",
+        "url": "https://github.com/haiwen/seafile",
+        "owner": "haiwen",
+        "name": "seafile"
+      },
+      {
+        "slug": "seafile-server",
+        "url": "https://github.com/haiwen/seafile-server",
+        "owner": "haiwen",
+        "name": "seafile-server"
+      },
+      {
+        "slug": "syncthing",
+        "url": "https://github.com/syncthing/syncthing",
+        "owner": "syncthing",
+        "name": "syncthing"
+      }
+    ]
+  },
+  {
+    "dir": "vector-databases",
+    "question": "How do open-source vector / context databases structure embedding storage, recall ranking, payload schemas, filter expressivity, persistence, and ANN-algorithm choice (HNSW / IVF / DiskANN / ScaNN / etc.) — and what are the trade-offs when migrating between them?",
+    "pinned": [
+      {
+        "slug": "chroma",
+        "url": "https://github.com/chroma-core/chroma",
+        "owner": "chroma-core",
+        "name": "chroma"
+      },
+      {
+        "slug": "lancedb",
+        "url": "https://github.com/lancedb/lancedb",
+        "owner": "lancedb",
+        "name": "lancedb"
+      },
+      {
+        "slug": "milvus",
+        "url": "https://github.com/milvus-io/milvus",
+        "owner": "milvus-io",
+        "name": "milvus"
+      },
+      {
+        "slug": "pgvector",
+        "url": "https://github.com/pgvector/pgvector",
+        "owner": "pgvector",
+        "name": "pgvector"
+      },
+      {
+        "slug": "qdrant",
+        "url": "https://github.com/qdrant/qdrant",
+        "owner": "qdrant",
+        "name": "qdrant"
+      },
+      {
+        "slug": "weaviate",
+        "url": "https://github.com/weaviate/weaviate",
+        "owner": "weaviate",
+        "name": "weaviate"
+      }
+    ]
+  }
+]

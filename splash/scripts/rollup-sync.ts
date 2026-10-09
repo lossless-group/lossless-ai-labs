@@ -49,6 +49,7 @@ const CHILDREN: { slug: string; dir: string; containers?: string[] }[] = [
   { slug: 'corpora-builder',       dir: 'corpora-builder' },
   { slug: 'id-didi-sh',            dir: 'id-didi-sh' },
   { slug: 'flave',                 dir: 'flave-ai' },
+  { slug: 'hope-ai',               dir: 'hope-ai' },
   { slug: 'studies',               dir: 'studies', containers: ['.'] },
 ];
 
@@ -308,6 +309,87 @@ async function syncCollection(
   return { total, heldBack: heldBackCount, perSource };
 }
 
+/* ─── Studies snapshot ──────────────────────────────────────────────────────
+ *
+ * The /studies/ page and the homepage need each study's question and pinned
+ * repos. Those live inside the study submodules, which CI never checks out
+ * (pages.yml: submodules: false), so reading them at build time rendered
+ * "0 pinned" and no questions on the live site. Snapshot them here instead,
+ * where the submodules are on disk, and commit the JSON like the rest of
+ * src/rollup/.
+ */
+
+interface StudySnapshot {
+  dir: string;
+  question: string;
+  pinned: { slug: string; url: string; owner: string; name: string }[];
+}
+
+function parseGitmodules(text: string): { path: string; url: string }[] {
+  return text
+    .split(/\[submodule /)
+    .slice(1)
+    .map((b) => ({
+      path: b.match(/path\s*=\s*(.+)/)?.[1]?.trim() ?? '',
+      url: b.match(/url\s*=\s*(.+)/)?.[1]?.trim() ?? '',
+    }))
+    .filter((m) => m.path && m.url);
+}
+
+/** First blockquote after the H1 (each study README states its question as
+ *  one), falling back to the first paragraph. */
+function extractQuestion(readme: string): string {
+  let pastH1 = false;
+  const bq: string[] = [];
+  const para: string[] = [];
+  for (const line of readme.split(/\r?\n/)) {
+    if (!pastH1) {
+      if (/^#\s/.test(line)) pastH1 = true;
+      continue;
+    }
+    if (line.startsWith('>')) {
+      bq.push(line.replace(/^>\s?/, ''));
+      continue;
+    }
+    if (bq.length > 0) break;
+    if (line.startsWith('#') || line.trim() === '') {
+      if (para.length > 0) break;
+      continue;
+    }
+    para.push(line);
+  }
+  return (bq.length > 0 ? bq : para).join(' ').replace(/\*\*/g, '').replace(/\s+/g, ' ').trim();
+}
+
+async function syncStudies(): Promise<number> {
+  const studiesDir = resolve(PARENT_DIR, 'studies');
+  const out: StudySnapshot[] = [];
+  for (const e of await readdir(studiesDir, { withFileTypes: true })) {
+    // collaborations/ holds friends' codebases, not pinned upstreams; the
+    // studies page lists those by hand, anonymously.
+    if (!e.isDirectory() || e.name.startsWith('.') || e.name === 'collaborations') continue;
+    const dir = resolve(studiesDir, e.name);
+    const gm = await readFile(resolve(dir, '.gitmodules'), 'utf8').catch(() => '');
+    if (!gm) continue;
+    const readme = await readFile(resolve(dir, 'README.md'), 'utf8').catch(() => '');
+    const pinned = parseGitmodules(gm)
+      .map((m) => {
+        const hit = m.url.match(/github\.com[/:]([\w.-]+)\/([\w.-]+?)(?:\.git)?$/);
+        return {
+          slug: m.path,
+          url: m.url.replace(/\.git$/, ''),
+          owner: hit?.[1] ?? '',
+          name: hit?.[2] ?? m.url,
+        };
+      })
+      .sort((a, b) => a.slug.localeCompare(b.slug));
+    out.push({ dir: e.name, question: extractQuestion(readme), pinned });
+  }
+  out.sort((a, b) => a.dir.localeCompare(b.dir));
+  await writeFile(resolve(ROLLUP_ROOT, 'studies.json'), JSON.stringify(out, null, 2) + '\n', 'utf8');
+  return out.length;
+}
+
 async function writeMarker(sources: Source[]): Promise<void> {
   const marker = `# Generated content — do not hand-edit
 
@@ -348,6 +430,9 @@ async function main(): Promise<void> {
   for (const [slug, n] of Object.entries(cl.perSource)) console.log(`               · ${slug}: ${n}`);
   console.log(`[rollup-sync] context-v : ${cv.total} files (${cv.heldBack} held back by frontmatter)`);
   for (const [slug, n] of Object.entries(cv.perSource)) console.log(`               · ${slug}: ${n}`);
+
+  const studyCount = await syncStudies();
+  console.log(`[rollup-sync] studies   : ${studyCount} snapshotted to studies.json`);
 
   await writeMarker(sources);
   console.log('[rollup-sync] done.');

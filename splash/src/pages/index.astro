@@ -2,6 +2,8 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { toDate } from '@lib/date';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 const base = import.meta.env.BASE_URL;
 
@@ -13,8 +15,14 @@ const products = (await getCollection('product-highlights'))
 const changelogAll = await getCollection('changelog');
 const contextVAll = await getCollection('context-v');
 
-const childSlugs = ['context-vigilance-kit', 'memopop-ai', 'dididecks-ai', 'augment-it'] as const;
-const activeCount = childSlugs.length;
+// One product card per active child, so the card collection is the roster.
+const activeCount = products.length;
+
+// Studies count comes from the rollup snapshot; CI never checks out the
+// study submodules, so the studies/ dirs are empty there.
+const studyCount = (JSON.parse(
+  await readFile(resolve(process.cwd(), 'src', 'rollup', 'studies.json'), 'utf8').catch(() => '[]'),
+) as unknown[]).length;
 
 // Latest 3 changelog entries across the whole tree — for the hero side.
 const latestEntries = [...changelogAll]
@@ -25,7 +33,7 @@ const latestEntries = [...changelogAll]
 const graduated = [
   { name: 'Content Farm',                 href: 'https://github.com/lossless-group/content-farm',      note: 'Obsidian multi-plugin suite' },
   { name: 'image-gin',                    href: 'https://github.com/lossless-group/image-gin',         note: 'AI image-gen plugin' },
-  { name: 'lossless-skills',              href: 'https://github.com/lossless-group/lossless-skills',   note: 'agent-skills home' },
+  { name: 'lossless-agent-skills',        href: 'https://github.com/lossless-group/lossless-agent-skills', note: 'agent-skills home' },
 ];
 ---
 <BaseLayout>
@@ -39,7 +47,7 @@ const graduated = [
         </h1>
         <p class="lede">
           The Lossless Group's pseudomonorepo for AI experiments graduating into real
-          products. Currently housing three active builds; earlier strands have already
+          products. Currently housing {activeCount} active builds; earlier strands have already
           shipped elsewhere.
         </p>
         <ul class="meta-strip" role="list">
@@ -79,7 +87,7 @@ const graduated = [
     <div class="container">
       <p class="eyebrow">ch.02 · active builds</p>
       <h2>Currently housing.</h2>
-      <p class="lede">Three children. Each on its own three-tier branches; each rolls
+      <p class="lede">{activeCount} children. Each on its own three-tier branches; each rolls
       its <code>changelog/</code> and <code>context-v/</code> up to this surface.</p>
       <div class="grid grid--products">
         {products.map((p) => (
@@ -139,7 +147,7 @@ const graduated = [
           <span class="bench-card__label">context-v</span>
           <div class="bench-card__body">
             <h3>Specs · explorations · plans · reminders</h3>
-            <p>Every child carries the same six-folder shape. The parent owns cross-cutting documents that span more than one child.</p>
+            <p>Every child carries the same <code>context-v/</code> shape. The parent owns cross-cutting documents that span more than one child.</p>
           </div>
         </article>
         <article class="bench-card">
@@ -168,7 +176,7 @@ const graduated = [
           <h2>Pinned reading, not paraphrase.</h2>
           <p class="lede">Each study scopes one domain question and pins upstream code as nested submodules. We read from the pinned source, not from training data.</p>
         </div>
-        <a class="studies-head__more" href={`${base}studies/`}>browse all studies&nbsp;→</a>
+        <a class="studies-head__more" href={`${base}studies/`}>browse all {studyCount} studies&nbsp;→</a>
       </header>
       <div class="grid grid--studies">
         <a class="bench-card bench-card--link" href={`${base}studies/#open-specs-and-standards`}>

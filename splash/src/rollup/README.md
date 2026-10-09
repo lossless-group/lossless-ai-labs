@@ -18,6 +18,7 @@ Sources rolled up:
 - `corpora-builder`
 - `id-didi-sh`
 - `flave`
+- `hope-ai`
 - `studies`
 - `studies/agent-harnesses`
 - `studies/conversational-ui-and-native-shells`

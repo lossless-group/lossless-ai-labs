@@ -2,14 +2,14 @@
 title: Augment It
 slug: augment-it
 order: 4
-status: newly nested
+status: active build
 label: product
 repo: https://github.com/lossless-group/augment-it
 tags:
+  - svelte-5
   - module-federation
-  - nextjs
-  - turbo
-  - perplexity
+  - nats
+  - multi-tenant
 lede: |
-  Web tooling for augmenting data with AI. Module-federated microfrontends — record-collector, prompt-manager, request-reviewer — on Next.js + Turbo + RSBuild, with Perplexity as the research backbone. The outlier in the labs, built on React where siblings are Astro/Svelte, because Module Federation pays off where the architecture warrants it.
+  Multi-tenant AI data augmentation. Upload a CSV, fire enrichment passes against it (custom prompts or source packs like LinkedIn, X, Bluesky, Wikipedia), triage the responses, and promote enhanced rows into new canonical record sets. Federated Svelte 5 microfrontends on Rsbuild, over stateless TypeScript services talking NATS. Every column on every row is tenant-defined; there is no hardcoded schema.
 ---
