@@ -73,3 +73,6 @@
 	path = studies/collaborations/phoenixcapera/instadeck-v2
 	url = https://github.com/acpcareconnectdev-ui/deck-v2.git
 	branch = main
+[submodule "kay-os"]
+	path = kay-os
+	url = https://github.com/lossless-group/kay-os.git
