@@ -76,3 +76,7 @@
 [submodule "kay-os"]
 	path = kay-os
 	url = https://github.com/lossless-group/kay-os.git
+[submodule "mcps/event-hog-mcp"]
+	path = mcps/event-hog-mcp
+	url = https://github.com/lossless-group/event-hog-mcp.git
+	branch = main
