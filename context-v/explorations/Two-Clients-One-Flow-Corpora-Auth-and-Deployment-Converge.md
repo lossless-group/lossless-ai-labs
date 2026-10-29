@@ -21,8 +21,8 @@ tags:
   - Corpus-Substrate
   - Cloudflare-R2
   - JuiceFS
-  - reach-edu
-  - humain-vc
+  - Reach-Edu
+  - Humain-VC
   - Memos
   - Decks
 site_uuid: a9f2f841-9468-48b6-aefc-3894eee0e95f

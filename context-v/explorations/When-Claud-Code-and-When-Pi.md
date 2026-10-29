@@ -3,6 +3,7 @@ site_uuid: 8cc893df-ea14-45a6-84bb-dcf2e13eaa6a
 hex_code: 4flpvt
 title: When Claud Code and When Pi
 date_created: 2026-05-08
+date_modified: 2026-08-18
 date_authored_initial_draft: 2026-05-08
 date_authored_current_draft: 2026-05-08
 authors:

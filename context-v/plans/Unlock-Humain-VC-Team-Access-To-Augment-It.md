@@ -15,7 +15,7 @@ tags:
   - Didi-Platform
   - Identity-Service
   - Augment-It
-  - humain-vc
+  - Humain-VC
   - Deployment
   - Single-Tenant
   - Corpus-Sync
