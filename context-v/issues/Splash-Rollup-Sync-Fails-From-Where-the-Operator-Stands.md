@@ -13,7 +13,6 @@ tags:
   - Usability
   - AI-Labs
   - Splash
-  - Pnpm
 status: Resolved
 site_uuid: f7b9cf9b-73cf-4e04-9198-a5a698798886
 hex_code: jynh6c
