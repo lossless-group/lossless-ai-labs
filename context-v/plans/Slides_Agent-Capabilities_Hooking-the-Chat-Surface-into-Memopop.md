@@ -22,6 +22,7 @@ hex_code: tkz2nt
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
 publish: true
+type: Plans
 ---
 
 # Agent Capabilities — Hooking the Chat Surface into Memopop

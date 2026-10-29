@@ -21,6 +21,7 @@ hex_code: pn48cz
 date_authored_initial_draft: 2026-05-07
 date_authored_current_draft: 2026-05-07
 publish: true
+type: Explorations
 ---
 
 # ChromaDB as Context Improvement Across Everything, Everyone

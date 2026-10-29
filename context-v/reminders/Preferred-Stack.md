@@ -18,6 +18,7 @@ hex_code: kdjar6
 date_authored_initial_draft: 2026-05-07
 date_authored_current_draft: 2026-05-07
 publish: true
+type: Reminders
 ---
 
 # Preferred Stack — uv over pip, and other defaults

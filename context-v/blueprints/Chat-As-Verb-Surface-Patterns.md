@@ -26,6 +26,7 @@ hex_code: ciqqws
 date_authored_initial_draft: 2026-05-22
 date_authored_current_draft: 2026-05-22
 publish: true
+type: Blueprints
 ---
 
 # Chat-As-Verb-Surface Patterns

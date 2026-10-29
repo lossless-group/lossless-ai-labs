@@ -23,6 +23,7 @@ hex_code: wzzb9e
 date_authored_initial_draft: 2026-07-25
 date_authored_current_draft: 2026-07-25
 publish: true
+type: Explorations
 ---
 
 # Secrets for Collaborators Who Will Never Open a Terminal

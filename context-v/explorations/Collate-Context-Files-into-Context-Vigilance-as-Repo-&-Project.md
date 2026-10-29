@@ -23,6 +23,7 @@ hex_code: y8ql74
 date_authored_initial_draft: 2026-05-07
 date_authored_current_draft: 2026-05-07
 publish: true
+type: Explorations
 ---
 
 # Collate Context Files into Context Vigilance as Repo & Project

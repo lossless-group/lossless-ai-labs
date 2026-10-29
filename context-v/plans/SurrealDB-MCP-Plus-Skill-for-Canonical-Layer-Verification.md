@@ -16,6 +16,7 @@ hex_code: ar9dkt
 date_authored_initial_draft: 2026-07-07
 date_authored_current_draft: 2026-07-07
 publish: true
+type: Plans
 ---
 
 ## Why this exists

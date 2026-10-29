@@ -20,6 +20,7 @@ hex_code: jynh6c
 date_authored_initial_draft: 2026-10-06
 date_authored_current_draft: 2026-10-06
 publish: true
+type: Issues
 ---
 
 # Splash `rollup:sync` fails from where the operator actually stands

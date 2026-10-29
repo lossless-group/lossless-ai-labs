@@ -27,6 +27,7 @@ hex_code: 2958x0
 date_authored_initial_draft: 2026-08-12
 date_authored_current_draft: 2026-08-12
 publish: false
+type: Plans
 ---
 
 ## Why Care?

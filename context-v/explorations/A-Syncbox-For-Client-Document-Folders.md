@@ -33,6 +33,7 @@ tags:
   - Jujutsu
   - Cloudflare-R2
 publish: true
+type: Explorations
 ---
 
 # A Syncbox for Client Document Folders

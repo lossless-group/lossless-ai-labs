@@ -28,6 +28,7 @@ summary: >-
   path-relativity invariant, the swappable-backend seam, and the recursive
   component. Read before building a third; the differences between the two
   existing implementations are where the decisions actually are.
+type: Blueprints
 ---
 
 # Show the Filesystem of a Workspace

@@ -27,6 +27,7 @@ tags:
   - Corpus
   - Client-Data
 publish: true
+type: Reminders
 ---
 
 # Never Run jj in a Git LFS Repo

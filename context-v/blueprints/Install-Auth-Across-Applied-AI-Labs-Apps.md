@@ -30,6 +30,7 @@ hex_code: x9mdxa
 date_authored_initial_draft: 2026-06-05
 date_authored_current_draft: 2026-06-05
 publish: true
+type: Blueprints
 ---
 
 # Install Auth Across Applied AI Labs Apps

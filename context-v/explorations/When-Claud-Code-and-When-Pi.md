@@ -11,6 +11,7 @@ at_semantic_version: 0.0.1.0
 tags:
   - Exploration
 publish: true
+type: Explorations
 ---
 
 # Pi vs. Claude Code

@@ -20,6 +20,7 @@ hex_code: qisp1e
 date_authored_initial_draft: 2026-05-08
 date_authored_current_draft: 2026-05-08
 publish: true
+type: Plans
 ---
 
 # Add a Chroma Local UI Interface

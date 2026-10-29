@@ -30,6 +30,7 @@ hex_code: gegohy
 date_authored_initial_draft: 2026-07-06
 date_authored_current_draft: 2026-07-06
 publish: true
+type: Explorations
 ---
 
 # Two Clients, One Flow — Corpora by Domain-Type, Auth, and Deployment Converge

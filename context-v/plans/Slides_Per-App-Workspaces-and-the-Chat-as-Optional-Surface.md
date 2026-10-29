@@ -23,6 +23,7 @@ hex_code: fpme7z
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
 publish: true
+type: Plans
 ---
 
 # Per-App Workspaces and the Chat as Optional Surface

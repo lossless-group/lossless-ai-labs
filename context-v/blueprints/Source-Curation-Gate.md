@@ -34,6 +34,7 @@ hex_code: yz3l5f
 date_authored_initial_draft: 2026-06-27
 date_authored_current_draft: 2026-06-27
 publish: true
+type: Blueprints
 ---
 
 # The Source Curation Gate

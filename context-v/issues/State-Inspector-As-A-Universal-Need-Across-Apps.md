@@ -23,6 +23,7 @@ hex_code: 9ep3mv
 date_authored_initial_draft: 2026-07-24
 date_authored_current_draft: 2026-07-24
 publish: true
+type: Issues
 ---
 
 # State-Inspector — a universal need across the ai-labs apps

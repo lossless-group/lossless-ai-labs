@@ -31,6 +31,7 @@ tags:
   - MemoPop
   - Corpus
 publish: true
+type: Reminders
 ---
 
 # corpora-builder Is Not augment-it Tooling

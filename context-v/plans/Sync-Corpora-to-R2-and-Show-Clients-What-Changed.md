@@ -38,6 +38,7 @@ tags:
   - Version-Control
   - Client-Facing
 publish: true
+type: Plans
 ---
 
 # Sync Corpora to R2, and Show Clients What Changed

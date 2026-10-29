@@ -27,6 +27,7 @@ hex_code: orc3qj
 date_authored_initial_draft: 2026-05-17
 date_authored_current_draft: 2026-05-17
 publish: true
+type: Explorations
 ---
 
 # In-App Chat as the Agent Surface for Client Apps

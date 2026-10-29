@@ -29,6 +29,7 @@ hex_code: v163au
 date_authored_initial_draft: 2026-07-06
 date_authored_current_draft: 2026-08-23
 publish: true
+type: Specs
 ---
 
 # id.didi.sh — the Didi Identity Service

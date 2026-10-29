@@ -24,6 +24,7 @@ hex_code: adbf9x
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
 publish: true
+type: Plans
 ---
 
 # The Anatomy of the In-App Agent Shell

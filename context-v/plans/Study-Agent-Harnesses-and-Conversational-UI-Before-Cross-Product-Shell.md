@@ -24,6 +24,7 @@ hex_code: 7ogk6u
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
 publish: true
+type: Plans
 ---
 
 # Study Agent Harnesses + Conversational UI, Then Decide the Cross-Product Native Shell

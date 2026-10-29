@@ -19,6 +19,7 @@ tags:
   - Design-System
   - Theme-System
   - AI-Labs
+type: Reminders
 ---
 
 # Load the theme system before touching tokens

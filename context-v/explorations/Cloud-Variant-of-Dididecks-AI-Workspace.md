@@ -26,6 +26,7 @@ hex_code: 4kqfzr
 date_authored_initial_draft: 2026-06-05
 date_authored_current_draft: 2026-06-05
 publish: true
+type: Explorations
 ---
 
 # Cloud Variant of the Dididecks-AI Workspace

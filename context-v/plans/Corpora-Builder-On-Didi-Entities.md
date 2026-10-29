@@ -36,6 +36,7 @@ tags:
   - Tenancy
   - Agent-Chat
 publish: true
+type: Plans
 ---
 
 # corpora-builder on didi.sh Entities

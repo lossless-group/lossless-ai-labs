@@ -31,6 +31,7 @@ hex_code: 1v99yj
 date_authored_initial_draft: 2026-05-18
 date_authored_current_draft: 2026-05-18
 publish: true
+type: Explorations
 ---
 
 # Memory Layers for the In-App Chat Package

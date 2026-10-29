@@ -21,6 +21,7 @@ hex_code: fyumco
 date_authored_initial_draft: 2026-08-18
 date_authored_current_draft: 2026-08-18
 publish: false
+type: Blueprints
 ---
 
 ## Why Care?

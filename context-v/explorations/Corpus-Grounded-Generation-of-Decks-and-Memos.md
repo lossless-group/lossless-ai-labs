@@ -40,6 +40,7 @@ hex_code: 05bseu
 date_authored_initial_draft: 2026-06-19
 date_authored_current_draft: 2026-06-19
 publish: true
+type: Explorations
 ---
 
 # Corpus-Grounded Generation of Decks and Memos

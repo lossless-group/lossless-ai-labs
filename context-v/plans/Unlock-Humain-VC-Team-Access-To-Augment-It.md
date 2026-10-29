@@ -24,6 +24,7 @@ hex_code: nc7k7l
 date_authored_initial_draft: 2026-07-06
 date_authored_current_draft: 2026-07-06
 publish: true
+type: Plans
 ---
 
 # Unlock: the humain-vc team logs into a deployed augment-it
