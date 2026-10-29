@@ -80,3 +80,7 @@
 	path = mcps/event-hog-mcp
 	url = https://github.com/lossless-group/event-hog-mcp.git
 	branch = main
+[submodule "mcps/hubspot-mcp-wrap"]
+	path = mcps/hubspot-mcp-wrap
+	url = https://github.com/lossless-group/hubspot-mcp-wrap.git
+	branch = main
