@@ -143,6 +143,9 @@ function unionLoader(opts: UnionLoaderOpts) {
         try {
           for await (const file of fsGlob('**/*.md', { cwd: root })) {
             if (file.toLowerCase() === 'readme.md') continue;
+            // OKF folder indexes (ours and every rolled-up child's) are
+            // navigation for agents, not pages.
+            if (file.split('/').pop() === 'index.md') continue;
             // context-v/extra/ is gitignored scratch. CI never sees it, but a
             // local build reads the disk, so skip it here rather than trust that.
             if (file.split('/')[0] === 'extra') { skipped++; continue; }
