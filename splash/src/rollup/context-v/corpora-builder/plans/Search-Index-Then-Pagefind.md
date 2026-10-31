@@ -31,6 +31,7 @@ summary: >-
   the manifest — Pagefind has no incremental add, so it cannot stay fresh on
   capture, and the manifest is what keeps the listing honest between rebuilds.
   Phase 2 is explicitly optional and gated on Phase 1's measured result.
+type: Plans
 from: "corpora-builder"
 from_path: "context-v/plans/Search-Index-Then-Pagefind.md"
 ---

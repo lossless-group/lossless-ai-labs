@@ -20,6 +20,7 @@ tags:
   - Retrieval
   - Search
   - Pagefind
+type: Specs
 from: "corpora-builder"
 from_path: "context-v/specs/Ranked-Search.md"
 ---

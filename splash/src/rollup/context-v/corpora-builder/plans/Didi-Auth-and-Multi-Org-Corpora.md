@@ -31,6 +31,7 @@ summary: >-
   rewrite — which is what the storage seam was built for — and that two specs
   currently disagree about whether organizations and workspaces are one table or
   two.
+type: Plans
 from: "corpora-builder"
 from_path: "context-v/plans/Didi-Auth-and-Multi-Org-Corpora.md"
 ---

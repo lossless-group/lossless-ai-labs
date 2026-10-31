@@ -19,6 +19,7 @@ tags:
   - Corpora-Builder
   - Retrieval
   - Search
+type: Specs
 from: "corpora-builder"
 from_path: "context-v/specs/Search-Index.md"
 ---

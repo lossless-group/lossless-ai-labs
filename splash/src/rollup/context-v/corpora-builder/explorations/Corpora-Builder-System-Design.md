@@ -20,6 +20,7 @@ hex_code: exp936
 date_authored_initial_draft: 2026-07-20
 date_authored_current_draft: 2026-07-20
 publish: true
+type: Explorations
 from: "corpora-builder"
 from_path: "context-v/explorations/Corpora-Builder-System-Design.md"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Flave — An Agent-Native Document Format and Desktop Publisher"
-version: 0.1.0.0
+at_semantic_version: 0.1.0.0
 date: 2026-08-15
 publish: true
 generated_with: Claude Code on Opus 5
@@ -39,6 +39,7 @@ image_prompt: "An open document that is simultaneously a stack of paper and a la
 hex_code: uzgr7l
 date_authored_initial_draft: 2026-08-15
 date_authored_current_draft: 2026-08-15
+type: Specs
 from: "flave"
 from_path: "context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md"
 ---

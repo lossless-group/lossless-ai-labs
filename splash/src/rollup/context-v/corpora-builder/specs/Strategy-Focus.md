@@ -20,6 +20,7 @@ tags:
   - Navigation
   - Retrieval
   - Frontend
+type: Specs
 from: "corpora-builder"
 from_path: "context-v/specs/Strategy-Focus.md"
 ---

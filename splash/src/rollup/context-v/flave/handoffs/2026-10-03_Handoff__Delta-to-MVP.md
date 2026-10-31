@@ -29,6 +29,7 @@ tags:
   - Audiences
   - Clearance
   - Versioning
+type: Handoffs
 from: "flave"
 from_path: "context-v/handoffs/2026-10-03_Handoff__Delta-to-MVP.md"
 ---

@@ -19,6 +19,7 @@ tags:
   - Corpora-Builder
   - Tauri
   - Agent-Discipline
+type: Reminders
 from: "corpora-builder"
 from_path: "context-v/reminders/The-Sidecar-Port-Is-Adopted-Not-Owned.md"
 ---

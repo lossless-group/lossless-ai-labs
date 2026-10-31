@@ -20,6 +20,7 @@ tags:
   - Ghostscript
   - Test-Discipline
 publish: true
+type: Issues
 from: "corpora-builder"
 from_path: "context-v/issues/Orphaned-Bin-Objects-From-A-Half-Migration.md"
 ---

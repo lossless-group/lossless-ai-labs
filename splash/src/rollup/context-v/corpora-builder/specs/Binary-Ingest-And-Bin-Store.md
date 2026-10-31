@@ -21,6 +21,7 @@ tags:
 site_uuid: b45d5098-b08d-4fff-ac61-b5648622f24e
 hex_code: mmz3kp
 publish: true
+type: Specs
 from: "corpora-builder"
 from_path: "context-v/specs/Binary-Ingest-And-Bin-Store.md"
 ---

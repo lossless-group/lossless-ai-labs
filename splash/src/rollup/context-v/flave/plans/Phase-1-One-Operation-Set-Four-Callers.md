@@ -24,6 +24,7 @@ site_uuid: 39d974c0-4063-41f9-b489-68b4c685992e
 hex_code: 84nvor
 date_authored_initial_draft: 2026-08-20
 date_authored_current_draft: 2026-08-20
+type: Plans
 from: "flave"
 from_path: "context-v/plans/Phase-1-One-Operation-Set-Four-Callers.md"
 ---

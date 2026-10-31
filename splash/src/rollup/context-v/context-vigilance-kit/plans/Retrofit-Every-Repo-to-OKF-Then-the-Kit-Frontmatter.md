@@ -6,9 +6,9 @@ lede: "The kit made every doc declare a type. 945 older docs across 47 repos don
 summary: "Execution plan for a directed normalization sweep across the Lossless tree, decisions settled 2026-10-28. Only repos whose development, main, and master are present and at parity are swept; the rest go on a logged list for their own troubleshooting. Per swept repo: Phase 1 makes context-v an OKF v0.2 bundle, Phase 2 adds the kit's baseline frontmatter from facts only (no reading pass, no today's dates). Each phase is one commit, one changelog entry, pushed to all three tiers. The corpus roll-up runs after. Push to main and master is authorized."
 publish: true
 date_created: 2026-10-28
-date_modified: 2026-10-28
+date_modified: 2026-10-31
 date_authored_initial_draft: 2026-10-28
-date_authored_current_draft: 2026-10-28
+date_authored_current_draft: 2026-10-31
 date_authored_final_draft:
 authors:
   - Michael Staton
@@ -51,6 +51,14 @@ We made the rule after writing a thousand docs without it. The first survey of t
 9. **Soft-impose the metadata standards, not just the missing keys.** The standards are now comprehensive and settling, so Phase 2 also brings existing frontmatter up to them, by hand, value preserved: non-standard key spellings renamed (`version:` → `at_semantic_version:`), `status` and `tags` values in Title-Case (`draft` → `Draft`, `in review` → `In-Review`), and `authors` / `augmented_with` / `tags` written as YAML lists when they're a bare string. See the normalization table under Phase 2.
 10. **`date_modified` older than the file's last commit is fine.** Files get moved and renamed constantly in this tree, and a move is a commit. Never "correct" an existing `date_modified` from git.
 11. **Author spelling variants stay as written.** `Michael P. Staton` is not swept to `Michael Staton`; the aggregation layer resolves variants through an authors list with aliases. See `astro-knots/sites/lossless-changelog/context-v/plans/Maintain-an-Authors-List-Enables-Naming-Aliases.md`.
+
+### Added during the 2026-10-31 batch (operator)
+
+12. **An existing `type` that doesn't match its folder is corrected.** `type: issue` in `issues/` becomes `type: Issues`. OKF requires `type` to equal the folder name in Train-Case, so this restores the rule rather than changing meaning. Grep the repo's code for readers of the old value first.
+13. **Package and tool names aren't tags.** `pnpm`, `pptxgenjs` and the like come out of `tags`. If the body doesn't already mention the tool, add it there. A tag is a topic.
+14. **Uncommitted work in the operator's checkout gets committed**, as its own commit before the sweep, not left behind. Secrets (`.env*`, credentials) and nested git repos are never committed.
+15. **Bring every local tier current at the end, including the checked-out branch** (`git merge --ff-only`), so the operator never has to pull after a sweep.
+16. **Each agent mints its own IDs, one at a time, at the moment it writes them.** Never mint a pool into a shared file: two agents drawing from one pool wrote the same 8 `site_uuid`/`hex_code` pairs into two repos each on 2026-10-31.
 
 ## Scope
 
@@ -125,6 +133,8 @@ Each field is written only when it's absent, and only from a fact. Existing valu
 
 | Found | Becomes | Never |
 |---|---|---|
+| `type: issue` in `issues/` (decision 12) | `type: Issues` | retyping a doc to a different folder than the one it's in |
+| a package or tool name in `tags` (decision 13) | removed from `tags`; mentioned in the body if it isn't already | dropping a topic tag |
 | `version: 0.1.0.0` (no `at_semantic_version` present) | `at_semantic_version: 0.1.0.0` | bumping the value; touching `semantic_version:`, which is a permanent alias |
 | `status: draft`, `status: in review` | `status: Draft`, `status: In-Review` (Title-Case, hyphenated) | changing which status it is |
 | `tags` values in lowercase or kebab-case | Title-Case, hyphenated (`markdown-rendering` → `Markdown-Rendering`) | adding, dropping, or merging tags |

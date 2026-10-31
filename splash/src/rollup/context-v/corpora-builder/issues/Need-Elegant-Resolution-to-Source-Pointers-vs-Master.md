@@ -22,6 +22,7 @@ tags:
   - Scoped-Corpora
   - Augment-It
   - Cross-Repo
+type: Issues
 from: "corpora-builder"
 from_path: "context-v/issues/Need-Elegant-Resolution-to-Source-Pointers-vs-Master.md"
 ---

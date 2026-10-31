@@ -23,6 +23,7 @@ site_uuid: dde8b507-cc63-423a-ab3f-e64d0be4dbfe
 hex_code: 3r1gdh
 date_authored_initial_draft: 2026-08-21
 date_authored_current_draft: 2026-08-21
+type: Ideas
 from: "flave"
 from_path: "context-v/ideas/Editor-And-Format-Ideas.md"
 ---

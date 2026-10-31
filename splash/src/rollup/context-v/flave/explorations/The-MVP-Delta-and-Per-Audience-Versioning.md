@@ -23,6 +23,7 @@ tags:
   - Clearance
   - Versioning
   - Gap-Analysis
+type: Explorations
 from: "flave"
 from_path: "context-v/explorations/The-MVP-Delta-and-Per-Audience-Versioning.md"
 ---

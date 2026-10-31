@@ -20,6 +20,7 @@ site_uuid: e8746326-f97c-4991-be23-9744503c0312
 hex_code: 5qsauj
 date_authored_initial_draft: 2026-08-20
 date_authored_current_draft: 2026-08-20
+type: Issues
 from: "flave"
 from_path: "context-v/issues/LFM-Barrel-Imports-Node-Builtins.md"
 ---

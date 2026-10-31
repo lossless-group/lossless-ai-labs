@@ -20,6 +20,7 @@ hex_code: ypi2ps
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
 publish: true
+type: Contracts
 from: "corpora-builder"
 from_path: "context-v/contracts/Autonomy-Gates.md"
 ---

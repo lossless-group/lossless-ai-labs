@@ -24,6 +24,7 @@ site_uuid: 79127dfc-3d02-4e66-9921-020a7b842feb
 hex_code: r7u7jd
 date_authored_initial_draft: 2026-08-20
 date_authored_current_draft: 2026-08-20
+type: Plans
 from: "flave"
 from_path: "context-v/plans/Phase-2-The-Workspace-And-The-Files-Surface.md"
 ---

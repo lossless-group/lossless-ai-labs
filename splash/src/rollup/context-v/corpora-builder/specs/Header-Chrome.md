@@ -19,6 +19,7 @@ tags:
   - Corpora-Builder
   - Frontend
   - Theme-System
+type: Specs
 from: "corpora-builder"
 from_path: "context-v/specs/Header-Chrome.md"
 ---

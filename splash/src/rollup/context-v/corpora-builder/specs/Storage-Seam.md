@@ -22,6 +22,7 @@ hex_code: y3v71z
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
 publish: true
+type: Specs
 from: "corpora-builder"
 from_path: "context-v/specs/Storage-Seam.md"
 ---

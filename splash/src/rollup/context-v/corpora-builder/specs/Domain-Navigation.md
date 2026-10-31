@@ -19,6 +19,7 @@ tags:
   - Corpora-Builder
   - Navigation
   - Frontend
+type: Specs
 from: "corpora-builder"
 from_path: "context-v/specs/Domain-Navigation.md"
 ---

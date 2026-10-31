@@ -21,6 +21,7 @@ tags:
 site_uuid: 82951453-3d0a-4eea-8715-a680ecb35fd5
 hex_code: xwmtc5
 publish: true
+type: Specs
 from: "corpora-builder"
 from_path: "context-v/specs/Corpus-Change-Feed.md"
 ---
