@@ -84,3 +84,6 @@
 	path = mcps/hubspot-mcp-wrap
 	url = https://github.com/lossless-group/hubspot-mcp-wrap.git
 	branch = main
+[submodule "studies/adhd-and-executive-function-skills"]
+	path = studies/adhd-and-executive-function-skills
+	url = https://github.com/lossless-group/study-adhd-and-executive-function-skills.git

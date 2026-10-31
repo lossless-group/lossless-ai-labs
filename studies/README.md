@@ -130,3 +130,10 @@ re-derived. The study is the project's institutional memory for that domain.
   live: the transport, the store, the application, or the document? (jj,
   Seafile, Syncthing, restic, Kopia, Automerge). Promoted to
   `lossless-group/study-sync-and-content-version-control`.
+- [adhd-and-executive-function-skills](./adhd-and-executive-function-skills)
+  — when an agent skill compensates for ADHD or other executive-function
+  limits, does it shape the reply, steer the session's task flow, or keep
+  state outside the chat? Intel for hope-ai and kay-os (i-have-adhd,
+  nd-skills, claude-adhd-skills, adhd-claude-skill, audhd-executive-function,
+  adhd-copilot, dsh-adhd-copilot, adhd-skills, adhd-study-coach). Promoted to
+  `lossless-group/study-adhd-and-executive-function-skills`.
