@@ -27,6 +27,7 @@ augmented_with:
   - Claude Code on Claude Opus 5
 site_uuid: b81bfb98-418e-43e3-b24e-629c4517826b
 hex_code: d4d1cb
+type: Plans
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/plans/Reconciling-Perplexity-Citations-Against-Retrieved-Sources.md"
 ---

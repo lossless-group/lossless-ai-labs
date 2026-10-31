@@ -2,13 +2,14 @@
 title: "Phase 2 — The Workspace and the Files Surface"
 lede: "Flave opens a folder, shows you what is in it, and lets you edit the theme that styles what you are reading — so design work is brought in once and reused, never recreated."
 date_created: 2026-08-20
-date_modified: 2026-08-20
+date_modified: 2026-10-09
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
-semantic_version: 0.0.0.2
-status: Draft
+semantic_version: 0.0.0.3
+status: Partially-Shipped
+date_first_published: 2026-08-21
 spec_reference: "[[Master-Flave-An-Agent-Native-Document-Format-and-Publisher]]"
 tags:
   - Plan
@@ -172,6 +173,28 @@ Both closed by the owner on 2026-08-20, before implementation started:
 |---|---|
 | **D-26** | Tauri, brought forward. Viability proven on NixOS first — webkit2gtk 2.52.5, gtk 3.24.52, libsoup 3.6.6, cargo 1.97 via a repo-local flake devshell — because "toolchain trouble generates more loops than logic ever does" and a Tauri build on NixOS is exactly where that bites |
 | **D-27** | The left rail toggles Chat ⇄ Files. One rail, two surfaces, never both |
+
+## Remaining work (as of 2026-10-09)
+
+Shipped 2026-08-21 — see `changelog/2026-08-21_01.md`:
+
+- **Done 1–3:** the Files rail lists the workspace and opens files in Source
+  (toggling with Chat per D-27); editing `themes/lossless.css` restyles the
+  document with no reload; Source edits save to disk on a debounce.
+- **Done 5:** the theme lives in the workspace, not in any one document.
+- `WorkspaceFs` on Tauri (three folder-rooted Rust commands) and the
+  non-persistent `MemoryFs` fallback; the seeded workspace with
+  `themes/lossless.css` and its `DESIGN.md`; `.md` / `.css` / `.yaml` / `.json`
+  language modes.
+
+Not yet built:
+
+- **Done 4:** the unknown-token CSS diagnostic while typing. Today
+  `check-styles.mjs` runs only at proof time.
+- `watch()`: edit a file outside the app and the tree does not notice.
+- YAML and JSON parse and schema diagnostics in the editor.
+- A folder picker. The workspace path is resolved relative to the repo, so the
+  app opens its own seeded workspace rather than any folder you choose.
 
 ## See also
 

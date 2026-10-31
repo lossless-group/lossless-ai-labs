@@ -9,7 +9,8 @@ date_first_published:
 date_last_updated: 2026-06-08
 at_semantic_version: 0.0.0.2
 status: Draft
-augmented_with: Claude Code (Opus 4.7)
+augmented_with:
+  - Claude Code (Opus 4.7)
 category: Exploration
 tags:
   - Agent-Topology
@@ -28,6 +29,7 @@ date_modified: 2026-05-14
 site_uuid: 50e8e8fa-2903-41ab-a819-57d36908bbde
 hex_code: zxh70n
 publish: true
+type: Explorations
 from: "memopop-ai"
 from_path: "context-v/explorations/Separating-Retrieval-from-Generation-in-Agent-Pipelines.md"
 ---

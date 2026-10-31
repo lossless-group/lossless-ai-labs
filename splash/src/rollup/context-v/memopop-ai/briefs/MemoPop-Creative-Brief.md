@@ -6,7 +6,8 @@ date_created: 2026-05-05
 date_modified: 2026-05-06
 at_semantic_version: 0.1.0.0
 status: Active
-augmented_with: Claude Code (Claude Opus 4.7)
+augmented_with:
+  - Claude Code (Claude Opus 4.7)
 category: Blueprint
 publish: true
 authors:
@@ -26,8 +27,9 @@ site_uuid: 71c4946e-0010-42fd-8ba3-2a028f416388
 hex_code: ofolxb
 date_authored_initial_draft: 2026-05-06
 date_authored_current_draft: 2026-05-06
+type: Briefs
 from: "memopop-ai"
-from_path: "context-v/MemoPop-Creative-Brief.md"
+from_path: "context-v/briefs/MemoPop-Creative-Brief.md"
 ---
 # MemoPop AI — Ideogram OG Image Brief
 

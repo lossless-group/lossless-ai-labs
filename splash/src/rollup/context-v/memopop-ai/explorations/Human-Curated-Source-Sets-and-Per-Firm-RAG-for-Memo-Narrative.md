@@ -9,7 +9,8 @@ date_first_published:
 date_last_updated: 2026-05-22
 at_semantic_version: 0.0.0.4
 status: Draft
-augmented_with: Claude Code (Opus 4.7)
+augmented_with:
+  - Claude Code (Opus 4.7)
 category: Exploration
 tags:
   - Source-Quality
@@ -29,6 +30,7 @@ date_modified: 2026-05-22
 site_uuid: fa617119-933c-4c03-a51c-2df5409e2632
 hex_code: 91mg1l
 publish: true
+type: Explorations
 from: "memopop-ai"
 from_path: "context-v/explorations/Human-Curated-Source-Sets-and-Per-Firm-RAG-for-Memo-Narrative.md"
 ---

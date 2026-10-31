@@ -24,6 +24,7 @@ summary: >-
   why the versioning system exists and why no run output ever belongs in a
   scratch or temp directory.
 tags: [Orchestrator, Artifacts, Versioning, Resumability, Run-Discipline, Reminders]
+type: Reminders
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/reminders/Every-Step-Writes-Its-Output-To-File.md"
 ---

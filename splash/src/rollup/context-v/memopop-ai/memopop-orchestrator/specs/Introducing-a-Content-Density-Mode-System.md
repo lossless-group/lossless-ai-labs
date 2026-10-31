@@ -8,7 +8,8 @@ date_first_published:
 date_last_updated: 2026-03-10
 at_semantic_version: 0.1.0
 status: Draft
-augmented_with: Claude Code (Opus 4.6)
+augmented_with:
+  - Claude Code (Opus 4.6)
 category: Specification
 tags: [Content-Strategy, Configuration, Writer-Agent, Redundancy, Firm-Preferences]
 authors:
@@ -20,8 +21,9 @@ date_modified: 2026-03-10
 publish: true
 site_uuid: c5394691-11a7-451f-9c32-bcb0f6d0daff
 hex_code: orx2l1
+type: Specs
 from: "memopop-ai/memopop-orchestrator"
-from_path: "context-v/Introducing-a-Content-Density-Mode-System.md"
+from_path: "context-v/specs/Introducing-a-Content-Density-Mode-System.md"
 ---
 # Introducing a Content Density Mode System
 

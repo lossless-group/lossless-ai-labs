@@ -9,7 +9,8 @@ date_first_published:
 date_last_updated: 2026-05-07
 at_semantic_version: 0.0.0.1
 status: Draft
-augmented_with: Claude Code (Opus 4.7)
+augmented_with:
+  - Claude Code (Opus 4.7)
 category: Exploration
 tags: [Team-Extraction, Crawling, Firecrawl, Crawl4AI, LangChain, Structured-Output, Pydantic, Agent-Orchestration, MemoPop]
 authors:
@@ -20,6 +21,7 @@ date_modified: 2026-05-07
 site_uuid: 7dc994c9-ca5e-4b30-963c-4a56cf48a5a6
 hex_code: mhl0ld
 publish: true
+type: Explorations
 from: "memopop-ai"
 from_path: "context-v/explorations/Crawl-for-Better-Team-Structured-Output.md"
 ---

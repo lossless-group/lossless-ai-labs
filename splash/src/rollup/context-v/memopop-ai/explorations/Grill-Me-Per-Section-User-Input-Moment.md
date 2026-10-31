@@ -9,7 +9,8 @@ date_first_published:
 date_last_updated: 2026-06-09
 at_semantic_version: 0.0.0.1
 status: Draft
-augmented_with: Claude Code (Opus 4.7)
+augmented_with:
+  - Claude Code (Opus 4.7)
 category: Exploration
 tags:
   - Grill-Me
@@ -25,6 +26,9 @@ authors:
 site_uuid: 4ba81081-8e0f-488e-8efb-c6a9ee38ef47
 hex_code: j66mvp
 publish: true
+date_created: 2026-06-09
+date_modified: 2026-08-18
+type: Explorations
 from: "memopop-ai"
 from_path: "context-v/explorations/Grill-Me-Per-Section-User-Input-Moment.md"
 ---

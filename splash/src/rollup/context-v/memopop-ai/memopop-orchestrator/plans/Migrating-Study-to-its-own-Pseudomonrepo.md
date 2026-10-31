@@ -1,6 +1,6 @@
 ---
 title: Migrate `studies/open-specs-and-standards/` into its own pseudo-monorepo
-status: proposed
+status: Proposed
 date: 2026-05-02
 authors:
   - Michael Staton
@@ -14,6 +14,7 @@ site_uuid: 30177018-0b39-414d-9857-dcb2efb5b41e
 hex_code: y3qs76
 date_authored_initial_draft: 2026-05-08
 date_authored_current_draft: 2026-05-08
+type: Plans
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/plans/Migrating-Study-to-its-own-Pseudomonrepo.md"
 ---

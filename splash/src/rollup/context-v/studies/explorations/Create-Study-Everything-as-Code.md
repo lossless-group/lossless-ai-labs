@@ -12,7 +12,7 @@ tags:
   - Context-Vigilance
 publish: true
 from: "studies"
-from_path: "context-v/Create-Study-Everything-as-Code.md"
+from_path: "context-v/explorations/Create-Study-Everything-as-Code.md"
 ---
 The thesis isn't "as-code is good" — it's vendor-neutral artifact formats
    are how you escape the agent-lock-in flywheel. Notion+Notion-AI, Microsoft+Copilot, Figma+Figma-AI

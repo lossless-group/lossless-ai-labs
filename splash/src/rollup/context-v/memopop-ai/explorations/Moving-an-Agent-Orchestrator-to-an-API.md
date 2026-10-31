@@ -8,7 +8,8 @@ date_first_published:
 date_last_updated: 2026-04-30
 at_semantic_version: 0.0.0.1
 status: Draft
-augmented_with: Claude Code (Opus 4.7)
+augmented_with:
+  - Claude Code (Opus 4.7)
 category: Exploration
 tags: [Python, FastAPI, Tauri-Framework, API-Design, LangGraph, Sidecar-Process, Agent-Orchestration]
 authors:
@@ -19,6 +20,7 @@ date_modified: 2026-04-30
 site_uuid: 2234f38d-c925-4ac2-b286-ba7bdc3ab996
 hex_code: nlbb83
 publish: true
+type: Explorations
 from: "memopop-ai"
 from_path: "context-v/explorations/Moving-an-Agent-Orchestrator-to-an-API.md"
 ---

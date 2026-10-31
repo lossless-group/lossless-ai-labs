@@ -10,7 +10,8 @@ date_last_updated: 2026-06-15
 at_semantic_version: 0.0.0.1
 usage_index: 0
 publish: true
-augmented_with: Claude Code (Opus 4.7)
+augmented_with:
+  - Claude Code (Opus 4.7)
 category: Issue-Resolution
 tags: [Citation-Assembly, Section-Citations, 1-Research, MemoPop, Orchestrator, Pandoc, Export]
 authors:
@@ -22,6 +23,7 @@ date_created: 2026-06-15
 date_modified: 2026-06-15
 site_uuid: 4ad8a5e1-979f-4ae9-a7a8-0dac1d78df95
 hex_code: iev7s2
+type: Issue-Resolution
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/issue-resolution/Section-Citations-Orphaned-When-Defs-Live-In-1-Research.md"
 ---

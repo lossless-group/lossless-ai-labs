@@ -10,7 +10,8 @@ date_last_updated: 2026-06-15
 at_semantic_version: 0.0.0.1
 usage_index: 0
 publish: true
-augmented_with: Claude Code (Opus 4.7)
+augmented_with:
+  - Claude Code (Opus 4.7)
 category: Issue-Resolution
 tags: [Research-Agent, Citation-Validation, Source-Harvester, Multi-Agent, Validation-Gap, MemoPop, Orchestrator]
 authors:
@@ -20,6 +21,7 @@ date_created: 2026-06-15
 date_modified: 2026-06-15
 site_uuid: 411db066-bece-4da4-b5bf-69db955448e0
 hex_code: arv3uo
+type: Issue-Resolution
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/issue-resolution/Research-Agent-Concatenates-Multiple-Sources-Under-One-Citation-ID.md"
 ---

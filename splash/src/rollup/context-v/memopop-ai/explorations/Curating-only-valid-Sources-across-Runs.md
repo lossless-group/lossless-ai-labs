@@ -9,7 +9,8 @@ date_first_published:
 date_last_updated: 2026-08-06
 at_semantic_version: 0.0.0.3
 status: Draft
-augmented_with: Claude Code (Opus 4.7)
+augmented_with:
+  - Claude Code (Opus 4.7)
 category: Exploration
 tags: [Source-Validation, Citation-Quality, Soft-404, URL-Hallucination, Memo-Curation, MemoPop, Dedupe, Cross-Run-Merge]
 authors:
@@ -20,6 +21,7 @@ date_modified: 2026-08-06
 site_uuid: bc4d446b-6f49-44ba-852e-d6304d4cc23e
 hex_code: grzwxn
 publish: true
+type: Explorations
 from: "memopop-ai"
 from_path: "context-v/explorations/Curating-only-valid-Sources-across-Runs.md"
 ---

@@ -29,6 +29,7 @@ tags:
   - Delegation
   - Operator-Preference
 publish: true
+type: Reminders
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/reminders/Long-Running-Is-Not-A-Reason-To-Fan-Out.md"
 ---

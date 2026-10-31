@@ -20,6 +20,7 @@ Sources rolled up:
 - `flave`
 - `hope-ai`
 - `studies`
+- `studies/adhd-and-executive-function-skills`
 - `studies/agent-harnesses`
 - `studies/conversational-ui-and-native-shells`
 - `studies/memory-layers-for-agents`

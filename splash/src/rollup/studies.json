@@ -1,5 +1,65 @@
 [
   {
+    "dir": "adhd-and-executive-function-skills",
+    "question": "When an agent skill is written to compensate for ADHD or other executive-function limits (short attention span, task initiation, working memory, time blindness, hyperfocus, drift), where does the skill put the intervention? Does it shape the agent's own output, steer the user's task flow, or keep state between sessions? Which rules and trigger heuristics have the authors converged on?",
+    "pinned": [
+      {
+        "slug": "adhd-claude-skill",
+        "url": "https://github.com/Leonw98/adhd-claude-skill",
+        "owner": "Leonw98",
+        "name": "adhd-claude-skill"
+      },
+      {
+        "slug": "adhd-copilot",
+        "url": "https://github.com/dsx0511/adhd-copilot",
+        "owner": "dsx0511",
+        "name": "adhd-copilot"
+      },
+      {
+        "slug": "adhd-skills",
+        "url": "https://github.com/RobotDisco/adhd-skills",
+        "owner": "RobotDisco",
+        "name": "adhd-skills"
+      },
+      {
+        "slug": "adhd-study-coach",
+        "url": "https://github.com/itsAalaa7/adhd-study-coach",
+        "owner": "itsAalaa7",
+        "name": "adhd-study-coach"
+      },
+      {
+        "slug": "audhd-executive-function",
+        "url": "https://github.com/assafkip/audhd-executive-function",
+        "owner": "assafkip",
+        "name": "audhd-executive-function"
+      },
+      {
+        "slug": "claude-adhd-skills",
+        "url": "https://github.com/ravila4/claude-adhd-skills",
+        "owner": "ravila4",
+        "name": "claude-adhd-skills"
+      },
+      {
+        "slug": "dsh-adhd-copilot",
+        "url": "https://github.com/zimai233/dsh-adhd-copilot",
+        "owner": "zimai233",
+        "name": "dsh-adhd-copilot"
+      },
+      {
+        "slug": "i-have-adhd",
+        "url": "https://github.com/ayghri/i-have-adhd",
+        "owner": "ayghri",
+        "name": "i-have-adhd"
+      },
+      {
+        "slug": "nd-skills",
+        "url": "https://github.com/jpoindexter/nd-skills",
+        "owner": "jpoindexter",
+        "name": "nd-skills"
+      }
+    ]
+  },
+  {
     "dir": "agent-harnesses",
     "question": "How do coding-agent / conversational-agent runtimes organize and write to files on disk, persist memory across sessions, log traces of tool calls and reasoning, decide which tools/MCP servers are in scope at a given moment, and load or evolve skills?",
     "pinned": [

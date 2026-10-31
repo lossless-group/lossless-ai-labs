@@ -8,7 +8,8 @@ date_first_published:
 date_last_updated: 2026-03-09
 at_semantic_version: 0.1.0
 status: Draft
-augmented_with: Claude Code (Opus 4.6)
+augmented_with:
+  - Claude Code (Opus 4.6)
 category: Architecture
 tags: [Agent-Design, Diagrams, Visualization, Export, Mermaid, SVG]
 authors:
@@ -20,6 +21,7 @@ date_modified: 2026-03-09
 publish: true
 site_uuid: a7113642-41e8-47c2-845d-90ce9ef74299
 hex_code: 53fkeq
+type: Specs
 from: "memopop-ai/memopop-orchestrator"
 from_path: "context-v/specs/Introducing-a-Diagram-Generator-Agent.md"
 ---
