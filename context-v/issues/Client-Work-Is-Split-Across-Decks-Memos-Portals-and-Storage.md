@@ -25,6 +25,7 @@ hex_code: 86guiw
 date_authored_initial_draft: 2026-10-18
 date_authored_current_draft: 2026-10-18
 publish: false
+type: Issues
 ---
 
 # Client work is split across decks, memos, portals, and storage
