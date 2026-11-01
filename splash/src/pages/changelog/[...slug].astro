@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
+import AstroMarkdown from '@components/markdown/AstroMarkdown.astro';
+import Sources from '@components/markdown/Sources.astro';
+import { renderable } from '@lib/markdown';
 import { toDate, formatDate, isoDate } from '@lib/date';
 
 const base = import.meta.env.BASE_URL;
@@ -14,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { tree, citations } = await renderable(entry.body);
 const when = toDate(entry.data.date_modified ?? entry.data.date_created ?? entry.data.date ?? entry.data.date_authored_current_draft ?? entry.data.date_authored_initial_draft);
 const from = entry.data.from ?? 'ai-labs';
 const title = entry.data.title ?? entry.id;
@@ -49,7 +52,8 @@ const title = entry.data.title ?? entry.id;
       </header>
 
       <article class="prose">
-        <Content />
+        <AstroMarkdown node={tree} />
+        {citations.length > 0 && <Sources citations={citations} />}
       </article>
     </div>
   </section>
@@ -151,7 +155,7 @@ const title = entry.data.title ?? entry.id;
     padding: var(--space-2) var(--space-3);
     text-align: left;
   }
-  .prose :global(th) {
+  .prose :global(th), .prose :global(thead td) {
     background: var(--color-bg-elevated);
     font-family: var(--font__mono);
     font-size: 0.78rem;
