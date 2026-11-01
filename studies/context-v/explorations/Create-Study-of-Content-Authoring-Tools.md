@@ -1,12 +1,16 @@
 ---
 title: "Study Kickoff — Content Authoring Tools"
-status: pre-draft, working discussion
+status: Draft
 date: 2026-05-02
 slug-candidate: content-authoring-tools
 remote-candidate: lossless-group/study-content-authoring-tools
 site_uuid: 97f63f26-9992-4777-ac0a-54517231d5a2
 hex_code: bpsrgd
 publish: true
+date_created: 2026-05-02
+date_modified: 2026-10-28
+authors:
+  - Michael Staton
 type: Explorations
 ---
 
