@@ -1,0 +1,155 @@
+---
+/**
+ * /studies/collaborations/dididecks-vs-instadeck-recheck/
+ *
+ * A one-month recheck of dididecks-vs-instadeck.astro: what changed, what the
+ * product's own records show, and where the two generators actually differ.
+ *
+ * FRAMING: differences between two approaches, never a ranking. Say what each
+ * choice makes easier and harder, and state the limits of the evidence.
+ *
+ * NAMING: Instadeck and dididecks-ai may be named. Never add any person's name,
+ * the repo owner path or repo names, a link to the repo or the study notes, run
+ * or account identifiers, private correspondence, or credentials. The study's
+ * working notes stay in gitignored files for this reason.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const runs = [
+  { when: 'Oct 21', run: 'Two live test runs', result: 'Both ended before the design stage, so neither produced a deck.' },
+  { when: 'After Oct 23', run: 'Four-page synthetic source, online', result: 'Seven slides published about 14 minutes after upload. The record calls the styling “basic” and says a real-deck review is outstanding.' },
+  { when: 'Oct 26', run: 'Three-page test deck', result: 'Published, with clipped text and repeated headlines. Recorded as needing improvement, not accepted.' },
+  { when: 'Oct 26', run: 'Corrected version of that deck', result: 'Rendered without the layout faults, then publication failed on a job-lineage check. Recorded as not accepted.' },
+];
+
+const handoff = [
+  { row: 'Content', ours: 'Narrative Markdown files, one per slide', them: 'An investor story and a typed narrative packet' },
+  { row: 'Layout intent', ours: 'In the same files, as prose a designer reads: what the slide is, why it’s here', them: 'A redesign plan, a design document and short typed fields; the composition field is capped at 160 characters' },
+  { row: 'Generation', ours: 'Claude Code subagents with tools, told not to look at the original deck or each other', them: 'A budget-capped OpenAI pipeline run, then a compiler' },
+  { row: 'Variation', ours: 'Several isolated variants, and a person chooses', them: 'One design per run, then checks and bounded repair' },
+  { row: 'Changing a slide', ours: 'Edit the file and look again', them: 'A new immutable version through correction, proof and publication' },
+  { row: 'Proof', ours: 'A person looks; no automated tests', them: 'Chromium geometry checks, hashed artifacts, budget ledgers, a large test suite' },
+];
+
+const tradeoffs = [
+  { h: 'Iteration against integrity', p: 'Editing a file makes the next attempt cheap, which suits work that improves through many looks. Immutable versions make every published deck traceable and safe to recover, which suits strangers paying for an unattended service, and they make a one-line headline change a pipeline event.' },
+  { h: 'Prose briefs against typed contracts', p: 'A prose brief can carry intent and argument, but nothing validates it. Typed fields are easy to validate and hard to misread, and they leave less room to say why a slide exists.' },
+  { h: 'Where the reasoning goes', p: 'Instadeck puts research, narrative and copy first, and they can stop design from starting. Its V4 test caps allow 550 cents across research, memo and factual review, against 400 for the designer. That protects claims, which due-diligence decks need. These are limits rather than actual spend, but they show the emphasis.' },
+  { h: 'Gates against flow', p: 'Each gate in its records is defensible alone. Together they also stopped runs for reasons unrelated to the deck: a leftover narrative veto, a job-history check and a spending guard.' },
+];
+
+const limits = [
+  'We read commits and documents and did not run either system. Anything uncommitted isn’t counted, and it may include better results.',
+  'This isn’t a head-to-head. Our examples are real client content refined by an operator; its committed examples are small synthetic runs and labelled fixtures.',
+  'Claude against OpenAI is a confound that reading code can’t separate.',
+  'Our side has no tests and no measurement, and it runs only on one operator’s machine. It has never served a stranger.',
+];
+---
+
+<BaseLayout
+  title="Dididecks vs Instadeck: One Month On"
+  description="A one-month recheck of two deck generators from one lineage: what changed, what Instadeck's own records show, and why the handoff from content to design may matter more than the order of steps. Not a ranking."
+>
+  <div class="recheck" data-pagefind-body>
+    <section class="hero" aria-labelledby="rc-title">
+      <div class="container">
+        <p class="eyebrow">study · collaboration · 02 · recheck</p>
+        <h1 id="rc-title">Dididecks vs Instadeck. <br /><span class="gradient-text">One month on.</span></h1>
+        <p class="lede">
+          A follow-up to <a href={`${base}studies/collaborations/dididecks-vs-instadeck/`}>the October comparison</a>.
+          Instadeck has moved fast since then, so we asked what changed, and why its decks come out differently
+          from ours when the two processes look so alike on paper.
+        </p>
+        <p class="rc-note"><strong>Not a ranking, and not a verdict on the work.</strong> Read November 1, 2026, from commits through October 28. The two products face different problems: one serves strangers unattended, the other has an operator in the loop.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="rc-changed">
+      <div class="container">
+        <p class="eyebrow">ch · what changed</p>
+        <h2 id="rc-changed">The engineering moved a long way</h2>
+        <ul class="rc-stats" role="list">
+          <li><strong>246</strong><span>commits across two repos since the study</span></li>
+          <li><strong>5</strong><span>user steps: upload, extract brand, review brand, choose style, redesign</span></li>
+          <li><strong>~209k</strong><span>lines in the V4 backend and frontend</span></li>
+        </ul>
+        <p>The V4 test environment also dropped the vector database, passing saved source and evidence straight to the designer. It now publishes decks online and exports them from an exact saved version.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="rc-records">
+      <div class="container">
+        <p class="eyebrow">ch · its own records</p>
+        <h2 id="rc-records">Careful records, and no accepted deck yet</h2>
+        <p>These records are unusually candid. They separate “it ran” from “it’s good”, and they say so: “Tests do not establish product acceptance.” As of the last commits we read, they don’t yet record a run accepted end to end.</p>
+        <div class="rc-scroll">
+          <table>
+            <thead><tr><th>When</th><th>Run</th><th>Recorded result</th></tr></thead>
+            <tbody>{runs.map((r) => <tr><td>{r.when}</td><td>{r.run}</td><td>{r.result}</td></tr>)}</tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="rc-handoff">
+      <div class="container">
+        <p class="eyebrow">ch · the handoff</p>
+        <h2 id="rc-handoff">Same order of steps, different handoff</h2>
+        <p>Both write the deck down before generating it, and design follows content in both. So order doesn’t explain the difference. What crosses the handoff, and what happens after it, might. These are hypotheses; we didn’t test them as causes.</p>
+        <div class="rc-scroll">
+          <table>
+            <thead><tr><th></th><th>dididecks-ai</th><th>Instadeck</th></tr></thead>
+            <tbody>{handoff.map((h) => <tr><th scope="row">{h.row}</th><td>{h.ours}</td><td>{h.them}</td></tr>)}</tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="rc-tradeoffs">
+      <div class="container">
+        <p class="eyebrow">ch · trade-offs</p>
+        <h2 id="rc-tradeoffs">What each choice makes easier and harder</h2>
+        <div class="rc-cards">{tradeoffs.map((t) => <article><h3>{t.h}</h3><p>{t.p}</p></article>)}</div>
+      </div>
+    </section>
+
+    <section aria-labelledby="rc-next">
+      <div class="container">
+        <p class="eyebrow">ch · what we’d borrow</p>
+        <h2 id="rc-next">If we picked this back up</h2>
+        <p>We’d keep our generation loop and look at hosting it, so it stops depending on one machine. We’d borrow the non-creative parts of Instadeck’s approach: sign-in, upload and extraction, brand extraction, durable jobs, spend limits, and browser layout checks that an agent can run and fix against. That’s untested, and the cost per deck is unknown. We’ve parked the question for now.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="rc-limits">
+      <div class="container">
+        <p class="eyebrow">ch · limits</p>
+        <h2 id="rc-limits">What this can’t tell you</h2>
+        <ul class="rc-limits" role="list">{limits.map((l) => <li>{l}</li>)}</ul>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .recheck section:not(.hero) { padding-block: var(--space-8); }
+  .recheck p { max-width: 46rem; }
+  .recheck a { color: var(--color-accent); }
+  .rc-note { padding: var(--space-4) var(--space-5); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); color: var(--color-text-soft); }
+  .rc-stats { list-style: none; padding: 0; margin: 0 0 var(--space-5); display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+  .rc-stats li { display: grid; gap: var(--space-1); padding: var(--space-5); background: var(--color-bg-card); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); }
+  .rc-stats strong { font-family: var(--font__display); font-size: 2rem; color: var(--color-accent); line-height: 1.1; }
+  .rc-stats span { color: var(--color-text-soft); font-size: 0.9rem; }
+  .rc-scroll { overflow-x: auto; margin-top: var(--space-5); }
+  .recheck table { width: 100%; min-width: 34rem; border-collapse: collapse; font-size: 0.92rem; }
+  .recheck th, .recheck td { text-align: left; vertical-align: top; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border); color: var(--color-text-soft); }
+  .recheck thead th { font-family: var(--font__mono); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-dim); border-bottom-color: var(--color-border-strong); }
+  .recheck tbody th, .recheck tbody td:first-child { color: var(--color-text); font-weight: 600; white-space: nowrap; }
+  .rc-cards { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); margin-top: var(--space-5); }
+  .rc-cards article { padding: var(--space-5); background: var(--color-bg-card); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); }
+  .rc-cards h3 { margin: 0 0 var(--space-2); font-size: 1.05rem; }
+  .rc-cards p { margin: 0; color: var(--color-text-soft); font-size: 0.92rem; }
+  .rc-limits { display: grid; gap: var(--space-3); max-width: 46rem; padding-left: var(--space-5); color: var(--color-text-soft); }
+</style>

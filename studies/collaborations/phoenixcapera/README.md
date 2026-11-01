@@ -8,9 +8,11 @@ learn from us?
   ai-labs submodule. It is **read-only**: never commit, push, branch, or
   refactor inside it. It's private, so it only clones for people they've
   given access to.
-- **[`deck-v4/`](./deck-v4)** is their current repo (`deck-v-4-`, created
-  2026-10-23, a fresh history rather than a fork of `instadeck-v2`). Same
-  rules: read-only, private, never commit, push, branch, or refactor inside it.
+- **[`deck-v4/`](./deck-v4)** is their later derivative of `instadeck-v2`
+  (created 2026-10-23 with new Git history). Its README calls it
+  an isolated test; a 2026-10-26 contract in `instadeck-v2` calls it the
+  product authority. Same rules: read-only, private, never commit, push,
+  branch, or refactor inside it.
 - Everything else in this folder is our notes.
 
 The method, comparison dimensions, and ground rules live in
