@@ -19,6 +19,7 @@ tags:
 site_uuid: 48579756-ec16-426e-9b97-32de5a805f3e
 hex_code: bq6oul
 publish: true
+type: Prompts
 ---
 
 # Kickoff: Collaborator Codebase Analysis

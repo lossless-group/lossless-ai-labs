@@ -11,6 +11,7 @@ at_semantic_version: 0.0.1.0
 tags:
   - Context-Vigilance
 publish: true
+type: Explorations
 ---
 
 The thesis isn't "as-code is good" — it's vendor-neutral artifact formats

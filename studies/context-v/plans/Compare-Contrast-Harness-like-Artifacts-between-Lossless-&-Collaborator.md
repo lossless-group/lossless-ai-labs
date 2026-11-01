@@ -21,6 +21,7 @@ status: Ready
 site_uuid: 19b43f02-30e7-443f-a7dd-68fcf7d49674
 hex_code: yrq380
 publish: true
+type: Plans
 ---
 
 # Compare and Contrast Harness-like Artifacts between Lossless and a Collaborator

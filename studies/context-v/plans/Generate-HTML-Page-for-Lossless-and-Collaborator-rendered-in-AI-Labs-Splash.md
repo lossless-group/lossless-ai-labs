@@ -21,6 +21,7 @@ status: Ready
 site_uuid: 3064177b-b68c-4585-a30b-37039811db5b
 hex_code: 5cjo3u
 publish: true
+type: Plans
 ---
 
 # Generate an HTML Page for Lossless and a Collaborator, Rendered in the AI Labs Splash

@@ -6,6 +6,7 @@ site_uuid: 4e3efad6-1025-4c5c-a8c4-b45555a638ab
 hex_code: e3v5qg
 date_created: 2026-05-02
 publish: true
+type: Prompts
 ---
 
 # Create a New Study
