@@ -4,7 +4,7 @@ lede: "Dev-only GET/POST over `data/audits/slides.json` — `'pending'` is never
 artifact_kind: route
 ownership: shell
 mode: n/a
-status: shipped
+status: Shipped
 shell_version_introduced: 0.0.1
 route_pattern: "/api/slide-rank"
 prerender: false
@@ -31,6 +31,8 @@ publish: true
 site_uuid: 695a421a-8347-4abd-af43-9f3a6829c885
 hex_code: 6bzmur
 date_authored_current_draft: 2026-05-12
+type: Sitemap
+date_first_published: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/api-slide-rank.md"
 ---

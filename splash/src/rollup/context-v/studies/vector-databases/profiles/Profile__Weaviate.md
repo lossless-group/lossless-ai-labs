@@ -32,6 +32,12 @@ summary: >-
   memory-category typing from the sibling memory-layers study. Migration out is
   the study's most expensive — paged REST/gRPC reads, no bulk export.
 publish: true
+type: Profiles
+title: "Weaviate — Profile"
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__Weaviate.md"
 ---

@@ -1,5 +1,6 @@
 ---
 name: Open Vibe Profile
+title: "Open Vibe — Profile"
 slug: open-vibe
 upstream: https://github.com/open-vibe/open-vibe
 package: n/a (single Tauri 2 app; Rust crate `codex_monitor_lib` at `src-tauri/`, React 19 frontend at `src/`)
@@ -9,10 +10,13 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/open-vibe
 profile_kind: Single-backend (Tauri 2 + Rust/Tokio) desktop shell around the `codex app-server` CLI, one child process per workspace
 date_created: 2026-07-13
+date_modified: 2026-08-18
 site_uuid: ccee3c94-6239-470f-9f9b-81450456c1ef
 hex_code: v4ywh0
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+authors:
+  - Michael Staton
 lede: >-
   One real OS child process per workspace — but only ever one binary. What
   varies per workspace is the invocation, not the backend.
@@ -32,7 +36,9 @@ summary: >-
   Note the maturity caveat — single-contributor, no ADRs, no architecture doc, so every
   claim here comes from source rather than a maintained decision log. Positions between
   `Profile__Routa.md` (positive result) and `Profile__Dive.md` (one shared subprocess).
+status: Reference
 publish: true
+type: Profiles
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Open-Vibe.md"
 ---

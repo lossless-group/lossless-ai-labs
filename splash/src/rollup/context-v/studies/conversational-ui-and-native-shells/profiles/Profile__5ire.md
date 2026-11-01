@@ -1,5 +1,6 @@
 ---
 name: 5ire Profile
+title: "5ire — Profile"
 slug: 5ire
 upstream: https://github.com/nanbingxyz/5ire
 package: "\"5ire\" (npm-style package.json, but distributed only as electron-builder desktop binaries — macOS/Windows/Linux, via `.erb` scaffold)"
@@ -9,10 +10,13 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/5ire
 profile_kind: Electron (React renderer), MCP client + local-first chat app mid-migration from SQLite to PGlite/Postgres
 date_created: 2026-07-13
+date_modified: 2026-08-18
 site_uuid: 9fd5b9ae-14ee-4a79-90d5-1321b93d1216
 hex_code: 6lscdz
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+authors:
+  - Michael Staton
 lede: >-
   5ire's MCP layer has no apply button — editing a server row in PGlite makes
   the client reconnect via the live-query changefeed.
@@ -31,7 +35,9 @@ summary: >-
   and its commercial-use and brand carve-outs. Use it to lift architecture patterns, not
   code — the license gates reuse. Read alongside `Profile__Dive.md` and
   `Profile__Anything-LLM.md`.
+status: Reference
 publish: true
+type: Profiles
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__5ire.md"
 ---

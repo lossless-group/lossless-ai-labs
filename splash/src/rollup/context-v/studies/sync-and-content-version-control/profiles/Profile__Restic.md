@@ -1,5 +1,6 @@
 ---
 name: restic Profile
+title: restic — Profile
 slug: restic
 upstream: https://github.com/restic/restic
 pinned_sha: a80be1478
@@ -19,7 +20,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.1
-status: Draft
+status: Reference
 site_uuid: 4479c1f7-b333-48c1-a27e-2c1ca44daa5e
 hex_code: 5ftjfs
 lede: >-
@@ -40,8 +41,8 @@ tags:
   - Content-Addressed-Storage
   - Cloudflare-R2
   - Snapshots
-  - Corpora-Builder
 publish: true
+type: Profiles
 from: "studies/sync-and-content-version-control"
 from_path: "context-v/profiles/Profile__Restic.md"
 ---

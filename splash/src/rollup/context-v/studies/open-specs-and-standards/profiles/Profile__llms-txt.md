@@ -1,4 +1,5 @@
 ---
+title: "llms.txt — Profile"
 name: llms.txt Profile
 slug: llms-txt
 upstream: https://github.com/AnswerDotAI/llms-txt
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/llms-txt
 profile_kind: file-convention
 date_created: 2026-05-05
+date_modified: 2026-08-18
 site_uuid: fbc2da2e-fd68-4497-bb7c-f0594a3ec864
 hex_code: f3v4oq
 date_authored_initial_draft: 2026-05-05
@@ -26,7 +28,11 @@ summary: >-
   A2A, llms.txt is steward-by-personality (Answer.AI / Jeremy Howard) rather than by foundation.
   Use it when publishing docs for LLM consumption or when deciding between llms.txt, robots.txt,
   and sitemap.xml.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__llms-txt.md"
 ---

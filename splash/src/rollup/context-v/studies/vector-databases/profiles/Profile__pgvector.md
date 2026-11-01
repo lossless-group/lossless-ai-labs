@@ -30,6 +30,12 @@ summary: >-
   substrate profile for most of those systems, and explains why that pattern
   keeps recurring.
 publish: true
+type: Profiles
+title: "pgvector — Profile"
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__pgvector.md"
 ---

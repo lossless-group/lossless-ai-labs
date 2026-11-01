@@ -29,6 +29,12 @@ summary: >-
   to move the Lossless context-v / changelog / session corpora off Chroma onto
   `.lance` tables, and an honest note that today's workload does not justify it.
 publish: true
+type: Profiles
+title: "LanceDB — Profile"
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__LanceDB.md"
 ---

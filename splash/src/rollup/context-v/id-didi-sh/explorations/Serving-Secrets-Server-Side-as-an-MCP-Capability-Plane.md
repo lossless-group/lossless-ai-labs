@@ -8,10 +8,9 @@ authors:
 augmented_with:
   - Claude Code on Claude Fable 5
 semantic_version: 0.0.0.4
-status: Open
+status: Draft
 tags:
   - Exploration
-  - Id-Didi-Sh
   - Secrets-Management
   - MCP
   - Capability-Plane
@@ -22,6 +21,7 @@ hex_code: rjw6lx
 date_authored_initial_draft: 2026-07-24
 date_authored_current_draft: 2026-07-24
 publish: true
+type: Explorations
 from: "id-didi-sh"
 from_path: "context-v/explorations/Serving-Secrets-Server-Side-as-an-MCP-Capability-Plane.md"
 ---

@@ -6,9 +6,9 @@ lede: "The kit made every doc declare a type. 945 older docs across 47 repos don
 summary: "Execution plan for a directed normalization sweep across the Lossless tree, decisions settled 2026-10-28. Only repos whose development, main, and master are present and at parity are swept; the rest go on a logged list for their own troubleshooting. Per swept repo: Phase 1 makes context-v an OKF v0.2 bundle, Phase 2 adds the kit's baseline frontmatter from facts only (no reading pass, no today's dates). Each phase is one commit, one changelog entry, pushed to all three tiers. The corpus roll-up runs after. Push to main and master is authorized."
 publish: true
 date_created: 2026-10-28
-date_modified: 2026-10-31
+date_modified: 2026-11-01
 date_authored_initial_draft: 2026-10-28
-date_authored_current_draft: 2026-10-31
+date_authored_current_draft: 2026-11-01
 date_authored_final_draft:
 authors:
   - Michael Staton
@@ -59,6 +59,12 @@ We made the rule after writing a thousand docs without it. The first survey of t
 14. **Uncommitted work in the operator's checkout gets committed**, as its own commit before the sweep, not left behind. Secrets (`.env*`, credentials) and nested git repos are never committed.
 15. **Bring every local tier current at the end, including the checked-out branch** (`git merge --ff-only`), so the operator never has to pull after a sweep.
 16. **Each agent mints its own IDs, one at a time, at the moment it writes them.** Never mint a pool into a shared file: two agents drawing from one pool wrote the same 8 `site_uuid`/`hex_code` pairs into two repos each on 2026-10-31.
+
+### Added during the astro-knots sweep, 2026-11-01 (operator)
+
+17. **Repo names aren't tags either.** `mpstaton-site` and the like come out of `tags` when the body already names the repo. This extends decision 13; a framework or product that is the doc's subject (Astro, Svelte, Vercel) stays.
+18. **`"[]"` in a date key becomes an empty value.** The key stays, since present-but-empty means "not yet". A quoted date (`"2026-05-04"`) parses the same as a bare one and is left alone.
+19. **Status values follow the expanded vocabulary in `status-discipline.md`**: planned work, issues, decisions, standing docs, any doc. That reference lists the variants found in the tree. Its "plain rename" rows are normalizations a sweep makes; its "read first" rows go to a status sweep the operator confirms.
 
 ## Scope
 
@@ -135,8 +141,11 @@ Each field is written only when it's absent, and only from a fact. Existing valu
 |---|---|---|
 | `type: issue` in `issues/` (decision 12) | `type: Issues` | retyping a doc to a different folder than the one it's in |
 | a package or tool name in `tags` (decision 13) | removed from `tags`; mentioned in the body if it isn't already | dropping a topic tag |
+| a repo name in `tags` (decision 17) | removed from `tags` when the body already names the repo | removing it when the body doesn't |
+| `date_*: "[]"` (decision 18) | the key with an empty value | deleting the key; touching a quoted real date |
 | `version: 0.1.0.0` (no `at_semantic_version` present) | `at_semantic_version: 0.1.0.0` | bumping the value; touching `semantic_version:`, which is a permanent alias |
 | `status: draft`, `status: in review` | `status: Draft`, `status: In-Review` (Title-Case, hyphenated) | changing which status it is |
+| a status in the "plain rename" rows of `status-discipline.md` (decision 19): `In-Progress`, `Implemented`, `Authoritative`, `As-observed-from-filesystem`, `Open · Jotted` | `Implementing`, `Shipped`, `Active`, `Reference`, `Open` | a "read first" row (`Published`, `Proposed`, `Idea`, `Planned`, …), which goes to the operator |
 | `tags` values in lowercase or kebab-case | Title-Case, hyphenated (`markdown-rendering` → `Markdown-Rendering`) | adding, dropping, or merging tags |
 | `authors: Name` or `augmented_with: Tool on Model` as a bare string | a one-item YAML list | changing the name or model string |
 | `date_modified` earlier than the last commit | left alone (decision 10) | "correcting" it from git |

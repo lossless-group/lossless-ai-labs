@@ -4,7 +4,7 @@ lede: "Per-variant TOC — one row per slot with five rank pills and a scaffold 
 artifact_kind: route
 ownership: shell
 mode: n/a
-status: shipped
+status: Shipped
 shell_version_introduced: 0.0.1
 route_pattern: "/toc/[deckSlug]/[variantSlug]/"
 emits_for: "every (deck, variant) in DECKS registry"
@@ -27,6 +27,8 @@ publish: true
 site_uuid: e3622bb4-4aec-49c7-b551-176817435a3b
 hex_code: s3dmcm
 date_authored_current_draft: 2026-05-12
+type: Sitemap
+date_first_published: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/toc.md"
 ---

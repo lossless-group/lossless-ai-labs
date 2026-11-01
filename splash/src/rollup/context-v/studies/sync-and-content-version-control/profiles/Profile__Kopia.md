@@ -1,5 +1,6 @@
 ---
 name: Kopia Profile
+title: Kopia — Profile
 slug: kopia
 upstream: https://github.com/kopia/kopia
 pinned_sha: 4ebb2be6
@@ -19,7 +20,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.1
-status: Draft
+status: Reference
 site_uuid: 614c535a-806a-4a22-a06b-ef7d4c08105d
 hex_code: 59jzq6
 lede: >-
@@ -41,8 +42,8 @@ tags:
   - Content-Addressed-Storage
   - Snapshots
   - Policy-Inheritance
-  - Corpora-Builder
 publish: true
+type: Profiles
 from: "studies/sync-and-content-version-control"
 from_path: "context-v/profiles/Profile__Kopia.md"
 ---

@@ -20,6 +20,7 @@ status: Ready
 site_uuid: 51efba2f-3319-4bf2-b6b0-2cc2da29ea91
 hex_code: z9hwef
 publish: true
+type: Plans
 from: "studies"
 from_path: "context-v/plans/Analyze-Harness-like-Evidence-in-Collaborator-Codebase.md"
 ---

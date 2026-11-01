@@ -29,6 +29,12 @@ summary: >-
   design choice, and they set up Profile__StateBench, Profile__Neo, and
   Profile__RetainDB as the counterarguments.
 publish: true
+title: Mem0 — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__Mem0.md"
 ---

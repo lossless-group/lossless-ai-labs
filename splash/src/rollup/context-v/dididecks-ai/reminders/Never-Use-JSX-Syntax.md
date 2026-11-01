@@ -16,6 +16,7 @@ site_uuid: ec061e8f-1b5e-41d3-82cb-057a0b3fb441
 hex_code: q8mfvh
 date_authored_initial_draft: 2026-08-02
 date_authored_current_draft: 2026-08-02
+type: Reminders
 from: "dididecks-ai"
 from_path: "context-v/reminders/Never-Use-JSX-Syntax.md"
 ---

@@ -30,6 +30,7 @@ tags:
   - MemoPop
   - Id-Didi-Sh
 publish: true
+type: Issues
 from: "id-didi-sh"
 from_path: "context-v/issues/Claude-Connectors-Need-didi-sh-to-Be-an-OAuth-Server.md"
 ---

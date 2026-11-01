@@ -23,6 +23,7 @@ site_uuid: 3c9abbce-ba0b-4f58-933f-abe6727bcdbc
 hex_code: ddk2j2
 date_authored_initial_draft: 2026-05-16
 date_authored_current_draft: 2026-05-16
+type: Plans
 from: "dididecks-ai"
 from_path: "context-v/plans/Init-DidiDecks-as-core-Submodule-of-AI-Labs.md"
 ---

@@ -4,7 +4,7 @@ lede: "Dev-only route that writes an empty per-slide stub and refuses to overwri
 artifact_kind: route
 ownership: shell
 mode: n/a
-status: shipped
+status: Shipped
 shell_version_introduced: 0.0.1
 route_pattern: "/api/slide-decompose"
 prerender: false
@@ -31,6 +31,8 @@ publish: true
 site_uuid: ad3a1f82-6942-4ed7-8e23-602dec12d20c
 hex_code: x5firz
 date_authored_current_draft: 2026-05-12
+type: Sitemap
+date_first_published: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/api-slide-decompose.md"
 ---

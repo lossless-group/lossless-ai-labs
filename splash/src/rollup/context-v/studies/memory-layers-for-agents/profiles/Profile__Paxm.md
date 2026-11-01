@@ -30,6 +30,12 @@ summary: >-
   before the code — this profile names it as the best architecture doc in the
   study.
 publish: true
+title: Paxm — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__Paxm.md"
 ---

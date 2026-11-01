@@ -4,7 +4,7 @@ lede: "Play-UI's outer frame at `/play/[deck]/[variant]/[slot]/` — `<SlideCanv
 artifact_kind: component
 ownership: shell
 mode: play-ui
-status: shipped
+status: Shipped
 shell_version_introduced: 0.0.1
 composes:
   - SlideCanvas
@@ -32,6 +32,8 @@ publish: true
 site_uuid: dc6b9036-8273-4f0c-97b3-018e7910affc
 hex_code: 3yg3s5
 date_authored_current_draft: 2026-05-13
+type: Sitemap
+date_first_published: 2026-05-17
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckFrame--Play-UI.md"
 ---

@@ -1,16 +1,19 @@
 ---
 title: "Dates are UTC at rest, viewer-local at render"
 purpose: "Store and emit dates in UTC. Localize in the viewer's browser, never at build time — formatting a date during a static build bakes whichever timezone the build machine happened to be in into the HTML every reader sees."
-status: Authoritative
+status: Active
 last_verified: 2026-08-21
 applies_to: every splash, site, changelog renderer, and content collection under `~/code/lossless-monorepo/`
 authors:
   - Michael Staton
-augmented_with: Claude Code on Claude Opus 5 (1M context)
+augmented_with:
+  - Claude Code on Claude Opus 5 (1M context)
 site_uuid: fc71171c-3603-4031-991f-bc948b7c8ea7
 hex_code: 7a3esr
 date_created: 2026-08-21
+date_modified: 2026-08-21
 publish: true
+type: Reminders
 from: "id-didi-sh"
 from_path: "context-v/reminders/Dates-Are-UTC-At-Rest-Viewer-Local-At-Render.md"
 ---

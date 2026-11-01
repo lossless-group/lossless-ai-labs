@@ -8,7 +8,12 @@ maintainer: Aalaa Fahiem (GitHub `itsAalaa7`)
 study: studies/adhd-and-executive-function-skills
 profile_path: studies/adhd-and-executive-function-skills/adhd-study-coach
 profile_kind: single-agent study coach (one prompt, five variants, two state tiers)
+title: "ADHD Study Coach — Profile"
+status: Reference
+authors:
+  - Michael Staton
 date_created: 2026-10-29
+date_modified: 2026-10-31
 site_uuid: beca39e7-ba3e-4c94-9e9a-01ce83fa172e
 hex_code: jptcd3
 date_authored_initial_draft: 2026-10-29
@@ -27,6 +32,7 @@ summary: >-
   skill that must keep state across chats without files, when deciding how to cite research inside
   a prompt honestly, or when an agent needs to auto-start a behavior without nagging.
 publish: true
+type: Profiles
 from: "studies/adhd-and-executive-function-skills"
 from_path: "context-v/profiles/Profile__ADHD-Study-Coach.md"
 ---

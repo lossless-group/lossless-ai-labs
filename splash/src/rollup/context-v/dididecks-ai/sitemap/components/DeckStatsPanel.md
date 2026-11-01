@@ -4,7 +4,7 @@ lede: "Four-tile stats row above `DeckMatrix` — Variants, Slide Files, People,
 artifact_kind: component
 ownership: shell
 mode: n/a
-status: shipped
+status: Shipped
 shell_version_introduced: 0.0.1
 composes: []
 composed_by:
@@ -42,6 +42,8 @@ publish: true
 site_uuid: a6a81047-8d66-4a70-b6f2-d185eee53c8f
 hex_code: 4gn8y6
 date_authored_current_draft: 2026-05-15
+type: Sitemap
+date_first_published: 2026-05-17
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckStatsPanel.md"
 ---

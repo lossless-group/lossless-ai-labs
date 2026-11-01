@@ -4,7 +4,7 @@ lede: "Three-mode state machine factory, namespaced to `{client}:mode` in localS
 artifact_kind: runtime
 ownership: shell
 mode: both
-status: shipped
+status: Shipped
 shell_version_introduced: 0.2.0
 runtime_type: "TS factory module — installs window.modeSwitcher singleton"
 composed_by:
@@ -38,6 +38,8 @@ publish: true
 site_uuid: 5ba29148-17fd-4b51-a1b1-2fd3fc5c5c49
 hex_code: o2ycp1
 date_authored_current_draft: 2026-06-06
+type: Sitemap
+date_first_published: 2026-06-06
 from: "dididecks-ai"
 from_path: "context-v/sitemap/runtime/mode-switcher.md"
 ---

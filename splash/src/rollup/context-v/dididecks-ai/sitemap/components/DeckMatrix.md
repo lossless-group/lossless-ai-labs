@@ -4,7 +4,7 @@ lede: "The embeddable variants × slots matrix: each cell pairs a Scroll-UI and 
 artifact_kind: component
 ownership: shell
 mode: n/a
-status: shipped
+status: Shipped
 shell_version_introduced: 0.0.1
 composes:
   - DididecksNav (when props.showNav === true)
@@ -41,6 +41,8 @@ publish: true
 site_uuid: 7a7ca52b-0cd0-49d7-8b55-82068b76b508
 hex_code: 7brdos
 date_authored_current_draft: 2026-05-15
+type: Sitemap
+date_first_published: 2026-05-17
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckMatrix.md"
 ---

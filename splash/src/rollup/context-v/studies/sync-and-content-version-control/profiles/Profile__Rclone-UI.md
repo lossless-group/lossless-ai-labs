@@ -1,5 +1,6 @@
 ---
 name: Rclone UI Profile
+title: Rclone UI — Profile
 slug: rclone-ui
 upstream: https://github.com/rclone-ui/rclone-ui
 homepage: https://rcloneui.com/
@@ -20,7 +21,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.2
-status: Draft
+status: Reference
 site_uuid: 3216cd55-a2b8-4971-9355-60a963460599
 hex_code: 9u06dv
 lede: >-
@@ -43,6 +44,7 @@ tags:
   - Scheduling
   - Cross-Platform
 publish: true
+type: Profiles
 from: "studies/sync-and-content-version-control"
 from_path: "context-v/profiles/Profile__Rclone-UI.md"
 ---

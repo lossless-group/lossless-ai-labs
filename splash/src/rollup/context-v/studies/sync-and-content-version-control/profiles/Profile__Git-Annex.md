@@ -1,5 +1,6 @@
 ---
 name: git-annex Profile
+title: git-annex — Profile
 slug: git-annex
 upstream: https://git.joeyh.name/git/git-annex.git
 pinned_sha: 6bc1790845
@@ -19,7 +20,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.1
-status: Draft
+status: Reference
 site_uuid: 93ecf7d9-e814-4e7c-b365-fc1a007de0d0
 hex_code: ytq3zv
 lede: >-
@@ -41,6 +42,7 @@ tags:
   - Large-Files
   - Corpus
 publish: true
+type: Profiles
 from: "studies/sync-and-content-version-control"
 from_path: "context-v/profiles/Profile__Git-Annex.md"
 ---

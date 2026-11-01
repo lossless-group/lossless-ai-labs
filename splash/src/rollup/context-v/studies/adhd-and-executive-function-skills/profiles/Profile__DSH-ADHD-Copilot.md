@@ -8,7 +8,12 @@ maintainer: zimai233 (`skills/adhd-copilot/SKILL.md:7`; sole author of the singl
 study: studies/adhd-and-executive-function-skills
 profile_path: studies/adhd-and-executive-function-skills/dsh-adhd-copilot
 profile_kind: behavioral-coaching harness plugin (one routing tool + verbatim Chinese skill)
+title: "DSH ADHD Copilot — Profile"
+status: Reference
+authors:
+  - Michael Staton
 date_created: 2026-10-29
+date_modified: 2026-10-31
 site_uuid: 8132526d-8206-4073-8302-e95259d5fca8
 hex_code: 4vljod
 date_authored_initial_draft: 2026-10-29
@@ -31,6 +36,7 @@ summary: >-
   code, or when you need the study's only non-Claude-harness packaging data
   point.
 publish: true
+type: Profiles
 from: "studies/adhd-and-executive-function-skills"
 from_path: "context-v/profiles/Profile__DSH-ADHD-Copilot.md"
 ---

@@ -1,4 +1,5 @@
 ---
+title: "Superpowers — Profile"
 name: Superpowers Profile
 slug: superpowers
 upstream: https://github.com/obra/superpowers
@@ -8,6 +9,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/superpowers
 profile_kind: methodology
 date_created: 2026-05-07
+date_modified: 2026-08-18
 site_uuid: 9e3c8cc9-d1ce-49df-b80f-f3d138fbd91c
 hex_code: v8etlx
 date_authored_initial_draft: 2026-05-07
@@ -25,7 +27,11 @@ summary: >-
   names, the behavioral test suite that plants real bugs and checks the agent catches them, and the
   contributor guide's 94%-rejection anti-slop posture. Ends with an honest fit note against
   Lossless conventions: the techniques are worth lifting; wholesale adoption probably is not.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Superpowers.md"
 ---

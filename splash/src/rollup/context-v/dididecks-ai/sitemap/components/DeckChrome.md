@@ -4,7 +4,7 @@ lede: "Floating bottom-right nav capsule replacing v0.1's dark PlayChrome bar; s
 artifact_kind: component
 ownership: shell
 mode: play-ui
-status: shipped
+status: Shipped
 shell_version_introduced: 0.1.0-rc.0
 composes: []
 composed_by:
@@ -49,6 +49,8 @@ publish: true
 site_uuid: 176c912a-6ad7-4b41-8aa7-50f2a1cf0cfc
 hex_code: t2e9mq
 date_authored_current_draft: 2026-05-14
+type: Sitemap
+date_first_published: 2026-05-14
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckChrome.md"
 ---

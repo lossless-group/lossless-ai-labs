@@ -1,5 +1,6 @@
 ---
 name: Routa Profile
+title: "Routa — Profile"
 slug: routa
 upstream: https://github.com/phodal/routa
 package: n/a (Rust crates `routa-core`/`routa-server`/`routa-cli` + Next.js app `routa` + Tauri desktop `routa-desktop`, all pinned at workspace version 0.19.0)
@@ -9,10 +10,13 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/routa
 profile_kind: Dual-backend (Next.js + Rust/Axum) multi-agent coordination platform, three client surfaces (Tauri desktop, web, VS Code extension)
 date_created: 2026-07-13
+date_modified: 2026-08-18
 site_uuid: 683bbbef-fc28-460c-8253-d06956bf6fbd
 hex_code: gvfktz
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+authors:
+  - Michael Staton
 lede: >-
   The swappable unit turns out to be the session, not the workspace: two
   sessions in one workspace can run two different agent CLIs.
@@ -33,7 +37,9 @@ summary: >-
   invariants, including that the `default` workspace is transition scaffolding. Caveat:
   this is the largest and most heavily tooled repo in the study, a full product rather
   than a minimal pattern demonstration.
+status: Reference
 publish: true
+type: Profiles
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Routa.md"
 ---

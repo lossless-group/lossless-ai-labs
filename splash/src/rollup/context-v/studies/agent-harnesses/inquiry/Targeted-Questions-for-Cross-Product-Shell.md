@@ -2,6 +2,7 @@
 title: "Agent Harnesses — Answers to the Plan's Targeted Questions"
 lede: "Phase 2, not a survey: three questions — MCP tool scoping, trajectory logs, per-project config swaps — answered from the profiles."
 date_created: 2026-07-13
+date_modified: 2026-08-18
 authors:
   - Michael Staton
 augmented_with:
@@ -18,6 +19,7 @@ hex_code: d8e5mi
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
 publish: true
+type: Inquiry
 from: "studies/agent-harnesses"
 from_path: "context-v/inquiry/Targeted-Questions-for-Cross-Product-Shell.md"
 ---

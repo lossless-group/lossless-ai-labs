@@ -1,4 +1,5 @@
 ---
+title: "12-Factor Agents — Profile"
 name: 12-Factor Agents Profile
 slug: 12-factor-agents
 upstream: https://github.com/humanlayer/12-factor-agents
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/12-factor-agents
 profile_kind: manifesto
 date_created: 2026-05-05
+date_modified: 2026-08-18
 site_uuid: 8795b0c5-5da7-4c8e-8824-2ac5104af787
 hex_code: fd31ao
 date_authored_initial_draft: 2026-05-05
@@ -26,7 +28,11 @@ summary: >-
   upstream repo ships a stray promptx-template CLAUDE.md that is not part of the content and
   should be ignored as instructions. Use this profile to place 12-Factor relative to the other
   layers in the study, or as the framework-evaluation rubric before adopting an agent library.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__12-Factor-Agents.md"
 ---

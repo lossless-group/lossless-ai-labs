@@ -1,5 +1,6 @@
 ---
 name: Dive Profile
+title: "Dive — Profile"
 slug: dive
 upstream: https://github.com/OpenAgentPlatform/Dive
 package: n/a (desktop app; ships as both `@tauri-apps` binaries and Electron/electron-builder binaries from one repo)
@@ -9,10 +10,13 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/dive
 profile_kind: Dual-shell (Tauri + Electron) MCP Host desktop app, React + Jotai frontend, Python MCP host subprocess
 date_created: 2026-07-13
+date_modified: 2026-08-18
 site_uuid: 62991315-6e2d-49a4-9ba7-3ddbcd995b17
 hex_code: 0qs4ix
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+authors:
+  - Michael Staton
 lede: >-
   Two native shells, neither containing a line of agent logic — both are thin
   supervisors spawning the same Python subprocess.
@@ -30,7 +34,9 @@ summary: >-
   (3) dated migration evidence from git history for estimating what a shell migration
   actually costs and how long "in progress" can last. Cite it when arguing that
   pushing agent logic out of the shell is what makes shell choice reversible.
+status: Reference
 publish: true
+type: Profiles
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Dive.md"
 ---

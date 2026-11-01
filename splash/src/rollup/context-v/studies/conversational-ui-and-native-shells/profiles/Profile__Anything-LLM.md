@@ -1,5 +1,6 @@
 ---
 name: AnythingLLM Profile
+title: "AnythingLLM — Profile"
 slug: anything-llm
 upstream: https://github.com/mintplex-labs/anything-llm
 package: n/a (Node/Express server + collector service + React frontend; distributed as Docker image and a documented desktop/Electron build not present in this pinned checkout)
@@ -9,10 +10,13 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/anything-llm
 profile_kind: Node/Express backend + Prisma/SQLite + React frontend, multi-user document-chat platform
 date_created: 2026-07-13
+date_modified: 2026-08-18
 site_uuid: 7c95712a-ae10-4fbe-a60b-05ecb1e98e79
 hex_code: j3p25r
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+authors:
+  - Michael Staton
 lede: >-
   A "workspace" is a config row over one always-shared backend: the chat
   provider varies per workspace, the vector DB never can.
@@ -31,7 +35,9 @@ summary: >-
   An agent should cite this profile when arguing that config-row parameterization is
   not equivalent to per-context adapter isolation, and should read `Profile__Routa.md`
   for the positive counterpart.
+status: Reference
 publish: true
+type: Profiles
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Anything-LLM.md"
 ---

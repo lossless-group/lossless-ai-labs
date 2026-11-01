@@ -1,5 +1,6 @@
 ---
 name: Kaas Profile
+title: "Kaas — Profile"
 slug: kaas
 upstream: https://github.com/0xfrankz/Kaas
 package: n/a (Rust crate `kaas` + `kaas_lib`; distributed as Tauri desktop binaries — macOS/Windows/Linux)
@@ -9,10 +10,13 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/kaas
 profile_kind: Tauri (Rust backend) + React frontend, multi-provider chat client
 date_created: 2026-07-13
+date_modified: 2026-08-18
 site_uuid: 549aa797-958b-4b72-99a3-1bbe3bc57be4
 hex_code: 8993jw
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+authors:
+  - Michael Staton
 lede: >-
   Every credential, provider quirk, and even context assembly lives in Rust;
   React gets typed `invoke()` calls and nothing else.
@@ -31,7 +35,9 @@ summary: >-
   no MCP, no tool-calling, no dual-shell, no per-request cancellation, no WAL tuning.
   Use it as the provider-abstraction reference; use `Profile__Openagent.md` for MCP and
   skills, `Profile__Dive.md` for dual-shell.
+status: Reference
 publish: true
+type: Profiles
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Kaas.md"
 ---

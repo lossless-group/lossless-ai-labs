@@ -1,5 +1,6 @@
 ---
 name: Seafile Profile
+title: Seafile — Profile
 slug: seafile
 upstream: https://github.com/haiwen/seafile
 upstream_secondary: https://github.com/haiwen/seafile-server
@@ -18,7 +19,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.1
-status: Draft
+status: Reference
 site_uuid: cfc5aa8a-0ba6-42c9-b0ad-33129e9738b8
 hex_code: z1byzx
 lede: >-
@@ -43,6 +44,7 @@ tags:
   - Content-Defined-Chunking
   - Open-Core
 publish: true
+type: Profiles
 from: "studies/sync-and-content-version-control"
 from_path: "context-v/profiles/Profile__Seafile.md"
 ---

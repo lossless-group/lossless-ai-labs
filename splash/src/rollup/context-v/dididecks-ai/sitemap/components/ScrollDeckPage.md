@@ -4,7 +4,7 @@ lede: "Collapses the three shell imports a variant page used to need — paginat
 artifact_kind: component
 ownership: shell
 mode: scroll-ui
-status: shipped
+status: Shipped
 shell_version_introduced: 0.2.0
 composes:
   - ModeToggle (unless props.hideModeToggle)
@@ -39,6 +39,8 @@ publish: true
 site_uuid: 7df1251a-302b-4c6f-8ac5-e9d60c8634d2
 hex_code: p19m53
 date_authored_current_draft: 2026-06-07
+type: Sitemap
+date_first_published: 2026-06-06
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/ScrollDeckPage.md"
 ---

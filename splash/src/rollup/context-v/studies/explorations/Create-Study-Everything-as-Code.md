@@ -11,6 +11,9 @@ at_semantic_version: 0.0.1.0
 tags:
   - Context-Vigilance
 publish: true
+date_modified: 2026-10-28
+status: Draft
+type: Explorations
 from: "studies"
 from_path: "context-v/explorations/Create-Study-Everything-as-Code.md"
 ---

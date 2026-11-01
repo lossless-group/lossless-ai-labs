@@ -1,4 +1,5 @@
 ---
+title: "AGENTS.md — Profile"
 name: AGENTS.md Profile
 slug: agents-md
 upstream: https://github.com/agentsmd/agents.md
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/agents-md
 profile_kind: file-convention
 date_created: 2026-05-05
+date_modified: 2026-08-18
 site_uuid: 42eb0a4a-c72c-4139-bda5-573687fae0dd
 hex_code: agwg0r
 date_authored_initial_draft: 2026-05-05
@@ -26,7 +28,11 @@ summary: >-
   Linux Foundation stewardship that separates it from a vendor label. Use it when deciding what
   goes in a repo's agent-facing context file versus its README, and note that the convention is
   advisory — enforcement belongs to the host runtime's permission system.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__AGENTS-md.md"
 ---

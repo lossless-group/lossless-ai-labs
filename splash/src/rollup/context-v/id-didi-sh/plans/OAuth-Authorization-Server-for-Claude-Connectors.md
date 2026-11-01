@@ -13,7 +13,8 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5.5 (1M context)
 at_semantic_version: 0.0.0.1
-status: Ready
+status: Shipped
+date_first_published: 2026-10-10
 issue_reference: context-v/issues/Claude-Connectors-Need-didi-sh-to-Be-an-OAuth-Server.md
 consumer_spec: memopop-orchestrator/context-v/specs/MemoPop-Connector-API.md
 branch: feature/oauth-for-connectors (from main, this repo's working branch)

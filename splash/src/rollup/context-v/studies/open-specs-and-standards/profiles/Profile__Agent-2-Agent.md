@@ -1,4 +1,5 @@
 ---
+title: "Agent2Agent (A2A) Protocol — Profile"
 name: Agent2Agent (A2A) Protocol Profile
 slug: agent-2-agent
 upstream: https://github.com/a2aproject/A2A
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/agent-2-agent
 profile_kind: wire-protocol
 date_created: 2026-05-05
+date_modified: 2026-08-18
 site_uuid: 198dcc8c-0c37-435f-ab0c-85d0b730dc2e
 hex_code: dwyigb
 date_authored_initial_draft: 2026-05-05
@@ -26,7 +28,11 @@ summary: >-
   breaking changes (kind-discriminator removal, SCREAMING_SNAKE_CASE enums). Use it to decide
   whether a service belongs behind an A2A endpoint, and as the map to the normative .proto before
   reading the 3611-line prose spec.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Agent-2-Agent.md"
 ---

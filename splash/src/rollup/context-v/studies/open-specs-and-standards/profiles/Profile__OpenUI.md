@@ -1,4 +1,5 @@
 ---
+title: "OpenUI — Profile"
 name: OpenUI Profile
 slug: openui
 upstream: https://github.com/thesysdev/openui
@@ -13,6 +14,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/openui
 profile_kind: framework
 date_created: 2026-05-06
+date_modified: 2026-08-18
 site_uuid: 42e091c5-28c9-498f-88da-720da80ed710
 hex_code: e212hh
 date_authored_initial_draft: 2026-05-06
@@ -31,7 +33,11 @@ summary: >-
   into one source of truth, and the constrained-output tradeoff. Includes an honest fit note: the
   runtime is React-only and therefore collides with the astro-knots prohibition, so read this for
   the patterns worth stealing rather than as an adoption recommendation.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__OpenUI.md"
 ---

@@ -30,6 +30,12 @@ summary: >-
   without ever running the benchmark; the submission hygiene is the template to
   copy for any internal eval.
 publish: true
+title: StateBench — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__StateBench.md"
 ---

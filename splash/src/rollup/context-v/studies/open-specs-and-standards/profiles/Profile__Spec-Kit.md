@@ -1,4 +1,5 @@
 ---
+title: "Spec Kit — Profile"
 name: Spec Kit Profile
 slug: spec-kit
 upstream: https://github.com/github/spec-kit
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/spec-kit
 profile_kind: tool
 date_created: 2026-05-03
+date_modified: 2026-08-18
 site_uuid: 9ce0a83c-ac3e-4156-8e06-4569ea1d92fd
 hex_code: s8eij9
 date_authored_initial_draft: 2026-05-03
@@ -26,7 +28,11 @@ summary: >-
   extensions, and core. Note the methodology's intended response to a wrong spec mid-implementation
   is regeneration of downstream artifacts, not in-place editing. Use it when compliance,
   traceability, and greenfield alignment matter more than iteration speed.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Spec-Kit.md"
 ---

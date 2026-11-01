@@ -30,6 +30,12 @@ summary: >-
   what an agent needs to remember) and Profile__Understand-Anything
   (deterministic vs LLM-authored graph construction).
 publish: true
+title: Graphify — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__Graphify.md"
 ---

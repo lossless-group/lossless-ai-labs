@@ -30,6 +30,12 @@ summary: >-
   is in the mental-model section: verify forgetting and supersession in your own
   eval rather than on the README's word.
 publish: true
+title: Supermemory — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__Supermemory.md"
 ---

@@ -1,5 +1,6 @@
 ---
 name: Agent-Native Profile
+title: "Agent-Native — Profile"
 slug: agent-native
 upstream: https://github.com/BuilderIO/agent-native
 package: "@agent-native/core (framework + CLI), @agent-native/dispatch, @agent-native/toolkit, plus Electron/Expo/VS Code shells — pnpm monorepo, 24 packages, 17 first-party templates"
@@ -10,6 +11,7 @@ profile_path: studies/conversational-ui-and-native-shells/agent-native
 profile_kind: Web-first agent+UI application framework (Nitro/H3 + React Router + Postgres/PGlite) with an Electron webview-per-app shell, an Expo webview shell, and a cross-app control plane (Dispatch) over A2A and MCP
 pinned_at: 1452a82854 (2026-10-03)
 date_created: 2026-10-04
+date_modified: 2026-10-04
 site_uuid: e77dacb3-337b-44a5-ba19-3f8b4d7c29f5
 hex_code: fqbquh
 date_authored_initial_draft: 2026-10-04
@@ -46,7 +48,9 @@ tags:
   - Electron
   - MCP
   - A2A
+status: Reference
 publish: true
+type: Profiles
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Agent-Native.md"
 ---

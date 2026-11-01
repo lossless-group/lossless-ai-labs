@@ -29,6 +29,12 @@ summary: >-
   decision that involves ByteRover — the Elastic-2.0 analysis is the section
   most likely to change a plan.
 publish: true
+title: ByteRover CLI — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__ByteRover.md"
 ---

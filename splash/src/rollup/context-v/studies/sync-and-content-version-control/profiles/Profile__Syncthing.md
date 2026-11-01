@@ -1,5 +1,6 @@
 ---
 name: Syncthing Profile
+title: Syncthing — Profile
 slug: syncthing
 upstream: https://github.com/syncthing/syncthing
 pinned_sha: 38ac58c82
@@ -19,7 +20,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.1
-status: Draft
+status: Reference
 site_uuid: 55e6066c-f5cc-401e-b131-4fd14fa7be74
 hex_code: 96r08u
 lede: >-
@@ -40,8 +41,8 @@ tags:
   - File-Sync
   - Peer-To-Peer
   - Conflict-Resolution
-  - Augment-It
 publish: true
+type: Profiles
 from: "studies/sync-and-content-version-control"
 from_path: "context-v/profiles/Profile__Syncthing.md"
 ---

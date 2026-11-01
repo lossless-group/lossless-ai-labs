@@ -5,8 +5,9 @@ date_authored_initial_draft: 2026-05-15
 date_authored_current_draft: 2026-06-07
 date_last_updated: 2026-06-07
 at_semantic_version: 0.0.2.0
-status: Draft-Updated
-augmented_with: Claude Code (Opus 4.7, 1M context)
+status: Draft
+augmented_with:
+  - Claude Code (Opus 4.7, 1M context)
 category: Sitemap-Index
 tags:
   - Sitemap
@@ -21,6 +22,7 @@ date_modified: 2026-06-07
 publish: true
 site_uuid: 925f384a-9843-41ee-ab16-82709f515586
 hex_code: s3oiqn
+type: Sitemap
 from: "dididecks-ai"
 from_path: "context-v/sitemap/README.md"
 ---

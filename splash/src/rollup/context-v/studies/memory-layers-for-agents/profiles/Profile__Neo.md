@@ -30,6 +30,12 @@ summary: >-
   invalidated-layer and supersession sections when the requirement is
   state-correctness over time.
 publish: true
+title: Neo — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__Neo.md"
 ---

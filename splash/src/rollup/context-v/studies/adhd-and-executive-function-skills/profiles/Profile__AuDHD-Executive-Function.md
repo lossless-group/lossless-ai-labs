@@ -8,7 +8,12 @@ maintainer: Assaf Kipnis (LICENSE copyright line; sells a paid "Playbook" and Cl
 study: studies/adhd-and-executive-function-skills
 profile_path: studies/adhd-and-executive-function-skills/audhd-executive-function
 profile_kind: output-contract skill (single SKILL.md + research base + user-profile template)
+title: "AuDHD Executive Function — Profile"
+status: Reference
+authors:
+  - Michael Staton
 date_created: 2026-10-29
+date_modified: 2026-10-31
 site_uuid: d8fa66a4-ac5e-4cfa-976c-7cd088db0a04
 hex_code: cmix8s
 date_authored_initial_draft: 2026-10-29
@@ -31,6 +36,7 @@ summary: >-
   when deciding how far an EF skill should go toward doing the work for the
   user, or when you need a concrete shame-free vocabulary list.
 publish: true
+type: Profiles
 from: "studies/adhd-and-executive-function-skills"
 from_path: "context-v/profiles/Profile__AuDHD-Executive-Function.md"
 ---

@@ -20,6 +20,7 @@ status: Draft
 site_uuid: 7e9e48e8-9905-4811-ba9f-c1bd5790a139
 hex_code: 8z39yb
 publish: true
+type: Explorations
 from: "studies"
 from_path: "context-v/explorations/Explore-Collaborator-Codebases-for-Insights-Comparative-Highlights.md"
 ---

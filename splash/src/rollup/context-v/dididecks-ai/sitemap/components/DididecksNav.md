@@ -4,7 +4,7 @@ lede: "Shell-injected global header auto-mounted on `/toc/*` and `/play/*`, with
 artifact_kind: component
 ownership: shell
 mode: both
-status: shipped
+status: Shipped
 shell_version_introduced: 0.1.0-rc.0
 composes: []
 composed_by:
@@ -28,6 +28,8 @@ publish: true
 site_uuid: 09ca1b6b-e5cb-494c-b090-62889a34fab9
 hex_code: z7yucd
 date_authored_current_draft: 2026-05-12
+type: Sitemap
+date_first_published: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DididecksNav.md"
 ---

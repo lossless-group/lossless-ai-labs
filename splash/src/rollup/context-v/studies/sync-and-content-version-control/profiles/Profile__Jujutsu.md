@@ -1,5 +1,6 @@
 ---
 name: Jujutsu Profile
+title: Jujutsu (`jj`) — Profile
 slug: jujutsu
 upstream: https://github.com/jj-vcs/jj
 pinned_sha: 9d905d5432869c7aa9539e6e5c7fece5842bed37
@@ -19,7 +20,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.2
-status: Draft
+status: Reference
 site_uuid: db950edb-0c90-4a69-a977-59f93ee0d3fe
 hex_code: nyrny9
 lede: >-
@@ -41,8 +42,8 @@ tags:
   - Version-Control
   - Content-Addressed-Storage
   - Sync
-  - Flave
 publish: true
+type: Profiles
 from: "studies/sync-and-content-version-control"
 from_path: "context-v/profiles/Profile__Jujutsu.md"
 ---

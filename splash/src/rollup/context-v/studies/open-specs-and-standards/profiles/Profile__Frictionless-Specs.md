@@ -1,4 +1,5 @@
 ---
+title: "Frictionless Specs — Profile"
 name: Frictionless Specs Profile
 slug: frictionless-specs
 upstream: https://github.com/frictionlessdata/datapackage
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/frictionless-specs
 profile_kind: standard
 date_created: 2026-05-03
+date_modified: 2026-08-18
 site_uuid: ee323d4a-eb28-4aa1-a6d1-7e77e28151d5
 hex_code: 4i6p5l
 date_authored_initial_draft: 2026-05-03
@@ -25,7 +27,11 @@ summary: >-
   the recipes-then-extensions-then-private-properties escalation, and a maturity comparison table
   against the emerging agent specs. Read it as the reference exemplar when evaluating or designing
   a new open spec, not as something to adopt for behavior specification.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Frictionless-Specs.md"
 ---

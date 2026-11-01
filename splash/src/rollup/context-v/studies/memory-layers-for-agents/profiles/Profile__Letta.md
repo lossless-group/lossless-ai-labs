@@ -29,6 +29,12 @@ summary: >-
   context-vigilance is the section to read if an agent is ever going to write
   into a context-v directory directly.
 publish: true
+title: Letta — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__Letta.md"
 ---

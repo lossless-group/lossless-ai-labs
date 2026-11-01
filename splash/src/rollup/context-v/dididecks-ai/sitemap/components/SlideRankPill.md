@@ -4,7 +4,7 @@ lede: "Bottom-right floating pill exposing the five-state classifier for the act
 artifact_kind: component
 ownership: shell
 mode: both
-status: shipped
+status: Shipped
 shell_version_introduced: 0.1.0-rc.0
 composes: []
 composed_by:
@@ -33,6 +33,8 @@ publish: true
 site_uuid: 9462cf15-a163-4626-9821-b74b46f0850a
 hex_code: cdyj7o
 date_authored_current_draft: 2026-05-12
+type: Sitemap
+date_first_published: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/SlideRankPill.md"
 ---

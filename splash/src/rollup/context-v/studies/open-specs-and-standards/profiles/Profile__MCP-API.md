@@ -1,4 +1,5 @@
 ---
+title: "MCP-API — Profile"
 name: MCP-API Profile
 slug: mcp-api
 upstream: https://github.com/Parslee-ai/mcp-api
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/mcp-api
 profile_kind: applied-product
 date_created: 2026-05-05
+date_modified: 2026-08-18
 site_uuid: ccb76823-c008-48c1-aeab-d5b1af096da5
 hex_code: c09mpg
 date_authored_initial_draft: 2026-05-05
@@ -26,7 +28,11 @@ summary: >-
   documents over 2MB, the three distinct auth layers (user, MCP-server, upstream API), the tier
   limits checked before dispatch, and the SSRF defense that is mandatory for any product that
   executes user-supplied URLs. Use it for the hardening checklist, not as a spec.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__MCP-API.md"
 ---

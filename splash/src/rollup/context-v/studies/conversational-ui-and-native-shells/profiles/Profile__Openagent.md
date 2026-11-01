@@ -1,5 +1,6 @@
 ---
 name: OpenAgent Profile
+title: "OpenAgent — Profile"
 slug: openagent
 upstream: https://github.com/BANG404/openagent
 package: n/a (Tauri desktop app; frontend via bun/SvelteKit, backend via cargo/Rust)
@@ -9,10 +10,13 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/openagent
 profile_kind: Tauri desktop chat client — Rust backend + SvelteKit webview, MCP-native
 date_created: 2026-07-13
+date_modified: 2026-08-18
 site_uuid: 8e1f608d-fdcf-4dfe-8f02-130565870676
 hex_code: xi1ebf
 date_authored_initial_draft: 2026-07-13
 date_authored_current_draft: 2026-07-13
+authors:
+  - Michael Staton
 lede: >-
   Delegation recursion is prevented not by a depth counter but by never
   registering `spawn_agent` on the child's tool server.
@@ -31,7 +35,9 @@ summary: >-
   for an agent: the repo is GPL-3.0-or-later, so copy the shape and not the code, and it is
   a two-person project under two months old, so treat everything as "what the code does
   today," not a proven pattern.
+status: Reference
 publish: true
+type: Profiles
 from: "studies/conversational-ui-and-native-shells"
 from_path: "context-v/profiles/Profile__Openagent.md"
 ---

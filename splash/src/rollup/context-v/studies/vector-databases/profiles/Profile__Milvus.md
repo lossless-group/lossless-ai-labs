@@ -31,6 +31,12 @@ summary: >-
   already running, DiskANN or GPU indexes needed, very high tenant count) under
   which the complexity starts to pay.
 publish: true
+type: Profiles
+title: "Milvus — Profile"
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__Milvus.md"
 ---

@@ -30,6 +30,12 @@ summary: >-
   differences to expect), or when studying Mem0's adapter as the reference
   application driving Qdrant.
 publish: true
+type: Profiles
+title: "Qdrant — Profile"
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
 from: "studies/vector-databases"
 from_path: "context-v/profiles/Profile__Qdrant.md"
 ---

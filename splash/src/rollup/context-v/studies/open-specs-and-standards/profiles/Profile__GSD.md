@@ -1,4 +1,5 @@
 ---
+title: "GSD (Get Shit Done) — Profile"
 name: GSD (Get Shit Done) Profile
 slug: get-shit-done
 upstream: https://github.com/gsd-build/get-shit-done
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/get-shit-done
 profile_kind: tool
 date_created: 2026-05-05
+date_modified: 2026-08-18
 site_uuid: 04f5330d-0816-4dbb-8031-a093d82a834f
 hex_code: i63ife
 date_authored_initial_draft: 2026-05-05
@@ -26,7 +28,11 @@ summary: >-
   file-locked STATE.md writes, and the heavier-than-average recovery surface. Use it to understand
   the context-rot argument and the thin-orchestrator pattern; note the profile's explicit list of
   cases where a spec artifact matters more than a workflow.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__GSD.md"
 ---

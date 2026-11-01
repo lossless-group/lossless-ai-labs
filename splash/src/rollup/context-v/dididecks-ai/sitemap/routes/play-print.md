@@ -4,7 +4,7 @@ lede: "Stacks every slot as SlideCanvas instances with `page-break-after: always
 artifact_kind: route
 ownership: shell
 mode: play-ui
-status: shipped
+status: Shipped
 shell_version_introduced: 0.0.1
 route_pattern: "/play/[deckSlug]/[variantSlug]/print/"
 prerender: false
@@ -30,6 +30,8 @@ publish: true
 site_uuid: d94d3ca6-aafc-4bd1-886e-ed74d83523a6
 hex_code: ws2pmo
 date_authored_current_draft: 2026-05-15
+type: Sitemap
+date_first_published: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/play-print.md"
 ---

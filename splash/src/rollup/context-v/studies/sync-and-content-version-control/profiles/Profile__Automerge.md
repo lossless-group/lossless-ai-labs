@@ -1,5 +1,6 @@
 ---
 name: Automerge Profile
+title: Automerge — Profile
 slug: automerge
 upstream: https://github.com/automerge/automerge
 pinned_sha: 47908d6c0
@@ -19,7 +20,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.1
-status: Draft
+status: Reference
 site_uuid: e003c56b-82d8-4d22-91a9-3b1935048310
 hex_code: qwg9e1
 lede: >-
@@ -40,8 +41,8 @@ tags:
   - CRDT
   - Local-First
   - Collaboration
-  - Flave
 publish: true
+type: Profiles
 from: "studies/sync-and-content-version-control"
 from_path: "context-v/profiles/Profile__Automerge.md"
 ---

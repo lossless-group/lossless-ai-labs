@@ -13,7 +13,8 @@ post_ship_note: |
   Reusable for future client engagements — file stays "Shipped" because
   the per-client repeat-application is part of normal use, not an
   outstanding deliverable.
-augmented_with: Claude Code (Opus 4.7, 1M context)
+augmented_with:
+  - Claude Code (Opus 4.7, 1M context)
 category: Plan
 tags:
   - Dididecks-Shell
@@ -33,6 +34,7 @@ date_modified: 2026-05-16
 publish: true
 site_uuid: b296e1c7-6983-47e8-a2d2-5c51cd2bbb93
 hex_code: 992gth
+type: Plans
 from: "dididecks-ai"
 from_path: "context-v/plans/Refactor-Scroll-Ported-Slides-to-Static-Play-Format.md"
 ---

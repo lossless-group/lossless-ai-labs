@@ -4,7 +4,7 @@ lede: "Single mount point on the play-slot route composing DeckChrome and SlideR
 artifact_kind: component
 ownership: shell
 mode: play-ui
-status: shipped
+status: Shipped
 shell_version_introduced: 0.1.0-rc.0
 composes:
   - DeckChrome
@@ -28,6 +28,8 @@ publish: true
 site_uuid: 78fa6c78-bf45-4ed5-9690-b8c0034c9581
 hex_code: k78erw
 date_authored_current_draft: 2026-05-15
+type: Sitemap
+date_first_published: 2026-05-16
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/DeckOverlay--Play-UI.md"
 ---

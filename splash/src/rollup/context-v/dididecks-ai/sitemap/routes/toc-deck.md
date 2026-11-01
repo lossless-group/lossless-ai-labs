@@ -4,7 +4,7 @@ lede: "The deck-level review matrix: variants × slots with dual-surface ratings
 artifact_kind: route
 ownership: shell
 mode: n/a
-status: shipped
+status: Shipped
 shell_version_introduced: 0.0.1
 route_pattern: "/toc/[deckSlug]/"
 prerender: false
@@ -35,6 +35,8 @@ publish: true
 site_uuid: 750b2f94-d7b7-4118-b6d9-7d57ce74046e
 hex_code: c57t6v
 date_authored_current_draft: 2026-05-15
+type: Sitemap
+date_first_published: 2026-05-17
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/toc-deck.md"
 ---

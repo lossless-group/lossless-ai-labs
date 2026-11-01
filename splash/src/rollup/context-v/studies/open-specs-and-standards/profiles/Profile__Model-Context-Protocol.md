@@ -1,4 +1,5 @@
 ---
+title: "Model Context Protocol (MCP) — Profile"
 name: Model Context Protocol (MCP) Profile
 slug: modelcontextprotocol
 upstream: https://github.com/modelcontextprotocol/modelcontextprotocol
@@ -9,6 +10,7 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/modelcontextprotocol
 profile_kind: wire-protocol
 date_created: 2026-05-05
+date_modified: 2026-08-18
 site_uuid: 4da2393b-3484-4a26-9ff2-1d8d60c7e79a
 hex_code: tp297c
 date_authored_initial_draft: 2026-05-05
@@ -26,7 +28,11 @@ summary: >-
   date-based rather than semantic versioning, the TypeScript-first schema with generated JSON
   Schema, the SEP process, and the Linux Foundation BDFL governance model. Note that the protocol
   cannot enforce its own security model — consent and tool-description distrust are the host's job.
+authors:
+  - Michael Staton
+status: Reference
 publish: true
+type: Profiles
 from: "studies/open-specs-and-standards"
 from_path: "context-v/profiles/Profile__Model-Context-Protocol.md"
 ---

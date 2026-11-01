@@ -6,6 +6,11 @@ site_uuid: 4e3efad6-1025-4c5c-a8c4-b45555a638ab
 hex_code: e3v5qg
 date_created: 2026-05-02
 publish: true
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Active
+type: Prompts
 from: "studies"
 from_path: "context-v/prompts/Create-a-new-Study.md"
 ---

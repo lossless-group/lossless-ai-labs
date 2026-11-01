@@ -8,7 +8,12 @@ maintainer: Leon Wilkinson (`Leonw98/adhd-claude-skill`)
 study: studies/adhd-and-executive-function-skills
 profile_path: studies/adhd-and-executive-function-skills/adhd-claude-skill
 profile_kind: user-invoked session enforcer with file-based workstream state
+title: "ADHD Claude Skill — Profile"
+status: Reference
+authors:
+  - Michael Staton
 date_created: 2026-10-29
+date_modified: 2026-10-31
 site_uuid: b87f88a6-9a57-415c-b4ef-2cdc0985daf5
 hex_code: eo4l51
 date_authored_initial_draft: 2026-10-29
@@ -29,6 +34,7 @@ summary: >-
   it, or how to lay out cross-session state as plain files with no runtime,
   hook, or database.
 publish: true
+type: Profiles
 from: "studies/adhd-and-executive-function-skills"
 from_path: "context-v/profiles/Profile__ADHD-Claude-Skill.md"
 ---

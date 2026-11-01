@@ -8,7 +8,12 @@ maintainer: Jason Poindexter (`jpoindexter`)
 study: studies/adhd-and-executive-function-skills
 profile_path: studies/adhd-and-executive-function-skills/nd-skills
 profile_kind: executive-function taxonomy skill pack with a manual router, an always-on index block, and static regression checks
+title: "ND Skills — Profile"
+status: Reference
+authors:
+  - Michael Staton
 date_created: 2026-10-29
+date_modified: 2026-10-31
 site_uuid: 3b979b50-aeb3-4390-add0-68a250b36868
 hex_code: oxo3ee
 date_authored_initial_draft: 2026-10-29
@@ -33,6 +38,7 @@ summary: >-
   executive-function support into skills, how to keep many skills cheaply
   always-on, or how to govern an agent that can speak unprompted.
 publish: true
+type: Profiles
 from: "studies/adhd-and-executive-function-skills"
 from_path: "context-v/profiles/Profile__ND-Skills.md"
 ---

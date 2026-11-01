@@ -29,6 +29,12 @@ summary: >-
   LICENSE-BSL file the README references is absent from the pinned snapshot, so
   verify server license terms upstream before any commercial planning.
 publish: true
+title: RetainDB — Profile
+date_modified: 2026-08-18
+authors:
+  - Michael Staton
+status: Reference
+type: Profiles
 from: "studies/memory-layers-for-agents"
 from_path: "context-v/profiles/Profile__RetainDB.md"
 ---

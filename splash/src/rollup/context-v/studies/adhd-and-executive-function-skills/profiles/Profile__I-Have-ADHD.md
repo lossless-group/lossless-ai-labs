@@ -8,7 +8,12 @@ maintainer: Ayoub G. (`ayghri`)
 study: studies/adhd-and-executive-function-skills
 profile_path: studies/adhd-and-executive-function-skills/i-have-adhd
 profile_kind: always-on output-style skill, distributed cross-harness, with evals
+title: "I Have ADHD — Profile"
+status: Reference
+authors:
+  - Michael Staton
 date_created: 2026-10-29
+date_modified: 2026-10-31
 site_uuid: 6d50de62-7b9a-4009-9724-6371dc41912b
 hex_code: c8qr7h
 date_authored_initial_draft: 2026-10-29
@@ -29,6 +34,7 @@ summary: >-
   output-format problem, when designing a style skill that must persist across
   turns and topic changes, or when packaging one skill for many harnesses.
 publish: true
+type: Profiles
 from: "studies/adhd-and-executive-function-skills"
 from_path: "context-v/profiles/Profile__I-Have-ADHD.md"
 ---

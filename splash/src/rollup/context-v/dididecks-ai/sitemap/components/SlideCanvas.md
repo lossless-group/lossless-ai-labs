@@ -4,7 +4,7 @@ lede: "Pure-CSS 16:9 stage — container queries scale a 1920×1080 design size 
 artifact_kind: component
 ownership: shell
 mode: play-ui
-status: shipped
+status: Shipped
 shell_version_introduced: 0.1.0-rc.0
 composes: []
 composed_by:
@@ -27,6 +27,8 @@ publish: true
 site_uuid: aa84d68d-9e5b-466a-8cf6-b31e147e1770
 hex_code: 2s6ach
 date_authored_current_draft: 2026-05-13
+type: Sitemap
+date_first_published: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/components/SlideCanvas.md"
 ---

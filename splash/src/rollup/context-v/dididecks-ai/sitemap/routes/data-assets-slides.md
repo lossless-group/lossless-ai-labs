@@ -36,8 +36,9 @@ tags:
   - Route
   - Slide-Audit
   - Dididecks
-  - Calmstorm-Decks
 publish: true
+type: Sitemap
+date_first_published: 2026-05-10
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/data-assets-slides.md"
 ---

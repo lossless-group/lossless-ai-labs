@@ -4,7 +4,7 @@ lede: "Enumerates every (deck, variant) and 302s to slot 01 — unconditionally 
 artifact_kind: route
 ownership: shell
 mode: play-ui
-status: partial
+status: Partially-Shipped
 shell_version_introduced: 0.1.0-rc.0
 route_pattern: "/play/[deckSlug]/[variantSlug]/"
 emits_for: "every (deck, variant) in DECKS registry"
@@ -26,6 +26,8 @@ publish: true
 site_uuid: ae39fef9-e914-4e80-b1db-26f93af50e64
 hex_code: fol4vb
 date_authored_current_draft: 2026-05-12
+type: Sitemap
+date_first_published: 2026-05-12
 from: "dididecks-ai"
 from_path: "context-v/sitemap/routes/play-index.md"
 ---

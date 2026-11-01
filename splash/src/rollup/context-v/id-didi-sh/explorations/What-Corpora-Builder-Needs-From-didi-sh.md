@@ -8,10 +8,9 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 semantic_version: 0.0.0.1
-status: Open
+status: Draft
 tags:
   - Exploration
-  - Id-Didi-Sh
   - Corpora-Builder
   - Identity
   - Workspaces
@@ -21,6 +20,7 @@ hex_code: ywp7rx
 date_authored_initial_draft: 2026-08-08
 date_authored_current_draft: 2026-08-08
 publish: true
+type: Explorations
 from: "id-didi-sh"
 from_path: "context-v/explorations/What-Corpora-Builder-Needs-From-didi-sh.md"
 ---
