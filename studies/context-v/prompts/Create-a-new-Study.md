@@ -9,6 +9,7 @@ publish: true
 date_modified: 2026-08-18
 authors:
   - Michael Staton
+status: Active
 type: Prompts
 ---
 
