@@ -87,3 +87,7 @@
 [submodule "studies/adhd-and-executive-function-skills"]
 	path = studies/adhd-and-executive-function-skills
 	url = https://github.com/lossless-group/study-adhd-and-executive-function-skills.git
+[submodule "studies/collaborations/phoenixcapera/deck-v4"]
+	path = studies/collaborations/phoenixcapera/deck-v4
+	url = https://github.com/acpcareconnectdev-ui/deck-v-4-.git
+	branch = main
