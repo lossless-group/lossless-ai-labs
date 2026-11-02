@@ -122,6 +122,12 @@ interface UnionLoaderOpts {
   rollupDir: string;
 }
 
+/** A doc's first `# Heading` outside code fences, as plain text. */
+function firstHeading(body: string): string | undefined {
+  const match = body.replace(/^```[\s\S]*?^```/gm, '').match(/^# +(.+)$/m);
+  return match?.[1].replace(/`/g, '').trim();
+}
+
 function unionLoader(opts: UnionLoaderOpts) {
   return {
     name: `union-loader:${opts.collectionName}`,
@@ -146,6 +152,8 @@ function unionLoader(opts: UnionLoaderOpts) {
             // OKF folder indexes (ours and every rolled-up child's) are
             // navigation for agents, not pages.
             if (file.split('/').pop() === 'index.md') continue;
+            // Skills keep scraped pages under cache/. They're data, not docs.
+            if (file.split('/').includes('cache')) { skipped++; continue; }
             // context-v/extra/ is gitignored scratch. CI never sees it, but a
             // local build reads the disk, so skip it here rather than trust that.
             if (file.split('/')[0] === 'extra') { skipped++; continue; }
@@ -156,6 +164,8 @@ function unionLoader(opts: UnionLoaderOpts) {
 
             const merged = {
               ...data,
+              // Skill files have no `title` by design, so use their own heading.
+              title: data.title || firstHeading(body) || data.name,
               from: data.from ?? fallbackProvenance,
               from_path: data.from_path ?? file,
             };
