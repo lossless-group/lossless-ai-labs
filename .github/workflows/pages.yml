@@ -43,9 +43,7 @@ jobs:
           cache-dependency-path: splash/pnpm-lock.yaml
 
       - name: Install
-        # --ignore-workspace because the parent ai-labs/ workspace boundaries
-        # do not include the splash; the splash installs its own deps.
-        run: pnpm install --frozen-lockfile=false --ignore-workspace
+        run: pnpm install --frozen-lockfile=false
 
       - name: Build
         run: pnpm build
