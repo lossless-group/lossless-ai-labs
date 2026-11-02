@@ -1,5 +1,6 @@
 ---
 title: "The Moat Is Grounded Deliverable Production, Not Chat"
+type: Explorations
 lede: "Chat-over-documents is commoditizing; the moat is the last mile — a shippable deck or memo with every claim traceable to source."
 date_created: 2026-06-18
 date_modified: 2026-06-18
@@ -10,17 +11,14 @@ augmented_with:
 semantic_version: 0.0.0.2
 tags:
   - Exploration
-  - Augment-It
   - RAG
   - KAG
   - Grounded-Generation
   - Deliverable-Production
-  - Dididecks
-  - Memopop
   - Client-Product
-  - reach-edu
+  - Reach-Edu
   - Citations
-status: Active
+status: Draft
 site_uuid: 27cddadf-0c2f-4dc1-822e-70eb67591043
 hex_code: 59c8he
 date_authored_initial_draft: 2026-06-18

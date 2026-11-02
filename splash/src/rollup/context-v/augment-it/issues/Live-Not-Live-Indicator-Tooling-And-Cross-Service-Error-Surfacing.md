@@ -1,5 +1,6 @@
 ---
 title: "Live/not-live indicator tooling — parts of the UI feel dead, and there's no single view that says whether everything is actually working"
+type: Issues
 lede: "Five distinct failures — dead remote, dead socket, dead service, no refresh, unwired button — all present to the operator as one dead click."
 date_created: 2026-07-24
 date_modified: 2026-07-24
@@ -17,7 +18,7 @@ tags:
   - Liveness
   - Error-Surfacing
   - Shell
-status: Open · Jotted
+status: Open
 site_uuid: 6b25472d-3441-41d8-9d46-2b3a5e7461f5
 hex_code: bep4f8
 date_authored_initial_draft: 2026-07-24

@@ -1,5 +1,6 @@
 ---
 title: "Capability Gaps Surfaced by the First Triage Co-Pilot Run — One Collective Ledger, Not Five Tickets"
+type: Issues
 lede: "Five gaps from the first triage run — including direct SurrealDB writes whose string-typed ids silently failed to join their org rows."
 date_created: 2026-07-25
 date_modified: 2026-07-25
@@ -16,7 +17,7 @@ tags:
   - Capabilities
   - Corpus-Triage
   - SurrealDB
-status: Active
+status: Open
 site_uuid: a704f082-384b-4c55-9e9e-265c48e78c39
 hex_code: vdyn9p
 date_authored_initial_draft: 2026-07-25

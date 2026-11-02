@@ -1,5 +1,6 @@
 ---
 title: "Enhanced Records List — the Triage Checkpoint and the Promotion Loop"
+type: Specs
 lede: >-
   One record-grained view of a whole enrichment round: select the good rows, promote them to canonical, and the predecessors archive.
 date_created: 2026-05-22
@@ -11,9 +12,9 @@ augmented_with:
   - Claude Code on Claude Opus 4.7
 semantic_version: 0.0.0.2
 status: Shipped
+date_first_published: 2026-05-23
 tags:
   - Spec
-  - Augment-It
   - Enhanced-Records-List
   - Triage
   - Record-Identity

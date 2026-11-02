@@ -1,5 +1,6 @@
 ---
 title: "Tooltip System — A Versatile First-Class Family, Plus a Walkthrough for New and Returning Users"
+type: Specs
 lede: >-
   Apps fail at orientation, not functionality — so tooltips become a first-class family, not the browser's half-working `title=`.
 date_created: 2026-06-01
@@ -14,7 +15,6 @@ revisions:
   - "2026-06-01 — Sharpened by the user (0.0.0.2). Added: the **subcomponent family** (Tooltip--Simple, Tooltip--Rich, Tooltip--Popover) rather than one component; the **`from` directionality prop** with cardinal + diagonal placements and an arrow/triangle connector; the **`distance` rem prop** with a small default; and the **Tooltip-Walkthrough** surface for new- and returning-user orientation. Framing locked: apps succeed at onboarding/orientation, not at functionality."
 tags:
   - Spec
-  - Augment-It
   - Tooltip
   - Shell
   - Shared-UI

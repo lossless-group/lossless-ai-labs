@@ -1,5 +1,6 @@
 ---
 title: "Search-Results Queue — a right-rail microfrontend where concurrent agent searches land, signal, and get triaged"
+type: Specs
 lede: >-
   Agent searches run minutes; the operator shouldn't. Every search becomes a card in a persistent right rail — fire many, triage on arrival.
 date_created: 2026-07-24
@@ -18,7 +19,9 @@ tags:
   - Microfrontends
   - Concurrency
   - Workspace
-status: Implemented (Phases 1–3 shipped 2026-07-24; Phase 4 pending with #35)
+status: Partially-Shipped
+status_note: "Implemented (Phases 1–3 shipped 2026-07-24; Phase 4 pending with #35)"
+date_first_published: 2026-07-24
 site_uuid: fac82cac-f188-4c37-aff7-b5745deb3929
 hex_code: 391o4k
 date_authored_initial_draft: 2026-07-24

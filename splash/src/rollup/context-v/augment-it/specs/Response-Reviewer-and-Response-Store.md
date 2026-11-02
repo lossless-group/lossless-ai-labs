@@ -1,5 +1,6 @@
 ---
 title: "Response Reviewer and Response Store — the Post-Flight Surface"
+type: Specs
 lede: >-
   No review surface until a fired response is a first-class stored object — so response-store and response-reviewer are specced as one.
 date_created: 2026-05-22
@@ -14,13 +15,13 @@ revisions:
   - 2026-05-25 — Status swept to Shipped; response-store service + response-reviewer remote landed per changelog 2026-05-22_01..03.
 tags:
   - Spec
-  - Augment-It
   - Response-Reviewer
   - Response-Store
   - Post-Flight
   - Human-in-the-Loop
   - Module-Federation
 status: Shipped
+date_first_published: 2026-05-22
 site_uuid: f46fc57e-b0e9-4eb6-98e6-aebf7d3679f0
 hex_code: 6b20xg
 date_authored_initial_draft: 2026-05-25

@@ -1,5 +1,6 @@
 ---
 title: "Forced One-By-One Tag Selector — a pulse-dimension pattern for deliberate triage instead of lazy bulk-tick"
+type: Explorations
 lede: "Bulk checkboxes produce uniform half-considered tags. Present one tag at a time — apply / skip / skip-rest — and each decision gets made."
 date_created: 2026-06-16
 date_modified: 2026-06-16
@@ -19,6 +20,7 @@ tags:
   - Triage
   - UI-Component
   - Reusable-Pulse-Dimension
+status: Draft
 site_uuid: 12a562c5-68a2-4be2-beb8-7e5a292c48e7
 hex_code: m3m7vm
 date_authored_initial_draft: 2026-06-16

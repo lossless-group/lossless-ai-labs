@@ -1,5 +1,6 @@
 ---
 title: "Fix Env Aliasing That Drops PUBLIC_ Vars in the Developers Menu"
+type: Plans
 lede: >-
   Assigning import.meta.env to a variable defeats rsbuild's static replacement, so two production URLs quietly resolve to localhost.
 date_created: 2026-09-10
@@ -11,7 +12,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 at_semantic_version: 0.0.0.1
-status: Open
+status: Ready
 tags:
   - Plan
   - Augment-It

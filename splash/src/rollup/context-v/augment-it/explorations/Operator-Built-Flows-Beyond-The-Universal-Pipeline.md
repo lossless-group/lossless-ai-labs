@@ -1,5 +1,6 @@
 ---
 title: "Operator-built flows beyond the universal pipeline — the default augmentation path is a dud for most edge cases, and the cheaper-than-microfrontend escape is a view-spec the agent-chat composes from natural language and the UI renders generically"
+type: Explorations
 lede: "The default flow lands cleanly on 17 of 96 reach-edu records. The escape isn't a microfrontend per scenario — it's a generic spec-renderer."
 date_created: 2026-06-09
 date_modified: 2026-06-09
@@ -10,7 +11,6 @@ augmented_with:
 semantic_version: 0.0.0.1
 tags:
   - Exploration
-  - Augment-It
   - Records-Augmentation
   - Operator-Built-Flows
   - View-Specs

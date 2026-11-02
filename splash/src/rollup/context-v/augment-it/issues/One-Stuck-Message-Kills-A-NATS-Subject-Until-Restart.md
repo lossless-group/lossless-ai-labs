@@ -1,5 +1,6 @@
 ---
 title: "One stuck message kills a NATS subject until restart — `domain.list: timeout` and the sequential handler loop"
+type: Issues
 lede: "Every handler in `domains.ts` consumes its subject with a `for await` loop, so one unsettled request blocks the subject until a restart."
 date_created: 2026-08-08
 date_modified: 2026-08-08
@@ -16,7 +17,7 @@ tags:
   - Record-SurrealDB-Resolver
   - Resilience
   - Error-Handling
-status: Shipped
+status: Resolved
 site_uuid: f8fe524b-f991-4631-805e-7b2f045cdcc0
 hex_code: 11hve5
 date_authored_initial_draft: 2026-08-08

@@ -1,5 +1,6 @@
 ---
 title: "Switching flows from the Flows popdown doesn't surface the new flow's stage — a rotation-step click is required"
+type: Issues
 lede: "Switching flows flips the pill but leaves the stage blank until a step-bubble click. Only tabs with persisted layout state reproduce it."
 date_created: 2026-07-24
 date_modified: 2026-07-24
@@ -15,7 +16,7 @@ tags:
   - Shell
   - Flows
   - Tiling-Host
-status: Open · Jotted
+status: Open
 site_uuid: 1180b8b1-e2b3-4617-bf8f-fc80be21b1bb
 hex_code: ae44wb
 date_authored_initial_draft: 2026-07-24

@@ -1,5 +1,6 @@
 ---
 title: "Move the rest of the app to remote hosting — prod still falls back to localhost for every undeployed remote"
+type: Issues
 lede: "12 micro-frontends are hardcoded to `http://localhost:3XXX` in the prod shell, so augment.didi.sh fetches them from the visitor's machine."
 date_created: 2026-08-03
 date_modified: 2026-08-03
@@ -15,7 +16,8 @@ tags:
   - Deployment
   - Shell
   - Remote-Hosting
-status: Open · Diagnosed
+status: Open
+status_note: Open · Diagnosed
 site_uuid: a005d699-8629-437a-8a11-8f4ac8e04fe5
 hex_code: 8yeycg
 date_authored_initial_draft: 2026-08-03

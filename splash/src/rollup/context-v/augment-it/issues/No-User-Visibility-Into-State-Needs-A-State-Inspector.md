@@ -1,5 +1,6 @@
 ---
 title: "No user visibility into state — the app needs a State-Inspector surface"
+type: Issues
 lede: "State lives in five places and none are inspectable from inside the app — nothing shows which remote currently believes what."
 date_created: 2026-07-24
 date_modified: 2026-07-24
@@ -13,11 +14,10 @@ tags:
   - Issue
   - Oversight
   - Usability
-  - Augment-It
   - State-Inspector
   - Observability
   - Microfrontends
-status: Open · Jotted
+status: Open
 site_uuid: 52ff4460-797a-4d46-964b-74afd3176689
 hex_code: pk0w3a
 date_authored_initial_draft: 2026-07-24

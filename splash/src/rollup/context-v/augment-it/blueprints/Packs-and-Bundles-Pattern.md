@@ -1,5 +1,6 @@
 ---
 title: "Packs and Bundles — The Two-Tier Pattern for Entity-Profile Augmentation (and Beyond)"
+type: Blueprints
 lede: >-
   Two tiers: a pack is one source, one remote, one schema; a bundle is a named composition of packs fired by a single chat verb.
 date_created: 2026-05-25
@@ -15,7 +16,6 @@ revisions:
   - 2026-05-26 — Added §Triage Surface UX Requirements (emergent). Captures pattern-level requirements that the foundation-dataset smoke surfaced — discoveries the upfront draft didn't anticipate. Codified here so future pack/bundle implementations across the Lossless family inherit the discipline without re-hitting the same walls.
 tags:
   - Blueprint
-  - Augment-It
   - Packs-and-Bundles
   - MCP-Servers
   - Microfrontends
@@ -24,7 +24,7 @@ tags:
   - Profile-Augmentation
   - Response-Reviewer
   - Verification-Pattern
-status: Draft
+status: Reference
 site_uuid: 276d12c8-1a45-45a7-a742-6f330c540cd8
 hex_code: dn39ix
 date_authored_initial_draft: 2026-05-25

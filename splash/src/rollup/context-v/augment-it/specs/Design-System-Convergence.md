@@ -1,5 +1,6 @@
 ---
 title: "Design System Convergence — the organ registry, its five verdicts, and the fingerprint ledger that catches drift while it happens"
+type: Specs
 lede: "The registry is what makes drift legible: a declared organ is a decision, an undeclared one is drift. The code can be identical in both cases."
 date_created: 2026-09-13
 date_modified: 2026-09-13
@@ -11,7 +12,6 @@ semantic_version: 0.0.1.0
 status: Active
 tags:
   - Spec
-  - Augment-It
   - Design-System
   - Component-Library
   - Federation

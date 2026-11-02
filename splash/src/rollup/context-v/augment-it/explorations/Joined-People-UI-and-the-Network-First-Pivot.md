@@ -1,5 +1,6 @@
 ---
 title: "Joined People UI and the Network-First Pivot — augment-it's sibling-flow to org-first augmentation, and the canonical/proprietary layer split underneath it"
+type: Explorations
 lede: "Org-first and people-first are two pivots on one join — and the split that matters is canonical (shareable) vs proprietary (client-only)."
 date_created: 2026-06-15
 date_modified: 2026-06-15
@@ -15,7 +16,6 @@ revisions:
   - 2026-06-15 — Initial draft. Captures the network-first pivot, the joined-UI three-thing requirement (filter / tag / rank), and an open-questions list (storage scope, tag vocabulary, corpus-type status of the LinkedIn pipeline, table-first vs tag-editor-first slicing).
 tags:
   - Exploration
-  - Augment-It
   - Network-First
   - Org-People-Join
   - Canonical-Vs-Proprietary

@@ -1,5 +1,6 @@
 ---
 title: "Build Selector and close the keyboard contract"
+type: Plans
 lede: "Nine surfaces declare a keyboard widget. Zero implement one. This is the first component whose whole substance is behaviour, so it is the first one with real tests."
 date_created: 2026-09-14
 date_modified: 2026-09-14
@@ -8,7 +9,8 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 semantic_version: 0.0.1.0
-status: Active
+status: Shipped
+date_first_published: 2026-09-14
 tags:
   - Plan
   - Augment-It

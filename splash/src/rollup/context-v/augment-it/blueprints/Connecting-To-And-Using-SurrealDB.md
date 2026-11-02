@@ -1,5 +1,6 @@
 ---
 title: "Connecting To And Using SurrealDB"
+type: Blueprints
 lede: "The one place that codifies how augment-it talks to SurrealDB Cloud — the five env vars, the connect → signin → use dance, the client-tagging write contract, and the dev-only-credentials posture that a proxy service eventually replaces."
 date_created: 2026-06-21
 date_modified: 2026-06-21
@@ -17,7 +18,7 @@ tags:
   - Multi-Client
   - Module-Federation
   - Person-Enrichment
-status: Draft
+status: Reference
 site_uuid: b83c9250-18f1-4ffc-9715-48d82b4bfe56
 hex_code: 7vqdeg
 date_authored_initial_draft: 2026-06-21

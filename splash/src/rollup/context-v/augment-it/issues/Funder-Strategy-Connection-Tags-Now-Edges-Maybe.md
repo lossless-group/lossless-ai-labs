@@ -1,5 +1,6 @@
 ---
 title: "Funder↔strategy is tags for now — whether it deserves a real edge is deferred"
+type: Issues
 lede: "140 strategy tags landed on 69 funders, but a tag can't carry evidence counts, gift sizes, or recency. The edge question comes due later."
 date_created: 2026-07-28
 date_modified: 2026-07-28
@@ -14,7 +15,8 @@ tags:
   - Data-Modeling
   - Strategies
   - Funders
-status: Active
+status: Deferred
+deferral_note: "Not now, per operator ruling (\"let's not worry about the deeper design question\"). The observation-log design means tags today don't preclude edges later; the mega-gifts CSV (amounts included) remains the backfill source whenever this comes due."
 site_uuid: a5aa838c-8991-424d-bdb5-91838d0baaf1
 hex_code: nhhx09
 date_authored_initial_draft: 2026-07-28

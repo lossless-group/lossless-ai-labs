@@ -1,5 +1,6 @@
 ---
 title: "Augment from DB — the Org Workbench + Search-and-Add flow: two new microfrontends over capabilities that mostly exist"
+type: Specs
 lede: >-
   Start from a canonical org, not a CSV row: an org workbench over links, streams, corpus and people, plus provider-pluggable search-and-add.
 date_created: 2026-07-22
@@ -22,7 +23,6 @@ revisions:
   - "2026-07-22 — v0.0.0.1: initial draft from the exploration of record, grounded in a same-day code read (flows registry, capability dispatcher, resolver handlers, connector registry). Six exploration open questions locked as decisions D1–D6."
 tags:
   - Spec
-  - Augment-It
   - Augment-From-DB
   - Org-Workbench
   - Search-And-Add

@@ -1,5 +1,6 @@
 ---
 title: "Build the Shell Tiling & Peek-Deck — Window the Federated Frontends"
+type: Prompts
 lede: >-
   The shell stops being a tab switcher: a peek-deck at 90% width with neighbours peeking, plus a two-remote split with a draggable seam.
 date_created: 2026-05-21
@@ -11,7 +12,6 @@ augmented_with:
 semantic_version: 0.0.0.1
 tags:
   - Prompt
-  - Augment-It
   - Shell
   - Module-Federation
   - Window-Tiling
@@ -20,7 +20,8 @@ tags:
   - Layout-State
   - User-Preferences
   - Single-Record-Enrichment
-status: Draft
+status: Shipped
+date_first_published: 2026-05-21
 site_uuid: 2d5b8a91-62f5-45dc-85bd-883b8e83329a
 hex_code: q61qku
 date_authored_initial_draft: 2026-05-21

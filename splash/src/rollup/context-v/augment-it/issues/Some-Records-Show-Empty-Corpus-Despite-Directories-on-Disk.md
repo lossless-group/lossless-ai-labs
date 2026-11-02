@@ -1,5 +1,6 @@
 ---
 title: "Some records show empty corpus in the Sort & Filter Lens despite per-funder directories existing on disk — the lineage join is healthy but the workspace-service capability has no timeout override (defaults to 5000ms), the content-ingest handler processes requests serially, and each call walks every funder directory under clients/<id>/corpus/, so late requests in the 96-row fan-out time out and the lens swallows the error silently; the durable fix is to make corpus_funder_slug (a column the records sheet already populates) the primary join key, which limits each call to one small directory and dissolves the timeout race — this supersedes the originally-proposed corpus-overrides.yaml because the override surface is now the records-sheet cell"
+type: Issues
 lede: "No `CAPABILITY_TIMEOUTS_MS` entry for `corpus.list_for_record` — 96 parallel calls hit the 5000ms default and the lens swallows the error."
 date_created: 2026-06-10
 date_modified: 2026-06-10
@@ -13,7 +14,6 @@ revisions:
   - "2026-06-10 (follow-on session) — Hard-refresh resolved the original four but exposed three more (hewlett / howard-schultz / kellogg). Second NATS probe confirmed backend is healthy for those too. Root cause identified: workspace capability timeout defaults to 5000ms + serial handler + per-request walk of every funder directory → late requests in the 96-row fan-out time out. Audit of corpus dir: 301 files total, 36 already stamped with record_uuid, 201 unstamped but resolvable (script `scripts/backfill-corpus-record-uuid.mjs` built this session), 0 stale-uuid conflicts, 64 null-record_id files (all in inbox/). Operator proposed using the existing `corpus_funder_slug` column as the primary join key — that change dissolves the timeout race AND makes the originally-proposed corpus-overrides.yaml unnecessary because the override surface is already a records-sheet column the operator edits."
 tags:
   - Issue
-  - Augment-It
   - Corpus
   - Lens
   - Sort-Filter-Lens
@@ -21,7 +21,8 @@ tags:
   - Slug-Join
   - Workspace-Timeout
   - Defense-In-Depth
-status: Open · Real Root Cause Identified (Workspace Timeout + Serial Handler + Walks-All-Dirs) · corpus_funder_slug Join Strategy Supersedes corpus-overrides.yaml · Fix In Progress
+status: Resolved
+status_note: Open · Real Root Cause Identified (Workspace Timeout + Serial Handler + Walks-All-Dirs) · corpus_funder_slug Join Strategy Supersedes corpus-overrides.yaml · Fix In Progress
 site_uuid: d399a7a6-d4e4-4fe6-9c6d-fe9b406fc145
 hex_code: m1mdv1
 date_authored_initial_draft: 2026-06-10

@@ -1,5 +1,6 @@
 ---
 title: "Augment from Affiliations — the first flow that starts from SurrealDB instead of a CSV, turning an event's speaker/org pairs into a rated, sourced prospect list"
+type: Specs
 lede: >-
   The first flow that starts in the canonical layer, not a CSV: export an event's affiliations, rate relevance offline, reimport.
 date_created: 2026-07-07
@@ -19,7 +20,6 @@ revisions:
 status: Shipped
 tags:
   - Spec
-  - Augment-It
   - Affiliations
   - Canonical-Layer
   - Relevance-Rating

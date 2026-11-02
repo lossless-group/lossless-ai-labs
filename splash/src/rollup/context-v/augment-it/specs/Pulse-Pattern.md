@@ -1,5 +1,6 @@
 ---
 title: "Pulse pattern — one operator burst against one entity, expressed as N independent pulse-dimensions composed in a pulse-surface, each dimension potentially owning its own microservice"
+type: Specs
 lede: >-
   Operators enrich in bursts, not steps: one search fills name, socials, emails, and org, and a pulse-surface commits all of it in one save.
 date_created: 2026-06-15
@@ -15,7 +16,6 @@ status: Shipped
 post_ship_note: "Shipped 2026-06-16 inside apps/person-enrichment (changelog 2026-06-16_01: 'Person-Enrichment-Surface-Ships-Pulse-Pattern'); the pulse-dimension components live in apps/person-enrichment/src/pulse-dimensions/ and gained many-per-person affiliations + org autocomplete 2026-06-17. Reuse on a second pulse-surface (org-workbench) is proposed in the Augment-From-DB exploration."
 tags:
   - Spec
-  - Augment-It
   - Pulse-Pattern
   - Pulse-Dimension
   - Pulse-Surface

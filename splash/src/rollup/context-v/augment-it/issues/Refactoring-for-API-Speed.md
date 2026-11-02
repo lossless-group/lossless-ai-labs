@@ -1,5 +1,6 @@
 ---
 title: "Refactoring for API Speed — a single-user app should boot in milliseconds, not a minute"
+type: Issues
 lede: "Measured: shell mount to workspaces ready is ~543ms. The perceived minute was a stale deploy plus remotes hanging on `localhost:3XXX`."
 date_created: 2026-08-02
 date_modified: 2026-08-02
@@ -15,7 +16,8 @@ tags:
   - Architecture
   - Refactor
   - Boot-Latency
-status: Open · Diagnosed · Refactor Backlog
+status: Open
+status_note: Open · Diagnosed · Refactor Backlog
 site_uuid: f4909703-caf5-4b1d-96f5-ce78be3f9eba
 hex_code: wemu7u
 date_authored_initial_draft: 2026-08-02

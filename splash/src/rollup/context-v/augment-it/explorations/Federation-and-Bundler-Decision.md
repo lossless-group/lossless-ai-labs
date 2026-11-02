@@ -1,5 +1,6 @@
 ---
 title: "Federation and Bundler Decision — Bun + Rsbuild + Module Federation, Workspace State, Optional Chat"
+type: Explorations
 lede: "We federate: Module Federation on rsbuild, bun over turbo, and state of truth in `@augment-it/workspace` — chat is just one consumer."
 date_created: 2026-05-18
 date_modified: 2026-05-25
@@ -11,7 +12,6 @@ augmented_with:
 semantic_version: 0.0.1.0
 tags:
   - Exploration
-  - Augment-It
   - Module-Federation
   - Rsbuild
   - Bun

@@ -1,5 +1,6 @@
 ---
 title: "Prompt-Template-Manager — Walking Skeleton Plan"
+type: Plans
 lede: >-
   Author `{{column}}` templates and run them per row — `prompt-runner` is the only container that calls the Anthropic API.
 date_created: 2026-05-21
@@ -14,7 +15,6 @@ revisions:
   - 2026-05-25 — Status swept to Shipped; prompt-template-manager UI + prompt-store + prompt-runner landed per changelog 2026-05-21_04..05.
 tags:
   - Plan
-  - Augment-It
   - Prompt-Template-Manager
   - Prompt-Runner
   - Prompt-Store
@@ -24,6 +24,7 @@ tags:
   - Module-Federation
   - Anthropic-API
 status: Shipped
+date_first_published: 2026-05-21
 site_uuid: a724b530-d1b5-4845-94f7-41aff5c97bf2
 hex_code: 9r21lc
 date_authored_initial_draft: 2026-05-25

@@ -1,5 +1,6 @@
 ---
 title: "Test coverage — pick the harness, seed the suite from the prove-scripts, and loop the open bugs to green"
+type: Plans
 lede: "Vitest + Playwright for this repo, ExUnit already standing in id-didi-sh — convert the six prove-scripts into a permanent suite, then write the humain-vc corpora bugs as failing tests and iterate until they pass."
 date_created: 2026-07-30
 date_modified: 2026-07-30
@@ -8,10 +9,10 @@ authors:
 augmented_with:
   - Claude Code on Claude Fable 5
 semantic_version: 0.0.0.1
-status: Draft
+status: Partially-Shipped
+date_first_published: 2026-07-30
 tags:
   - Plan
-  - Augment-It
   - Testing
   - TDD
   - Agentic-Development

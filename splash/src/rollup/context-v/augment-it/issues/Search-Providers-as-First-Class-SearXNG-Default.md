@@ -1,5 +1,6 @@
 ---
 title: "Search Providers as First-Class — Stand Up SearXNG as the New Default for Social Packs; Tavily Stays as a Peer; Per-Row Iteration as the Workflow We're Building Toward"
+type: Issues
 lede: "Tavily is a content-RAG index — wrong substrate for social-profile pages. The fix isn't a swap — it's making provider plural per-fire."
 date_created: 2026-05-26
 date_modified: 2026-07-21
@@ -25,7 +26,8 @@ tags:
   - Provider-Plurality
   - Iteration-Loop
   - Social-Search
-status: Resolved · Provider Plurality Shipped 2026-06-01 · Registry 2026-06-02 · Smoke Metric + Blueprint Skipped
+status: Resolved
+status_note: Resolved · Provider Plurality Shipped 2026-06-01 · Registry 2026-06-02 · Smoke Metric + Blueprint Skipped
 site_uuid: 4e75401b-b169-4757-9395-bee3567bd922
 hex_code: ywq1cg
 date_authored_initial_draft: 2026-05-26

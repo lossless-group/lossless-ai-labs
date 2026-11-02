@@ -1,5 +1,6 @@
 ---
 title: "Run-as-First-Class-Operation — Pair Pack-Runner with Prompt-Template-Manager, Make Runs Legible Across the Pipeline"
+type: Plans
 lede: >-
   Lift `Run` from a string id buried on each response into a real entity, so any surface can see which batch produced what it's showing.
 date_created: 2026-05-25
@@ -23,7 +24,8 @@ tags:
   - Job-Manifest
   - Co-Existence-Pairing
   - Architecture
-status: Draft
+status: Partially-Shipped
+date_first_published: 2026-05-25
 site_uuid: 2fa5f400-1e7b-4c85-a38a-62a9fdf1390f
 hex_code: ocki8w
 date_authored_initial_draft: 2026-05-25

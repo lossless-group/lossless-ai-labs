@@ -1,5 +1,6 @@
 ---
 title: "Strategy Curator — An Entry-Point App for augment-it"
+type: Specs
 lede: >-
   A canonical source registry in SurrealDB owns identity, the client's filesystem owns usage, and a shared UUID is the only bond.
 date_created: 2026-06-29
@@ -15,7 +16,6 @@ status: Shipped
 post_ship_note: "First slice (source surface) shipped 2026-06-29; the Build-Corpora front door landed 2026-07-06; live in the shell at :3017 as 'Corpora Curator' and deployed with the Railway cut of 2026-07-09."
 tags:
   - Spec
-  - Augment-It
   - Strategy-Curator
   - Source-Curation
   - Microfrontend

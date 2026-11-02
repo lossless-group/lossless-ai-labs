@@ -1,5 +1,6 @@
 ---
 title: "Plan stub: ingest the next reach-edu event CSV into the canonical layer"
+type: Plans
 lede: "The mechanism already exists and is proven twice over (turning-jobs, FreedomFest) — this is the sequence to run the moment the next event CSV lands, so it's 'follow the stub' instead of 're-derive the pipeline.'"
 date_created: 2026-07-17
 date_modified: 2026-07-17
@@ -8,12 +9,11 @@ authors:
 augmented_with:
   - Claude Code on Claude Sonnet 5
 semantic_version: 0.0.0.1
-status: Draft
+status: Ready
 tags:
   - Plan
-  - Stub
   - Augment-It
-  - reach-edu
+  - Reach-Edu
   - SurrealDB
   - Person-Org-Resolver
 site_uuid: 9ab8a5d8-903e-4a27-bd81-21af9ebf88b9

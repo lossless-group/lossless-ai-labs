@@ -1,5 +1,6 @@
 ---
 title: "Inbox Sort by Agent Tasks — moving the inbox from a flat 86-item pending queue into a task-typed work surface where the operator sees what's next and the agent does the safe parts automatically"
+type: Explorations
 lede: "86 pending inbox files render identically, so the operator context-switches between four task types on every scroll."
 date_created: 2026-06-11
 date_modified: 2026-06-11
@@ -20,7 +21,7 @@ tags:
   - Confidence-Bands
   - Frontmatter
   - Living-Roster
-status: Active
+status: Draft
 
 related_skills:
   - lossless-flavored-markdown

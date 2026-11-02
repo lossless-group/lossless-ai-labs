@@ -1,5 +1,6 @@
 ---
 title: "Concurrent agent searches queue into a search-results column — fire many, deal with them as they come"
+type: Issues
 lede: "Agent searches run 60–210s and each one hijacks a single column. Wanted: a rightmost queue where every fired search appends its own card."
 date_created: 2026-07-24
 date_modified: 2026-08-02
@@ -16,7 +17,8 @@ tags:
   - Search-And-Add
   - Microfrontends
   - Concurrency
-status: Resolved · Shipped 2026-07-24 via the queue rail (search-results remote :3018) · Live per-card progress frames + chat/manual-search doors deferred to #35
+status: Resolved
+status_note: "Resolved · Shipped 2026-07-24 via the queue rail (search-results remote :3018) · Live per-card progress frames + chat/manual-search doors deferred to #35"
 site_uuid: 2c343ac3-ee06-42ec-b49f-3099b92f8b96
 hex_code: 1w5ub7
 date_authored_initial_draft: 2026-07-24

@@ -1,5 +1,6 @@
 ---
 title: "Run /speckit-specify — Workspace + Sidecar Foundation (Feature 001)"
+type: Prompts
 lede: >-
   The workspace package and bun sidecar, plus exactly one capability — `records.import` — end to end to prove the pipe. No federation yet.
 date_created: 2026-05-18
@@ -13,10 +14,9 @@ tags:
   - Prompt
   - Spec-Kit
   - Specify
-  - Augment-It
   - Walking-Skeleton
   - First-Feature
-status: Draft
+status: Stale
 site_uuid: ce5d13fa-ea32-4bf5-bc0c-2eb0a2f167d7
 hex_code: gpvh2t
 date_authored_initial_draft: 2026-05-18

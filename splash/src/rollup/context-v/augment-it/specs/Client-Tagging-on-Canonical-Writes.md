@@ -1,5 +1,6 @@
 ---
 title: "Client tagging on canonical writes — every observation carries the client that produced it, and every canonical entity carries the materialized set of clients that can see it"
+type: Specs
 lede: >-
   The canonical layer is cross-client by design — a materialized `client_access` array is how each workspace still sees only its own.
 date_created: 2026-06-15
@@ -9,7 +10,8 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 4.7 (1M context)
 semantic_version: 0.0.0.1
-status: Draft
+status: Shipped
+date_first_published: 2026-06-15
 tags:
   - Spec
   - Augment-It

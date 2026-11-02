@@ -1,5 +1,6 @@
 ---
 title: "Record-Set Family Grouping — internal lineage vs. external-variant families in the Record Collector sidebar"
+type: Specs
 lede: >-
   The sidebar shows a tracker uploaded as v4–v8 as five unrelated CSVs. Two family kinds — promotion lineage and external variant — fix that.
 date_created: 2026-06-05
@@ -9,10 +10,10 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 4.7
 semantic_version: 0.0.0.1
-status: Draft
+status: Shipped
+date_first_published: 2026-06-05
 tags:
   - Spec
-  - Augment-It
   - Record-Collector
   - Record-Set
   - Lineage

@@ -1,5 +1,6 @@
 ---
 title: "Entity-Card Edit & Remove Affordances — every visible property gets a micro-button pair"
+type: Specs
 lede: "The org card views and edits in place, but only additively — a misclicked ➕ today required a direct database write to undo. Every entry and identity property the card shows grows ✎ and × micro-buttons."
 date_created: 2026-07-24
 date_modified: 2026-07-24
@@ -10,11 +11,12 @@ augmented_with:
 semantic_version: 0.0.1.0
 tags:
   - Spec
-  - Augment-It
   - Org-Workbench
   - Workspace
   - Canonical-Layer
-status: Implemented (shipped 2026-07-24)
+status: Shipped
+status_note: "Implemented (shipped 2026-07-24)"
+date_first_published: 2026-07-24
 site_uuid: be6c36d7-edf5-44b6-93f2-5de33db8f5a3
 hex_code: v12fb2
 date_authored_initial_draft: 2026-07-24

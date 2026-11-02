@@ -1,5 +1,6 @@
 ---
 title: "Corpora Builder Harmony — the evolving test registry"
+type: Specs
 lede: "Every proposed and implemented test guarding the corpora builder and the systems it must harmonize with — identity, workspace connector, transport, state, canonical layer, files — in human language, MECE, one ✓-phrase each."
 date_created: 2026-07-30
 date_modified: 2026-08-01
@@ -9,10 +10,11 @@ augmented_with:
   - Claude Code on Claude Fable 5
   - Claude Code on Claude Opus 4.8
 semantic_version: 0.0.0.4
-status: Implemented · All 10 Groups Landed
+status: Shipped
+status_note: "Implemented · All 10 Groups Landed"
+date_first_published: 2026-08-01
 tags:
   - Spec
-  - Augment-It
   - Testing
   - Corpora-Builder
   - Workspace-Auth

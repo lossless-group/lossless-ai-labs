@@ -1,5 +1,6 @@
 ---
 title: "Relation kinds are inverse pairs — one stored string can't speak from both seats"
+type: Issues
 lede: "NextLadder is funded_by Ballmer Group; Ballmer Group is funder_of NextLadder — the same edge needs a different kind string per perspective, and today only one pair is special-cased in a read-time map."
 date_created: 2026-07-28
 date_modified: 2026-07-28
@@ -13,7 +14,7 @@ tags:
   - Augment-It
   - Org-Relations
   - Data-Modeling
-status: Active
+status: Open
 site_uuid: 2697e117-3a10-4832-a576-6693c51b3adc
 hex_code: wj23wc
 date_authored_initial_draft: 2026-07-28

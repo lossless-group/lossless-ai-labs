@@ -1,5 +1,6 @@
 ---
 title: "The Gap Between What We Preach and What We Practiced"
+type: Explorations
 lede: "Forty deployable units, one git repo, zero component-level design systems or changelogs. An honest audit of augment-it against the three recommendations we make to clients."
 date_created: 2026-09-12
 date_modified: 2026-09-12
@@ -10,7 +11,6 @@ augmented_with:
 semantic_version: 0.0.1.0
 tags:
   - Exploration
-  - Augment-It
   - Methodology
   - Context-Over-Code
   - Extreme-Monorepo
@@ -20,7 +20,7 @@ tags:
   - Changelog-First
   - Self-Audit
   - Client-Recommendations
-status: Active
+status: Reference
 site_uuid: f842fe54-7a2d-413f-bde6-5b4ee86fc934
 hex_code: ucorp7
 date_authored_initial_draft: 2026-09-12

@@ -1,5 +1,6 @@
 ---
 title: "Canonical Entity Registry on SurrealDB Cloud — just write records"
+type: Plans
 lede: "SurrealDB Cloud is up at main/main with three SCHEMALESS tables (persons, organizations, affiliations). Goal: write records from tonight's CSV+JSONL into those tables. SCHEMALESS stays. No field discipline up front."
 date_created: 2026-06-15
 date_modified: 2026-06-15
@@ -16,7 +17,8 @@ tags:
   - Augment-It
   - SurrealDB
   - Canonical-Layer
-status: Draft
+status: Shipped
+date_first_published: 2026-06-15
 site_uuid: 82371c70-3f6a-460f-b87a-b9fa4c677dab
 hex_code: q997wb
 date_authored_initial_draft: 2026-06-15

@@ -1,5 +1,6 @@
 ---
 title: "Response Reviewer — Structured-Output Extension (Packs-and-Bundles Foundation)"
+type: Prompts
 lede: >-
   Build the surface every pack lands on — candidate cards, confidence pills, outcome enum — against mock fixtures. Zero packs ship here.
 date_created: 2026-05-25
@@ -18,7 +19,8 @@ tags:
   - Structured-Output
   - Confidence-Pill
   - Theme-System
-status: Draft
+status: Shipped
+date_first_published: 2026-05-25
 site_uuid: 46b1d5c3-22f0-4470-99f2-e485486bc66f
 hex_code: kgxk0f
 date_authored_initial_draft: 2026-05-25

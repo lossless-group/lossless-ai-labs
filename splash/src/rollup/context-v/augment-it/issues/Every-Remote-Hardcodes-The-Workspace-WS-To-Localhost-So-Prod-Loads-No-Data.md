@@ -1,5 +1,6 @@
 ---
 title: "Every remote hardcodes the workspace WebSocket to localhost — Org Workbench loads no data on augment.didi.sh"
+type: Issues
 lede: "Sixteen remotes dial `ws://localhost:3001/ws` with no env read. On prod that points at the visitor's own laptop, so the socket shows `closed` and the roster never fills."
 date_created: 2026-08-21
 date_modified: 2026-08-21
@@ -17,7 +18,8 @@ tags:
   - WebSocket
   - Reach-Edu
   - Module-Federation
-status: Open · Diagnosed · Root cause pinned to a one-line source defect
+status: Resolved
+status_note: Open · Diagnosed · Root cause pinned to a one-line source defect
 site_uuid: c85ae72b-182a-4d7a-b8b7-ac47e8ffb3de
 hex_code: 3jweyu
 date_authored_initial_draft: 2026-08-21

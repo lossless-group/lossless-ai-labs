@@ -1,5 +1,6 @@
 ---
 title: "Why Response Reviewer and Highlight Collector Exist — The Verbose-Prose-to-Tabular Bridge"
+type: Blueprints
 lede: >-
   CRM cells are terse and LLM answers are prose; no structured-output regime removes the human integrity check that bridges them.
 date_created: 2026-05-18
@@ -11,14 +12,13 @@ augmented_with:
 semantic_version: 0.0.0.1
 tags:
   - Blueprint
-  - Augment-It
   - Pipeline-Design-Rationale
   - LLM-Output
   - Human-in-the-Loop
   - Tabular-Data
   - Response-Reviewer
   - Highlight-Collector
-status: Draft
+status: Reference
 site_uuid: 71dcc42a-f947-4cf5-839a-4f35c39ab6e1
 hex_code: u2xx6c
 date_authored_initial_draft: 2026-05-18

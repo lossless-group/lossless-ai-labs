@@ -1,5 +1,6 @@
 ---
 title: "Tidy every consumer onto the shared primitives"
+type: Plans
 lede: "Button is done across nineteen units. This sequences what is left: Chip everywhere, the stale annotations, and the three containment jobs that are not component work at all."
 date_created: 2026-09-13
 date_modified: 2026-09-13
@@ -8,7 +9,8 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 semantic_version: 0.0.1.0
-status: Active
+status: Partially-Shipped
+date_first_published: 2026-09-13
 tags:
   - Plan
   - Augment-It

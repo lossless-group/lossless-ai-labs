@@ -1,5 +1,6 @@
 ---
 title: "Setting up a micro-frontend with the monorepo configurations it actually needs"
+type: Patterns
 lede: "Three live remotes shipped without a registry row and were invisible to every check for months. This is the list that prevents the next one."
 date_created: 2026-09-13
 date_modified: 2026-09-13
@@ -11,7 +12,6 @@ semantic_version: 0.0.1.0
 status: Active
 tags:
   - Pattern
-  - Augment-It
   - Microfrontends
   - Design-System
   - Module-Federation

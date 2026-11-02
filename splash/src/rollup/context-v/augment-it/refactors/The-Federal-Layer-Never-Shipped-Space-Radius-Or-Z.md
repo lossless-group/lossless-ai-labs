@@ -1,5 +1,6 @@
 ---
 title: "The federal layer never shipped --space-*, --radius-* or --z-* — so ten members invented token names and let the fallback carry the value"
+type: Refactors
 lede: "170 declarations across the federation reference tokens that do not exist. Each one silently ships its literal in all three modes."
 date_created: 2026-09-13
 date_modified: 2026-09-13
@@ -8,10 +9,10 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 semantic_version: 0.0.1.0
-status: Proposed
+status: Shipped
+date_first_published: 2026-09-13
 tags:
   - Refactor
-  - Augment-It
   - Design-System
   - Tokens
   - Federation

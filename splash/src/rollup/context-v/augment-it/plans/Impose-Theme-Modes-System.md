@@ -1,5 +1,6 @@
 ---
 title: "Impose the Three-Mode Theme System on augment-it"
+type: Plans
 lede: >-
   The two-tier tokens and light/dark/vibrant contract adapted to a federated, Tailwind-less app: one shared `packages/theme`, no raw hex.
 date_created: 2026-05-21
@@ -14,7 +15,6 @@ revisions:
   - 2026-05-25 — Status swept to Shipped; three-mode theme system landed per changelog 2026-05-21_06.
 tags:
   - Plan
-  - Augment-It
   - Theme-System
   - Three-Mode-Contract
   - Two-Tier-Tokens
@@ -23,6 +23,7 @@ tags:
   - Module-Federation
   - Mode-Switcher
 status: Shipped
+date_first_published: 2026-05-21
 site_uuid: 85923a4d-817e-4859-8d66-4a9d32c053fb
 hex_code: t5p2ru
 date_authored_initial_draft: 2026-05-25

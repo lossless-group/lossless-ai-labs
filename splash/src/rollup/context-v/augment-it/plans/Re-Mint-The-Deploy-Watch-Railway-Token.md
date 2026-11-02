@@ -1,5 +1,6 @@
 ---
 title: "Re-Mint the Deploy-Watch Railway Token — the watchdog has been blind for days"
+type: Plans
 lede: >-
   The watchdog built so a failed deploy would not go unnoticed for twelve days has never once run green itself.
 date_created: 2026-09-10
@@ -19,7 +20,6 @@ post_ship_note: >-
   never checks out. GH_REPO on both gh steps closed it. First green run ever.
 tags:
   - Plan
-  - Augment-It
   - Railway
   - Observability
   - CI

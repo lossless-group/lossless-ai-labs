@@ -1,5 +1,6 @@
 ---
 title: "Issue: Person · DB Resolver UI needs to accommodate multiple organizations per person"
+type: Issues
 lede: "`person-db-resolver` resolves one org per row, but Lincoln Ellis's bio names four — no way to add an Nth without re-running the row."
 date_created: 2026-07-17
 date_modified: 2026-07-17
@@ -8,7 +9,8 @@ authors:
 augmented_with:
   - Claude Code on Claude Sonnet 5
 semantic_version: 0.0.0.1
-status: Open · Stub
+status: Open
+status_note: Open · Stub
 tags:
   - Issue
   - Augment-It

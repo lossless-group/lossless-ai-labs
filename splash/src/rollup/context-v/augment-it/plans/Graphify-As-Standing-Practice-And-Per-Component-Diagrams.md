@@ -1,5 +1,6 @@
 ---
 title: "Graphify as Standing Practice and Per-Component Diagrams — Visual Engineering That Doesn't Go Stale"
+type: Plans
 lede: "The graph ran once, on 2026-08-06, and still names an app that was renamed two days later. Turning a snapshot into an instrument, and giving each unit its own picture."
 date_created: 2026-09-12
 date_modified: 2026-09-12
@@ -10,7 +11,6 @@ augmented_with:
 semantic_version: 0.0.1.0
 tags:
   - Plan
-  - Augment-It
   - Visual-Engineering
   - Graphify
   - Knowledge-Graph
@@ -18,7 +18,8 @@ tags:
   - Mermaid
   - Documentation-First
   - Client-Recommendations
-status: Proposed
+status: Partially-Shipped
+date_first_published: 2026-09-13
 site_uuid: 34b59262-dc9c-4d98-ac9c-76a5c333e3ec
 hex_code: jhr8iv
 date_authored_initial_draft: 2026-09-12

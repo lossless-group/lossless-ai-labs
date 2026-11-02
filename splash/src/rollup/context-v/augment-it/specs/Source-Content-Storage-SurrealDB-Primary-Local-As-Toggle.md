@@ -1,5 +1,6 @@
 ---
 title: "Source Content Storage — SurrealDB-Primary, Local as a Per-User Toggle"
+type: Specs
 lede: >-
   Flip the content store: the article body moves onto the canonical `sources` row and the local filesystem write demotes to a toggle.
 date_created: 2026-08-02
@@ -9,10 +10,10 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 4.8
 semantic_version: 0.0.0.2
-status: Draft — Forks A/B/C Decided; Migration + Collaboration Transport Open
+status: Draft
+status_note: "Draft — Forks A/B/C Decided; Migration + Collaboration Transport Open"
 tags:
   - Spec
-  - Augment-It
   - Content-Ingest
   - SurrealDB
   - Storage

@@ -1,5 +1,6 @@
 ---
 title: "Prove the component API end-to-end on request-reviewer — ship the scales, build Button, migrate one member, and verify by measurement"
+type: Plans
 lede: "If this loop closes once it closes eighteen more times. One member, nine buttons, and a measurable accessibility delta."
 date_created: 2026-09-13
 date_modified: 2026-09-13
@@ -8,7 +9,8 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 semantic_version: 0.0.1.0
-status: Ready-For-Handoff
+status: Shipped
+date_first_published: 2026-09-13
 tags:
   - Plan
   - Augment-It

@@ -1,5 +1,6 @@
 ---
 title: "Adopt CardRow and a SelectWrapper in one member"
+type: Loops
 lede: "The pilot executor. Three members answer the open decisions with evidence; everything mechanical is inherited from the Button loop."
 date_created: 2026-09-13
 date_modified: 2026-09-13
@@ -8,7 +9,7 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 semantic_version: 0.0.1.0
-status: Untested
+status: Active
 tags:
   - Loop
   - Augment-It

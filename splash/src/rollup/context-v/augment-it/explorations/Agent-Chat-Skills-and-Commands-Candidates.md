@@ -1,5 +1,6 @@
 ---
 title: "Agent-Chat Skills and Commands — Candidates List"
+type: Explorations
 lede: "The chat's verb roster is four prompt-focused capabilities. A running list of shell scripts that should graduate into chat-callable verbs."
 date_created: 2026-05-26
 date_modified: 2026-05-26
@@ -12,7 +13,6 @@ revisions:
   - 2026-05-26 — Initial draft. Seeded with `backup-stores.sh` (the nominating commit), the cleanup script `scrap-pack-artifacts.ts` (already exists as a ScriptCapability candidate), and a broader brainstorm across five categories — data safety, inspection, enrichment flow, record-set lifecycle, triage assist. Categories are scaffolding; promote individual items out as specs land.
 tags:
   - Exploration
-  - Augment-It
   - Agent-Chat
   - Capabilities
   - Verb-Surface

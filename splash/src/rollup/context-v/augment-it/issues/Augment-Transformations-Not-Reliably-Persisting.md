@@ -1,5 +1,6 @@
 ---
 title: "Augment Transformations Not Reliably Persisting — Hand-Curated Field Edits and Whole-Row Augmentations Are Disappearing Across Record-Set Versions"
+type: Issues
 lede: "98 hand-curated URLs across 45 records with no save or promote affordance — only the row-store's auto-persisted JSON keeps them alive."
 date_created: 2026-06-02
 date_modified: 2026-06-02
@@ -13,14 +14,14 @@ revisions:
   - 2026-06-02 — **Audit complete (0.0.0.2).** Read the backup. Diffed v4 ↔ v5 row-by-row. Sampled rows in full. The headline finding inverts issue #1: **the v3 hand-curated edits ARE preserved in both v4 and v5.** Promote is carrying the data forward correctly. The user's observation "v5 has none of the homepage URL fetching I did" was a UI visibility problem, not a data persistence failure. Issue #2 (no save/promote affordance) remains real. Added §"Audit findings" + §"What was actually wrong" + §"What is actually wrong (still)".
 tags:
   - Issue
-  - Augment-It
   - Data-Persistence
   - Record-Set-Versioning
   - Promote
   - Records-Surface
   - Hand-Curation
-  - URGENT
-status: Open · Backup Made
+  - Urgent
+status: Resolved
+status_note: Open · Backup Made
 site_uuid: e9bd175d-1a45-4482-b18f-a1bf39a2721e
 hex_code: 9x5btu
 date_authored_initial_draft: 2026-06-02

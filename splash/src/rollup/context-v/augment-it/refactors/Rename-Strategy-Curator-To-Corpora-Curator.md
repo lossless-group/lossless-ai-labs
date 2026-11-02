@@ -1,5 +1,6 @@
 ---
 title: "Rename the corpora curator — finishing a rename that only ever reached the label"
+type: Refactors
 lede: >-
   Four naming layers were tangled here and only three moved — the fourth is a data value living in two external client repos.
 date_created: 2026-08-08
@@ -9,10 +10,10 @@ authors:
 augmented_with:
   - Claude Code on Claude Opus 5
 semantic_version: 0.0.2.0
-status: Partially-Shipped
+status: Shipped
+date_first_published: 2026-08-15
 tags:
   - Refactor
-  - Augment-It
   - Naming
   - Module-Federation
   - Deployment
