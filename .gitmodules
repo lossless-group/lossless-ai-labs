@@ -32,7 +32,8 @@
 	url = https://github.com/lossless-group/id-didi-sh.git
 [submodule "packages/odysseus"]
 	path = packages/odysseus
-	url = https://github.com/pewdiepie-archdaemon/odysseus.git
+	url = https://github.com/odysseus-dev/odysseus.git
+	branch = dev
 [submodule "studies/agent-harnesses"]
 	path = studies/agent-harnesses
 	url = https://github.com/lossless-group/study-agent-harnesses.git
