@@ -137,3 +137,9 @@ re-derived. The study is the project's institutional memory for that domain.
   nd-skills, claude-adhd-skills, adhd-claude-skill, audhd-executive-function,
   adhd-copilot, dsh-adhd-copilot, adhd-skills, adhd-study-coach). Promoted to
   `lossless-group/study-adhd-and-executive-function-skills`.
+- [content-authoring-tools](./content-authoring-tools) — which
+  content-authoring tools keep Markdown and open formats first-class, so an
+  AI agent can read and write the same store the human uses? First round is
+  the PKM / "second brain" cluster (Baalda, Logseq, Anytype, AppFlowy,
+  Trilium, SilverBullet). Promoted to
+  `lossless-group/study-content-authoring-tools`.

@@ -92,3 +92,6 @@
 	path = studies/collaborations/phoenixcapera/deck-v4
 	url = https://github.com/acpcareconnectdev-ui/deck-v-4-.git
 	branch = main
+[submodule "studies/content-authoring-tools"]
+	path = studies/content-authoring-tools
+	url = https://github.com/lossless-group/study-content-authoring-tools.git

@@ -126,6 +126,48 @@
     ]
   },
   {
+    "dir": "content-authoring-tools",
+    "question": "Which content-authoring tools treat Markdown (and adjacent open formats) as first-class citizens in their data model — such that an AI agent can read from and write into the same store the human uses, without going through an app-specific cloud API?",
+    "pinned": [
+      {
+        "slug": "anytype-ts",
+        "url": "https://github.com/anyproto/anytype-ts",
+        "owner": "anyproto",
+        "name": "anytype-ts"
+      },
+      {
+        "slug": "appflowy",
+        "url": "https://github.com/AppFlowy-IO/AppFlowy",
+        "owner": "AppFlowy-IO",
+        "name": "AppFlowy"
+      },
+      {
+        "slug": "baalda",
+        "url": "https://github.com/naveedharri/baalda",
+        "owner": "naveedharri",
+        "name": "baalda"
+      },
+      {
+        "slug": "logseq",
+        "url": "https://github.com/logseq/logseq",
+        "owner": "logseq",
+        "name": "logseq"
+      },
+      {
+        "slug": "silverbullet",
+        "url": "https://github.com/silverbulletmd/silverbullet",
+        "owner": "silverbulletmd",
+        "name": "silverbullet"
+      },
+      {
+        "slug": "trilium",
+        "url": "https://github.com/TriliumNext/Trilium",
+        "owner": "TriliumNext",
+        "name": "Trilium"
+      }
+    ]
+  },
+  {
     "dir": "conversational-ui-and-native-shells",
     "question": "How do native, cross-platform conversational UI applications — especially ones built with Tauri (Rust backend + web frontend) — structure frontend state management, multi-conversation/multi-context switching (e.g. swapping between different \"workspaces\" or agent personas), local file persistence (chat history, settings), and integration with backend agent processes or MCP servers?",
     "pinned": [

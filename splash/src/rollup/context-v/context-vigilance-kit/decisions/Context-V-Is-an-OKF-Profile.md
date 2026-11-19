@@ -5,7 +5,7 @@ description: "Context-v folders conform to Open Knowledge Format v0.2, with cont
 lede: "Any tool that reads Open Knowledge Format can read a context-v folder. The price is one frontmatter field and an index file."
 publish: true
 date_created: 2026-10-05
-date_modified: 2026-10-05
+date_modified: 2026-11-05
 date_authored_initial_draft: 2026-10-05
 date_authored_current_draft: 2026-10-05
 date_authored_final_draft:
@@ -97,7 +97,7 @@ An OKF tool reading a raw context-v doc sees an unrecognized status value. The s
 
 - **`agent-skills/` sits outside the bundle.** Skill files follow the Agent Skills spec, and adding `type` to `SKILL.md` may trip strict skill validators; their `references/` files have no frontmatter at all. OKF already expects schemas like `.proto` files to live beside a bundle, not inside it.
 - **`extra/`** is scratch with no frontmatter, but it's gitignored, so a cloned bundle never contains it.
-- ~~**Links.**~~ **Settled 2026-10-06: wikilinks stay.** OKF doesn't require any link style; conformance is frontmatter and `type` only. A repo declares its link syntax in `context-v/config.md` under `links:` (default: wikilinks, resolved by filename). OKF's reference visualizer only follows markdown links, which is a limitation of that demo tool; a 31-line patch makes it follow wikilinks too.
+- ~~**Links.**~~ **Settled 2026-10-06: wikilinks stay.** OKF doesn't require any link style; conformance is frontmatter and `type` only. A repo declares its link syntax in `context-v/config.md` under `links:` (default: an Obsidian wikilink with path and alias and no `.md`, resolved by path, then by filename; every other form stays valid). OKF's reference visualizer only follows markdown links, which is a limitation of that demo tool; a 31-line patch makes it follow wikilinks too.
 - **`log.md`.** Whether `/cv:reflect` also appends a `log.md` (OKF's per-folder change history) alongside `changelog/`.
 - **Datetimes.** OKF timestamps are full datetimes with a UTC offset; our `date_*` fields stay date-only. OKF fields we add use OKF's form.
 
