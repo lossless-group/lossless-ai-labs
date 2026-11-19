@@ -139,7 +139,9 @@ re-derived. The study is the project's institutional memory for that domain.
   `lossless-group/study-adhd-and-executive-function-skills`.
 - [content-authoring-tools](./content-authoring-tools) — which
   content-authoring tools keep Markdown and open formats first-class, so an
-  AI agent can read and write the same store the human uses? First round is
-  the PKM / "second brain" cluster (Baalda, Logseq, Anytype, AppFlowy,
-  Trilium, SilverBullet). Promoted to
+  AI agent can read and write the same store the human uses? Second brains
+  (Baalda, Logseq, SiYuan, Anytype, AFFiNE, AppFlowy, Joplin, Trilium, …),
+  team wikis (Outline, Docmost), Markdown editors (MarkText, Zettlr,
+  Milkdown, …), and Markdown/plain-source notebooks (Livebook, Pluto, mystmd,
+  Notebook Kit, …). Promoted to
   `lossless-group/study-content-authoring-tools`.

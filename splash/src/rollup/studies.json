@@ -130,6 +130,12 @@
     "question": "Which content-authoring tools treat Markdown (and adjacent open formats) as first-class citizens in their data model — such that an AI agent can read from and write into the same store the human uses, without going through an app-specific cloud API?",
     "pinned": [
       {
+        "slug": "affine",
+        "url": "https://github.com/toeverything/AFFiNE",
+        "owner": "toeverything",
+        "name": "AFFiNE"
+      },
+      {
         "slug": "anytype-ts",
         "url": "https://github.com/anyproto/anytype-ts",
         "owner": "anyproto",
@@ -148,10 +154,88 @@
         "name": "baalda"
       },
       {
+        "slug": "deepnote",
+        "url": "https://github.com/deepnote/deepnote",
+        "owner": "deepnote",
+        "name": "deepnote"
+      },
+      {
+        "slug": "docmost",
+        "url": "https://github.com/docmost/docmost",
+        "owner": "docmost",
+        "name": "docmost"
+      },
+      {
+        "slug": "evidence",
+        "url": "https://github.com/evidence-dev/evidence",
+        "owner": "evidence-dev",
+        "name": "evidence"
+      },
+      {
+        "slug": "joplin",
+        "url": "https://github.com/laurent22/joplin",
+        "owner": "laurent22",
+        "name": "joplin"
+      },
+      {
+        "slug": "khoj",
+        "url": "https://github.com/khoj-ai/khoj",
+        "owner": "khoj-ai",
+        "name": "khoj"
+      },
+      {
+        "slug": "livebook",
+        "url": "https://github.com/livebook-dev/livebook",
+        "owner": "livebook-dev",
+        "name": "livebook"
+      },
+      {
         "slug": "logseq",
         "url": "https://github.com/logseq/logseq",
         "owner": "logseq",
         "name": "logseq"
+      },
+      {
+        "slug": "marktext",
+        "url": "https://github.com/marktext/marktext",
+        "owner": "marktext",
+        "name": "marktext"
+      },
+      {
+        "slug": "milkdown",
+        "url": "https://github.com/Milkdown/milkdown",
+        "owner": "Milkdown",
+        "name": "milkdown"
+      },
+      {
+        "slug": "mystmd",
+        "url": "https://github.com/jupyter-book/mystmd",
+        "owner": "jupyter-book",
+        "name": "mystmd"
+      },
+      {
+        "slug": "notebook-kit",
+        "url": "https://github.com/observablehq/notebook-kit",
+        "owner": "observablehq",
+        "name": "notebook-kit"
+      },
+      {
+        "slug": "notesnook",
+        "url": "https://github.com/streetwriters/notesnook",
+        "owner": "streetwriters",
+        "name": "notesnook"
+      },
+      {
+        "slug": "outline",
+        "url": "https://github.com/outline/outline",
+        "owner": "outline",
+        "name": "outline"
+      },
+      {
+        "slug": "pluto",
+        "url": "https://github.com/JuliaPluto/Pluto.jl",
+        "owner": "JuliaPluto",
+        "name": "Pluto.jl"
       },
       {
         "slug": "silverbullet",
@@ -160,10 +244,28 @@
         "name": "silverbullet"
       },
       {
+        "slug": "siyuan",
+        "url": "https://github.com/siyuan-note/siyuan",
+        "owner": "siyuan-note",
+        "name": "siyuan"
+      },
+      {
         "slug": "trilium",
         "url": "https://github.com/TriliumNext/Trilium",
         "owner": "TriliumNext",
         "name": "Trilium"
+      },
+      {
+        "slug": "vnote",
+        "url": "https://github.com/vnotex/vnote",
+        "owner": "vnotex",
+        "name": "vnote"
+      },
+      {
+        "slug": "zettlr",
+        "url": "https://github.com/Zettlr/Zettlr",
+        "owner": "Zettlr",
+        "name": "Zettlr"
       }
     ]
   },
