@@ -405,6 +405,8 @@ but it depends only on Linux's built-in virtualization. From its
 
 ## Related
 
+- [[Flave-Sync-The-Product-Is-in-the-Sync-Layer]]: the follow-up. With the instruction kit as the primary use case, sync is where the product is, and why Dropbox and iCloud can't do it
+
 - [[Master-Flave-An-Agent-Native-Document-Format-and-Publisher]]: §4, §5.2,
   §8.2, §9.2 (D-28), §9.4, §11
 - [[The-Flave-Document-Service-Not-A-Forge]]: the stub this partly answers
