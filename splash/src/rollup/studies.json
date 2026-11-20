@@ -122,6 +122,12 @@
         "url": "https://github.com/earendil-works/pi",
         "owner": "earendil-works",
         "name": "pi"
+      },
+      {
+        "slug": "tome",
+        "url": "https://github.com/devrelaicom/tome",
+        "owner": "devrelaicom",
+        "name": "tome"
       }
     ]
   },
