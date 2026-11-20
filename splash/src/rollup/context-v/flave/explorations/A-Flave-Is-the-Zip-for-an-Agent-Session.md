@@ -5,7 +5,7 @@ date_created: 2026-11-19
 date_modified: 2026-11-19
 date_authored_initial_draft: 2026-11-19
 date_authored_current_draft: 2026-11-19
-at_semantic_version: 0.0.1.0
+at_semantic_version: 0.0.2.0
 status: Resolved-Into-Spec
 publish: true
 site_uuid: afafa693-da44-4eeb-8e25-15b647c0914a
@@ -279,6 +279,96 @@ Candidates for a study (`study-agent-workspace-bundles`), not yet pinned:
 RO-Crate is the one to read first. It's a decade of thinking about "a folder
 of work plus enough metadata to trust it" and it already separates the payload
 from a generated human view.
+
+## 6 · Rebuilding and running the sandbox
+
+*Added 2026-11-19, from a follow-up discussion. The runtimes discussed here are
+pinned in
+[`study-agent-workspace-bundles`](https://github.com/lossless-group/study-agent-workspace-bundles).*
+
+A flave's `env/` says what the work needs. Something still has to rebuild that
+environment and run the scripts in it. That is two separate questions, and
+most confusion here comes from treating them as one.
+
+### Two questions, not one
+
+| Question | What answers it | Example tools |
+|---|---|---|
+| **What is installed?** | A reproducible environment: exact versions of every tool and library, rebuilt the same way anywhere | Nix flakes, devenv, Flox, `uv` lockfiles, Dev Containers |
+| **What can the running code reach?** | Isolation: a wall between the script and your files, keys, network and system | Containers, gVisor, microVMs, WebAssembly |
+
+**Nix answers the first and not the second.** A flake pins every package, and
+`nix develop` gives you that exact toolchain in a shell. It's *ephemeral* in
+the sense that the packages exist only in that shell. But a script run there
+runs **as you**: it can read your home folder, your SSH keys and a flave's
+`.secrets`, reach the network, and delete files. (Nix sandboxes its *build*
+step on Linux; running the result is not sandboxed.)
+
+**Isolation tools answer the second and not the first.** A container, gVisor or
+a microVM decides what the code can touch, but says nothing about which Python
+or which DuckDB is inside.
+
+The analogy: Nix is the recipe and a perfectly stocked pantry. The sandbox is
+a kitchen with locked doors. A great recipe doesn't stop a cook you've never
+met from walking into your bedroom.
+
+**They compose.** Nix can build container images directly (`dockerTools`,
+`nix2container`), so a common pattern is Nix for the exact environment and a
+container or microVM to run it in.
+
+**Platforms.** Nix runs natively on Linux and macOS; on Windows only inside
+WSL2 (Linux in a VM). macOS builds reproduce less exactly than Linux ones,
+because some packages differ by platform.
+
+### Beyond Docker: the isolation layers
+
+Docker is one assembly of parts that now exist separately, plus stronger walls
+it never had. From least to most isolation:
+
+| Layer | Examples | What it is |
+|---|---|---|
+| **Low-level OCI runtimes** | `runc` (Docker's default), `crun` (C; faster start, less memory), `youki` (Rust) | The piece that actually starts a container: gives a process its own view of files, network and processes. A component under an engine, not a choice you'd make instead of Nix |
+| **Container engines** | containerd + `nerdctl`, Podman, Docker | Run OCI images. containerd is what runs under both Docker and Kubernetes. Podman needs no daemon and runs without root |
+| **Container VMs on a desktop** | Apple `container`, Colima (open source), OrbStack (closed source), Docker Desktop | On a Mac, containers always run inside a Linux VM; these make it fast. Apple's gives each container its own lightweight VM |
+| **Sandboxed kernel** | gVisor | A user-space kernel between the container and the real one, so an escape lands in gVisor. Stronger than a container, lighter than a VM |
+| **MicroVMs** | Firecracker, Cloud Hypervisor, Kata Containers | A real VM boundary that boots in a fraction of a second. The standard for running code nobody reviewed |
+| **Hosted agent sandboxes** | E2B, Cloudflare Sandbox, Daytona, Modal, Vercel Sandbox | What chat products and agent frameworks call to run code. Mostly Firecracker or gVisor underneath |
+| **WebAssembly** | Pyodide, Wasmtime, WasmEdge, StackBlitz WebContainers | Code runs in a browser or a tiny runtime with nothing installed. A reader could re-run a flave's Python script from a web page |
+
+### Firecracker is not tied to Amazon
+
+Firecracker is open source (Apache-2.0). AWS wrote it and runs Lambda on it,
+but it depends only on Linux's built-in virtualization. From its
+`docs/getting-started.md`:
+
+- **Needs:** Linux on x86_64 or ARM64, and read/write access to `/dev/kvm`.
+  `tools/devtool checkenv` in its repo checks a machine.
+- **Runs on:** your own Linux hardware with virtualization enabled (the owner's
+  NixOS machine likely qualifies; `lsmod | grep kvm` to check); rented bare
+  metal (Hetzner, OVH, Equinix Metal); cloud VMs only where the provider
+  exposes KVM inside the VM (nested virtualization).
+- **AWS is the restrictive one:** the doc says EC2 supports KVM only on `.metal`
+  instance types, so an ordinary EC2 VM can't run it. Google Cloud and Azure
+  offer nested virtualization on some machine types.
+- **Hosted:** E2B (open source and self-hostable), Fly.io and Vercel Sandbox run
+  Firecracker on their own machines.
+- **Doesn't run on** macOS (no KVM; Apple's answer is `container`), Windows
+  outside a Linux VM, or a Linux VM without nested virtualization.
+
+### What this means for a flave
+
+- **`env/` is the recipe.** Lockfiles always; a Nix flake or a
+  `devcontainer.json` when the environment needs more than a language's
+  package manager. The host chooses how to rebuild it.
+- **Your own bundle, your own scripts:** Nix (or `uv`) alone is enough. You
+  trust the code; you want it to rebuild identically.
+- **A bundle someone sent you:** both. The recipe recreates their environment,
+  and isolation stops their scripts from reading your `.secrets` or your home
+  folder. That's M6 (*"I open a stranger's `.flave` and nothing can hurt me"*).
+- **Which wall, by where the reader is:** a Mac gets Apple `container` or a
+  Linux VM; a Linux server gets Firecracker or gVisor; a browser gets
+  Pyodide; a chat gets whatever sandbox its vendor runs. The format names none
+  of them.
 
 ## Open questions
 
