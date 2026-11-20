@@ -1,6 +1,6 @@
 ---
 title: "Flave — An Agent-Native Document Format and Desktop Publisher"
-at_semantic_version: 0.1.3.0
+at_semantic_version: 0.1.3.1
 date: 2026-08-15
 publish: true
 generated_with: Claude Code on Opus 5
@@ -1349,24 +1349,12 @@ tool is unavailable, and the saved outputs still render.
 HubSpot, and are asked for *their own* token, or skip it and read the saved
 data. Nobody's key ever crossed the wire.
 
-### 5.9 Inspiration for the sandbox and settings design
+### 5.9 Inspiration for the sandbox and settings design — moved
 
-§5.7 and §5.8 borrow from three existing formats. Each does one part of what a
-flave now has to do. All three are pinned in
-[`study-agent-workspace-bundles`](https://github.com/lossless-group/study-agent-workspace-bundles),
-alongside the sandbox runtimes that could rebuild a flave's `env/`.
-
-| Format | What it is | What flave takes from it |
-|---|---|---|
-| **[RO-Crate](https://www.researchobject.org/ro-crate/)** (Research Object Crate) | A convention from research data: any folder becomes a crate by adding one `ro-crate-metadata.json` at its root, which describes every file and where it came from. An optional `ro-crate-preview.html` is the human view | The closest match to flave's whole shape: **a folder of work, one file of metadata and provenance, and a generated human view kept separate from the payload.** Read first before extending `_sources.yaml` and `runs/` |
-| **[Letta Agent File (`.af`)](https://github.com/letta-ai/agent-file)** | An open format for exporting a stateful agent: memory, tools, system prompt and model settings in one file | **Secrets are set to `null` on export.** The structure of the agent travels; the keys don't. Same rule as `.secrets` (§5.8) |
-| **[MCP Bundles (`.mcpb`)](https://github.com/modelcontextprotocol/mcpb)** | The zip format behind Claude Desktop's one-click extensions: a local MCP server plus a `manifest.json` | **`user_config` fields marked `"sensitive": true`** are collected from the user and stored in the OS keychain, and the server config refers to them as `${user_config.api_key}`. The model for `config/secrets.yaml`, `${secret:NAME}` and keychain pointers |
-
-Also worth reading alongside them: Frictionless Data Package (typed data files
-with a `datapackage.json`), Dev Containers and Nix flakes (rebuilding an
-environment from a small recipe, as `env/` does), git-annex (big files as
-pointers in git, as §8.5 requires), and Claude Code's `settings.json` /
-`settings.local.json` split (shared vs. personal, as `config/` vs. `.env`).
+Moved 2026-11-19 to its own exploration, to keep the spec about what flave
+*is*: [[Inspiration-for-the-Sandbox-and-Settings-Design]]. It records what
+§5.7 and §5.8 borrow from RO-Crate, Letta's Agent File (`.af`) and MCP
+Bundles (`.mcpb`), and what else is worth reading alongside them.
 
 ### 5.10 Source files — the raw material people bring
 
