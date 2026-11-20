@@ -1,6 +1,6 @@
 ---
 title: "Flave — An Agent-Native Document Format and Desktop Publisher"
-at_semantic_version: 0.1.1.0
+at_semantic_version: 0.1.2.0
 date: 2026-08-15
 publish: true
 generated_with: Claude Code on Opus 5
@@ -712,6 +712,19 @@ Q3-Investor-Update.flave/
 ├── components/                 # local trigger-pack: syntax the agent can use
 │   ├── metric-card.trigger.yaml
 │   └── metric-card.html
+├── scripts/                    # code the agent or author wrote: .py .ts .sh (§5.7)
+├── queries/                    # one named .sql per file (§5.7)
+├── runs/                       # one record per execution: inputs, outputs, hashes (§5.7)
+├── env/                        # how to rebuild the sandbox: lockfiles + notes (§5.7)
+├── config/                     # shared: tools, connectors, APIs; secrets by NAME (§5.8)
+│   ├── mcp.json
+│   ├── secrets.yaml            #   which secrets this bundle needs — names, never values
+│   └── apis/
+│       └── hubspot.yaml
+├── dist/                       # exported views; derived, disposable, never in history
+├── .env                        # THIS machine's non-secret values; never shared (§5.8)
+├── .secrets                    # secret VALUES; never in history, never shared (§5.8)
+├── .gitignore                  # written at creation: .env, .secrets, dist/, .flave/cache/
 ├── .jj/                        # Jujutsu repo — history lives here (§8.2)
 ├── .git/                       # colocated git backend, for interchange (§8.2)
 ├── .flave/
@@ -733,6 +746,16 @@ how to present them:
 | **Content** | `content/` | Prose, transcripts, notes, raw source text — carrying `clearance` and `register` (§11.1) |
 | **Data** | `data/` | Rows: CSV, Parquet, JSON, plus `_sources.yaml` provenance |
 | **Assets** | `assets/` | Binaries: images, logos, headshots, screenshots, plus `_manifest.yaml` |
+
+**A fourth kind, added 2026-11-19 (D-29): the workings of the sandbox.** A
+document made in an agent chat was made by *running* things: packages
+installed, connectors called, scripts and SQL written, intermediate JSON saved.
+The trinity holds what came out; these directories hold how it was made, so a
+flave can be the whole of an agent session and not only its deliverable.
+
+| Kind | Directory | Holds |
+|---|---|---|
+| **Workings** | `scripts/`, `queries/`, `runs/`, `env/`, `config/` | The code that ran, the record of each run, how to rebuild the environment, and which tools and APIs it used (§5.7, §5.8) |
 
 *(`document/` was renamed to `content/` on 2026-08-14 for exactly this reason:
 "document" names the thing you produce, "content" names the material you hold —
@@ -1199,6 +1222,128 @@ upstream edit silently restyling documents you already published.
 components, frames — already wired. "New from template" is a directory copy.
 Nothing new needs inventing to support it, which is the strongest argument that
 the bundle-is-a-folder decision (§5.1, D-03) was right.
+
+### 5.7 The sandbox — what the agent did, not only what it made
+
+> [!success] **D-29 — RESOLVED 2026-11-19 by the owner · a flave carries the
+> whole agent session.** The deliverable a chat shows is a view; the work is
+> in the sandbox behind it. *"In theory this is like a Zip for all of that."*
+> The flave spec grows to hold it, rather than a separate bundle format sitting
+> underneath. Exploration: [[A-Flave-Is-the-Zip-for-an-Agent-Session]].
+
+Four directories, all plain text, all shared:
+
+| Directory | Holds | Rule |
+|---|---|---|
+| `scripts/` | Code that produced something: fetchers, transforms, chart builders | Never contains a secret value; reads them by name (§5.8) |
+| `queries/` | One SQL query per file, named by its file stem (`arr_by_segment.sql`) | The same names a `sql` fence or a figure can reference (§7.4, §7.6) |
+| `env/` | How to rebuild the sandbox: `pyproject.toml` + `uv.lock`, `package.json` + lockfile, `environment.md` for what a lockfile can't say | **A recipe, never a snapshot.** No `node_modules/`, no virtualenv, no image. A few kilobytes any agent can read |
+| `runs/` | One YAML record per execution | Written by whoever ran it: the app, the agent, or the connector (§8.5) |
+
+A run record:
+
+```yaml
+# runs/2026-11-19T14-02-11_fetch-arr.yaml
+command: uv run scripts/fetch_arr.py --since 2026-01
+by: claude-opus-5-5             # an agent id or a person
+started: 2026-11-19T14:02:11Z
+exit: 0
+inputs:
+  - path: scripts/fetch_arr.py
+    sha256: 9f2c…
+  - path: config/apis/hubspot.yaml
+secrets_used: [HUBSPOT_TOKEN]   # names only, never values
+outputs:
+  - path: data/arr-by-month.csv
+    sha256: 41ab…
+```
+
+`data/_sources.yaml` rows gain an optional `run:` pointing at the record that
+produced the file. That closes the provenance chain: *this number came from
+this query, on this file, fetched from this API, on this date.*
+
+**Outputs are kept, so re-running is optional.** A connector's data changes; a
+recipient may not hold the key. The bundle keeps what came out (`data/`, with
+provenance), so it reads and publishes without running anything. `runs/` makes
+the work **legible**; it does not promise it is **reproducible**. Offering
+"re-run this" to a recipient needs the sandbox rebuilt from `env/` and lands
+with M6's trust model, not before.
+
+### 5.8 Config, `.env`, and `.secrets`
+
+Three places for settings, split by **who may see them**, not by format:
+
+| File | Holds | Shared? | In history? |
+|---|---|---|---|
+| `config/` | Which tools, connectors and APIs the bundle uses; endpoints, scopes, non-secret options; **the names** of the secrets they need | **Yes** | **Yes** |
+| `.env` | This machine's non-secret values: local paths, ports, a preferred model, a sandbox URL | No | No |
+| `.secrets` | Secret values only: API keys, tokens, passwords | **Never** | **Never** |
+
+**Why `.secrets` is separate from `.env`.** Both use the same `KEY=value`
+syntax, and that's the point: a `.env` *could* hold keys, and in practice it
+always does. That is why `.env` files leak. They mix harmless settings with
+keys, get committed by accident, and every process launched from the folder
+inherits every value in them, so one `env` dump in a script or a transcript
+prints them all. Splitting the file lets `.env` be ordinary and harmless, and
+gives `.secrets` rules no other file has:
+
+1. **Never loaded wholesale.** Nothing exports `.secrets` into a process
+   environment. The host injects only the names a tool declares in `config/`,
+   only into that tool's process, only for that call.
+2. **Never in history.** The bundle's `.gitignore` lists it from creation, and
+   the app refuses to snapshot if it is ever tracked. (`jj` snapshots the
+   working copy automatically, so an unignored secrets file is in history the
+   moment it's written.)
+3. **The leak scan has its values.** Because the app knows every value in
+   `.secrets`, it can search every outgoing file for an **exact match**, which
+   is far stronger than guessing at key-shaped strings (§10.2 rule 7).
+4. **A value may be a pointer.** `HUBSPOT_TOKEN=keychain:flave/hubspot` keeps
+   the literal in the OS keychain, following MCP Bundles' `sensitive` fields.
+
+The validator warns when a `.env` value looks like a secret: *"move this to
+`.secrets`."*
+
+**`config/` names what the bundle needs:**
+
+```yaml
+# config/secrets.yaml — the contract a recipient fills in. Names, never values.
+HUBSPOT_TOKEN:
+  for: config/apis/hubspot.yaml
+  description: HubSpot private-app token, read-only CRM scopes
+  get_it_at: https://app.hubspot.com/private-apps
+  required: false               # the saved data in data/ reads without it
+```
+
+```jsonc
+// config/mcp.json — same shape as a .mcp.json `mcpServers` block, so it copies in and out
+{
+  "mcpServers": {
+    "hubspot": {
+      "command": "npx",
+      "args": ["-y", "example-hubspot-mcp"],   // illustrative package name
+      "env": { "HUBSPOT_TOKEN": "${secret:HUBSPOT_TOKEN}" }
+    }
+  }
+}
+```
+
+```yaml
+# config/apis/hubspot.yaml
+base_url: https://api.hubapi.com
+auth: { scheme: bearer, secret: HUBSPOT_TOKEN }
+scopes: [crm.objects.deals.read]
+docs: https://developers.hubspot.com/docs/api/overview
+```
+
+**Resolution order.** `${secret:NAME}` resolves from `.secrets`, then the OS
+keychain, then asks the person (and offers to save the answer to `.secrets`).
+`${env:NAME}` resolves from `.env`, then the process environment, then a
+default declared in `config/`. A missing optional secret is not an error: the
+tool is unavailable, and the saved outputs still render.
+
+**What a recipient experiences:** they open a shared flave, see that it uses
+HubSpot, and are asked for *their own* token, or skip it and read the saved
+data. Nobody's key ever crossed the wire.
 
 ## 6 · The language layer: LFM, extended
 
@@ -1869,6 +2014,57 @@ block-addressing scheme (§8.1) must be reserved and stable from M0. Retrofittin
 stable block ids after people have real documents is the kind of migration that
 poisons a format.
 
+### 8.5 Remotes — where a flave lives when it leaves the laptop
+
+> [!success] **D-30 — RESOLVED 2026-11-19 · a flave's remote is a git remote.
+> Cloudflare Artifacts is the first-class one, not a dependency.**
+
+A flave is a folder with `jj` over a git backend inside it (§8.2). Anything
+that holds a folder or speaks git can hold one, and **the format never depends
+on which.**
+
+| Remote | Shape | Good at | Costs |
+|---|---|---|---|
+| **A server's filesystem** | A bare git repo beside the served folder | Simplest; self-hostable; `dist/` serves as a static site | Someone runs the server, its auth, its backups |
+| **Object storage (R2, S3)** | The working tree mirrored under a prefix, history in a separate store | Cheap, no server; the corpora pattern | Not a filesystem: no atomic rename, no git without a tool on top |
+| **Cloudflare Artifacts** | One git repo per flave, at a URL | Sharing is built in; no server; reachable from inside a chat | Git-shaped limits; billed per operation; open beta |
+
+**Why Artifacts is the first-class remote:** it makes a repo cheap enough to
+have one per document, which turns sharing into ordinary operations rather than
+a product to build. It answers the round trip [[The-Flave-Document-Service-Not-A-Forge]]
+left open, without being a forge:
+
+| Sharing need | Artifacts operation |
+|---|---|
+| Someone may read it | A `read` token for that repo, short TTL |
+| Someone reads a version that won't change under them | A read-only fork |
+| Someone works on it | A fork with their own `write` token; their work comes back as a branch, merged with `jj` |
+| A client sees the deliverable, never the repo | A push event triggers a Worker that rebuilds `dist/` and serves it at a link |
+| Who you are | didi.sh, which mints the Artifacts token for that repo |
+
+**Rules that hold on every remote:**
+
+- **Only the git half travels.** `jj`'s change ids and operation log stay local
+  (see `Profile__Jujutsu` in `sync-and-content-version-control`). The op log is
+  the author's undo, not the shared record.
+- **`.env`, `.secrets` and `dist/` never reach a remote** (§5.8).
+- **Big binaries are pointers.** Artifacts caps a repo at 1 GB and git keeps
+  every version forever. Media and large data live in object storage, recorded
+  in `assets/_manifest.yaml` / `data/_sources.yaml` by URL and sha256.
+- **Push on a gesture or a debounce of minutes, not on save.** Artifacts bills
+  per operation; autosave-to-remote would be a bill.
+
+**Exporting from inside a chat** uses the same remote. A remote MCP connector
+lets a chat agent save its sandbox into a flave repo, committing as the signed-in
+person. The tree already runs this pattern: `self-host-stack/hubs/event-hog-mcp`
+is a remote MCP server over Artifacts, one repo per event, one commit per write.
+A zip download (`flave pack`) is the fallback that needs no integration.
+
+**`⟨DECIDE⟩ D-31`** — When someone exports a chat through the connector, whose
+account holds the repo: Lossless's, the person's, or their company's? It
+decides billing, data jurisdiction (an Artifacts namespace's jurisdiction is
+permanent), and what "delete my data" means. **OPEN.**
+
 ---
 
 ## 9 · The agent layer
@@ -2147,6 +2343,15 @@ enforces:
 6. **Fonts are embedded and license-checked** at pack time; a document that
    embeds a font it can't redistribute fails export with a clear error.
 
+7. **Nothing leaves with a secret in it.** Every outbound path (push, `flave
+   pack`, publish, a connector save) scans every outgoing file for exact
+   matches against the values in `.secrets` and for key-shaped strings
+   (`sk-`, `ghp_`, `art_v\d+_`, high-entropy tokens), and refuses until each
+   is replaced by a `${secret:NAME}` reference. This is the clearance scan
+   (§11.1) with one more pattern list, not a second system. It matters most for
+   scripts: agents paste keys into code far more often than they read them
+   from a file.
+
 **`⟨DECIDE⟩ D-11`** — Do we sign bundles (publisher identity + integrity), or
 is trust purely "do you trust the person who sent you this"? Signing is a real
 cost (key management, revocation) but is what makes org-wide distribution safe.
@@ -2162,7 +2367,7 @@ can be added without a format break.**
 | `html-single` | One self-contained `.html`; assets as data URIs; charts pre-rendered SVG | The share-a-link default. Must render with JS disabled. |
 | `html-site` | A directory / static site; real asset URLs; Pagefind search | For longer documents; deploys anywhere |
 | `pdf` | Via headless Chromium print, Paged.js for `paged` surfaces | Deterministic for `paged` and `deck`; best-effort for `flow` |
-| `flave-bundle` | The `.flave` itself, zipped | The collaborate-with-internals path |
+| `flave-bundle` | The `.flave` itself, zipped | The collaborate-with-internals path. Includes `scripts/`, `queries/`, `runs/`, `env/`, `config/`; **never** `.env`, `.secrets` or `dist/` (§5.8) |
 | `md` | Flattened LFM + assets | Escape hatch. **Guaranteed forever** (Principle 5). |
 
 ### 11.1 The flatten contract — *the core promise, per D-01*
@@ -2552,7 +2757,7 @@ slippage is visible early rather than at the end.
 
 | # | Claim | Contains |
 |---|---|---|
-| **M0 · Format** | *"An agent can read and correctly modify a `.flave` with no Flave software installed."* | `flave.yaml` schema, directory layout, `@flave/format`, CLI (`validate`, `render`), fixture corpus, published format spec. **Frozen here:** block addressing (§8.1), the reserved `.flave/review/` path (§8.4), the provenance schemas (`data/_sources.yaml`, `assets/_manifest.yaml`), and the `publish.audiences` shape (§11.1) |
+| **M0 · Format** | *"An agent can read and correctly modify a `.flave` with no Flave software installed."* | `flave.yaml` schema, directory layout, `@flave/format`, CLI (`validate`, `render`), fixture corpus, published format spec. **Frozen here:** block addressing (§8.1), the reserved `.flave/review/` path (§8.4), the provenance schemas (`data/_sources.yaml`, `assets/_manifest.yaml`), the `publish.audiences` shape (§11.1), the sandbox directories and run-record schema (§5.7), and the `config/` / `.env` / `.secrets` split with `${secret:NAME}` references and the creation-time `.gitignore` (§5.8) |
 | **M1 · Render** | *"A `.flave` renders identically in the CLI and in the Svelte app."* | `@flave/render` over `lfm`, tokens→CSS pipeline, `flow` surface, Vega-Lite + Mermaid fences, `html-single` export, CI screenshot-diff parity test |
 | **M2 · Publish** ★ | *"I produce five levels from one document — private notes, transcript, team, LP, public — **none of which drift**, and I can **prove** the public one contains nothing private."* | ★ **The core promise (§11.1, D-01).** The clearance × register model, block-level clearance with fail-closed defaults, per-register variants with fallback, derived-variant staleness, redaction-by-construction, the **clearance scan**, per-audience preview, cross-audience diff, and the Vega-Lite inlined-data / metadata vectors |
 | **M3 · Edit** | *"A human composes a full document — prose, layout, and theme — without ever touching a drag handle or a line of CSS."* | Tauri shell, Compose / Source views, **command palette as primary layout interface** (it writes `surfaces.json` and frames), token editor. **First `flow` frame vocabulary ships here.** |
@@ -2623,6 +2828,9 @@ The engineering handoff is not complete until every row is resolved.
 | **D-24** | `theme/` (document, singular) vs `themes/` (workspace, plural) | 5.2, 5.6 | ✅ **RESOLVED 2026-08-20 — both, and they are different scopes.** `themes/lossless.css` is a workspace library documents choose **from**; `theme/` is the document-local layer that overrides on top. The cascade absorbs it unchanged: `builtin < workspace < theme < pack < document`. Naming them alike is a hazard, so the plural/singular distinction is load-bearing and must survive review |
 | **D-25** | §5.2 says hand-editing `theme.css` is a lint error. §1.1 says v0 ships one hand-edited `theme.css`. Which? | 1.1, 5.2, 5.5, 5.6 | ✅ **RESOLVED 2026-08-20 — the lint error is CONDITIONAL on a `tokens.yaml` existing.** The rule's whole purpose (§5.5) is preventing two sources of truth from drifting. With no `tokens.yaml`, `theme.css` **is** the single source and hand-editing it is correct, not a violation. The moment a `tokens.yaml` appears beside it, `theme.css` becomes generated and hand-edits become the lint error §5.2 describes. This reconciles the two sections without weakening the anti-drift argument — and it is what makes the owner's *"I want to see that you are doing the theme.css the way I want"* a supported workflow rather than a spec violation |
 | **D-26** | How does the app read and write the workspace before Tauri? | 1.1, 5.6 | ✅ **RESOLVED 2026-08-20 by the owner — bring Tauri forward.** *"Tauri wrapper should be obvious and easy, and I wanna see it on Linux, let's do that first."* This **reverses §1.1's explicit cut** (annotated there) and is a deliberate scope change, not drift. It collapses the problem rather than working around it: with a native host there is no dev-server bridge to build and no Chromium-only gesture gate, and the filesystem is real from day one. My prior recommendation optimised for §1.1's ordering; the owner optimised for seeing the actual product on their actual OS, which is the better objective. **The `WorkspaceFs` interface still stands** — a browser backend follows for anyone without the desktop app. Viability proven on NixOS before committing: webkit2gtk 2.52.5, gtk 3.24.52, libsoup 3.6.6, cargo 1.97 via a repo-local flake devshell |
+| **D-29** | Is a whole agent session a flave, or a separate bundle format underneath? | 5.2, 5.7 | ✅ **RESOLVED 2026-11-19 by the owner — a flave.** The spec grows `scripts/`, `queries/`, `runs/`, `env/` and `config/`, so a flave holds how the work was made, not only what it made. Exploration: [[A-Flave-Is-the-Zip-for-an-Agent-Session]] |
+| **D-30** | Where does a flave live off the laptop? | 8.5 | ✅ **RESOLVED 2026-11-19 — any git remote; Cloudflare Artifacts first-class, not a dependency.** A server's filesystem and object storage remain valid. Artifacts wins on sharing: read tokens, read-only forks, a fork per collaborator, push-triggered rebuilds of `dist/` |
+| **D-31** | Whose account holds a repo exported from a chat? | 8.5 | **OPEN — NEW.** Lossless's, the person's, or their company's. Decides billing, jurisdiction, deletion |
 | **D-28** | Do agents edit a `.flave` through a typed Document API, or by writing its files? | 4, 7.3, 9.2 | ✅ **RESOLVED 2026-11-19 by the owner — by writing its files.** A flave is a folder of low-data files (Markdown, MDX, JSON, CSV, CSS, HTML, code); every deliverable is a view or export of them. Agents generate and write files with ordinary tools; `jj` and git catch renegade behavior (D-17's undo horizon). **Supersedes** the earlier §9.2 rule *"the agent never writes bytes to files"*, the typed operation list, and the Phase 1 plan built on it. Prompted by [[Positioning-Flave-Against-the-Content-Authoring-Tools-Study]] |
 | **D-27** | With Files added, four columns compete for width | 7.3, 5.6 | ✅ **RESOLVED 2026-08-20 by the owner — the left rail toggles between Chat and Files.** One rail, two surfaces, never both. Follows the precedent Phase 0 set with the Source toggle, and keeps the document the widest thing on screen — correct for a tool whose claim is that you are reading a document, not operating an IDE |
 | **D-20** | Where does the `tokens.yaml` → `theme.css` + Tailwind generator live? | 12, 5.5 | ✅ **RESOLVED 2026-08-14 — in `@flave/theme`.** My "build it upstream in `@knots/tokens`" recommendation was wrong: **`@knots` was given up on**; only `lfm` was a true package and it was extracted. `astro-knots/packages/*` is starter-copy and prior art, never a dependency. **Flave originates the theme format; astro-knots sites starter-copy from it** — Flave has the stronger forcing function (frames + 3 surfaces + 2 generated outputs) |

@@ -5,8 +5,8 @@ date_created: 2026-11-19
 date_modified: 2026-11-19
 date_authored_initial_draft: 2026-11-19
 date_authored_current_draft: 2026-11-19
-at_semantic_version: 0.0.0.1
-status: Open
+at_semantic_version: 0.0.1.0
+status: Resolved-Into-Spec
 publish: true
 site_uuid: afafa693-da44-4eeb-8e25-15b647c0914a
 hex_code: orycgx
@@ -33,6 +33,14 @@ from: "flave"
 from_path: "context-v/explorations/A-Flave-Is-the-Zip-for-an-Agent-Session.md"
 ---
 # A Flave Is the Zip for an Agent Session
+
+> [!success] **Folded into the master spec 2026-11-19** as D-29 (§5.7, the
+> sandbox directories), §5.8 (`config/`, `.env`, `.secrets`) and D-30 (§8.5,
+> remotes). The owner chose to grow the flave spec rather than define a
+> separate bundle format (open question 1), and asked for a `config` and a
+> `.secrets` alongside `.env`. Where this document and the spec differ, **the
+> spec wins**: `tools/` became `config/`, and `.flave/local/` became the
+> root-level `.env` and `.secrets`.
 
 ## Why care?
 
