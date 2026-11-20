@@ -126,6 +126,90 @@
     ]
   },
   {
+    "dir": "agent-workspace-bundles",
+    "question": "What does it take to package everything an agent did in a session (the files it made, the code it ran, the tools and APIs it used, the environment it ran in, and the secrets it needed) as one folder that can be saved, shared, and opened somewhere else, with the secrets left behind?",
+    "pinned": [
+      {
+        "slug": "agent-file",
+        "url": "https://github.com/letta-ai/agent-file",
+        "owner": "letta-ai",
+        "name": "agent-file"
+      },
+      {
+        "slug": "apple-container",
+        "url": "https://github.com/apple/container",
+        "owner": "apple",
+        "name": "container"
+      },
+      {
+        "slug": "cloudflare-sandbox-sdk",
+        "url": "https://github.com/cloudflare/sandbox-sdk",
+        "owner": "cloudflare",
+        "name": "sandbox-sdk"
+      },
+      {
+        "slug": "containerd",
+        "url": "https://github.com/containerd/containerd",
+        "owner": "containerd",
+        "name": "containerd"
+      },
+      {
+        "slug": "datapackage",
+        "url": "https://github.com/frictionlessdata/datapackage",
+        "owner": "frictionlessdata",
+        "name": "datapackage"
+      },
+      {
+        "slug": "devcontainers-spec",
+        "url": "https://github.com/devcontainers/spec",
+        "owner": "devcontainers",
+        "name": "spec"
+      },
+      {
+        "slug": "e2b",
+        "url": "https://github.com/e2b-dev/E2B",
+        "owner": "e2b-dev",
+        "name": "E2B"
+      },
+      {
+        "slug": "firecracker",
+        "url": "https://github.com/firecracker-microvm/firecracker",
+        "owner": "firecracker-microvm",
+        "name": "firecracker"
+      },
+      {
+        "slug": "gvisor",
+        "url": "https://github.com/gvisor/gvisor",
+        "owner": "gvisor",
+        "name": "gvisor"
+      },
+      {
+        "slug": "mcpb",
+        "url": "https://github.com/modelcontextprotocol/mcpb",
+        "owner": "modelcontextprotocol",
+        "name": "mcpb"
+      },
+      {
+        "slug": "podman",
+        "url": "https://github.com/podman-container-tools/podman",
+        "owner": "podman-container-tools",
+        "name": "podman"
+      },
+      {
+        "slug": "pyodide",
+        "url": "https://github.com/pyodide/pyodide",
+        "owner": "pyodide",
+        "name": "pyodide"
+      },
+      {
+        "slug": "ro-crate",
+        "url": "https://github.com/ResearchObject/ro-crate",
+        "owner": "ResearchObject",
+        "name": "ro-crate"
+      }
+    ]
+  },
+  {
     "dir": "content-authoring-tools",
     "question": "Which content-authoring tools treat Markdown (and adjacent open formats) as first-class citizens in their data model — such that an AI agent can read from and write into the same store the human uses, without going through an app-specific cloud API?",
     "pinned": [

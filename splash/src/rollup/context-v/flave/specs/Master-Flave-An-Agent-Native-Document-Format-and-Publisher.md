@@ -1348,8 +1348,9 @@ data. Nobody's key ever crossed the wire.
 ### 5.9 Inspiration for the sandbox and settings design
 
 §5.7 and §5.8 borrow from three existing formats. Each does one part of what a
-flave now has to do. None is pinned yet; they are the first candidates for a
-small study (`study-agent-workspace-bundles`).
+flave now has to do. All three are pinned in
+[`study-agent-workspace-bundles`](https://github.com/lossless-group/study-agent-workspace-bundles),
+alongside the sandbox runtimes that could rebuild a flave's `env/`.
 
 | Format | What it is | What flave takes from it |
 |---|---|---|

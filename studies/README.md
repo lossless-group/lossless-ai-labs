@@ -145,3 +145,11 @@ re-derived. The study is the project's institutional memory for that domain.
   Milkdown, …), and Markdown/plain-source notebooks (Livebook, Pluto, mystmd,
   Notebook Kit, …). Promoted to
   `lossless-group/study-content-authoring-tools`.
+- [agent-workspace-bundles](./agent-workspace-bundles) — what does it take
+  to package everything an agent did in a session (files, code, tools,
+  environment, secrets) as one folder that can be shared with the secrets
+  left behind? Bundle formats (RO-Crate, Letta `.af`, `.mcpb`, Frictionless
+  Data Package, Dev Containers) and sandbox runtimes beyond Docker
+  (containerd, Podman, Apple `container`, gVisor, Firecracker, E2B,
+  Cloudflare Sandbox SDK, Pyodide). Promoted to
+  `lossless-group/study-agent-workspace-bundles`.
