@@ -1,12 +1,12 @@
 ---
 title: "Flave — An Agent-Native Document Format and Desktop Publisher"
-at_semantic_version: 0.1.0.0
+at_semantic_version: 0.1.1.0
 date: 2026-08-15
 publish: true
 generated_with: Claude Code on Opus 5
 categories: Technical-Specification
 date_created: 2026-08-14
-date_modified: 2026-08-20
+date_modified: 2026-11-19
 lede: "The master spec. A package format (.flave) and an editor built on Lossless Flavored Markdown — a document that keeps its workings, publishes only what you choose, and is written in the languages agents already speak fluently."
 status: Implementing
 implementation_note: >-
@@ -545,7 +545,9 @@ format is stable. Segment D requires WYSIWYG parity that would eat two years.
    runtime. The published artifact must survive Flave being discontinued.
 6. **Extensibility without code, then with code.** Declarative trigger-packs
    for authors; real plugins for developers. Two tiers, never one.
-7. **Every agent mutation is a typed operation, not a byte write.** See §9.
+7. **Agents write files; history keeps them honest.** No API stands between an
+   agent and the bundle. Every write lands in `jj`, so every write can be
+   reviewed and undone. See §8.2 and §9.2.
 
 ### 4.1 Technical principles
 
@@ -1371,11 +1373,10 @@ they are the hidden two-thirds of the `paged` milestone.
    is comfortable in markdown and has an agent. They would rather type
    `⌘K two-column, chart on the right` than hunt for a drag target. Pretending
    otherwise would have produced a mouse-driven layer nobody in Segment A uses.
-4. **It makes agent and human writes identical.** Both go through the same
-   named-frame vocabulary and the same typed ops (§9.2). There is no
-   "the human did it by hand so the agent can't understand it" divergence —
-   which is the exact rot that makes agent-edited documents degrade over
-   sessions.
+4. **It makes agent and human writes identical.** Both write the same files
+   with the same named-frame vocabulary (§9.2). There is no "the human did it
+   by hand so the agent can't understand it" divergence, which is the exact rot
+   that makes agent-edited documents degrade over sessions.
 
 **Precise statement of what the mouse may still do**, since "no mouse" is too
 blunt:
@@ -1547,12 +1548,14 @@ fast text editor with a live preview than to a page-layout tool.
    Compose, the palette or the agent. Navigation was never the thing the
    ceiling was protecting against — positional CSS was.
 
-**Design consequence worth naming:** the command palette and the agent's
-Document API (§9.2) should be **the same operation set**, differing only in
-input modality — the palette is a typed, autocompleted front-end over the
-identical ops the agent calls. Build them as one layer. This is a real
-architectural instruction, not a nicety: it guarantees a human and an agent can
-never reach a state the other can't describe.
+**Design consequence worth naming:** the command palette is a typed,
+autocompleted way for a human to **write the same files an agent writes**:
+`⌘K two-column, chart on the right` edits `surfaces.json`, the same file an
+agent would edit. It is a convenience over the files, not a gate in front of
+them. Because both sides only ever produce files in the bundle, a human and an
+agent can never reach a state the other can't read. (Revised 2026-11-19; an
+earlier draft made the palette and a typed agent API "one operation set". See
+D-28.)
 
 ### 7.4 Live data (the differentiator)
 
@@ -1876,8 +1879,9 @@ Port wholesale, not re-architect:
 
 - The **three response modes** — `answer` (talk), `propose` (offer changes the
   user accepts), `invoke` (call a capability) — plus `capability_result`.
-  The `propose` mode is *exactly* the right contract for document editing:
-  the agent never silently mutates; it proposes and the human accepts.
+  `propose` stays useful when the user asks to see a change before it lands.
+  It is not a gate: per D-17 the agent writes files directly, and `jj` makes
+  every write reviewable and undoable (§8.2).
 - The **inline-draft pattern** from `PromptDraftPanel.svelte` — drafts render
   as turns in the dialog, not as detached artifacts. Directly applicable to
   proposed document blocks.
@@ -1886,49 +1890,61 @@ Port wholesale, not re-architect:
 - The **module-federation remote** mount contract, so the chat surface stays a
   separable app rather than fusing into the editor.
 
-### 9.2 The Document API — what the agent is actually allowed to do
+### 9.2 The bundle is files, and agents write them
 
-The agent never writes bytes to files. It calls typed operations. This is the
-thing that makes Flave agent-*native* rather than "an editor with a chat panel."
+> [!success] **D-28 — RESOLVED 2026-11-19 by the owner · there is no Document
+> API. Agents generate and write files; `jj` and git catch renegade behavior.**
+> *"This is not an API with functions/operations. This is a grouping of
+> low-data files like code files, markdown files, json files, csv files. The
+> agents just generate and write to files."*
 
-```ts
-// Prose
-block.insert(after: BlockRef, content: LfmSource): BlockRef
-block.replace(ref: BlockRef, content: LfmSource): void
-block.edit(ref: BlockRef, patch: TextPatch): void       // surgical, not rewrite
-block.move(ref: BlockRef, to: BlockRef): void
-block.remove(ref: BlockRef): void
+A `.flave` is a folder of small text files: LFM / Markdown / MDX prose,
+`flave.yaml`, `surfaces.json`, `tokens.yaml`, frame and theme CSS, HTML
+fragments, CSV and JSON under `data/`, Vega-Lite specs, and code. Every
+deliverable (the deck, the post, the report, the LP letter) is a **view or an
+export of those files**. Nothing about the document lives anywhere else.
 
-// Layout
-layout.place(ref: BlockRef, surface: SurfaceId, slot: string, span?: number): void
-layout.reframe(surface: SurfaceId, frame: FrameId): void
-surface.create(after: SurfaceId, frame: FrameId): SurfaceId
+So an agent works on a flave the way it works on a code repo:
 
-// Style — tokens only. There is no `style.setCss`. Deliberately.
-theme.setToken(path: string, value: string): void
-theme.extend(themeRef: string): void
+- **It reads and writes files with ordinary tools.** The in-app agent, Claude
+  Code, Codex, a shell script: all equal, and none needs Flave installed. This
+  is M0's claim (§13) taken at its word: *"an agent can read and correctly
+  modify a `.flave` with no Flave software installed."* A rule that made agents
+  call typed operations contradicted it.
+- **Version control is the safety net, not an API.** Every write is
+  snapshotted by `jj` (§8.2). The undo horizon (D-17) bounds what an agent may
+  do on its own: anything `jj undo` can reverse is fair game; push, publish and
+  writes outside the bundle need a gesture. A bad session costs one `jj undo`.
+  The diff is the review.
+- **The app follows the files.** It watches the bundle, re-parses what
+  changed, re-renders, and re-resolves block references (§8.1). An edit from an
+  outside agent is just an edit; nothing has to be imported or reconciled
+  through a special path.
+- **Agent sessions group into one step.** The in-app agent's turn is one `jj`
+  operation via `@flave/vcs`. An outside agent's writes are snapshotted when
+  the app sees them change; a `jj new` at the start of each session keeps that
+  session's work together so it still undoes as a unit.
+- **Conventions are checked, not enforced by absence.** `flave validate` and
+  the editor's diagnostics report what breaks the format's conventions: broken
+  block references, a `theme.css` hand-edited while a `tokens.yaml` exists
+  (D-25), free-floating CSS that should live in a frame or a trigger-pack
+  (§9.6), missing provenance for a file in `data/`. Diagnostics are warnings
+  with a fix, never a refusal to write.
 
-// Data & viz
-data.add(path: string, bytes: Uint8Array, source: Provenance): void
-data.query(sql: string): Table
-viz.upsert(id: string, spec: VegaLiteSpec | PlotSource): void
+**What the earlier draft got wrong.** Until 2026-11-19 this section listed a
+typed "Document API" (`block.insert`, `layout.place`, `theme.setToken`,
+`data.add` and so on) and said *"the agent never writes bytes to files."* That
+made the files an implementation detail behind an API, which is backwards for a
+format whose first principle is that the document is legible to an agent
+without tooling (§4, principle 1). The useful ideas from that list survive as
+conventions about *which file* holds what, not as functions: prose in
+`content/`, layout in `surfaces.json`, style in tokens and named frames, data in
+`data/` with its row in `_sources.yaml`.
 
-// Extensibility
-pack.define(trigger: TriggerPackDef): void
-pack.install(ref: string): void        // trust-gated
-
-// Publication
-publish.preview(target: PublishTarget): PreviewHandle
-publish.export(target: PublishTarget, dest: Path): Artifact
-```
-
-**Note the absence:** there is no `style.setCss(...)`, and no way to emit an
-inline style or a free-floating rule. **This is not a ban on the agent writing
-CSS** — §9.6 explicitly expects it to. It is a requirement that CSS always
-arrive *attached to a named thing*: a frame definition or a trigger-pack, both
-of which have a name, a home in the cascade, and a promotion path. Free-floating
-CSS has none of those, which is precisely why documents rot after ten agent
-sessions. Same capability ceiling as the GUI (§7.2), applied to the agent.
+**CSS** is welcome as files. The convention from §9.6 stands: CSS belongs to a
+named thing (a frame, a trigger-pack, the document's `@layer document`), because
+a rule with no name has nowhere to be promoted to. It is a convention the
+validator flags, not a missing function.
 
 ### 9.3 Where the agent runs
 
@@ -2081,9 +2097,9 @@ anything upstream. No `!important`. No selector-weight escalation. No inline
 styles. **The cascade was declared precisely so that "make this win here" is a
 layer choice rather than a specificity trick.**
 
-That is also why §9.2 has no `style.setCss`: CSS is welcome, but it arrives
-inside a frame definition or a trigger-pack — named, scoped, cascade-placed, and
-promotable. A rule with no name has nowhere to be promoted *to*, which is
+That is also why the validator flags free-floating CSS (§9.2): CSS is welcome,
+but it belongs inside a frame definition or a trigger-pack — named, scoped,
+cascade-placed, and promotable. A rule with no name has nowhere to be promoted *to*, which is
 another way of saying it can never graduate from a hack into a standard.
 
 #### Rung 5 is narrated, not gated
@@ -2345,14 +2361,14 @@ flave/   ← its OWN pseudomonorepo at the anchor root, per D-02 (fourth sibling
 │   │                      #   NOT @knots/*, which was given up on. See §12 note.)
 │   ├── format/            # @flave/format  — read/write, manifest schema, pack/unpack
 │   ├── render/            # @flave/render  — LFM AST → Svelte components, over lfm
-│   ├── layout/            # @flave/layout  — surfaces.json + the OPERATION SET (§7.3, §9.2)
+│   ├── layout/            # @flave/layout  — surfaces.json read/write + palette commands (§7.3)
 │   ├── frames/            # @flave/frames  — ★ the frame cascade (§7.2, D-15). With no
 │   │                      #   drag-to-layout this is the layout product, not a stylesheet.
 │   ├── theme/             # @flave/theme   — tokens.yaml → theme.css + tailwind preset;
 │   │                      #   theme copy-on-adopt + drift reporting (§5.5)
 │   ├── vcs/               # @flave/vcs     — jj wrapper: one-op-per-turn, undo horizon,
 │   │                      #   plain-language vocabulary, geek-mode stream (§8.2)
-│   ├── agent/             # @flave/agent   — Document API tools over @flave/layout ops
+│   ├── agent/             # @flave/agent   — in-app agent: file tools, chat surface, memory (§9)
 │   └── publish/           # @flave/publish — export pipeline, CSP emission, Paged.js
 ├── apps/
 │   ├── flave-desktop/     # Tauri 2 + SvelteKit    ← memopop-native pattern
@@ -2539,8 +2555,8 @@ slippage is visible early rather than at the end.
 | **M0 · Format** | *"An agent can read and correctly modify a `.flave` with no Flave software installed."* | `flave.yaml` schema, directory layout, `@flave/format`, CLI (`validate`, `render`), fixture corpus, published format spec. **Frozen here:** block addressing (§8.1), the reserved `.flave/review/` path (§8.4), the provenance schemas (`data/_sources.yaml`, `assets/_manifest.yaml`), and the `publish.audiences` shape (§11.1) |
 | **M1 · Render** | *"A `.flave` renders identically in the CLI and in the Svelte app."* | `@flave/render` over `lfm`, tokens→CSS pipeline, `flow` surface, Vega-Lite + Mermaid fences, `html-single` export, CI screenshot-diff parity test |
 | **M2 · Publish** ★ | *"I produce five levels from one document — private notes, transcript, team, LP, public — **none of which drift**, and I can **prove** the public one contains nothing private."* | ★ **The core promise (§11.1, D-01).** The clearance × register model, block-level clearance with fail-closed defaults, per-register variants with fallback, derived-variant staleness, redaction-by-construction, the **clearance scan**, per-audience preview, cross-audience diff, and the Vega-Lite inlined-data / metadata vectors |
-| **M3 · Edit** | *"A human composes a full document — prose, layout, and theme — without ever touching a drag handle or a line of CSS."* | Tauri shell, Compose / Source views, **command palette as primary layout interface**, `@flave/layout` operation set, token editor. **First `flow` frame vocabulary ships here.** |
-| **M4 · Agent** | *"An agent restructures a document through the same operation set the palette uses, and everything it did undoes in one gesture."* | `@flave/agent` over `@flave/layout` ops, chat surface port from `augment-it`, `propose` mode, `.flave/agent/` memory, `@flave/vcs` one-op-per-turn (§8.2) |
+| **M3 · Edit** | *"A human composes a full document — prose, layout, and theme — without ever touching a drag handle or a line of CSS."* | Tauri shell, Compose / Source views, **command palette as primary layout interface** (it writes `surfaces.json` and frames), token editor. **First `flow` frame vocabulary ships here.** |
+| **M4 · Agent** | *"An agent restructures a document by writing its files, from inside the app or out, and everything it did undoes in one gesture."* | `@flave/agent` with ordinary file tools, file watching and re-render for outside writes, chat surface port from `augment-it`, `propose` mode, `.flave/agent/` memory, `@flave/vcs` one-op-per-turn (§8.2) |
 | **M5 · Data** | *"I swap a CSV and every chart updates — and six months later I can still say where the number came from."* | DuckDB-WASM, `sql` fence, `data=` binding, **provenance capture** into `_sources.yaml`, Observable Plot tier |
 | **M6 · Trust** | *"I open a stranger's `.flave` and nothing can hurt me."* | Capability enforcement, sandboxed iframe runtime, trust-gesture UX, CSP on export, host-side network gating. **Gates any public release.** |
 | **M7 · Deck** | *"I replace Keynote for a real fundraise deck."* | `deck` surface, fixed-aspect frames, per-slide export, presenter view, **deck frame vocabulary** |
@@ -2607,6 +2623,7 @@ The engineering handoff is not complete until every row is resolved.
 | **D-24** | `theme/` (document, singular) vs `themes/` (workspace, plural) | 5.2, 5.6 | ✅ **RESOLVED 2026-08-20 — both, and they are different scopes.** `themes/lossless.css` is a workspace library documents choose **from**; `theme/` is the document-local layer that overrides on top. The cascade absorbs it unchanged: `builtin < workspace < theme < pack < document`. Naming them alike is a hazard, so the plural/singular distinction is load-bearing and must survive review |
 | **D-25** | §5.2 says hand-editing `theme.css` is a lint error. §1.1 says v0 ships one hand-edited `theme.css`. Which? | 1.1, 5.2, 5.5, 5.6 | ✅ **RESOLVED 2026-08-20 — the lint error is CONDITIONAL on a `tokens.yaml` existing.** The rule's whole purpose (§5.5) is preventing two sources of truth from drifting. With no `tokens.yaml`, `theme.css` **is** the single source and hand-editing it is correct, not a violation. The moment a `tokens.yaml` appears beside it, `theme.css` becomes generated and hand-edits become the lint error §5.2 describes. This reconciles the two sections without weakening the anti-drift argument — and it is what makes the owner's *"I want to see that you are doing the theme.css the way I want"* a supported workflow rather than a spec violation |
 | **D-26** | How does the app read and write the workspace before Tauri? | 1.1, 5.6 | ✅ **RESOLVED 2026-08-20 by the owner — bring Tauri forward.** *"Tauri wrapper should be obvious and easy, and I wanna see it on Linux, let's do that first."* This **reverses §1.1's explicit cut** (annotated there) and is a deliberate scope change, not drift. It collapses the problem rather than working around it: with a native host there is no dev-server bridge to build and no Chromium-only gesture gate, and the filesystem is real from day one. My prior recommendation optimised for §1.1's ordering; the owner optimised for seeing the actual product on their actual OS, which is the better objective. **The `WorkspaceFs` interface still stands** — a browser backend follows for anyone without the desktop app. Viability proven on NixOS before committing: webkit2gtk 2.52.5, gtk 3.24.52, libsoup 3.6.6, cargo 1.97 via a repo-local flake devshell |
+| **D-28** | Do agents edit a `.flave` through a typed Document API, or by writing its files? | 4, 7.3, 9.2 | ✅ **RESOLVED 2026-11-19 by the owner — by writing its files.** A flave is a folder of low-data files (Markdown, MDX, JSON, CSV, CSS, HTML, code); every deliverable is a view or export of them. Agents generate and write files with ordinary tools; `jj` and git catch renegade behavior (D-17's undo horizon). **Supersedes** the earlier §9.2 rule *"the agent never writes bytes to files"*, the typed operation list, and the Phase 1 plan built on it. Prompted by [[Positioning-Flave-Against-the-Content-Authoring-Tools-Study]] |
 | **D-27** | With Files added, four columns compete for width | 7.3, 5.6 | ✅ **RESOLVED 2026-08-20 by the owner — the left rail toggles between Chat and Files.** One rail, two surfaces, never both. Follows the precedent Phase 0 set with the Source toggle, and keeps the document the widest thing on screen — correct for a tool whose claim is that you are reading a document, not operating an IDE |
 | **D-20** | Where does the `tokens.yaml` → `theme.css` + Tailwind generator live? | 12, 5.5 | ✅ **RESOLVED 2026-08-14 — in `@flave/theme`.** My "build it upstream in `@knots/tokens`" recommendation was wrong: **`@knots` was given up on**; only `lfm` was a true package and it was extracted. `astro-knots/packages/*` is starter-copy and prior art, never a dependency. **Flave originates the theme format; astro-knots sites starter-copy from it** — Flave has the stronger forcing function (frames + 3 surfaces + 2 generated outputs) |
 | — | Theme adoption model | 5.5 | ✅ **RESOLVED 2026-08-14 — adopting a theme is a *copy*, not a link.** Simpler than the fetch-and-pin framing that reached the same mechanism. Kills the `network: deny` / Principle 5 conflict outright — there was never a link |

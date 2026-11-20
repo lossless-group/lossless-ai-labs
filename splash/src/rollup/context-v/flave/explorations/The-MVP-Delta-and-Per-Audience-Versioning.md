@@ -86,7 +86,8 @@ Still open from the phase plans:
   second bundle sharing the theme) are not met.
 - **Phase 1 (one operation set, four callers): not started.** It is not on the
   MVP path; it serves M3/M4. Worth saying, because "Phase 1" sounds like it comes
-  next.
+  next. *(2026-11-19: superseded outright by D-28. Agents write files; there is
+  no operation set to build.)*
 
 ### The audience half (§1.1 v1, M2's claim): nothing
 

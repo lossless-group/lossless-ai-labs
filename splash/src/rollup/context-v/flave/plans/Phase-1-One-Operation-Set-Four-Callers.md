@@ -2,13 +2,14 @@
 title: "Phase 1 — One Operation Set, Four Callers"
 lede: "A menu, a palette, a rendered page you can type into, and an agent — all writing through the same named operations, so a human and an agent can never reach a state the other cannot describe."
 date_created: 2026-08-20
-date_modified: 2026-08-20
+date_modified: 2026-11-19
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5 (1M context)
 semantic_version: 0.0.0.1
-status: Draft
+status: Superseded
+superseded_by: "D-28 in [[Master-Flave-An-Agent-Native-Document-Format-and-Publisher]] §9.2"
 spec_reference: "[[Master-Flave-An-Agent-Native-Document-Format-and-Publisher]]"
 tags:
   - Plan
@@ -29,6 +30,23 @@ from: "flave"
 from_path: "context-v/plans/Phase-1-One-Operation-Set-Four-Callers.md"
 ---
 # Phase 1 — One Operation Set, Four Callers
+
+> [!warning] **Superseded 2026-11-19 by D-28 (spec §9.2). Not started, and not
+> to be built as written.**
+> The owner resolved that a flave is a folder of plain files and that agents
+> write those files directly, with `jj` and git catching renegade behavior.
+> There is no typed operation set for agents to call, so the plan's central
+> claim (*"every document mutation goes through a named, typed operation"*) and
+> its done condition 2 (*"no direct mutation path exists anywhere"*) are void.
+>
+> **What survives, reframed as file writes:** the menu bar and the command
+> palette as human conveniences that edit the same files an agent would
+> (§7.3); Compose typing that edits the source text; the chat *contract* port
+> (§4 below); and `@flave/workspace` implementing `WorkspaceAdapter`, with
+> capabilities that wrap file reads and writes rather than block operations.
+> The next agent phase should be planned fresh from §9.2: file watching and
+> re-render for outside writes, `flave validate` diagnostics, and one `jj`
+> step per agent session.
 
 ## Why care?
 

@@ -1,11 +1,11 @@
 ---
 title: "Positioning Flave Against the Content-Authoring-Tools Study"
-lede: "Twenty-three tools, and none of them carries one source through to several audiences with proof that nothing leaked. The study backs flave's core bet, backs most of its spec, and pushes back on exactly one rule: the agent will write bytes to files whether we allow it or not."
+lede: "Twenty-three tools, and none of them carries one source through to several audiences with proof that nothing leaked. The study backs flave's core bet, backs most of its spec, and pushed back on exactly one rule, that agents must not write files. That rule is now gone: agents write the files, and Jujutsu and git catch mistakes."
 date_created: 2026-11-19
 date_modified: 2026-11-19
 date_authored_initial_draft: 2026-11-19
 date_authored_current_draft: 2026-11-19
-at_semantic_version: 0.0.0.1
+at_semantic_version: 0.0.1.0
 status: Draft
 publish: true
 site_uuid: bc65dfaf-caf9-4669-ae85-505e8866813a
@@ -47,7 +47,7 @@ proposes; it doesn't change the spec.
 Three axes separate the 23 entries:
 
 1. **Where the truth lives:** a file you can open, or a database / CRDT the app owns.
-2. **How an agent gets in:** not at all, by reading a copy, by writing files, or through typed operations.
+2. **How an agent gets in:** not at all, by reading a copy, by writing files, or through an API.
 3. **What happens to the workings:** discarded, compiled one way into output (§2.2's "literate-document tools"), or carried with the document and filtered per audience.
 
 | | Truth | Agent reach | Workings |
@@ -60,26 +60,26 @@ Three axes separate the 23 entries:
 | **SilverBullet** | **File** | **MCP + file co-editing with 3-way merge** | Baked query sections |
 | **Baalda** | File as a port onto a CRDT | MCP into the live doc | Not a concept |
 | mystmd, Evidence, Notebook Kit, Pluto, Livebook, Deepnote | File | File (some add CLI / MCP) | **Compiled one way** |
-| **flave (spec)** | **File (folder = bundle)** | **Typed operations** | **Carried, filtered by clearance** |
+| **flave (spec)** | **File (folder = bundle)** | **Writes the files; `jj` catches mistakes** | **Carried, filtered by clearance** |
 
 **The positioning, stated against the field:**
 
 > Notebooks and literate tools keep the file but throw the workings away on
 > publish. Second brains and wikis let agents in but moved the truth into a
-> database. Flave keeps the file, lets the agent in through typed operations,
-> and is the only entry where the workings travel with the document and a
+> database. Flave keeps the files, lets any agent write them directly with
+> version control as the safety net, and is the only entry where the workings travel with the document and a
 > verified publish filters them per audience.
 
 The closest neighbours, and what each one already has that flave hasn't built:
 
 - **[[Profile__SilverBullet]]:** plain Markdown as the truth, coding agents
   named as co-editors, `If-Match` writes plus server-side diff3, extensions as
-  pages under `Library/`. Missing: typed block operations, clearance.
+  pages under `Library/`. Missing: clearance, audiences, publishing.
 - **[[Profile__mystmd]]:** typed directives, a published AST, numbered
   cross-references, citations. The study's own words: *"what LFM keeps
   promising itself."* Missing: the editor, audiences, the private layer.
 - **[[Profile__Baalda]]:** plain `.md` plus real-time collaboration plus MCP.
-  Missing: typed operations, publishing.
+  Missing: publishing, clearance.
 - **[[Profile__Livebook]]:** Markdown notebooks, and the only entry that
   documents a Claude Code hook to push an agent's file edit into the live
   session.
@@ -94,12 +94,11 @@ The closest neighbours, and what each one already has that flave hasn't built:
   from a tree loses bytes: Outline admits it, Docmost routes through HTML, and
   MarkText reformats on save. Even [[Profile__Milkdown]]'s strict round trip lets
   remark-stringify rewrite what the author typed. Keep CodeMirror canonical, and
-  have the Compose caller emit operations, never a re-serialized AST.
-- **Typed operations (§9.2).** The field is converging on the same shape:
-  SiYuan declares `LocalRead`/`LocalWrite` per action; Trilium marks tools
-  read-only or destructive; Outline locates edits through a
-  Markdown↔ProseMirror block map. Flave's Document API is ahead of most of them,
-  not behind.
+  have Compose edit the source text, never write back a re-serialized AST.
+- **Agents write the files (§9.2, D-28).** Every tool that kept plain files
+  lets agents edit them directly, and the ones that went to an API (SiYuan,
+  Trilium, Outline) did so because their truth had left the file. Flave has no
+  reason to follow them there.
 - **Reserve block ids from M0 (§8.4).** [[Profile__Livebook]] shows the cost of
   not doing it: cell ids are random on every load, so nothing durable can point
   at a cell. [[Profile__Pluto]] shows the fix: a UUID per cell written into the
@@ -110,27 +109,30 @@ The closest neighbours, and what each one already has that flave hasn't built:
 
 ## 3 · Where the study pushes back
 
-### 3.1 "The agent never writes bytes to files" (§9.2)
+### 3.1 "The agent never writes bytes to files" (§9.2), resolved
 
-This is the one rule the field contradicts. Coding agents (Claude Code, Codex)
-write files directly, and the tools that welcome them don't fight it:
-SilverBullet's docs name them as co-editors, Livebook ships the hook,
-Baalda diffs every disk edit into its CRDT.
+This was the one rule the field contradicted. Coding agents (Claude Code,
+Codex) write files directly, and the tools that welcome them don't fight it:
+SilverBullet's docs name them as co-editors, Livebook ships the hook, Baalda
+diffs every disk edit into its CRDT.
 
-**Proposal:** keep typed operations as the *preferred* path and add **file
-reconciliation as a fifth caller.** When a watched file changes outside the app,
-parse it, diff it against the current AST, and replay the difference as named
-operations, so history, block ids and clearance checks see an ordinary edit.
-Precedents:
+**Resolved 2026-11-19 by the owner (D-28):** there is no Document API. A flave
+is a folder of low-data files; agents generate and write them; Jujutsu and git
+catch renegade behavior. An earlier draft of this section proposed keeping typed
+operations and treating outside file writes as a "fifth caller" to reconcile.
+That was still backwards and is withdrawn.
 
-- [[Profile__Livebook]] `POST /dev/sync`: re-parse, diff into session
-  operations, apply.
+What the study still offers is how the *app* should follow files that change
+under it:
+
 - [[Profile__Baalda]] origin tags (`disk` / `editor` / `remote`) and a
   `lastWrittenHash` so the watcher drops its own echo.
 - [[Profile__MarkText]]'s decision table: byte-identical → no-op; clean buffer
   → silent reload; dirty buffer → prompt; stale-epoch saves dropped.
+- [[Profile__Livebook]] `POST /dev/sync`: re-parse after an outside write and
+  update the live view.
 
-This is also the cheapest answer to Phase 2's file watching.
+This is the whole of Phase 2's file watching.
 
 ### 3.2 The CRDT deferral (§8.4)
 
@@ -148,20 +150,26 @@ The deferral holds. Two findings change the ladder below it:
 
 ## 4 · What to borrow, by spec section
 
-### Phase 1 operation set (§9.2, the four callers)
+### Around agent writes (§8.2, §9.2)
 
-A rail checklist assembled from the study's convergent patterns. None of the 23
-has all of these:
+Rails from the study that still apply once agents write files directly. They
+belong to the app, the validator and version control, not to an agent API:
 
-- [ ] **Agent writes off by default**; read is the default grant (Joplin, AFFiNE, Khoj).
-- [ ] **Grants map onto clearance:** an agent holding a `public`-only grant can't read `team` blocks (Anytype's per-space Read/ReadWrite grant, approved by the human). That makes "nothing leaks" enforceable at the API, not only at publish.
-- [ ] **Every operation declares its effect** (read / write / destructive), as in SiYuan and Trilium.
-- [ ] **`If-Match` on every write**; refuse with a typed error rather than touch a dirty human buffer (VNote's 409 `unsaved_changes`).
-- [ ] **Dry run** on batched writes (Logseq `upsertNodes`).
-- [ ] **Fail loud:** a write that changes nothing is an error and echoes what it found (Outline).
-- [ ] **Locate by block id first, by quoted text as fallback**, with ambiguity as an error rather than a guess (Outline `findText`, Joplin's heading rule).
-- [ ] **Reads by outline, then section**, capped in size (Joplin's `read_note`).
-- [ ] **Agent edits arrive as reviewable chunks** (Milkdown's diff plugin, Khoj's Apply/Cancel). This is the `propose` contract §8.4 already plans to reuse for v2 human review.
+- [ ] **Never clobber a dirty human buffer.** When a file changes on disk while
+  the editor holds unsaved edits, keep both and ask (MarkText, VNote's
+  `unsaved_changes`).
+- [ ] **One `jj` step per agent session**, so a bad session undoes as one
+  gesture whether the agent ran in the app or outside it.
+- [ ] **The diff is the review.** Show what an agent session changed per file,
+  the way Milkdown's diff plugin and Khoj's Apply/Cancel do, but after the fact
+  and backed by `jj undo` rather than as a gate.
+- [ ] **Fail loud in the validator.** Broken block references, duplicate ids,
+  a data file with no `_sources.yaml` row: diagnostics with a fix (Pluto's
+  loader repairs bad ids instead of failing).
+- [ ] **Clearance at publish, not at write.** Any agent can read any file; the
+  guarantee is that a publish for an audience can't include blocks above its
+  clearance. For the in-app agent, optionally keep agent-hidden blocks out of
+  its context (Docmost's `excludeFromLlm`).
 
 ### Trigger packs (§6.2)
 
@@ -260,10 +268,11 @@ found (build)?
 
 ## 7 · Suggested follow-ups
 
-1. Decide §3.1 (file reconciliation as a caller) before Phase 2's file
-   watching, since it changes what the watcher does.
-2. Fold the §4 rail checklist into
-   [[Phase-1-One-Operation-Set-Four-Callers]] as acceptance criteria.
+1. ~~Decide §3.1~~ Resolved as D-28: agents write files. Build Phase 2's file
+   watching against the §3.1 precedents.
+2. Fold the §4 "around agent writes" checklist into the next agent phase as
+   acceptance criteria. ([[Phase-1-One-Operation-Set-Four-Callers]] is
+   superseded.)
 3. Add the typed schema to the trigger-pack registration in §6.2 of the spec.
 4. Draft the `sql` fence spec against Evidence, Notebook Kit and Deepnote before
    un-parking it.
