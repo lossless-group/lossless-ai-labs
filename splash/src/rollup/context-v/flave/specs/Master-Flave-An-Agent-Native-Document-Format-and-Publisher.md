@@ -1,6 +1,6 @@
 ---
 title: "Flave — An Agent-Native Document Format and Desktop Publisher"
-at_semantic_version: 0.1.2.0
+at_semantic_version: 0.1.3.0
 date: 2026-08-15
 publish: true
 generated_with: Claude Code on Opus 5
@@ -688,7 +688,11 @@ Q3-Investor-Update.flave/
 │   ├── 001-cover.lfm.md        # ordered content blocks, LFM markdown
 │   ├── 002-thesis.lfm.md
 │   ├── 003-metrics.lfm.md
-│   └── 004-appendix.lfm.md
+│   ├── 004-appendix.lfm.md
+│   └── source/                 # raw material kept byte-for-byte (§5.10)
+│       ├── 2026-11-19_board-call.transcript.vtt
+│       ├── 2026-11-19_board-call.transcript.md   # readable twin, derived
+│       └── _manifest.yaml      # origin, imported_at, sha256, clearance
 ├── layout/
 │   ├── surfaces.json           # surface geometry & block placement (see §7.2)
 │   └── grid.json               # named grid/frame definitions
@@ -1363,6 +1367,91 @@ with a `datapackage.json`), Dev Containers and Nix flakes (rebuilding an
 environment from a small recipe, as `env/` does), git-annex (big files as
 pointers in git, as §8.5 requires), and Claude Code's `settings.json` /
 `settings.local.json` split (shared vs. personal, as `config/` vs. `.env`).
+
+### 5.10 Source files — the raw material people bring
+
+> [!success] **D-32 — RESOLVED 2026-11-19 by the owner · a flave accepts the
+> everyday files people already have**, starting with meeting transcripts.
+> They arrive in a chat as uploads or in a folder as downloads, and the
+> agent has to know where they go.
+
+**The rule: keep the original, add a readable twin.**
+
+1. **The original is kept byte-for-byte** in `content/source/`, never
+   rewritten. Its row in `content/source/_manifest.yaml` records where it came
+   from, when it was imported, its sha256, and its clearance.
+2. **Source material is `private` by default** (§11.1). A transcript or an
+   email thread is raw; the useful parts get promoted to `team` or `lp` on
+   purpose, never by accident.
+3. **Anything that isn't plain text gets a readable twin**: a Markdown file
+   beside the original, marked `derived_from:` it, that agents, ripgrep and
+   Flave Sync's search can read. Twins keep the original's anchors (a
+   timestamp, a page, a message id) so a claim in the document can cite the
+   exact moment it came from.
+4. **Large binaries are links, not files in history** (§8.5): recordings and
+   long videos go to object storage; the twin and the manifest row stay in the
+   bundle.
+
+#### Transcripts and captions
+
+**WebVTT (`.vtt`) is the industry standard.** It's a W3C specification (Web
+Video Text Tracks), the caption format HTML5 `<track>` elements use, and what
+Zoom, Microsoft Teams, YouTube and Vimeo export. A file starts with `WEBVTT`,
+then numbered cues of `start --> end` timestamps and text.
+
+Speaker names are where tools differ:
+
+| Source | How the speaker is marked | Example |
+|---|---|---|
+| **WebVTT spec** | A voice tag | `<v Michael Staton>Thanks for joining.` |
+| **Zoom** (`*.transcript.vtt`) | A `Name: ` prefix in the cue text | `Michael Staton: Thanks for joining.` |
+| **SRT** (`.srt`, SubRip) | No speaker field; often a prefix by convention | `Michael Staton: Thanks for joining.` |
+
+SRT is the older de facto format: no formal spec, commas instead of dots in
+timestamps (`00:00:18,840`), no header. Parsers should accept all three
+patterns and normalize to speaker + start + end + text.
+
+**The transcript's readable twin** is LFM with one block per speaker turn,
+consecutive cues from the same speaker merged, and the start time kept on
+each turn:
+
+```markdown
+---
+derived_from: content/source/2026-11-19_board-call.transcript.vtt
+clearance: private
+register: verbatim
+participants: [Toby Rush, Michael Staton]
+recorded: 2026-11-19T17:01:17Z
+---
+
+**Toby Rush** · 00:00:00
+…
+
+**Michael Staton** · 00:00:18
+…
+```
+
+A Zoom filename like `GMT20261119-170117_Recording.transcript.vtt` carries the
+recording's start time in UTC; the importer reads it into `recorded:`.
+
+#### The rest of the everyday roster
+
+| Kind | Formats | Standard | Lands in | Readable twin |
+|---|---|---|---|---|
+| **Transcripts, captions** | `.vtt`, `.srt` | WebVTT: W3C. SRT: de facto | `content/source/` | LFM, one block per speaker turn |
+| **Email** | `.eml`, `.mbox` | RFC 5322 | `content/source/` | LFM per message: from, to, date, body; attachments to `assets/` |
+| **Calendar** | `.ics` | RFC 5545 (iCalendar) | `content/source/` | LFM list of events |
+| **Contacts** | `.vcf` | RFC 6350 (vCard) | `content/source/` | YAML, one record per person |
+| **Chat exports** | Slack export (JSON), WhatsApp (`.txt`), Teams | Vendor formats | `content/source/` | LFM per thread |
+| **Office documents** | `.pdf`, `.docx`, `.pptx`, `.xlsx` | ISO 32000 (PDF), ECMA-376 (OOXML) | `assets/` | Extracted Markdown (tables from `.xlsx` go to `data/` as CSV) |
+| **Audio, video** | `.m4a`, `.mp3`, `.mp4`, `.mov` | — | `assets/`, large files as links | The transcript is the twin |
+| **Web pages** | saved `.html`, `.webloc`, `.url` | — | `content/source/` | Markdown of the page, with the URL and fetch date |
+| **Notes from other tools** | `.md`, `.mdx`, `.org`, `.txt` | — | `content/source/` | Usually already readable; MDX is kept as source, not rendered (§6.3) |
+| **Data** | `.csv`, `.tsv`, `.json`, `.jsonl`, `.parquet` | — | `data/`, with `_sources.yaml` | Already readable |
+
+New kinds join this table rather than getting bespoke handling. If a format
+has a standard, the parser follows it and tolerates the common deviations, as
+with Zoom's speaker prefix.
 
 ## 6 · The language layer: LFM, extended
 
@@ -2850,6 +2939,7 @@ The engineering handoff is not complete until every row is resolved.
 | **D-29** | Is a whole agent session a flave, or a separate bundle format underneath? | 5.2, 5.7 | ✅ **RESOLVED 2026-11-19 by the owner — a flave.** The spec grows `scripts/`, `queries/`, `runs/`, `env/` and `config/`, so a flave holds how the work was made, not only what it made. Exploration: [[A-Flave-Is-the-Zip-for-an-Agent-Session]] |
 | **D-30** | Where does a flave live off the laptop? | 8.5 | ✅ **RESOLVED 2026-11-19 — any git remote; Cloudflare Artifacts first-class, not a dependency.** A server's filesystem and object storage remain valid. Artifacts wins on sharing: read tokens, read-only forks, a fork per collaborator, push-triggered rebuilds of `dist/` |
 | **D-31** | Whose account holds a repo exported from a chat? | 8.5 | **OPEN — NEW.** Lossless's, the person's, or their company's. Decides billing, jurisdiction, deletion |
+| **D-32** | Which everyday files does a flave accept, and where do they go? | 5.10 | ✅ **RESOLVED 2026-11-19 by the owner — the everyday roster, starting with transcripts.** Originals byte-for-byte in `content/source/` with a manifest row, `private` by default, plus a readable Markdown twin that keeps timestamps or pages for citation. WebVTT is the transcript standard; Zoom's `Name: ` prefix and SRT are tolerated |
 | **D-28** | Do agents edit a `.flave` through a typed Document API, or by writing its files? | 4, 7.3, 9.2 | ✅ **RESOLVED 2026-11-19 by the owner — by writing its files.** A flave is a folder of low-data files (Markdown, MDX, JSON, CSV, CSS, HTML, code); every deliverable is a view or export of them. Agents generate and write files with ordinary tools; `jj` and git catch renegade behavior (D-17's undo horizon). **Supersedes** the earlier §9.2 rule *"the agent never writes bytes to files"*, the typed operation list, and the Phase 1 plan built on it. Prompted by [[Positioning-Flave-Against-the-Content-Authoring-Tools-Study]] |
 | **D-27** | With Files added, four columns compete for width | 7.3, 5.6 | ✅ **RESOLVED 2026-08-20 by the owner — the left rail toggles between Chat and Files.** One rail, two surfaces, never both. Follows the precedent Phase 0 set with the Source toggle, and keeps the document the widest thing on screen — correct for a tool whose claim is that you are reading a document, not operating an IDE |
 | **D-20** | Where does the `tokens.yaml` → `theme.css` + Tailwind generator live? | 12, 5.5 | ✅ **RESOLVED 2026-08-14 — in `@flave/theme`.** My "build it upstream in `@knots/tokens`" recommendation was wrong: **`@knots` was given up on**; only `lfm` was a true package and it was extracted. `astro-knots/packages/*` is starter-copy and prior art, never a dependency. **Flave originates the theme format; astro-knots sites starter-copy from it** — Flave has the stronger forcing function (frames + 3 surfaces + 2 generated outputs) |
