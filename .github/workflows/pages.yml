@@ -2,7 +2,7 @@ name: Deploy splash to GitHub Pages
 
 on:
   push:
-    branches: [master, main, development]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
