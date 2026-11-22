@@ -730,6 +730,17 @@ Per the `generate-consistent-og-images` skill's **preservation discipline**:
 - Raw candidates from each run land in `.ideogram-candidates/<subject>-<aspect>-<timestamp>/` (dot-prefixed, outside `public/` so static-site frameworks don't deploy them).
 - When replacing a canonical JPEG, move the old one to `.ogimage-archive/ogimage__AI-Labs--{Format}--{YYYY-MM-DD}.jpg` *before* writing the new one. The unfurler URL stays stable; old bytes survive in archive with a date stamp.
 
+### Trademark pack
+
+In `public/`, every piece outlined to paths (an `<img>` cannot load web fonts).
+
+| Piece | File |
+|---|---|
+| appIcon | `appIcon__AI-Labs.svg` |
+| favicon | `favicon.svg` |
+| wordmark | `wordmark__AI-Labs--{Dark,Light}-Mode.svg`: `Lossless/ai-labs` in JetBrains Mono 600, as the header sets it: *Lossless* soft, the slash faint, *ai-labs* in sodium accent |
+| trademark | `trademark__AI-Labs--{Dark,Light}-Mode.svg`: appIcon + wordmark |
+
 ## Do's and Don'ts
 
 - **Do** lead every section with an eyebrow (`ch.0X · {section-name}`). The
