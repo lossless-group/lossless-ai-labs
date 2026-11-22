@@ -94,3 +94,6 @@
 [submodule "studies/agent-workspace-bundles"]
 	path = studies/agent-workspace-bundles
 	url = https://github.com/lossless-group/study-agent-workspace-bundles.git
+[submodule "studies/agent-skill-packs"]
+	path = studies/agent-skill-packs
+	url = https://github.com/lossless-group/study-agent-skill-packs.git

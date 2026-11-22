@@ -48,7 +48,9 @@ The user may ask to "add a reference" or "extend a study." Default workflow:
 1. Confirm the study's question is still the right home for the new
    reference. If it isn't, suggest a new study instead of stretching scope.
 2. Add the upstream as a submodule **inside the study's repo** (not inside
-   ai-labs). Studies are self-contained.
+   ai-labs). Studies are self-contained. Pin the **original source repo**,
+   never a `lossless-group/*` fork of it, even if we already have the fork
+   cloned elsewhere in the tree. Studies cite the source directly.
 3. Update the study's README to include the new reference (link,
    maintainer, one-paragraph "why this is here").
 4. Stage and let the user review before committing.
