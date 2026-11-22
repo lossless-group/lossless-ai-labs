@@ -17,4 +17,5 @@
 * [Shared Auth for Applied AI Labs](Shared-Auth-for-Applied-AI-Labs.md) - Three sibling apps need login; none is at Auth0/Clerk scale. A small owned system: OAuth, invites, org-scoped roles, a roll-up seam.
 * [Successfully Connecting To AI Model Vendors](<Successfully Connecting to AI-Model-Vendors.md>) - Connect to AI Model vendors via API
 * [Two Clients, One Flow — Corpora by Domain-Type, Auth, and Deployment Converge](Two-Clients-One-Flow-Corpora-Auth-and-Deployment-Converge.md) - reach-edu wants corpus→memos by strategy, humain-vc by thesis — and typed domains, shared auth, and deployment all came due at once.
+* [Use an LLM Gateway to Augment Content](Use-LLM-Gateway-to-Augment-Content.md) - Create the content of a thousand content marketers with an LLM Gateway -- LiteLLM, Fabric, Ollama, MSTY
 * [When Claud Code and When Pi](When-Claud-Code-and-When-Pi.md)
