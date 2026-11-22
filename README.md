@@ -103,8 +103,7 @@ ai-labs/                              # this repo — the pseudomonorepo
 │   ├── frontend-ui-kits-component-libraries/
 │   └── collaborations/               #   silo-to-silo studies of friends' codebases (read-only)
 ├── packages/                         # vendored / upstream AI tooling
-│   ├── mermaid-js-ai-agent/          #   submodule · diagram agent
-│   └── odysseus/                     #   submodule · self-hosted AI workspace (chat/agents/research/docs)
+│   └── mermaid-js-ai-agent/          #   submodule · diagram agent
 ├── splash/                           # GitHub-Pages showcase for the tree
 ├── apis/                             # scratch surface — API examples per provider
 ├── scripts/                          # one-shot CLI helpers
@@ -121,9 +120,10 @@ Every submodule above carries its own `README.md`, its own `context-v/`, its own
 Forks or pins of upstream tools we use directly:
 
 - **[mermaid-js-ai-agent](./packages/mermaid-js-ai-agent)** — agentic Mermaid diagram generation ([disler/mermaid-js-ai-agent](https://github.com/disler/mermaid-js-ai-agent)).
-- **[odysseus](./packages/odysseus)** — self-hosted AI workspace for chat, agents, research, documents, email, notes, calendar, and local model workflows ([pewdiepie-archdaemon/odysseus](https://github.com/pewdiepie-archdaemon/odysseus)).
 
 Perplexica (formerly pinned here as `packages/Perplexica`) was removed — the upstream project has moved to [ItzCrazyKns/Vane](https://github.com/ItzCrazyKns/Vane).
+
+odysseus (formerly `packages/odysseus`) moved on 2026-11-21 to the [`conversational-ui-and-native-shells`](./studies/conversational-ui-and-native-shells) study, beside Onyx and LibreChat. It's something we read, not tooling we run.
 
 ## Sandbox — `apis/`, `scripts/`, `utils/`
 

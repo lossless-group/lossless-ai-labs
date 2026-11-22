@@ -34,7 +34,7 @@ list — this is a snapshot):
 | `studies/collaborations/phoenixcapera/deck-v4/` | the same developer's later derivative of `instadeck-v2` (private, new Git history). Same rules: read-only, never commit, push, or refactor inside it. |
 | `studies/` | nine pinned reference collections (open-specs, memory-layers, agent-harnesses, sync-and-content-version-control, …); read upstream code, do not paraphrase from training data. `pnpm rollup:sync` snapshots them for the splash |
 | `splash/` | GitHub-Pages showcase: product cards, studies, and every public child's changelog + context-v rolled up. `rollup-sync.ts` excludes `client-sites/`, non-public repos, and any file marked `private: true` or `publish: false` |
-| `packages/` | pinned upstream AI tooling: `mermaid-js-ai-agent`, `odysseus` |
+| `packages/` | pinned upstream AI tooling: `mermaid-js-ai-agent` (odysseus moved to `studies/conversational-ui-and-native-shells/` on 2026-11-21) |
 | `scripts/` | one-off and reusable Python/Node automation |
 | `apis/` | API integrations and clients |
 | `utils/` | shared utilities |
