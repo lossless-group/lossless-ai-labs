@@ -4,15 +4,15 @@ title: "MemoPop Connector API"
 lede: "Ten tools, one step registry, and the docs and tests that ship with each. What we build so a partner's Claude can write a MemoPop memo."
 publish: true
 date_created: 2026-10-10
-date_modified: 2026-10-11
+date_modified: 2026-11-19
 date_authored_initial_draft: 2026-10-10
-date_authored_current_draft: 2026-10-10
+date_authored_current_draft: 2026-11-19
 date_authored_final_draft:
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5.5 (1M context)
-at_semantic_version: 0.0.0.8
+at_semantic_version: 0.0.0.9
 status: Draft
 category: Specification
 site_uuid: f32ada52-1cdb-4348-9170-42eebdbc9bd3
@@ -135,6 +135,7 @@ Every step is declared once:
 | `needs_partner` | The step ends only when the partner has approved the artifact |
 | `source_agent` | The agent in `src/agents/` the instruction was adapted from |
 | `enabled` | Ops switch. A disabled optional step is skipped with `step_disabled` |
+| `revision_only` | The step is never in a memo's first walk; `next_step` hands it out only when an open revision reopens it (default `false`) |
 
 ### First mapping from today's workflow
 
@@ -149,6 +150,7 @@ become **Claude steps**; nodes that depend on our research APIs wait for v2.
 | `research.section` | research / section | claude, `needs_partner` | yes | `section_research`, `research`, `competitive_researcher` (competition section) |
 | `research.sources` | research / deal | claude, `needs_partner` | no | `aggregate_sources` |
 | `draft.section` | draft / section | claude | yes | `draft` (`writer`) |
+| `draft.rewrite` | draft / section | claude, `revision_only` | no | `section_reviser` (added by Finish-Turning-Agents-into-Connector-Steps, step 1) |
 | `enhance.tables` | enhance / section | claude | no | `generate_tables` |
 | `enhance.diagrams` | enhance / deal | claude | no | `generate_diagrams`, `enrich_visualizations` |
 | `enhance.citations` | enhance / section | claude | no | `cite`, `validate_citations` |
@@ -187,7 +189,7 @@ then compile. Rules:
 
 ## The tools
 
-All eight, over both MCP and REST. `RO` is `readOnlyHint`, `D` is
+All fifteen, over both MCP and REST (with the two in §Revisions, seventeen). `RO` is `readOnlyHint`, `D` is
 `destructiveHint`; Claude requires both on every tool.
 
 | Tool | REST | RO | D | Blocks? |
@@ -200,18 +202,40 @@ All eight, over both MCP and REST. `RO` is `readOnlyHint`, `D` is
 | `get_artifact` | `GET /v1/deals/{deal}/artifacts/{id}` | yes | no | no |
 | `save_snapshot` | `POST /v1/snapshots` | no | no | no |
 | `compile` | `POST /v1/deals/{deal}/compile` | no | no | yes (required) |
+| `whoami` | `GET /v1/whoami` | yes | no | no |
+| `list_skills` | `GET /v1/skills` | yes | no | no |
+| `get_skill` | `GET /v1/skills/{name}` | yes | no | no |
+| `edit_section` | `POST /v1/deals/{deal}/section-edits` | no | no | no |
+| `edit_final` | `POST /v1/deals/{deal}/final-edits` | no | no | no |
+| `get_outline` | `GET /v1/outlines` | yes | no | no |
+| `edit_outline` | `POST /v1/deals/{deal}/outline-edits` | no | no | no |
 
 \* `next_step` records skips and marks the step handed out, so it isn't
 read-only even though it changes no artifacts.
 
 No v1 tool deletes anything, so none is destructive. Overwriting an artifact
-keeps the old version in jj.
+keeps the old version in jj. The edit tools (Edit-Tools-for-Finished-Memos)
+write new versions of sections, finals, and outlines; nothing is removed, so
+they are not destructive either.
 
 ### Inputs and outputs
 
-**`list_deals`** `{ cursor?, limit? (default 20, max 100) }` →
-`{ deals: [{ deal, company, stage, template, phase, next_step_hint,
-materials_pending, skips: [...] , updated_at }], next_cursor? }`
+**`list_deals`** `{ cursor?, limit? (default 20, max 100), include_skips?
+(default false) }` → `{ deals: [{ deal, company, legal_name?, stage, template,
+phase, next_step_hint, materials_pending, skips_count, skips_by_reason:
+[{ reason, count }], skips?: [...], updated_at }], next_cursor? }`. `company`
+is the name the company trades under; `legal_name` is returned only when it
+differs. Skips are counted by reason; the per-skip list comes back only with
+`include_skips: true` (added 2026-11-21: an imported deal carries dozens of
+skips with one reason).
+
+**`whoami`** `{ firm? }` → `{ account: { subject, name, email, via }, firm,
+firm_name, firms: [{ firm, name, active }], firm_required, connector_version
+}`. Read-only, changes nothing. A sign-in on several firms may call it without
+`firm`: it then reports the firm chosen at sign-in as active, and
+`firm_required: true` says every other call needs `firm`. A static key reports
+the one firm it is bound to. `name` and `email` are null when the sign-in
+doesn't carry them.
 
 **`create_new_deal`** `{ company, url?, stage?, template? }` → `{ deal,
 created: bool, template, sections: [...] }`. The deal slug is derived from the
@@ -268,6 +292,64 @@ version, report: { sections, enhancements_run, skipped: [...] } }`. The links
 are signed and expire after seven days. If compiling would exceed about 200 seconds (inside Claude's 240-second limit),
 it returns `{ job_id, status: running }` and `list_deals` reports completion.
 
+**`list_skills`** `{}` → `{ skills: [{ name, description }] }`. The playbooks
+in `src/connector/skills/`, each a markdown file whose frontmatter carries its
+`name` and one-line `description` (see §How partners get the method).
+
+**`edit_section`** `{ deal, section, edits?: [{ old, new }], text? }` →
+`{ deal, section, section_name, artifact_id, version, next_hint }`. Give
+`edits` (each `old` must match the section's current text exactly once; they
+apply in order) or `text` (the whole new section), not both. Saves a new
+version of the section's current artifact (`current_section_key`); research
+and enhancements are not reopened and no revision opens. Several stack before
+one compile. `old` matching zero or several times is `validation_failed`
+naming it; a section with no draft is `section_not_drafted`; an open revision
+on the section is `revision_open`.
+
+**`edit_final`** `{ deal, edits: [{ old, new }], facts_changed?, formats? }` →
+`{ deal, version, label, html_url, pdf_url, site_url?, carried: [{ edit,
+section, section_name, artifact_id, version }], next_hint }`. Each `old` must
+match the latest compiled final exactly once. The section an edit falls in is
+found from the final's level-2 headings; the same `old` must match that
+section's text exactly once. An edit that spans sections, falls outside every
+section (title, contents, consolidated citations), or whose text isn't in the
+section as written (citation numbers differ, for one) is `edit_not_placed`,
+with `details.edit` its index; nothing is saved unless every edit places. The
+edited final becomes the next compiled version (label bumped, exports
+re-rendered), and each section changed gets a new version; the pairing is
+recorded in the deal's `final_edits`. With `facts_changed: true`, `next_hint`
+says to update those sections' research through `start_revision`.
+
+**`get_outline`** `{ deal?, template? }` → with `deal`: `{ deal, template,
+pinned, pinned_from?, sections: [{ key, number, name, description,
+guiding_questions }] }`, the sections the deal uses; with `template`: that
+outline's sections; with neither: `{ outlines: [{ name, source: firm |
+memopop, default, sections }] }`, excluding deals' pinned copies.
+
+**`edit_outline`** `{ deal, edits: [{ op: add_section | update_section |
+move_section | remove_section, section?, after?, name?, description?,
+guiding_questions? }],
+apply_to?: deal | firm }` → `{ deal, template, apply_to, added, changed,
+removed, sections, deals_using?, next_hint }`. By default (`apply_to: deal`)
+the firm's outline is copied once into a pinned outline for the deal
+(`<template>--<deal>`), the edits apply there, the deal's `template` points at
+it, and the change is recorded in the firm's history. Section keys never
+change. An added section, and a section whose description or questions
+changed, show in `next_step` as needing research and a draft. With `apply_to:
+firm` the firm's outline itself changes (a firm copy is made of a MemoPop
+outline), no deal changes, and `deals_using` lists the deals on it so Claude
+can work through them one at a time with the partner.
+
+**`compile`** also takes `discard_untracked?` (see §Where an edit goes):
+before writing a new final it checks the latest compiled final against what
+the sections produced for it, and refuses with `final_has_untracked_edits`,
+`details.differences` listing each `{ section, name, final, sections }`,
+unless `discard_untracked: true`.
+
+**`get_skill`** `{ name }` → `{ name, description, text }`, where `text` is the
+playbook. An unknown name is `skill_not_found`, with `details.available`
+listing the names that exist.
+
 ## Errors
 
 Every failure, on both transports, uses one envelope:
@@ -300,7 +382,7 @@ Starting codes (each must have a docs entry):
 | Kind | Codes |
 |---|---|
 | `down` | `service_unavailable`, `storage_unavailable`, `timeout`, `internal_error` |
-| `invalid` | `drafts_incomplete`, `link_expired`, `unauthenticated`, `forbidden_firm`, `deal_not_found`, `artifact_not_found`, `template_not_found`, `validation_failed`, `checks_failed`, `step_out_of_order`, `research_not_approved`, `material_too_large`, `link_unreachable`, `unsupported_version`, `not_implemented` |
+| `invalid` | `drafts_incomplete`, `link_expired`, `skill_not_found`, `final_has_untracked_edits`, `edit_not_placed`, `unauthenticated`, `forbidden_firm`, `deal_not_found`, `artifact_not_found`, `template_not_found`, `validation_failed`, `checks_failed`, `step_out_of_order`, `research_not_approved`, `material_too_large`, `link_unreachable`, `unsupported_version`, `not_implemented` |
 | `skipped` | `step_disabled`, `step_failed`, `step_skipped`, `material_unreadable` |
 
 ## Versioning
@@ -341,6 +423,41 @@ Per [[Sign-In-Through-didi-sh-OAuth]]:
 - **Until didi.sh OAuth ships,** a per-firm static key in a header works for
   Claude Code and the health check only. It is never given to a client and is
   removed from the code path the day OAuth works.
+
+### Site read endpoint
+
+A firm's own site reads its latest compiled memos over REST. This is not an
+MCP tool ([[Serve-Compiled-Memos-to-Firm-Sites]]; code in
+`src/connector/site.py`).
+
+- **`GET /site/v1/firms/{firm}/deals/{deal}/memo`**, with
+  `Authorization: Bearer <site key>`. Site keys are per firm, in
+  `MEMOPOP_SITE_KEYS` (`firm=key,firm=key`), and read-only. They are separate
+  from partner auth: a site key can't call the tools under `/v1/`, and a
+  partner's token or static key is refused here. Each read and each refusal
+  is logged with the firm and deal, never the key.
+- **401** `unauthenticated` for no key, a key that isn't a site key, or no
+  `Bearer` scheme. **403** `forbidden_firm` for another firm's site key.
+  **404** `deal_not_found` for an unknown deal, `artifact_not_found` for a
+  deal never compiled. Errors use the usual envelope.
+- **200** returns `firm`, `deal`, `company`, `version`, `label`,
+  `compiled_at`, `markdown` (the latest `compiled/<version>/memo.md`),
+  `html_url` and `pdf_url` (signed, seven days; `null` when that export was
+  never made, as for a memo imported from a local run), and
+  `images_unresolved`, with `Cache-Control: private, no-store`.
+- **Images.** Memos compiled on the server embed their market-sizing diagram
+  as a `data:` URI and place no other images (nothing writes
+  `materials/deck-images.json` yet). Memos imported from local runs point at
+  deck screenshots and diagrams by local path. The uploader put those files
+  in the bucket as `blobs/<sha256>`, each recorded as a material with its
+  `local_path`, so the endpoint rewrites each local image reference that
+  matches one uploaded binary to a signed link. When the same file name is in
+  several runs' outputs, the copy from the memo's own version (its `label`)
+  wins. `http(s)` and `data:` images are left alone. Local references with no
+  uploaded file are left as written and listed in `images_unresolved`.
+- **The compile reply links to the page.** `firm.json` may carry
+  `site_memo_url` (a pattern with `{slug}`) and `site_memo_slugs`
+  (`{deal: slug}`). When both cover the deal, `compile` returns `site_url`.
 
 ## Storage
 
@@ -540,7 +657,9 @@ numbers; one or several), the colleague's `angle` in their own words, optional
 `draft` (same evidence, new framing: only the draft is redone).
 
 **What reopens.** For each named section: its research (when `start` is
-`research`), its draft, and its section-scoped enhancements (tables,
+`research`), its rewrite (`draft.rewrite`, which rewrites the section as it
+stands from its research and the partner's request; `draft.section` writes
+first drafts only), and its section-scoped enhancements (tables,
 citations, fact check). For the deal: the summaries and the one-pager, which
 summarize every section. Nothing else changes.
 
@@ -574,6 +693,98 @@ after the last one: a deal imported from local run `v0.2.2` compiles as
 `v0.2.3`, then `v0.2.4`; a deal born on the server starts at `v0.0.1`. An
 unchanged recompile keeps its label. `list_deals` shows each deal's
 `memo_version` and any open `revision`.
+
+## Where an edit goes (Plan 9)
+
+**Scope for now (decided 2026-11-20):** the connector is for iterating memos
+that are already done, shared, and likely live on the firm's site or published
+into Decile Hub. Generating new memos through it comes later.
+
+The everyday use of the connector, once memos exist, is partners chatting with
+Claude to change them. A partner says what's wrong in their own words. Claude
+puts the change in the right place without being asked, because the pipeline
+writes research into sections and compiles sections into the final draft. A
+change made only in the final draft is overwritten the next time anything
+recompiles.
+
+**Routing (Claude decides, from what the partner says):**
+
+| The partner's complaint | Edit goes to | Then |
+|---|---|---|
+| About the source information: a bad or broken citation, incomplete information, weak research, a missed insight | The section's **research** | `start_revision` with `start: research`: research is redone, the section is rewritten from it, compile |
+| Narrative or clerical: wording, tone, order, emphasis, typos, formatting | The **section** | `edit_section`, then compile once all changes are worked through |
+| "Just edit the memo I'm looking at" (the partner overrides the process) | The **final draft**, immediately | Carried back to its section (and research, if a fact or source changed), so the next compile reproduces it |
+
+**Who does the rewrite, for now.** The orchestrator isn't running on the
+server with what it needs to do the work itself (its API keys and so on). Until
+it is, Claude in the partner's chat, or subagents Claude delegates to, does
+every step in sequence. "Research is redone, the section is rewritten from it"
+means Claude does two separate tasks:
+
+1. **Edit the research file.** Research notes have to be verifiable. They
+   don't have to read well or tell a story.
+2. **Rewrite the section draft from exactly two inputs:** the research file
+   and the current section draft. No knowledge of its own, and no web
+   research on the side. The writing task is only to make a good narrative
+   out of the research that's there.
+
+Keeping the two tasks apart is deliberate. It prevents hallucination, lets
+research be checked on its own, and keeps the writing focused. When the two
+were done as one task, iterations swung more widely, the output was less
+tight, and iterating was slower. The step instructions the connector hands out
+must say this, so a subagent given only the writing step can't drift into
+research.
+
+Claude doesn't ask the partner which layer to use. It names where the change
+went in one line ("Fixed the citation in the market research and rewrote the
+Market section from it"). If the partner objects to the process, Claude edits
+the final draft and doesn't argue.
+
+**New tools:**
+
+| Tool | What it does |
+|---|---|
+| `edit_section` | Applies a narrative or clerical change to one section's draft as a new version, without reopening research or the section's enhancements. Light path: no revision walk. Several can stack before one compile |
+| `edit_final` | Applies a change to the compiled final draft so the partner sees it now, then writes the same change into the section it came from (and the research, when facts or sources changed) as new versions, and records the pairing. Refuses only if it can't locate the text's section, and says so |
+
+**Compile never silently overwrites.** Before writing a new final draft,
+`compile` compares the current final draft with what the sections would
+produce. Text in the final draft that isn't traceable to a section (an edit
+that wasn't carried back, or someone editing the file outside the connector)
+stops the compile with `final_has_untracked_edits`. The error lists the
+differences and offers to carry each one back with `edit_final`. A partner
+can tell Claude to discard them; that's the only way they're dropped.
+
+**Agent-facing docs** for `start_revision`, `edit_section`, `edit_final` and
+`compile` carry the routing table above, so any client (Claude, ChatGPT, Claude
+Code) applies the same rule. The `memopop` skill in the plugin repeats it.
+
+**Outline changes (decided 2026-11-20).** A partner who changes the firm's
+outline while working on a deal memo expects the change in *that* memo, and it
+applies there only. If the partner asks for it in other memos too, Claude works
+through them one at a time, never all at once. This needs an `edit_outline`
+tool beside `edit_section` (see `Upload-Deal-Folders-With-a-Binaries-Manifest`).
+
+## How partners get the method (decided 2026-11-20)
+
+No skill uploads. Everything lives on the server, the way event-hog does it
+(`self-host-stack/hubs/event-hog-mcp/src/skills.ts`):
+
+- **Many small skills on the server**, in git, served by two tools:
+  `list_skills` (names and one-line descriptions) and `get_skill` (one
+  playbook). An edit reaches every partner on their next call. First set,
+  following Plan 9: fix a source or citation, rewrite a section from its
+  research, edit wording, just edit the memo, change the outline for this memo,
+  compile and check the site.
+- **MCP prompts as the entry points** (`prompts/list`): "Edit a memo", "Fix a
+  citation", "Change the outline for this memo", "Check the memo on the site".
+  A partner picks one from the connector's menu in Claude. Each names MemoPop,
+  so Claude loads the tools, which start out deferred.
+- **One getting-started prompt**, sent to each partner with the connector link
+  and pasted once. It tells Claude to load MemoPop, call `list_skills`, and say
+  what it can do.
+- **The server's instructions** name the skills and when to load each,
+  leading with revisions, not with writing a new memo.
 
 ## Defaults chosen for v1
 
@@ -671,7 +882,7 @@ renumber; retire one by striking it through. Status is derived by
 | `CONN-CMP-01` | Given every section drafted, when `compile` runs, then it returns working HTML and PDF links and a report of sections, enhancements run, and skips |
 | `CONN-CMP-02` | Given a section without a draft, then `compile` returns `invalid` |
 | `CONN-CMP-03` | Given a compile that would exceed its time budget, then it returns a `job_id` and `list_deals` reports when it finishes |
-| `CONN-CMP-04` | Given section drafts with citations, then the compiled memo has its citations consolidated and renumbered |
+| `CONN-CMP-04` | Given section drafts with citations, then the compiled memo has its citations consolidated, one hex key per source (amended 2026-11-21: the markdown keeps hex keys; exports and sites number them) |
 | `CONN-FLOW-01` | Given the fixture deal, when the scripted client walks it from creation to compile over MCP, then every step succeeds and the compiled memo contains every section |
 | `CONN-FLOW-02` | The same walk over REST succeeds identically |
 
@@ -703,16 +914,80 @@ renumber; retire one by striking it through. Status is derived by
 
 | ID | Given / When / Then |
 |---|---|
-| `CONN-REV-01` | Given a compiled deal, when `start_revision` reopens one section from `research`, then `next_step` hands out that section's research, its draft, its section enhancements, then the summaries and one-pager, and nothing else; each carries the `revision` object and its previous submission among the inputs |
-| `CONN-REV-02` | Given a revision with `material_ids`, then those materials are among the inputs of every reopened step |
-| `CONN-REV-03` | Given `start: draft`, then the section's research is not handed out again |
+| `CONN-REV-01` | Given a compiled deal, when `start_revision` reopens one section from `research`, then `next_step` hands out that section's research, then `draft.rewrite` (not `draft.section`), its section enhancements, then the summaries and one-pager, and nothing else; each carries the `revision` object and its previous submission among the inputs (for `draft.rewrite`, the section as it stands) |
+| `CONN-REV-02` | Given a revision with `material_ids`, then those materials are among the inputs of every reopened step except `draft.rewrite`, which gets new evidence only through the research |
+| `CONN-REV-03` | Given `start: draft`, then `draft.rewrite` is reopened and the section's research is not handed out again |
 | `CONN-REV-04` | Given a revision, when the walk finishes and `compile` runs, then the revision closes into `revisions` with the compiled version, and the label is the next patch |
 | `CONN-REV-05` | Given an open revision, then a second `start_revision` returns `revision_open`, and `compile` returns `revision_incomplete` until the reopened steps are done |
-| `CONN-REV-06` | Given a revised section, when `cancel_revision` runs, then the section's draft reads as it did before the revision, at a new version, and `next_step` reports the deal done |
+| `CONN-REV-06` | Given a revised section, when `cancel_revision` runs, then the section's current text reads as it did before the revision (each changed artifact restored at a new version, the rewrite dropped), and `next_step` reports the deal done |
 | `CONN-REV-07` | Given a section with no draft, then `start_revision` on it returns `section_not_drafted`; given an unknown section, `validation_failed` |
 | `CONN-REV-08` | Given research resubmitted unchanged during a revision, then it still counts as done (no endless re-handout) |
 | `CONN-REV-09` | Given a deal imported from local run `v0.2.2`, then its first compile is labelled `v0.2.3`; given a new deal, `v0.0.1`; an unchanged recompile keeps its label |
 | `CONN-REV-10` | Given an open revision, then `list_deals` shows it, and every deal shows its `memo_version` |
+
+### Partner-test fixes (Fix-What-the-First-Partner-Test-Found, 2026-11-21)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-PT-01` | Given a deal with 30 skips sharing one reason, when `list_deals` runs, then it returns `skips_count: 30` and that reason once with its count, and no per-skip list; with `include_skips: true` the full list comes back |
+| `CONN-PT-02` | Given a deal with no URL, when `research.section` is rendered, then the instruction contains no "(not given)" and leads with a notice to ask the partner for the company's URL before researching |
+| `CONN-PT-03` | Given a deal config with `legal_name` and `trading_name`, when the uploader stages it, then `company` is the trading name and `legal_name` is kept; `list_deals` returns both when they differ |
+| `CONN-PT-04` | Given a token for an account on two firms, when `whoami` runs, then it returns the account, both firms with the active one marked, and the connector version; given a static key, the firm it is bound to |
+| `CONN-PT-05` | Given a finished deal staged by the uploader, then `materials.brief` is a saved artifact (not a skip), and the deal's `research.section` step has the brief and its previous research among its inputs |
+| `CONN-PT-06` | Given a step whose read resolves to a skipped step, then its inputs include a notice naming the skipped step and the reason, never a silently empty list |
+
+### Rewrite step (Finish-Turning-Agents-into-Connector-Steps, step 1)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-STEP-11` | Given the registry, then a rewrite step exists with `source_agent` `section_reviser`, marked `revision_only`, reading only the section's research and its current draft; when a revision hands it out, its inputs are exactly those two and the partner's request (the angle) leads its instruction, and its instruction forbids outside knowledge and web research |
+| `CONN-STEP-12` | Given a first walk, then `draft.section` (first drafts only) carries the same no-outside-knowledge line in its instruction and does not read `section.current` (restated 2026-11-21 before it shipped: revisions use `draft.rewrite`) |
+
+### The method served from the server (Serve-the-Method-from-the-Server)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-SKL-01` | Given the MCP server, then its instructions open with editing finished memos (not writing new ones), name `list_skills`, and mention `whoami` for partners on more than one firm |
+| `CONN-SKL-02` | Given the skills folder, when `list_skills` runs, then every skill file is listed with its name and one-line description |
+| `CONN-SKL-03` | Given a skill name, `get_skill` returns its playbook; given an unknown name, `skill_not_found` listing the names that exist |
+| `CONN-SKL-04` | Given the MCP server, then `prompts/list` returns the four entry prompts, each naming MemoPop and a skill that exists |
+
+### Compiled memos for firm sites (Serve-Compiled-Memos-to-Firm-Sites)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-SITE-01` | Given a compiled deal and the firm's site key, when the site endpoint is called, then it returns the latest compiled memo, its label, its compile time, and signed export links |
+| `CONN-SITE-02` | Given another firm's site key, then `403`; given no key, `401` |
+| `CONN-SITE-03` | Given a deal with no compiled version, then `404` |
+| `CONN-SITE-04` | Given a firm with `site_memo_url` and a slug for the deal, when `compile` finishes, then its response includes `site_url` |
+
+### Edit tools for finished memos (Edit-Tools-for-Finished-Memos)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-EDIT-01` | Given a drafted section, when `edit_section` applies edits, then the section has a new version, its research is untouched, and no revision opens; an `old` string that does not match exactly once returns `validation_failed` naming it |
+| `CONN-EDIT-02` | Given two `edit_section` calls, then the next compile includes both |
+| `CONN-EDIT-03` | Given a compiled final edited outside the sections, then `compile` returns `final_has_untracked_edits` listing each difference with its section; with `discard_untracked: true` it compiles |
+| `CONN-EDIT-04` | Given `edit_final` on the latest compiled final, then the partner's change is in a new compiled version and in the section it falls in, and the next compile reproduces it without `final_has_untracked_edits` |
+| `CONN-EDIT-05` | Given `edit_outline` on one deal, then another deal using the same outline is unchanged, and an added section appears in that deal's `next_step` |
+| `CONN-EDIT-06` | Given `edit_outline` with `apply_to: firm`, then the firm's outline changes and the response lists the deals using it, none of them changed |
+
+### Uploader (Apply-the-Deal-Folder-Uploader)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-UPL-01` | Given a known-blobs list, when the uploader stages a firm, then no blob on the list is staged, and the materials and manifests still record those files |
+| `CONN-UPL-02` | Given a staged firm and the server state after apply, when the check script runs, then it reports per deal the compiled label against the newest local memo, sections against the outline, and materials against the manifest |
+| `CONN-UPL-03` | Given an imported deal that isn't finished, with binaries among its materials, when `next_step` reaches `materials.brief`, then it hands the step out with each binary's extracted text, or a notice for a binary with none, never `artifact_not_found` |
+| `CONN-UPL-04` | Given the same bytes at two paths in one deal, then one material carries both paths and the manifest has two entries sharing its id |
+
+### Hex-code citations (Hex-Code-Citations-and-a-Repair-Tool)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-HEX-01` | Given two sections citing the same URL under different local keys, when a research step's submission is checked and the memo compiles, then both use one hex key from `source_key()`, and the compiled markdown has one definition for it |
+| `CONN-HEX-02` | Given a section submitted with numbered keys, then `submit_artifact` accepts it and compile converts its keys to hex; given a hex key that doesn't match its definition's source, the check names it |
+| `CONN-HEX-03` | Given the connector's `research.section` and `draft.section` instructions, then they ask for hex keys, never `[^1]` |
 
 ## Done when
 
