@@ -40,8 +40,16 @@ const tradeoffs = [
   { h: 'Gates against flow', p: 'Each gate in its records is defensible alone. Together they also stopped runs for reasons unrelated to the deck: a leftover narrative veto, a job-history check and a spending guard.' },
 ];
 
+const codeNotes = [
+  { h: 'Start with the five big files', p: 'Generation, compilation, staged orchestration and the data model live in five modules of roughly 3k to 11k lines; the biggest is imported by about 70 others. Reading those explains more of the product than the other 1,494 files. The catch: a change there reaches most of the system, and an 11k-line file never fits in one agent read, so every session that edits it sees only slices.' },
+  { h: 'Two provider layers, one in use', p: 'Model calls go through provider modules in the LLM services. A second, provider-agnostic orchestration layer wraps those same modules and is imported back by them, but its one route is now disabled. Only OpenAI is active; three other adapters are kept. To learn what a request really calls, follow the caller, not the abstraction.' },
+  { h: 'Retired in place, not deleted', p: 'Their rule is to prove who calls something before removing it. So old endpoints answer 410, some services return fixed values, a legacy generator remains, about fifteen near-identical worker launchers sit beside a second set, and several pages only redirect. That protects live users from a bad deletion; the cost is that the tree reads as if all of it runs. The mounted route and job registries are the real index.' },
+  { h: 'Migrations tell a branching story', p: 'Revision numbers run out of order, some repeat, several revisions merge branches and a few do nothing, partly because the database split in two. Read the chain by what each revision follows, not by filename; the schema of record is the models plus each chain’s head.' },
+  { h: 'A tight, consistent trust boundary', p: 'Only sign-up, sign-in and links that carry their own token change anything without a session. A single helper fronts almost every one of the 142 proxy routes, adding the session, a request id, a failure ticket and one error shape. One convention applied everywhere is what keeps that layer readable.' },
+];
+
 const limits = [
-  'We read commits and documents and did not run either system. Anything uncommitted isn’t counted, and it may include better results.',
+  'We read commits, documents and (for the November 22 section) V4’s code, and did not run either system. Anything uncommitted isn’t counted, and it may include better results.',
   'This isn’t a head-to-head. Our examples are real client content refined by an operator; its committed examples are small synthetic runs and labelled fixtures.',
   'Claude against OpenAI is a confound that reading code can’t separate.',
   'Our side has no tests and no measurement, and it runs only on one operator’s machine. It has never served a stranger.',
@@ -115,6 +123,16 @@ const limits = [
       </div>
     </section>
 
+    <section aria-labelledby="rc-code">
+      <div class="container">
+        <p class="eyebrow">ch · inside the code</p>
+        <h2 id="rc-code">What a full map of V4 shows a newcomer</h2>
+        <p>Added November 22, 2026. We mapped every one of V4’s 1,499 code files and 235 backend endpoints, reading the code without running it. The layout matches its own architecture notes: a web app that proxies every call to a Python backend, queued worker roles running one durable runner, two databases and object storage. About half the backend sits in its services layer, and 241 test files back it.</p>
+        <div class="rc-cards">{codeNotes.map((t) => <article><h3>{t.h}</h3><p>{t.p}</p></article>)}</div>
+        <p class="rc-after">None of this is unusual for code that grew fast under acceptance pressure and deletes nothing until ownership is proven. The lesson we take for our own agent-maintained code: very large files and paths that look live but don’t run cost more when the reader is an agent with a fixed context window.</p>
+      </div>
+    </section>
+
     <section aria-labelledby="rc-next">
       <div class="container">
         <p class="eyebrow">ch · what we’d borrow</p>
@@ -151,5 +169,6 @@ const limits = [
   .rc-cards article { padding: var(--space-5); background: var(--color-bg-card); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); }
   .rc-cards h3 { margin: 0 0 var(--space-2); font-size: 1.05rem; }
   .rc-cards p { margin: 0; color: var(--color-text-soft); font-size: 0.92rem; }
+  .rc-after { margin-top: var(--space-5); color: var(--color-text-soft); }
   .rc-limits { display: grid; gap: var(--space-3); max-width: 46rem; padding-left: var(--space-5); color: var(--color-text-soft); }
 </style>

@@ -2,14 +2,14 @@
 title: "Compare and Contrast Harness Artifacts: Instadeck and dididecks-ai"
 lede: "Step 2 of 3 in the phoenixcapera collaboration study: two deck generators that share a lineage, compared layer by layer. dididecks-ai generates decks inside a coding-agent session; Instadeck generates them inside a server pipeline. Most of the differences follow from that one choice."
 date_created: 2026-10-03
-date_modified: 2026-10-03
+date_modified: 2026-11-22
 date_authored_initial_draft: 2026-10-03
 date_authored_current_draft: 2026-10-03
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5.5
-semantic_version: 0.0.1.0
+semantic_version: 0.0.2.0
 tags:
   - Studies
   - Collaborations
@@ -1237,3 +1237,116 @@ worked example on our side.
 11. Would you run the same pass on our silo? Your view of our product harness
     is probably the most useful thing this study could produce.
 12. Is there anything here you'd rather we leave out of the public version?
+
+## 9. Inside the V4 code (added 2026-11-22)
+
+**What this is.** A file-level map of `deck-v4/` at `main` `54107e44`, made
+with the Floorplan skill: every one of its 1,499 code files and 235 backend
+endpoints has a name and a one-line description, grouped into 69 parts and
+linked by 3,475 imports and 274 frontend-to-backend calls. The map lives in
+`deck-v4/floorplan/` (self-ignoring, so their repo stays clean) and opens with
+`node floorplan/serve.mjs` from that folder. **Limits:** we read the code and
+did not run it. Subagents wrote most descriptions from scan digests, so
+individual file descriptions are a starting point, not a review. Paths below
+are relative to `deck-v4/`.
+
+The shape matches their own `context/ARCHITECTURE.md`: a SvelteKit app whose
+server routes proxy every call to FastAPI, Redis-dispatched worker roles that
+all run one durable runner, Core and AI Postgres databases, object storage,
+and OpenAI as the only active provider. The services layer holds 87k of the
+backend's 177k lines. What follows is what a newcomer would want to know
+before reading it, framed, as in the rest of this study, by what each choice
+makes easier and what it makes harder.
+
+### 9.1 Insights for fresh eyes
+
+1. **The product lives in a handful of very large files, so start there.**
+   `backend/app/services/llm/full_html_generation_service.py` (about 11k
+   lines, imported by about 70 files), `services/llm/generation_service.py`
+   (about 8k), `services/rendering/html_deck_compiler.py` (about 2.7k, 70+
+   importers), `services/ai_vc/runtime.py` (about 3k) and
+   `db/models/entities.py` (84 models in one file) are where generation,
+   compilation, staged orchestration and the data model actually happen.
+   Reading these five explains more of the product than reading the other
+   1,494. The cost of the concentration: any change there touches most of the
+   system, and tests have to import much of it too (one 1.1k-line test module
+   acts as the shared fixture for about 25 others). It matters more here than
+   usual because agents write this code: an 11k-line file can't fit in one
+   read, so every agent session sees it in slices. That is a plausible source
+   of the drift the next three points describe.
+
+2. **There are two provider abstractions, and only one is in the request
+   path.** The real transport lives in `services/llm/*_provider.py`. A second
+   layer in `ai_orchestration/` (orchestrator, router, resolver,
+   `providers/*`) wraps those same modules, and `generation_service.py`
+   imports the resolver back, so the dependency runs both ways. Their
+   architecture doc already says the `Orchestrator -> BaseLlmProvider` path
+   "describes another retained abstraction, not every active request," and
+   the one route built on it, `POST …/ai/orchestrate`, is now a disabled
+   compatibility stop. Anthropic, OpenRouter and DashScope adapters are kept
+   but unused, and the docs forbid adding new selectors. To find out what a
+   request really calls, follow the caller, not the abstraction.
+
+3. **Retired code is retired in place, so presence is not evidence that
+   something runs.** This is deliberate. The architecture doc says to
+   "determine ownership from the actual mounted callers before moving or
+   deleting" anything, and the result is layered:
+   - Old endpoints answer 410: legacy Smart Edit and four due-diligence routes.
+   - Some services return hardcoded values or `None`:
+     `deck_processing_queue_service.py`, `deck_workflow_service.py`,
+     `deck_processing_worker_service.py`.
+   - Some modules have no importers at all.
+   - A legacy Claude/OpenAI slide generator in `services/generation/`.
+   - About 15 near-identical one-file worker launchers in `app/workers/`, plus
+     a second set in `workers/entrypoints/`.
+   - Many deck pages that only redirect.
+   - `/team` and `/exports` render empty states.
+
+   The trustworthy indexes are the mounted router registry
+   (`api/routes/product/__init__.py`), the worker job registry
+   (`workers/dispatch/job_handlers.py`) and the gating in
+   `frontend/src/hooks.server.ts`. The trade-off: retiring in place protects
+   live customers from a bad deletion, but a newcomer or an agent reads the
+   tree as if all of it were live, and spends effort on code nothing runs.
+
+4. **Read the migration history by `down_revision`, not by filename.** The
+   Alembic chain is out of numeric order (`0018_workflow_jobs` revises `0039`),
+   several numbers are used twice, several revisions merge heads, and a few
+   are repairs or no-ops. `0038_vector_chunks_pgvector`, for example, has its
+   DDL disabled because vectors moved to the AI database. Since the Core/AI
+   split, the old `ai_*` tables exist in both lineages, and `app.db.base`
+   keeps a `Base = CoreBase` alias. The schema of record is the models plus
+   the current head of each lineage. The tangle is what parallel branches and
+   a database split leave behind; it isn't a defect, but it is a trap for
+   anyone reasoning from the filenames.
+
+5. **The trust boundary is consistent, and it's worth borrowing.** The only
+   backend endpoints that change state without a session are sign-up and
+   sign-in (with their aliases) and links that carry their own token:
+   - render tokens and editor tokens, which are consumed on use;
+   - public deck-share tokens.
+
+   On the frontend:
+   - `hooks.server.ts` requires login for deck routes, blocks cross-origin
+     mutations, caps JSON bodies at 10 MB and sets CSP.
+   - Session cookies are AES-256-GCM encrypted.
+   - Nearly every proxy goes through one helper, `proxyBackendJson`, which
+     adds the bearer token and a request id, files a failure ticket on error
+     and normalizes the error shape.
+
+   One convention applied 142 times is why a 142-route proxy layer stays
+   readable.
+
+### 9.2 What this adds to the comparison
+
+- The engineering depth §§4–5 described is real in the code: 241 test files
+  (33k lines), a uniform proxy convention, durable jobs and render proof.
+- The same depth carries weight. Retained paths, doubled abstractions and
+  very large hubs are what a codebase looks like when it grows under
+  acceptance pressure and nothing gets deleted until ownership is proven. For
+  Lossless, the lesson is about agent-maintained code generally: file size
+  and dead paths cost more when the reader is an agent with a context window.
+- One finding is for the developer, not for publication: the map's secret
+  scan flagged a key written directly into one backend acceptance script and
+  one frontend test script. Raise it privately; it stays off the splash.
+
