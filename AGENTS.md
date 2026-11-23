@@ -104,7 +104,7 @@ Ingestion lives under `context-v-corpus/scripts/` at the anchor root (moved out 
 
 ## See also
 
-- `../AGENTS.md` — root, the HARD STOP relocation rules and tree-wide guidance
+- `../AGENTS.md` — root, tree-wide guidance
 - `context-v/explorations/ChromaDB-as-Context-Improvement-Across-Everything-Everyone.md` —
   the exploration that produced the Chroma integration
 - `../context-v-corpus/README.md` — the corpus, the four collections, the ingest scripts
