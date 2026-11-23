@@ -2,7 +2,7 @@
 title: "Compare and Contrast Harness Artifacts: dialogiq and Lossless"
 lede: "Step 2 of 3 in the dialogiq collaboration study: two harness layers on each side, compared layer by layer. Each silo is deep where the other is thin, so each has something to teach."
 date_created: 2026-10-03
-date_modified: 2026-10-03
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-10-03
 date_authored_current_draft: 2026-10-03
 authors:
@@ -46,6 +46,45 @@ parity in the other. This version splits both inventories into a
 **developer-agents harness** and an **in-product-agents harness**, and
 compares only within a layer.
 
+**Refresh note (2026-11-23).** dialogiq's side is now checked against
+`475febfbbbce` (2026-11-21). The Lossless side was not re-read; its SHAs and
+counts are still those of 2026-10-01 to 2026-10-03.
+
+## Changes since the previous pin (2026-10-22 → 2026-11-21)
+
+44 non-merge commits on their side, 2026-11-14 to 2026-11-21, all
+Claude-trailered. What it changes in this comparison:
+
+- **The headline holds.** Their dev harness is still thin: no instruction
+  file, CI, changelog or MCP; the allowlist is untouched since 2026-08-20.
+  Their product harness got deeper.
+- **D-SH2 (`verify` skill):** edited once, in the same commit that moved the
+  data to the EU database (`bff61b5`). Their one dev skill is maintained
+  along with the stack, which is more than our unlinked project skills show.
+- **D-SH4 (README):** 173 → 497 lines, now covering `/record` and Basil. Still
+  no platform map, so D-MI1 (no instruction file) stands, and the repo now
+  serves two sites.
+- **New ledger row P-SI12 (Similar):** `functions/lib/markHold.js`, a
+  deterministic check that the grader's quotes exist in the transcript, which
+  holds the mark when they don't. Its closest Lossless counterparts are our
+  citation and attribution checkers.
+- **New ledger row P-MI5 (Missing, our side):** per-exam mark equating, a
+  score correction per input, set from measured sim matrices. Nothing on our
+  side corrects a memo score for input difficulty.
+- **P-MI4 (source of truth between `/exam-build` and `/studio`) softened.**
+  Between the first read and the previous pin the template was synced
+  (2026-10-14) and template, shapes and studio were changed together
+  (2026-10-22). There is still no written rule or check for the command and
+  the studio, but they already use the pattern elsewhere:
+  `functions/lib/vendor/README.md` keeps vendored copies byte-identical with
+  a failing test. That is their own worked example for recommendation 5.
+- **§4.10 failure isolation:** they built the resilience we list as missing
+  on our side: retry once then fail over for interactive LLM calls, an STT
+  backup chain, held uploads on dropped links, time given back after a
+  connection drop, and alerts on out-of-credit and usage spikes.
+- **Their stack changed:** two Hosting sites, named Firestore databases in
+  the EU, 26 front-end scripts, ten deployed functions.
+
 ## 1. Highlights
 
 - **The layer map is the headline, and it holds.** dialogiq's developer
@@ -86,8 +125,10 @@ compares only within a layer.
   runs on prompt slabs condensed from Claude Code `SKILL.md` files
   (`services/workspace/src/chat.ts`). Neither side has a check that keeps
   the source and the runtime copy in sync. Ours has a written "update
-  together" rule (`chat.ts:154`); theirs has none. dialogiq's template already
-  "lags the shipped papers".
+  together" rule (`chat.ts:154`); theirs has none for this pair. At the first read
+  dialogiq's template "lags the shipped papers"; it was synced on 2026-10-14
+  and has since changed together with the studio, by habit rather than by
+  rule.
 - **We're overbuilt in places, and their thinness shows it.** Spec Kit
   runs beside `context-v/`. memopop-orchestrator has four instruction files,
   two stale since November 2025. Three domain skills exist as diverged
@@ -98,7 +139,7 @@ compares only within a layer.
 
 | Repo | SHA | Branch | Last commit | What was compared |
 |---|---|---|---|---|
-| dialogiq (`jdema-io/pub-interface`) | `eedd1353b6b765ec642d9762e255037c8adb8d8d` | detached at `origin/main` | 2026-10-01 | All 58 rows of step 1's layered inventory, plus three items from its prose (git history, ad-hoc browser drives, database rules) |
+| dialogiq (`jdema-io/pub-interface`) | `475febfbbbced62a4dee1026104e6fc9dd8d1bae` (first read: `eedd1353`, 2026-10-01) | detached at `origin/main` | 2026-11-21 | All 65 rows of step 1's layered inventory, plus three items from its prose (git history, ad-hoc browser drives, database rules) |
 | `augment-it` | `c825e8a83b11bd6b31b80cfe40714dfc331409f5` | `rebuild/turbo-rsbuild` (the active trunk, not `main`) | 2026-10-01 | Dev: `CLAUDE.md`, `.mcp.json`, `.specify/`, `context-v/` (240 files), `changelog/` (109), `.github/workflows/`, `scripts/`, `e2e/`, tests, `DESIGN.md`, git history (627 commits). Product: `services/workspace/src/chat.ts`, `services/prompt-runner/`, `services/prompt-store/`, `apps/chat/`, `apps/prompt-template-manager/`, `apps/request-reviewer/`, `apps/response-reviewer/`, the two runtime skills |
 | `memopop-ai` | `1479db0f93135e419351971ce7450664203f8c75` | `main` | 2026-10-02 | `CLAUDE.md`, `.claude/`, `agent-skills/`, `context-v/`, `changelog/`, `.github/`, `apps/memopop-native/` as the run UI, git history (75 commits) |
 | `memopop-ai/apps/memopop-orchestrator` | `4fbbb303893a7f78da2b641aa22c7b1abccab732` | `fix/timeseries-analyst-defects` | 2026-10-02 | Dev: `CLAUDE.md` (886 lines), `WARP.md`, `.claude/`, `context-v/` specs and plans, `changelog/` (86), `tests/`. Product: `AGENTS.md`, `templates/` (outlines, schema, scorecards), `data/`, `src/agents/` (46 entries), `src/workflow.py`, `src/llm_provider.py`, `src/artifacts.py`, `cli/evaluate_memo.py`, `cli/score_memo.py`, `docs/PIPELINE-REFERENCE.md`, `context-v/issue-resolution/` and `reminders/` |
@@ -115,11 +156,12 @@ server was down for this run, so the corpus is described from
 line 536; dated "what shipped" sections §14–§18), the seven parts of
 `V2 Scenario Builder/EXAM_CRAFT.md`, and that `.claude/` holds the only
 agent-facing files in `git ls-files` (no `CLAUDE.md`, `AGENTS.md` or
-`.github/`). All matched step 1.
+`.github/`). All matched step 1, and all still held at the 2026-11-21 pin.
 
-**Shape of each side.** dialogiq is one repo with one app: a static front end
-in `public/` and an Express API in `functions/`, both on Firebase, in plain
-JavaScript. The Lossless side is a nested tree. augment-it is a pnpm
+**Shape of each side.** dialogiq is one repo: a static front end in
+`public/` and an Express API in `functions/`, both on Firebase, in plain
+JavaScript. Since 2026-11-14 the same repo and functions also serve a second
+site, Basil (basil.fm, from `basil/`). The Lossless side is a nested tree. augment-it is a pnpm
 workspace with 20 federated front ends, 12 services, 7 packages and a shell.
 memopop-ai is a Bun workspace (Tauri desktop app, Astro site) that mounts the
 Python and LangGraph orchestrator as a submodule, which in turn mounts
@@ -130,7 +172,7 @@ anchor monorepo. Most of the dev-layer differences follow from that shape.
 
 | | Developer-agents harness | In-product-agents harness |
 |---|---|---|
-| **dialogiq** | **Thin.** No instruction file, CI or changelog; a frozen 210-entry click-approval allowlist; one dev skill. Two real strengths: signed-off specs that get post-ship updates, and commit bodies that work as a dated, measured record. | **Deep.** A rulebook with a single-source rule, a 2,163-line ID-stable findings ledger with a checked index, skeleton plus validator plus assembler, `/exam-build` ported into the product as `/studio`, an 18-profile simulator with error bars, five preflight and audit scripts, a flight recorder and an LLM review of real sittings. |
+| **dialogiq** | **Thin.** No instruction file, CI or changelog; a frozen 210-entry click-approval allowlist; one dev skill (kept current). Two real strengths: signed-off specs that get post-ship updates, and commit bodies that work as a dated, measured record. | **Deep.** A rulebook with a single-source rule, a 2,316-line ID-stable findings ledger with a checked index, skeleton plus validator plus assembler, `/exam-build` ported into the product as `/studio`, an 18-profile simulator with error bars, five preflight and audit scripts, a flight recorder, an LLM review of real sittings, and (since November) a deterministic hold on suspect AI marks and mark equating calibrated from sims. |
 | **Lossless** | **Deep, overbuilt in places.** Layered `AGENTS.md`/`CLAUDE.md` files from anchor to app, 240 `context-v/` files in augment-it alone, about 206 changelog entries across the four repos, 11 loops, handoffs, a shared skills library linked with Stow, CI plus a deploy watchdog, a browser-drive blueprint, and a Chroma corpus over past sessions. | **Moderate.** memopop-orchestrator: outline YAML contract with a JSON schema, runtime `AGENTS.md` principles cited in code, 46 agents including fact checkers and citation validators, closed-corpus citations, an artifact trail, scorecards. augment-it: an in-app agent (didi) with skill-sourced prompt slabs, a prompt store, human request and response reviewers. Missing: replay, synthetic inputs, preflights, error bars; craft findings are spread across 36 files. |
 
 **Does the headline hold?** Yes, with two caveats.
@@ -393,24 +435,25 @@ their side; `augment-it/package.json`, `augment-it/services/*/package.json`,
 
 | | dialogiq | augment-it | memopop-ai |
 |---|---|---|---|
-| Shape | One repo, one app | pnpm workspace: 20 apps, 12 services, 7 packages, a shell | Bun workspace of 4 apps, plus the Python orchestrator as a submodule |
-| Front end | **No framework.** About 20k lines of plain JS: 23 numbered scripts in `public/js/` loaded in order by `public/index.html`, plus separate pages (`builder`, `portal`, `studio`, `sim`, `admin`). About 600 direct DOM lookups | Svelte 5, rsbuild, Module Federation into the shell | SvelteKit 2 (`memopop-web-app`, and `memopop-native` on Tauri 2), Astro 5 (`memopop-site`) |
-| Back end | Express 5 on Cloud Functions, Node 22, `europe-west1`, 1 GiB, 300s (`functions/index.js` lines 41–48), about 20k lines in `routes/` and `lib/` | Fastify with WebSockets, NATS, SearXNG, Docker Compose | Python 3.11, LangGraph, LangChain, uv |
-| Data | Firestore and Storage; `firestore.rules` and `storage.rules` deny all client access | SurrealDB | Files on disk (artifact trail) |
+| Shape | One repo; one app plus, since 2026-11-14, a second site (Basil) on the same functions | pnpm workspace: 20 apps, 12 services, 7 packages, a shell | Bun workspace of 4 apps, plus the Python orchestrator as a submodule |
+| Front end | **No framework.** Plain JS: 26 numbered scripts in `public/js/` loaded in order by `public/index.html` (23 at the first read, about 20k lines then), plus separate pages (`builder`, `portal`, `studio`, `sim`, `admin`) and Basil's pages in `basil/`. About 600 direct DOM lookups at the first read | Svelte 5, rsbuild, Module Federation into the shell | SvelteKit 2 (`memopop-web-app`, and `memopop-native` on Tauri 2), Astro 5 (`memopop-site`) |
+| Back end | Express 5 on Cloud Functions, Node 22, `europe-west1`, 1 GiB, 300s (`functions/index.js` lines 40–56), about 20k lines in `routes/` and `lib/` at the first read, plus about 6k added in November | Fastify with WebSockets, NATS, SearXNG, Docker Compose | Python 3.11, LangGraph, LangChain, uv |
+| Data | Firestore and Storage; `firestore.rules` and `storage.rules` deny all client access. Since November, named EU databases (`dialogiq-eu`, `harvest`) instead of `(default)` in the US | SurrealDB | Files on disk (artifact trail) |
 | Types | None | TypeScript 6, zod | pydantic; TypeScript in the apps |
-| Hosting | Firebase Hosting and Functions; Firebase compat SDK 10.14.1 from `gstatic.com`, App Check | Railway (`DEPLOYMENT.md`) | Desktop and web |
-| Models | `functions/lib/llm.js` routes Gemini flash-lite models, DeepSeek, GPT-4o-mini and Claude Haiku 4.5; the choice is runtime config in Firestore | Anthropic SDK, Claude Agent SDK, Composio | Anthropic via LangChain; Perplexity, Tavily, Firecrawl |
-| Speech | Azure TTS (main), Google TTS, Google Speech-to-Text, Whisper | n/a | n/a |
+| Hosting | Firebase Hosting (two sites: dialogiq.org and basil.fm) and Functions; Firebase compat SDK 10.14.1 from `gstatic.com`, App Check | Railway (`DEPLOYMENT.md`) | Desktop and web |
+| Models | `functions/lib/llm.js` routes Gemini flash-lite models, DeepSeek, GPT-4o-mini and Claude Haiku 4.5; the choice is runtime config in Firestore. Interactive calls retry once, then fail over (since 2026-11-19). Basil uses Gemini, optionally on the teacher's own key | Anthropic SDK, Claude Agent SDK, Composio | Anthropic via LangChain; Perplexity, Tavily, Firecrawl |
+| Speech | Azure TTS (main), Google TTS; STT on OVH Whisper with Gemini 3.5 Transcribe, Soniox and Google Speech-to-Text as backups (chain added 2026-11-17) | n/a | n/a |
 
 **Where their stack wins.** No build and no toolchain, so an agent has no
 bundler, type config or federation manifest to break. One deploy surface.
 Deny-all data rules limit the damage of an agent's mistake. Model routing
 as data makes model comparisons cheap. Everything scales to zero.
 
-**Where it costs them.** No types and no imports: the 23 scripts share
+**Where it costs them.** No types and no imports: the 26 scripts share
 globals and depend on load order, which explains the allowlist full of
 line-number greps (step 1 §3.2). The 12,897-line dead `public/script.js`
-is still tracked. Firebase lock-in and a fixed region. No CI.
+is still tracked. Firebase lock-in and a fixed region. No CI. One
+functions codebase now serves two products.
 
 **Where ours wins.** Types and module boundaries give agents contracts to
 read. Independently deployable parts suit a multi-client platform. Python
@@ -482,7 +525,7 @@ parallel work from overwriting itself.
 
 **Where the evidence supports it.**
 - Smaller context per task. An agent changing one federated app reads that
-  app and its contract. In their monolith, 23 scripts share globals, so
+  app and its contract. In their monolith, 26 scripts share globals, so
   any change could touch anything, and agents search by line number
   (`awk 'NR<=7320 …'` against a 12,897-line file, step 1 §3.2).
 - Fewer collisions. Separate packages rarely put two agents in one file.
@@ -506,7 +549,7 @@ parallel work from overwriting itself.
 contracts. Microservices are one way to get them, and the most expensive.
 A modular monolith (one repo, one deploy, real modules with imports, types
 and a short instruction file each) gets most of the benefit. For them:
-ES modules plus `// @ts-check` in place of 23 global scripts. For us: the
+ES modules plus `// @ts-check` in place of 26 global scripts. For us: the
 services shape is right for many collaborators and clients in parallel,
 but it should be a deliberate cost, not a default.
 
@@ -537,24 +580,37 @@ leaves the others rendering.
 
 **Their side gets more than "monolith" suggests.** Hosting is a static CDN,
 separate from the API, so pages load when the API is down. They deploy
-seven functions: one `api` behind every `/api/**` route, plus six triggers
-and scheduled jobs (`functions/index.js` lines 38–62), so a bug in
-integrity analysis can't stop an exam sitting. Cloud Functions contain a
-crashing request to its instance. Their weak spot is the single `api`
-function: a bad deploy takes every route down at once. The fix is
-splitting it by surface, which is configuration, not microservices.
+ten functions: one `api` behind every `/api/**` route, plus nine triggers
+and scheduled jobs (`functions/index.js` lines 40–68; seven at the first
+read), so a bug in integrity analysis can't stop an exam sitting. Cloud
+Functions contain a crashing request to its instance. Their weak spot is the
+single `api` function: a bad deploy takes every route down at once, and
+since November that includes Basil's routes. The fix is splitting it by
+surface, which is configuration, not microservices.
+
+**Since November they have the resilience half too** (observed, all from
+real incidents in pilot runs): interactive LLM calls retry once and then
+fail over, after a Gemini 503 outage left each answer waiting 30–55 s
+(`functions/lib/llm.js`, `b63c44c`); an STT backup chain; answers whose
+upload hits a dropped link are held and resent; lost time is given back
+once per sitting (`functions/lib/connectionGrace.js`); and alerts fire on
+an out-of-credit 402 and on token-use spikes (`geminiCredit.js`,
+`usageWatch.js`). That is the "timeouts, retries, fallbacks" list above,
+built in a monolith.
 
 **For both sides.** Us: build the live/not-live indicators from that
-issue, add timeouts and fallbacks on WebSocket and NATS calls, and plan
-for the trunk (redundancy, or a read-only degraded mode). Them: split
-`api` into a few functions by surface.
+issue, add timeouts and fallbacks on WebSocket and NATS calls (their
+`INTERACTIVE_LLM_RETRIES` comment is a good model: a separate retry budget
+for calls a person is waiting on), and plan for the trunk (redundancy, or a
+read-only degraded mode). Them: split `api` into a few functions by
+surface, starting with Basil.
 
 ### 4.11 Bucket counts per layer
 
 ```mermaid
 pie title Developer layer: ledger rows
   "Shared (6)" : 6
-  "Similar (10)" : 10
+  "Similar (11)" : 11
   "Different (11)" : 11
   "Missing (3)" : 3
 ```
@@ -562,9 +618,9 @@ pie title Developer layer: ledger rows
 ```mermaid
 pie title In-product layer: ledger rows
   "Shared (4)" : 4
-  "Similar (11)" : 11
+  "Similar (12)" : 12
   "Different (1)" : 1
-  "Missing (4)" : 4
+  "Missing (5)" : 5
 ```
 
 The shapes differ. The dev layer is dominated by **different**: our
@@ -602,6 +658,7 @@ than its table. No row pairs across layers.
 | D-SI8 | Similar | `TODO.md` (deferred bugs) | `augment-it/context-v/issues/` (55), `backlogs/2026-08-02_Hitlist-for-Sprint.md`; `memopop-ai/context-v/issues/`, `Tasks.md`; orchestrator `context-v/issues/` (6) |
 | D-SI9 | Similar | `Notes/` (2 `.rtf`) | `context-v/extra/` (gitignored scratch, per `context-vigilance`) |
 | D-SI10 | Similar | `scripts/check-deploy-drift.sh` | `augment-it/.github/workflows/deploy-watch.yml` |
+| D-SI11 | Similar *(added 2026-11-23)* | `functions/lib/vendor/README.md`: "copies, not forks", each copy kept byte-identical by a failing test | "Edit skills only in that repo" (`../AGENTS.md`) and `sync-skills-symlinks.sh`: a single-source rule for skills, in prose, with no drift check |
 | D-DF1 | Different | — | Pseudomonorepo rules: branch tiers, the HARD STOP on relocation, submodule bumps (`../AGENTS.md`, `../context-v/agent-skills/pseudomonorepos/`) |
 | D-DF2 | Different | — | Shared skills library and its Stow linking (`../context-v/agent-skills/`, `.stow-local-ignore`) |
 | D-DF3 | Different | — | Chroma corpus over context, changelogs and past sessions (`../context-v-corpus/`, `search-lossless-corpus` skill) |
@@ -621,8 +678,8 @@ than its table. No row pairs across layers.
 
 | ID | Bucket | dialogiq | Lossless |
 |---|---|---|---|
-| P-SH1 | Shared | `public/js/09-prompts.js`, `public/js/13-v2-conversation.js`, `public/js/22-handoff.js`, `functions/lib/assessment.js` | `memopop-orchestrator/src/agents/` (writer, researcher, …); augment-it `services/prompt-runner/src/`, `services/prompt-store/data/prompts.json`, `apps/prompt-template-manager/` |
-| P-SH2 | Shared | `functions/lib/llm.js`, `functions/lib/config.js` | `memopop-orchestrator/src/llm_provider.py` |
+| P-SH1 | Shared | `public/js/09-prompts.js`, `public/js/13-v2-conversation.js`, `public/js/22-handoff.js`, `functions/lib/assessment.js`; Basil's `functions/lib/dialog.js`, `dialogProcess.js` (added 2026-11-23) | `memopop-orchestrator/src/agents/` (writer, researcher, …); augment-it `services/prompt-runner/src/`, `services/prompt-store/data/prompts.json`, `apps/prompt-template-manager/` |
+| P-SH2 | Shared | `functions/lib/llm.js`, `functions/lib/config.js`; since November also `functions/lib/geminiCredit.js`, `usageWatch.js` (model-supply alerts) | `memopop-orchestrator/src/llm_provider.py` |
 | P-SH3 | Shared | `public/js/20-flight-recorder.js`, `functions/lib/flightReport.js` | `memopop-orchestrator/src/artifacts.py` (artifact trail), `context-v/reminders/Every-Step-Writes-Its-Output-To-File.md` |
 | P-SH4 | Shared | `functions/test/` (LLM-machinery half: `handoff`, `ladderHandoff`, `examStudio`, `simParity`, `flightReview`) and `fixtures/README.md` (product facet) | `memopop-orchestrator/tests/` product half (`test_preservation.py`, `test_thesis_frames.py`, `test_prompt_templates.py`, `test_membership_gate.py`, …) |
 | P-SI1 | Similar | `V2 Scenario Builder/EXAM_TEMPLATE_PROMPT.md` | `memopop-orchestrator/AGENTS.md` (runtime contract) |
@@ -630,17 +687,19 @@ than its table. No row pairs across layers.
 | P-SI3 | Similar | `scripts/check-craft-index.js` | `memopop-orchestrator/scripts/gen_pipeline_reference.py --check` |
 | P-SI4 | Similar | `docs/exam-generator-architecture.md` (product facet: pipeline §5, model routing §8) | `memopop-orchestrator/docs/PIPELINE-REFERENCE.md`, `docs/pipeline-reference.overlay.yaml` |
 | P-SI5 | Similar | `exams/_template.json`, `functions/lib/examShapes/rhetorical-5.json`, `scripts/build-exam-shapes.js`, `scripts/validate-exam.js` → `functions/lib/examValidate.js` | `memopop-orchestrator/templates/outlines/*.yaml`, `outlines/sections-schema.json`, `memo-template*.md`, `style-guide.md` |
-| P-SI6 | Similar | `exams/_intake-template.md`, three filled `exams/<slug>/intake.md`, `_session-start.md` (product facet: source text and notes) | `memopop-orchestrator/data/*.json`, `templates/brand-configs/`, `Sources-template.md`, `corrections-template.yaml` |
+| P-SI6 | Similar | `exams/_intake-template.md`, five filled `exams/<slug>/intake.md`, `_session-start.md` (product facet: source text and notes) | `memopop-orchestrator/data/*.json`, `templates/brand-configs/`, `Sources-template.md`, `corrections-template.yaml` |
 | P-SI7 | Similar | `.claude/commands/exam-build.md` | Claude Code memo skills: orchestrator `context-v/agent-skills/` (3), `memopop-ai/agent-skills/` (3), `memopop-ai/context-v/agent-skills/thesis-bleed-cleanup/` |
 | P-SI8 | Similar | `functions/lib/examSketch.js` (sketch schema, two sign-off gates) | `memopop-ai/context-v/loops/Frontloaded-Source-Approval-Loop.md`; augment-it `apps/request-reviewer/`, `apps/response-reviewer/`, `context-v/blueprints/Why-Response-Reviewer-and-Highlight-Collector-Exist.md` |
 | P-SI9 | Similar | `functions/lib/examAssemble.js`, `functions/routes/studio.js`, `public/studio.html` | `memopop-orchestrator/src/workflow.py`, `src/main.py`, `cli/`; `memopop-ai/apps/memopop-native/` |
 | P-SI10 | Similar | `V2 Scenario Builder/DIALOGIQ_PEDAGOGY_REFERENCE.md` | Domain skills `competitive-analysis`, `market-capture-analysis`, `timeline-scenario-analysis` (in `../context-v/agent-skills/` and `memopop-ai/context-v/agent-skills/`) |
 | P-SI11 | Similar | `scripts/check-rubric-gates.js`, `scripts/reask-audit.js`, `functions/lib/flightReview.js` | `cli/evaluate_memo.py`, `cli/score_memo.py`, `templates/scorecards/`; agents `validator.py`, `fact_checker.py`, `fact_verifier.py`, `citation_validator.py`, `attribution_audit.py` |
+| P-SI12 | Similar *(added 2026-11-23)* | `functions/lib/markHold.js`: deterministic, no-model checks that hold an AI mark (no answers, invented quotes, coverage mismatch) | `citation_validator.py`, `attribution_audit.py` (do claims trace to the corpus) |
 | P-DF1 | Different | — | Firm-private nested submodules under `memopop-orchestrator/io/` |
 | P-MI1 | Missing, our side | `public/js/sim/` (`driver.js`, `dryrun.js`, `meter.js`), `public/sim/profiles.json` | — |
 | P-MI2 | Missing, our side | `scripts/gate-replay.js` | — |
-| P-MI3 | Missing, our side | `scripts/profile-preflight.js`, `scripts/handoff-preflight.js` | — |
+| P-MI3 | Missing, our side | `scripts/profile-preflight.js`, `scripts/handoff-preflight.js`; `scripts/probe-gemini-transcribe.js` (added 2026-11-23) | — |
 | P-MI4 | Missing, their side | *(no declared source of truth between `/exam-build` and `/studio`)* | augment-it `services/workspace/src/chat.ts` slabs, `apps/chat/`, runtime skills `context-v/agent-skills/inbox-curation/`, `triage-inbox-w-suggestions/` |
+| P-MI5 | Missing, our side *(added 2026-11-23)* | `public/js/23-mark-equating.js` (vendored to `functions/lib/vendor/`): a per-input score correction set from sim matrices, raw score kept | — |
 
 **What augment-it has in the product layer.** We checked, as the brief
 asked. augment-it does have in-product agents. didi, the in-app agent,
@@ -663,7 +722,7 @@ most of the weight.
 *Permission files (D-SH1).* Both sides commit a Claude Code settings file,
 and neither treats it as a policy. Theirs, `.claude/settings.json`, is about
 210 `allow` entries saved from click-approvals, committed once on
-2026-08-20, never edited since. It grants `git push *`, `firebase deploy *`,
+2026-08-20, never edited since (still true at the 2026-11-21 pin). It grants `git push *`, `firebase deploy *`,
 `gcloud auth *` and `git credential *`, and some entries embed credential
 values (not reproduced here). Ours are tiny and odd in another way:
 `ai-labs/.claude/settings.local.json` has two `allow` entries plus MCP
@@ -683,21 +742,26 @@ data. There is one difference in mechanics. Theirs sits in `.claude/skills/`,
 where Claude Code finds it with no setup. Ours sit in `context-v/agent-skills/`
 and are found only once linked into `~/.claude/skills`. As of this snapshot,
 none of augment-it's or memopop's project skills is linked there (observed:
-`ls ~/.claude/skills`). On discoverability, their simple path wins.
+`ls ~/.claude/skills`, 2026-10-03). On discoverability, their simple path
+wins. Theirs is also maintained: when the data moved to the named EU
+database, the same commit updated the skill's seeding step (`bff61b5`,
+2026-11-17).
 
 *Tests (D-SH3).* Ordinary unit tests on both sides: framework-free `node`
-tests for them, vitest and pytest for us. Both sides have tests outside the
-main run. Their five `examIntegrity*.test.js` files aren't in `npm test`. Our
+tests for them (46 files, 41 chained in `npm test` at the 2026-11-21 pin),
+vitest and pytest for us. Both sides have tests outside the main run. Their
+five `examIntegrity*.test.js` files still aren't in `npm test`. Our
 `scripts/test-all.sh` sits beside `pnpm -r test` with no note on which one
 counts.
 
 *READMEs (D-SH4) and manifests (D-SH5)* are ordinary. Their `README.md` has
-drifted into a `/record` manual. Ours have drifted toward length: the
+drifted into feature manuals: `/record`, and since November Basil (497
+lines, none of them a platform map). Ours have drifted toward length: the
 orchestrator's `README.md` is about 90 KB.
 
 *Commit history (D-SH6).* The closest match in this layer. Since July 2026,
-220 of their 263 non-merge commits carry a `Co-Authored-By: Claude …`
-trailer. Subjects state findings ("Fix the check, not the briefs: five of
+270 of their 313 non-merge commits carry a `Co-Authored-By: Claude …`
+trailer (every one since the first read). Subjects state findings ("Fix the check, not the briefs: five of
 eight preflight failures were mine", `19ca2f0`) and bodies quote
 measurements. Ours carry trailers too (augment-it: 526 of 602 non-merge
 commits, across six model labels) and follow `git-conventions`: a typed
@@ -763,12 +827,19 @@ answers "is prod what I think it is?" on demand. Our `deploy-watch.yml`
 answers "did the deploy happen at all?" after every merge. It exists because
 of a twelve-day silent failure (`augment-it/changelog/2026-08-15_01_…`).
 
+*Copy rules (D-SI11, added 2026-11-23).* `functions/lib/vendor/README.md`
+says "These are copies, not forks. Never edit a file here", and a test
+fails the build if a vendored copy drifts from its browser original. Our
+equivalent is the "edit skills only in that repo" rule in `../AGENTS.md`,
+written after skill copies drifted, with no check. Same problem, and theirs
+is enforced. Ours still has diverged domain-skill copies (P-SI10).
+
 **Different.** Each needs a reason.
 
 - **Pseudomonorepo rules (D-DF1), the shared skills library (D-DF2), the
   Chroma corpus (D-DF3).** These exist because of our shape: 27 projects,
   nested submodules, parallel sessions, too much history to grep. In a
-  single repo with 280 commits, `git log` does what the corpus does, and a
+  single repo with 341 commits, `git log` does what the corpus does, and a
   cross-repo skills library has nothing to share across. *Judgement:
   different, not missing.* If the exam pipeline becomes its own repo, the
   skills library becomes relevant first.
@@ -806,12 +877,13 @@ of a twelve-day silent failure (`augment-it/changelog/2026-08-15_01_…`).
 
 **Missing (all on their side).**
 
-- **A repo-wide instruction file (D-MI1).** None at any SHA. Nothing maps
-  `functions/routes/`, `functions/lib/` or the 23 ordered `public/js/NN-*.js`
-  files. Nothing says the 12,897-line `public/script.js` is dead. The
+- **A repo-wide instruction file (D-MI1).** None at any SHA, including the
+  2026-11-21 pin. Nothing maps `functions/routes/`, `functions/lib/` or the
+  26 ordered `public/js/NN-*.js` files, or says that `basil/` is a second
+  site on the same functions. Nothing says the 12,897-line `public/script.js` is dead. The
   allowlist's line-number greps against it (`awk 'NR<=7320 && …'
   public/script.js`) suggest agents explore it cold. *Judgement: missing.*
-  With 220 agent-trailered commits, the cost of a cold start recurs.
+  With 270 agent-trailered commits, the cost of a cold start recurs.
 - **CI (D-MI2).** Their dev gates run only when remembered. `npm test` is
   dependency-free and fast, an ideal first CI job.
 - **A changelog (D-MI3).** *Reconsidered from the first draft, which called
@@ -870,7 +942,7 @@ A harness that reads `AGENTS.md` by default would load the memo writer's
 rules as its coding instructions. Their filename can't be mistaken.
 
 *Craft ledgers (P-SI2).* This is now a fair pairing: product craft against
-product craft. Their `EXAM_CRAFT.md` is one 2,163-line file. Findings carry
+product craft. Their `EXAM_CRAFT.md` is one 2,316-line file. Findings carry
 stable IDs (I, S, Q, R, B, P, M) and an evidence line each. Part 6 holds
 "Candidate principles, not yet distilled", Part 7 is an append-only build
 log, and a script checks the index. Our product craft lives in
@@ -880,7 +952,10 @@ log, and a script checks the index. Our product craft lives in
 easier to publish and link. Theirs does the job a craft ledger exists for:
 an agent reads all of it in one pass, cites a finding by ID, and can tell
 proven rules from hunches. We have no "not yet distilled" tier and no
-per-run log.
+per-run log. One limit showed up in November: the mark-hold calibration and
+the equating factors were measured but went into commit bodies and code
+headers, not the ledger. Their ledger is for exam content; platform
+measurements still have no home there.
 
 *Ledger and pipeline-map checks (P-SI3, P-SI4).* Another convergence.
 `check-craft-index.js` fails `npm test` when the ledger's index and headings
@@ -898,10 +973,13 @@ and validates invariants that "are silently violable"
 section taxonomy in an outline YAML with a JSON schema because
 "cross-run drift in section taxonomy made merging seven ChromaDB runs
 produce 26 best-of catalogs instead of 9" (`AGENTS.md` §1). Both sides also
-show the same drift: their newest exam was built from a shipped exam
-"because the template still lags the shipped papers" (`EXAM_CRAFT.md`).
+showed the same drift: at the first read their newest exam had been built
+from a shipped exam "because the template still lags the shipped papers"
+(`EXAM_CRAFT.md` lines 2224–2225). They fixed it within two weeks: the
+template was synced on 2026-10-14 and the next exam was filled from it
+(lines 2240–2241).
 
-*Run inputs (P-SI6).* Each exam starts from an intake sheet the agent drafts
+*Run inputs (P-SI6).* Each exam starts from an intake sheet the agent drafts (five so far)
 and the human corrects, with `[CHECK]` and `[STILL OPEN]` markers. Each memo
 starts from a per-company data file, a brand config and a `Sources.md`. Their
 form tracks what is unverified. Ours doesn't.
@@ -948,6 +1026,18 @@ true and good*. Our anti-hallucination tiers are richer than anything they
 need for exams. What we lack is their next step: running those checks many
 times and reporting the spread.
 
+*Guarding the grader's output (P-SI12, added 2026-11-23).* On 2026-11-19
+their grader gave three silent test sittings 97/100 with invented quotes.
+`markHold.js` now checks, with no model calls, that the student answered,
+that quoted spans exist in the transcript or scenario, and that the score
+is plausible against ladder coverage; otherwise the mark is held for the
+teacher. Calibration is in the commit: 0 false positives over 53 graded
+sims and pilots, 9/9 invented quotes caught (`8b26054`). Our
+`citation_validator.py` and `attribution_audit.py` ask the same question of
+a memo (does each claim trace to the corpus). Two differences worth
+copying: theirs stops the output from counting rather than annotating it,
+and it reports its false-positive rate.
+
 **Different.**
 
 - **Firm-private submodules (P-DF1).** The orchestrator fences each client's
@@ -978,13 +1068,31 @@ times and reporting the spread.
 *On their side (a genuine exception: our product layer teaching theirs):*
 
 - **A declared source of truth for a runtime copy (P-MI4).** `/exam-build` and
-  `/studio` now implement the same flow twice, and the template both point at
-  already lags the shipped exams. augment-it faced the same split (a Claude
-  Code skill and its runtime condensation) and wrote the rule at the point of
-  use: "the SKILL.md is the source of truth, this slab is its always-loaded
-  condensation; update together" (`services/workspace/src/chat.ts`). That rule
-  is honour-system, so a check like their own `check-craft-index.js` would
-  make it stronger than ours.
+  `/studio` implement the same flow twice. At the first read the template both
+  point at lagged the shipped exams. *Softened since:* the template was synced
+  on 2026-10-14, and the 2026-10-22 passage-pool change updated template,
+  shapes and studio together ("Template, shapes and studio follow",
+  `EXAM_CRAFT.md` line 2306). That is discipline by habit; there is still no
+  written rule or check for this pair, and a small lag remains
+  (`_session-start.md` and `/exam-build` step 5 still say "three passages"
+  after step 2 moved to Passage A plus a pool of three). augment-it faced the
+  same split (a Claude Code skill and its runtime condensation) and wrote the
+  rule at the point of use: "the SKILL.md is the source of truth, this slab
+  is its always-loaded condensation; update together"
+  (`services/workspace/src/chat.ts`). That rule is honour-system. Their own
+  `functions/lib/vendor/README.md` already pairs a copy rule with a failing
+  test (D-SI11), so they have a stronger model than ours to hand.
+
+*On our side (added 2026-11-23):*
+
+- **Score correction per input (P-MI5).** Students draw one of five exams at
+  random, and the sim matrices of 2026-10-22 put the exams about 7 points
+  apart on average. `23-mark-equating.js` scales each exam's content score
+  by a factor (`adjusted = 100 − (100 − raw) × factor`), keeps the raw mark
+  beside it so the factor can be recalculated from real sittings, and the
+  validator rejects factors outside 0.5–1.5. memopop has no notion that one
+  deal's inputs are harder to score than another's. It depends on P-MI1
+  (tiered synthetic inputs) existing first.
 
 ## 6. Insights
 
@@ -1007,6 +1115,10 @@ times and reporting the spread.
 4. **The convergences confirm our product bets.** Assemble, don't generate;
    a rulebook with addressable rules; run records on disk; human gates
    before generation. A silo with none of our conventions reached all four.
+   *Added 2026-11-23:* **guard outputs with cheap deterministic checks, and
+   measure the guard.** Their mark hold is a few hundred lines with no
+   model calls, built the day after an incident, and shipped with a stated
+   false-positive rate. Our checkers are agents; theirs is arithmetic.
 
 **In the developer layer (where we're deep, but they still teach):**
 
@@ -1041,15 +1153,18 @@ times and reporting the spread.
 1. **The harness around your best work is almost all defaults.** No repo-wide
    instruction file. A permission list nobody curated, frozen on 2026-08-20,
    that lets an agent push, deploy and touch credentials without asking, and
-   that holds credential values in plain text.
+   that holds credential values in plain text. Still unchanged at the
+   2026-11-21 pin, while the repo grew a second site and a key vault.
 2. **Two workflows, one front door.** Exam work opens with `_session-start.md`
    and runs through `/exam-build`. Platform work starts cold. That probably
    explains the exploratory greps in the allowlist.
 3. **Your dev discipline is real, just hard to find.** Signed-off specs,
    post-ship sections and measured commits are all there. They need a map
    (a root `CLAUDE.md` that points at `docs/`), not a new system.
-4. **The gates exist, but nothing makes them run.** 27 tests, a validator, a
-   craft-index check and a deploy-drift check all run only when remembered.
+4. **The gates exist, but nothing makes them run.** 41 chained tests, a
+   validator, a craft-index check and a deploy-drift check all run only when
+   remembered. Two November commits skipped the emulator for lack of Java;
+   CI would have run regardless of the machine.
 5. **History has a hole, and stale context misleads.** Commit `0e31688` folds
    16 days of work done "outside git" into one commit, and the working copy
    "had lost" `.gitignore` and `.claude/`. `TODO.md` contradicts the repo. A
@@ -1065,8 +1180,15 @@ times and reporting the spread.
    and logging human sittings that "could not have come from a matrix" is
    rigorous evaluation practice. We plan to borrow it.
 8. **Exception: the `/exam-build` → `/studio` port needs a source-of-truth
-   rule.** Two implementations of one flow will drift, and the template has
-   already started.
+   rule.** Two implementations of one flow will drift. You caught the
+   template lag within two weeks and now change template, shapes and studio
+   together, but by habit; a small "three passages" lag is already back in
+   `_session-start.md`. Your vendored-copy test is the model to reuse.
+9. **Your platform measurements have no home.** *(Added 2026-11-23.)* The
+   mark-hold calibration, the equating factors and the usage-spike threshold
+   are each measured, and each lives only in a commit body or a code header.
+   A short platform section in `EXAM_CRAFT.md`, or a sibling ledger, would
+   keep them citable.
 
 ## 7. Recommendations
 
@@ -1081,7 +1203,7 @@ headline predicts. Exceptions are labelled.
 | 2 | Product | **Preflight prompt changes against the live model** before they ship, N passes, with the result recorded as "a statement about production". | `scripts/handoff-preflight.js` | `memopop-orchestrator/scripts/` | S–M |
 | 3 | Product | **A craft ledger for memo writing.** Stable finding IDs, an evidence line each, a "candidate, not yet distilled" tier, an append-only run log, and an index checked in `tests/`. Point existing `issue-resolution/` files at it rather than moving them. | `V2 Scenario Builder/EXAM_CRAFT.md`, `scripts/check-craft-index.js` | `memopop-orchestrator/context-v/` (for example `MEMO_CRAFT.md`) | M |
 | 4 | Product | **Synthetic inputs in tiers.** A small set of synthetic deals from clearly strong to clearly weak, with expected score bands, to check the scorecard ranks them in order. Preflight that each synthetic deal reads as its tier before trusting results. | `public/sim/profiles.json`, `public/js/sim/driver.js`, `scripts/profile-preflight.js` | `memopop-orchestrator/data/synthetic/`, `tests/` | L |
-| 5 | Product | **Obedience audits.** Over a batch of runs, check that agents did what their rules say (every URL traces to the corpus, `AGENTS.md` §6 holds), separately from whether the memo is good. | `scripts/check-rubric-gates.js`, `scripts/reask-audit.js` | `memopop-orchestrator/cli/` | S |
+| 5 | Product | **Obedience audits.** Over a batch of runs, check that agents did what their rules say (every URL traces to the corpus, `AGENTS.md` §6 holds), separately from whether the memo is good. Where a check fails, hold the output rather than annotate it, and report the check's false-positive rate. | `scripts/check-rubric-gates.js`, `scripts/reask-audit.js`, `functions/lib/markHold.js` (added 2026-11-23) | `memopop-orchestrator/cli/` | S |
 | 6 | Product | **`[CHECK]` and `[STILL OPEN]` markers in run inputs**, so the human sees what is unverified. | `exams/_intake-template.md` | `templates/Sources-template.md`, `data/` input conventions | S |
 | 7 | Both, exception | **Name the graduation path from Claude Code skill to product agent, with a sync rule and a check.** | `/exam-build` → `functions/routes/studio.js` | augment-it `chat.ts` slabs; memopop (for example `thesis-bleed-cleanup` as a post-generation agent) | M |
 | 8 | Dev, exception | **Make our most-used loops invocable.** A `.claude/commands/` file with `allowed-tools`, a reading order, explicit stops and a "do not push or deploy" line. Keep the loop doc as the explanation. | `.claude/commands/exam-build.md` (a product artifact teaching our dev layer) | `augment-it/.claude/commands/`, `memopop-ai/.claude/commands/` | M |
@@ -1107,8 +1229,10 @@ is the smallest version that helps.
      that must never break (no `--only functions` against production). A
      pointer to `docs/` for specs, and to `_session-start.md` for exam work.
      Who deploys and commits.
-   - *Evidence:* no instruction file at any SHA; `README.md` lines 11–173
-     cover only `/record`; the allowlist greps the dead `public/script.js`.
+   - *Evidence:* no instruction file at any SHA (rechecked 2026-11-21);
+     `README.md` lines 16–497 cover only `/record` and Basil; the allowlist
+     greps the dead `public/script.js`. Since November the map also needs
+     to say that `basil/` is a second site on the same functions.
    - *Worked example:* `ai-labs/memopop-ai/CLAUDE.md` (166 lines: layout,
      boundaries, "do not" lines, a see-also list). Leave out its links to
      parent files and its tree rules.
@@ -1121,8 +1245,9 @@ is the smallest version that helps.
      `gcloud auth`, `gh auth` and `git credential` to `ask`, and add a `deny`
      for curl against production. Keep one-off approvals in
      `settings.local.json`, which you already keep out of git.
-   - *Evidence:* about 210 entries, one commit on 2026-08-20, broad grants,
-     embedded credential values (step 1 §3.2).
+   - *Evidence:* about 210 entries, one commit on 2026-08-20, unchanged at
+     the 2026-11-21 pin, broad grants, embedded credential values (step 1
+     §3.2).
    - *Worked example:* honestly, we don't have a good one. Ours are small
      (`ai-labs/.claude/settings.local.json` has two entries) but lean on
      prose rules in `../AGENTS.md` ("ask before pushing") rather than `deny`
@@ -1134,7 +1259,9 @@ is the smallest version that helps.
      shipped exams. Add the five `examIntegrity*.test.js` files to the chain,
      or write down why they stay out. Keep the live-model preflights manual,
      because they cost money.
-   - *Evidence:* no `.github/`; 27 dependency-free tests already chained.
+   - *Evidence:* no `.github/`; 41 dependency-free tests already chained
+     (27 at the first read); two November commits note "no Java here, so no
+     emulators".
    - *Worked example:* `ai-labs/augment-it/.github/workflows/ci.yml`. Copy
      the "WHY THIS EXISTS" header habit and ignore the 16-image matrix.
 
@@ -1164,12 +1291,15 @@ is the smallest version that helps.
      disagree on the intake fields or gate count, or when `_template.json`
      falls behind the newest shipped exam.
    - *Evidence:* the port happened within ten days (2026-08-28 → 2026-09-07);
-     `EXAM_CRAFT.md` records building from a shipped exam "because the
-     template still lags the shipped papers".
-   - *Worked example:* `ai-labs/augment-it/services/workspace/src/chat.ts`
-     ("the SKILL.md is the source of truth, this slab is its always-loaded
-     condensation; update together"). Ours has the rule but no check, so
-     yours would be better.
+     `EXAM_CRAFT.md` recorded building from a shipped exam "because the
+     template still lags the shipped papers". That lag was fixed on
+     2026-10-14, but by hand, and `_session-start.md` and `/exam-build`
+     step 5 still say "three passages" after step 2 moved to a pool.
+   - *Worked example:* your own `functions/lib/vendor/README.md` plus
+     `test/markEquating.test.js` (a copy rule with a failing test). Ours,
+     `ai-labs/augment-it/services/workspace/src/chat.ts` ("the SKILL.md is
+     the source of truth, this slab is its always-loaded condensation;
+     update together"), has the rule but no check.
 
 ## 8. Open questions to ask them
 
@@ -1195,3 +1325,7 @@ is the smallest version that helps.
    overbuilt, and of our product harness, is probably the most useful thing
    this study could produce.
 10. Is there anything here you'd rather we leave out of the public version?
+11. *(Added 2026-11-23.)* Basil now ships from the same repo and functions.
+    Will it stay, and will it get a ledger or sims of its own?
+12. *(Added 2026-11-23.)* The mark hold calibrates at 0 false positives
+    over 53 sittings. How will you watch that rate on real cohorts?
