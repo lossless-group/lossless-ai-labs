@@ -69,13 +69,11 @@ bash /Users/mpstaton/code/lossless-monorepo/context-v/agent-skills/sync-skills-s
 Idempotent: links every `context-v/agent-skills/*` dir with a top-level `SKILL.md`
 that isn't already linked; never clobbers a non-symlink. Re-run it freely.
 
-## Branch tier model
+## Branches and shipping
 
-Three tiers, mirrored from the root: **`development` → `main` → `master`**.
-
-Parent on tier X → all submodules on tier X. See the root `CLAUDE.md`
-and `context-v/agent-skills/pseudomonorepos/references/branch-alignment.md` for
-the FF mechanics, divergence checks, and push-to-default-branch caveats.
+Same as the root `AGENTS.md`: when work is done, commit it, merge it, push, and bring
+`development`, `main`, `master` (and any working branch) to the same commit. Bump parent
+submodule pointers whenever a child moves, and sync the parents the same way.
 
 ## MCP scope
 
