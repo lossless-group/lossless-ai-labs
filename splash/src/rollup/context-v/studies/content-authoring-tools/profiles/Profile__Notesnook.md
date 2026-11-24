@@ -3,8 +3,8 @@ name: Notesnook Profile
 title: Notesnook — Profile
 slug: notesnook
 upstream: https://github.com/streetwriters/notesnook
-pinned_sha: 8bb25559e
-pinned_date: 2026-11-17
+pinned_sha: 9c4c2ef55
+pinned_date: 2026-11-23
 version_at_pin: "3.4.16-android (nearest tag)"
 license: GPL-3.0-or-later
 maintainer: Streetwriters (the Notesnook team)
@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/notesnook
 profile_kind: End-to-end encrypted notes app — encrypted SQLite locally, libsodium E2EE sync over SignalR, rich-text (HTML) content, write-only PGP Inbox API
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -49,7 +49,7 @@ from_path: "context-v/profiles/Profile__Notesnook.md"
 ---
 # Notesnook — Profile
 
-A profile of Notesnook as it lives in this study (`studies/content-authoring-tools/notesnook`, pinned at `8bb25559e`, nearest tag `3.4.16-android`, 2026-11-17). GPL-3.0-or-later, TypeScript/React across web, Electron desktop, and React Native mobile, from Streetwriters.
+A profile of Notesnook as it lives in this study (`studies/content-authoring-tools/notesnook`, pinned at `9c4c2ef55`, nearest tag `3.4.16-android`, 2026-11-23). GPL-3.0-or-later, TypeScript/React across web, Electron desktop, and React Native mobile, from Streetwriters.
 
 This is the study's **negative exemplar on purpose**. Against the study question (*"can an agent read from and write into the same store the human uses?"*), the answer is *no read, and only a narrow kind of write*. That is the point of the product. It shows what agent reach looks like when confidentiality comes first.
 
@@ -62,9 +62,9 @@ Everything is encrypted, both on the wire *and* at rest on your device. The loca
 ## How it works
 
 - **Stack.** npm monorepo. `packages/core` is shared logic (collections, sync, vault, monographs), `packages/crypto` and `packages/sodium` wrap libsodium, and `packages/editor` is the TipTap editor. Apps are in `apps/web`, `apps/desktop`, and `apps/mobile` (README "Monorepo structure").
-- **Local store.** SQLite through Kysely, with tables for notes, content, relations, notebooks, tags, vaults, monographs, and `inboxitemshistory` (`packages/core/src/database/index.ts:82-96`). On first run the web/desktop client generates a random key, keeps it in the key store (`apps/web/src/common/db.ts:41-44`), and opens the database with `PRAGMA key` (`packages/core/src/database/index.ts:290`). Desktop uses `better-sqlite3-multiple-ciphers` (`apps/desktop/src/api/sqlite-kysely.ts:58`). The web build uses a SQLite3MC WASM build.
+- **Local store.** SQLite through Kysely, with tables for notes, content, relations, notebooks, tags, vaults, monographs, and `inboxitemshistory` (`packages/core/src/database/index.ts:82-97`). On first run the web/desktop client generates a random key, keeps it in the key store (`apps/web/src/common/db.ts:41-44`), and opens the database with `PRAGMA key` (`packages/core/src/database/index.ts:292`). Desktop uses `better-sqlite3-multiple-ciphers` (`apps/desktop/src/api/sqlite-kysely.ts:58`). The web build uses a SQLite3MC WASM build.
 - **Crypto.** XChaCha20-Poly1305-IETF for items (`packages/crypto/src/encryption.ts:58`), a secretstream variant for attachments (`:91-105`), and Argon2 for key derivation (`packages/crypto/src/password.ts:34`, `keyutils.ts:51-57`). A per-account data key is wrapped by a password-derived master key. The docs say: *"The server only ever receives ciphertext"* (`docs/help/contents/how-is-my-data-encrypted.md:13`).
-- **Sync.** A SignalR hub connection (`packages/core/src/api/sync/index.ts:491`). Merge is per-item by `dateModified`, with a conflict state for notes (`packages/core/src/api/sync/merger.ts`).
+- **Sync.** A SignalR hub connection (`packages/core/src/api/sync/index.ts:511`). Merge is per-item by `dateModified`, with a conflict state for notes (`packages/core/src/api/sync/merger.ts`).
 
 ## What's on disk
 
@@ -96,7 +96,7 @@ An agent can **write but not read**, and can only *create* notes, never edit the
 
 ## What's clever or unique
 
-**The Inbox API is an asymmetric agent channel.** The client generates (or imports) a PGP keypair (`packages/core/src/api/user-manager.ts:729-733`), and the docs note the keys are *"validated (round-trip encrypt/decrypt) before being saved"* (`getting-started.md:46`). Each connected service gets its own named, expiring, revocable key, up to 10 (`packages/core/src/api/inbox-api-keys.ts`, `getting-started.md:52`). Items arrive over the sync hub's `SendInboxItems` message (`sync/index.ts:586-592`). The client then decrypts them with the private key (`merger.ts:249`), validates them against a strict zod schema (`merger.ts:207-224`), and runs `sanitizeHtml` on the device, after decryption (`merger.ts:319`). Each item id lands in `inboxitemshistory`, so a replayed item is skipped and a failed one is recorded with its error context (`merger.ts:238-300`). The server only relays ciphertext. A Zapier zap, an RSS bot, or an agent can *contribute* to the store without being able to *read* it.
+**The Inbox API is an asymmetric agent channel.** The client generates (or imports) a PGP keypair (`packages/core/src/api/user-manager.ts:729-733`), and the docs note the keys are *"validated (round-trip encrypt/decrypt) before being saved"* (`getting-started.md:46`). Each connected service gets its own named, expiring, revocable key, up to 10 (`packages/core/src/api/inbox-api-keys.ts`, `getting-started.md:52`). Items arrive over the sync hub's `SendInboxItems` message and are parked in a `pendingsyncitems` table until the sync run ends (`sync/index.ts:605-625`, `:310-321`). The client then decrypts them with the private key (`merger.ts:249`), validates them against a strict zod schema (`merger.ts:207-224`), and runs `sanitizeHtml` on the device, after decryption (`merger.ts:319`). Each item id lands in `inboxitemshistory`, so a replayed item is skipped and a failed one is recorded with its error context (`merger.ts:238-300`). The server only relays ciphertext. A Zapier zap, an RSS bot, or an agent can *contribute* to the store without being able to *read* it.
 
 ```ts
 // packages/core/src/api/sync/merger.ts:207-224 (trimmed)
@@ -130,6 +130,14 @@ const RawInboxItemSchema = z.object({
 - **Borrow the inbox pattern for untrusted contributors.** A write-only, schema-validated, sanitize-on-receipt drop box (with `source` provenance, per-sender revocable keys, and replay history) is a good shape for agents or collaborators who should add material to a `.flave` workspace without reading its `private` blocks.
 - **Note the agent-reach tradeoff.** In this group, how far an agent can reach falls as confidentiality rises: Joplin gives an agent read/write over plaintext, Notesnook gives write-only, and Khoj copies everything to a server. Flave is choosing plaintext files, so its leak protection has to live in the publish step (the v1 scan), not in storage.
 - **Avoid HTML-as-storage.** Notesnook's Markdown export is lossy by construction. Flave's "Markdown is the source" stance is the right side of that line.
+
+## Changes since the previous pin (2026-11-17 → 2026-11-23)
+
+`8bb25559ea78` → `9c4c2ef55c5f`, 14 commits (11 non-merge), no new release tag. Three merged PRs touch the Inbox path and the sync merge.
+
+- **Inbox items are deferred until sync finishes.** The `SendInboxItems` handler no longer decrypts and inserts items in the middle of the sync loop. It stores each received item in a new `pendingsyncitems` table (`packages/core/src/database/pending-sync-items.ts`, migration in `packages/core/src/database/migrations.ts`), and `Sync.stop()` runs `handleInboxItems` over them afterwards (`packages/core/src/api/sync/index.ts:309-321`, `:605-625`; PR #10054). Decryption, the zod schema and on-device sanitizing in `merger.ts` are unchanged, so the write-only contract above still holds.
+- **Sync merges no longer overwrite local edits made during the merge.** Reading local items, merging and writing now happen in one transaction (`sync/index.ts`, commit `6656477ce`, issue #10539), and `db.transaction` gained real transaction scoping (`packages/core/src/database/scope.ts`, `packages/core/src/utils/transaction-scope.ts`).
+- Web: the OPFS SQLite VFS returns error codes instead of throwing, and a full disk now shows a clear error when adding attachments. Mobile: legacy backup restore fixes.
 
 ## Read next
 

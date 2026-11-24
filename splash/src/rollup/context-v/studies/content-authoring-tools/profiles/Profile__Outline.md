@@ -3,18 +3,18 @@ name: Outline Profile
 title: Outline — Profile
 slug: outline
 upstream: https://github.com/outline/outline
-pinned_sha: 396f196de
-pinned_date: 2026-11-19
-version_at_pin: "v1.12.0-305-g396f196de (package.json and LICENSE already say 1.13.0)"
+pinned_sha: ee3c88bc1
+pinned_date: 2026-11-21
+version_at_pin: "v1.12.0-322-gee3c88bc1 (package.json and LICENSE already say 1.13.0)"
 license: "Source-available — Business Source License 1.1 (Additional Use Grant excludes running a competing 'Document Service'; converts to Apache-2.0 on 2030-11-15)"
 maintainer: General Outline, Inc.
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/outline
 profile_kind: Team wiki — React + Koa + Postgres, ProseMirror editor, Yjs collaboration via Hocuspocus
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -53,7 +53,7 @@ from_path: "context-v/profiles/Profile__Outline.md"
 ---
 # Outline — Profile
 
-A profile of Outline as it lives in this study (`studies/content-authoring-tools/outline`, pinned at `396f196de`, 2026-11-19, `git describe` → `v1.12.0-305`). Business Source License 1.1 from General Outline, Inc., converting to Apache-2.0 on 2030-11-15 (`LICENSE`).
+A profile of Outline as it lives in this study (`studies/content-authoring-tools/outline`, pinned at `ee3c88bc1`, 2026-11-21, `git describe` → `v1.12.0-322`). Business Source License 1.1 from General Outline, Inc., converting to Apache-2.0 on 2030-11-15 (`LICENSE`).
 
 This is the study's **team-wiki-with-a-real-API** entry. The question it answers: when the store is a database and the editor is ProseMirror, how close can an agent get to editing "the same thing the human edits"?
 
@@ -90,10 +90,10 @@ Toggle blocks use plus fences, one more + per nesting level (ToggleBlock.ts:474-
 +++
 
 See @[Roadmap](mention://<id>/document/<modelId>) — internal mentions keep a
-mention:// scheme so they parse back into live mentions (Mention.tsx:512-518).
+mention:// scheme so they parse back into live mentions (Mention.tsx:476-482).
 ```
 
-With `commonMark: true` on export, external mentions fall back to their real URLs (`Mention.tsx:505-515`; `DocumentHelper.tsx:378-398`). Frontmatter is stripped on import, with a frontmatter `title` taking precedence (`server/commands/documentImporter.test.ts:331-354`).
+With `commonMark: true` on export, external mentions fall back to their real URLs (`Mention.tsx:469-479`; `DocumentHelper.tsx:378-398`). Frontmatter is stripped on import, with a frontmatter `title` taking precedence (`server/commands/documentImporter.test.ts:331-354`).
 
 ## Agent reach
 
@@ -109,8 +109,8 @@ With `commonMark: true` on export, external mentions fall back to their real URL
 1. **Patch by quoting Markdown, apply as ProseMirror.** `update_document`'s description tells the model to prefer `editMode: "patch"` because `replace` will "lose any formatting that cannot be represented in markdown" (`server/mcp/tools/documents.ts:637`). The implementation (`DocumentHelper.tsx:596-727`) serializes the doc with `serializeWithPositions`, which returns the Markdown *and* a `blockMap` of `{mdFrom, mdTo, pmFrom, pmTo}` per top-level block (`shared/editor/lib/markdown/serializer.ts:74-81`). It finds `findText`, maps the hit to the overlapping blocks, tries a single-block surgical patch (`trySurgicalPatch`, `:778`), and otherwise re-parses only the affected region and splices it between untouched siblings. Comments, highlights and table widths elsewhere survive.
 2. **Agent writes land as one Yjs change, not a reset.** After computing the new doc, `updateYFragment` diffs it into the existing Y.Doc (`DocumentHelper.tsx:741-757`), so collaborators' cursors and undo history are not blown away. Compare [[Profile__Docmost]], whose `replace` deletes the whole fragment.
 3. **Honest about lossiness, in code.** `toMarkdown` and `toHTML` are documented as "lossy... should only be used for export" (`DocumentHelper.tsx:363`, `:419`); `toMarkdownDiff` explicitly diffs *un-normalized* serializer output because patch matching depends on it (`:563-582`).
-4. **Fail-loud writes.** `update_document` compares `revisionCount` before and after, and returns an error instead of a false success when nothing persisted (`documents.ts:741-760`). A patch echoes the resulting content back so the agent can verify (`:763-770`).
-5. **Mentions as a scheme, not a lookup.** `mention://id/type/modelId` keeps identity inside plain Markdown so a round trip through an LLM does not sever links (`Mention.tsx:484-519`).
+4. **Fail-loud writes.** `update_document` compares `revisionCount` before and after, and returns an error instead of a false success when nothing persisted (`documents.ts:775-794`). A patch echoes the resulting content back so the agent can verify (`:797-804`).
+5. **Mentions as a scheme, not a lookup.** `mention://id/type/modelId` keeps identity inside plain Markdown so a round trip through an LLM does not sever links (`Mention.tsx:448-483`).
 
 ## Costs / limits
 
@@ -128,11 +128,19 @@ With `commonMark: true` on export, external mentions fall back to their real URL
 - **Avoid the three-representation row.** Outline carries Markdown, PM JSON and Yjs state and has to document which is authoritative. flave's single source-of-truth file is the advantage; keep derived forms derived.
 - **Note the served-skills idea.** Outline ships its own agent playbooks over MCP. A `.flave` workspace could ship trigger-pack usage notes the same way.
 
+## Changes since the previous pin (2026-11-19 → 2026-11-21)
+
+`396f196de4d0` → `ee3c88bc14a6`, 17 commits, no release (`package.json` still says 1.13.0, nearest tag `v1.12.0`).
+
+- **`update_document` now rejects ill-formed edit modes before it touches the document.** `findText` with `replace` (or no mode) is an error that points the model at `patch`; `patch` requires both `text` and `findText`; `append`/`prepend` require `text` (`server/mcp/tools/documents.ts:697-729`, PR #14678). This makes the "quote to locate" contract above stricter, and it shifts the fail-loud and echo-back code down by 34 lines (re-cited above).
+- **Mentions switch between inline and card from a hover menu** instead of the selection toolbar (`shared/editor/nodes/Mention.tsx`). The `mention://` Markdown serialization is unchanged; only its line numbers moved.
+- `documents.users` permissions were tightened (`server/routes/api/documents/documents.ts`), media resizing gained an aspect-ratio lock, and hosted plan gating was reshuffled (`shared/utils/PlanHelper.ts`). The MCP route is still gated by a team preference (`server/routes/mcp/index.ts:174`).
+
 ## Read next
 
 - `server/models/helpers/DocumentHelper.tsx:596-760` — the whole agent write path
 - `shared/editor/lib/markdown/serializer.ts:74-81`, `:260-280` — position tracking inside the serializer
-- `server/mcp/tools/documents.ts:632-800` — tool contract as the model sees it
+- `server/mcp/tools/documents.ts:632-834` — tool contract as the model sees it
 - `server/collaboration/APIUpdateExtension.ts` — API → live editors
 
 ## Related

@@ -132,6 +132,36 @@
     ]
   },
   {
+    "dir": "agent-skill-packs",
+    "question": "Study popular and thoughtful \"skill packs\": clusters of agent skills developed by one developer or team.",
+    "pinned": [
+      {
+        "slug": "gstack",
+        "url": "https://github.com/garrytan/gstack",
+        "owner": "garrytan",
+        "name": "gstack"
+      },
+      {
+        "slug": "mattpocock-skills",
+        "url": "https://github.com/mattpocock/skills",
+        "owner": "mattpocock",
+        "name": "skills"
+      },
+      {
+        "slug": "pstack",
+        "url": "https://github.com/backnotprop/pstack",
+        "owner": "backnotprop",
+        "name": "pstack"
+      },
+      {
+        "slug": "seo-skills",
+        "url": "https://github.com/Illyism/seo-skills",
+        "owner": "Illyism",
+        "name": "seo-skills"
+      }
+    ]
+  },
+  {
     "dir": "agent-workspace-bundles",
     "question": "What does it take to package everything an agent did in a session (the files it made, the code it ran, the tools and APIs it used, the environment it ran in, and the secrets it needed) as one folder that can be saved, shared, and opened somewhere else, with the secrets left behind?",
     "pinned": [
@@ -400,6 +430,12 @@
         "name": "LibreChat"
       },
       {
+        "slug": "odysseus",
+        "url": "https://github.com/odysseus-dev/odysseus",
+        "owner": "odysseus-dev",
+        "name": "odysseus"
+      },
+      {
         "slug": "onyx",
         "url": "https://github.com/onyx-dot-app/onyx",
         "owner": "onyx-dot-app",
@@ -634,6 +670,12 @@
         "name": "letta"
       },
       {
+        "slug": "meko",
+        "url": "https://github.com/yugabyte/meko",
+        "owner": "yugabyte",
+        "name": "meko"
+      },
+      {
         "slug": "mem0",
         "url": "https://github.com/mem0ai/mem0",
         "owner": "mem0ai",
@@ -736,10 +778,10 @@
         "name": "specs"
       },
       {
-        "slug": "get-shit-done",
-        "url": "https://github.com/gsd-build/get-shit-done",
-        "owner": "gsd-build",
-        "name": "get-shit-done"
+        "slug": "gsd-core",
+        "url": "https://github.com/open-gsd/gsd-core",
+        "owner": "open-gsd",
+        "name": "gsd-core"
       },
       {
         "slug": "llms-txt",
@@ -821,8 +863,8 @@
       },
       {
         "slug": "rclone-ui",
-        "url": "https://github.com/rclone-ui/rclone-ui",
-        "owner": "rclone-ui",
+        "url": "https://github.com/rclone/rclone-ui",
+        "owner": "rclone",
         "name": "rclone-ui"
       },
       {

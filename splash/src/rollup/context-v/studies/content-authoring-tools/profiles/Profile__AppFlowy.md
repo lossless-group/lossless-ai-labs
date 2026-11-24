@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/appflowy
 profile_kind: Flutter UI over a Rust core (yrs collab objects in RocksDB, SQLite for app state), optional AppFlowy Cloud sync
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -117,6 +117,10 @@ A document decoded through `collab-document` is a flat block map with a separate
 - **Borrow the backend switch.** One trait, `Local` vs `Cloud` providers, chosen per workspace at build time. If flave adds sync later, a pluggable provider keeps the single-user path dependency-free.
 - **Borrow the "one operation bus, many callers" shape** (FFI events with typed payloads like `ApplyAction` and `ApplyTextDeltaEvent`) — it is the same idea as flave's planned single operation set with four callers, but flave should expose it to agents, not only to its own UI.
 - **On the CRDT deferral:** AppFlowy shows what full CRDT-as-database buys (uniform sync for docs, tables, folders) and what it costs (the files vanish). It supports keeping CRDT out of flave until a concrete multi-writer need appears; see [[Profile__Automerge]].
+
+## Changes since the previous pin (2026-10-28 → 2026-10-28)
+
+No change: the pin is still `8fcee27d9bd9` (tag `0.15.0`), the latest commit on upstream `main` as of 2026-11-23, so every citation above stands.
 
 ## Read next
 

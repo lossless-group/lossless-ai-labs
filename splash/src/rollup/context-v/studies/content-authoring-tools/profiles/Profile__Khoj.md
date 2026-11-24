@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/khoj
 profile_kind: AI-first second brain — Python (Django + FastAPI) server over Postgres/pgvector, fed by client plugins (Obsidian, Emacs, desktop, web) that push your files in
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -122,6 +122,10 @@ Both are scoped by `user` and optionally by `agent`, which is how a custom agent
 - **Clearance must travel with the copy.** Khoj copies everything to one index with no per-chunk visibility. A flave index (Chroma, an agent's context, an LP-facing bot as a Khoj-style "agent") must carry each block's `clearance` into the chunk metadata and filter at query time. Otherwise retrieval becomes a back door around the publish-time leak scan.
 - **Borrow `none / read / write` plus Apply/Cancel** as the human-facing control for flave's agent-caller of the shared operation set. Note that Khoj's text SEARCH/REPLACE is what flave's named operations should improve on, by addressing block ids rather than exact-match strings.
 - **Avoid the push-a-copy architecture.** Flave's workspace *is* files. An agent should read them in place (with a Joplin-style outline/section surface, [[Profile__Joplin]]) rather than through a synced server mirror that can go stale.
+
+## Changes since the previous pin (2026-08-01 → 2026-08-01)
+
+No change: the pin is still `ae229ca894c0` (nearest tag `2.0.0-beta.28`), the latest commit on upstream `master` as of 2026-11-23. The repo is not archived, but it has had no commits on `master` since 2026-08-02, close to four months.
 
 ## Read next
 

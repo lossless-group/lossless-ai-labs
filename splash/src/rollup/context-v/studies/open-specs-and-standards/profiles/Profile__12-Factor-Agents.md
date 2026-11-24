@@ -10,11 +10,11 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/12-factor-agents
 profile_kind: manifesto
 date_created: 2026-05-05
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 8795b0c5-5da7-4c8e-8824-2ac5104af787
 hex_code: fd31ao
 date_authored_initial_draft: 2026-05-05
-date_authored_current_draft: 2026-05-05
+date_authored_current_draft: 2026-11-23
 lede: >-
   Nothing to install — thirteen essays whose answer to "who owns the prompts,
   the context, the state, the control flow?" is always *you*.
@@ -278,6 +278,10 @@ The other three profiles in this study are **tools or methodologies for guiding 
 | **Compatible with the others?** | Yes — orthogonal. You can apply 12-Factor principles inside an OpenSpec/Spec-Kit/GSD-driven repo | — | — | — |
 
 A productive way to think about the relationship: if you are *building an agent product* (a customer-facing app where an LLM makes decisions), 12-Factor Agents tells you how to architect it. If you are *using an AI assistant to write code in your repo*, OpenSpec / Spec Kit / GSD tell you how to drive that assistant. They can co-exist — applying Factor 5 (unify state) and Factor 8 (own control flow) inside a repo whose features are scoped via OpenSpec deltas is a coherent stack.
+
+## Changes since the previous pin (2025-09-21 → 2025-09-21)
+
+No upstream changes: `main` is still at `d20c728368bf`, and the repo has not been pushed since 2025-09-21. It is not archived.
 
 ## One-line summary
 

@@ -3,18 +3,18 @@ name: Baalda Profile
 title: Baalda — Profile
 slug: baalda
 upstream: https://github.com/naveedharri/baalda
-pinned_sha: 90929b5a
-pinned_date: 2026-11-04
-version_at_pin: "staging (moving tag; nearest version tag v0.1.112)"
+pinned_sha: f80b6b5a
+pinned_date: 2026-11-20
+version_at_pin: "v0.1.113 (version tag on the pinned commit)"
 license: Apache-2.0 (everything outside ee/; ee/ is under the source-available Baalda Enterprise License)
 maintainer: Naveed Harri (naveedharri)
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/baalda
 profile_kind: Tauri v2 desktop notes app + Node/Hocuspocus/Postgres sync server, with a file↔Yjs bridge
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -52,7 +52,7 @@ from_path: "context-v/profiles/Profile__Baalda.md"
 ---
 # Baalda — Profile
 
-A profile of Baalda as it lives in this study (`studies/content-authoring-tools/baalda`, pinned at `90929b5a`, 2026-11-04, nearest version tag `v0.1.112`). Apache-2.0 outside `ee/`; Tauri v2 (Rust) desktop app with a React + CodeMirror 6 UI, plus a Node server running Hocuspocus over Postgres.
+A profile of Baalda as it lives in this study (`studies/content-authoring-tools/baalda`, pinned at `f80b6b5a54d5`, 2026-11-20, nearest version tag `v0.1.113`). Apache-2.0 outside `ee/`; Tauri v2 (Rust) desktop app with a React + CodeMirror 6 UI, plus a Node server running Hocuspocus over Postgres.
 
 It is here because its README names the exact tension this study is about: *"AI-editable notes need loose Markdown on disk as the source of truth. Real-time collaboration is built on CRDTs, whose state is an opaque binary blob. No tool combined them."* The question for this profile is how it actually reconciles the two.
 
@@ -87,8 +87,10 @@ A vault is an ordinary folder of `.md` files (plus `.markdown`, `.mdx`, `.txt`, 
 my-vault/
 ├── Projects/roadmap.md          ← plain Markdown, frontmatter rides in the same Y.Text
 ├── attachments/<content-hash>.png   ← the only binaries that sync
-└── .context/                    ← app state: index.sqlite, the CRDT store, config.json, local trash
+└── .context/                    ← app state: index.sqlite, the CRDT store, config.json
 ```
+
+(Until 2026-11-19 `.context/` also held a local trash of deleted notes. That was removed; see the changes section below.)
 
 `.context/` is off-limits to outside writers; it is excluded from the tree walk, watcher, and index (`spec 03:159-162`). Everything there is described as a rebuildable layer over the files.
 
@@ -128,7 +130,7 @@ my-vault/
 - **Server required for collaboration.** Self-hostable (Node + Postgres, Compose, Railway), but multiplayer means running Hocuspocus and Postgres.
 - **"Never travels in plain text" is narrower than it reads.** Yjs updates carry the text. Vault keys seal the Postgres columns at rest, off by default, and the docs say plainly *"This is not end-to-end encryption"* (`docs/VAULT_KEYS.md:8-12`).
 - **Open core.** `ee/` is source-available and requires a paid subscription for production use (`ee/README.md`); currently it holds only the license and README.
-- **Code files are ignored on purpose** (`file-formats.md`), so it is a notes app, not a workspace-over-a-repo.
+- **Most code files are ignored on purpose** (`file-formats.md`): `.py`, `.rs`, `.go`, `.sh`, `.sql` and data files now show read-only and sync as files, but `.js`, `.ts`, `.css` and similar never appear, so it is a notes app, not a workspace-over-a-repo.
 
 ## Relevance to flave
 
@@ -138,9 +140,16 @@ my-vault/
 - **Note the stable-id lesson.** Baalda keys everything on `doc_id` so a rename never forks a doc (`spec 03:121-122`); this is the same reason flave §8.1 freezes block ids at M0.
 - **Avoid the per-device-projection trap if flave stays file-first.** Baalda's file is re-derived per device from the CRDT; a `.flave` bundle sent by email has no CRDT behind it. If flave adds this later, the bundle must still be complete without `.context/`-style state.
 
-## Read next
+## Changes since the previous pin (2026-11-04 → 2026-11-20)
 
-- `docs/specs/03-sync-engine.md:72-200` — the bridge algorithm and every outside-writer rule
+Old pin `90929b5a68de`, new pin `f80b6b5a54d5`: 38 commits, release `v0.1.113` (shipped silently). The bridge (`noteBridge.ts`, `diff.ts`, `types.ts`), spec 03, and the MCP tool set (`app/apps/server/src/mcp/tools.ts`) did not change, so the Markdown-string-CRDT thesis and every bridge citation above still hold. What changed is delete semantics, file sync scope, and link parsing:
+
+- **"Deleted means deleted."** The server-side 30-day Trash was retired on 2026-11-19: a delete purges at once, keeps a content-free tombstone, and a vault checkpoint revert is the only way back (`docs/STATUS.md`). MCP deletes now call `purgeDeletedSoon` (`app/apps/server/src/mcp/service.ts`, `app/apps/server/src/trash/service.ts:398`). No device writes `.context/trash` copies any more, including on edit conflicts and lost access; a revoked note and its unsent edits are removed with no copy (`docs/specs/04-team-collaboration.md`). Spec 03 still describes `.context/trash` (`docs/specs/03-sync-engine.md:160-172`), so the spec now lags the code. For an agent this raises the cost of a wrong delete: there is no local or server trash to recover from.
+- **Standard Markdown links count as note links.** `[text](Other%20Note.md)` now feeds Graph View and backlinks alongside `[[wikilinks]]`; targets are percent-decoded and web URLs, anchors, and files are skipped (`app/apps/desktop/src-tauri/src/parse.rs:66-69`, `src-tauri/src/index.rs`). That makes plain CommonMark links, the kind an agent writes by default, first-class in the index.
+- **Files outside `attachments/` now sync** on the Team plan and on self-hosted servers without billing; previews cover Office files, CSV/TSV, archives and some code files, and server limits are per type up to `MAX_BLOB_BYTES_DIRECT` (500 MB) on S3-backed servers (`.claude/skills/baalda-guide/references/file-formats.md`). Images used only by a deleted note are removed on the server and every device (`app/apps/server/src/blobs/attachment-cleanup.ts`, migration `096_attachment_cleanup.sql`).
+- **Self-hosting got a prebuilt image** (`ghcr.io/naveedharri/baalda-server`, `deploy/compose/docker-compose.yml:24-25`), and `/health` reports the real release version.
+
+ — the bridge algorithm and every outside-writer rule
 - `app/apps/desktop/src/lib/bridge/noteBridge.ts:25-60`, `:760-930` — ingest guards in code
 - `app/apps/desktop/src/lib/bridge/diff.ts` — the 97-line diff-to-ops core
 - `app/apps/server/src/mcp/doc-writer.ts:25-38` and `tools.ts:546` — MCP writes as CRDT ops

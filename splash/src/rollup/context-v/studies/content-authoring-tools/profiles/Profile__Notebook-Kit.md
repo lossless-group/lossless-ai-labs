@@ -3,18 +3,18 @@ name: Notebook Kit Profile
 title: Notebook Kit — Profile
 slug: notebook-kit
 upstream: https://github.com/observablehq/notebook-kit
-pinned_sha: c74943a
-pinned_date: 2026-11-19
-version_at_pin: "v2.11.0-1-gc74943a (one commit past v2.11.0)"
+pinned_sha: 28b4701
+pinned_date: 2026-11-22
+version_at_pin: "v2.11.0-7-g28b4701 (seven commits past v2.11.0)"
 license: ISC
 maintainer: Observable, Inc.
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/notebook-kit
 profile_kind: Notebook file format (HTML) + CLI / Vite plugin / JS API for preview and static build
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -52,13 +52,13 @@ from_path: "context-v/profiles/Profile__Notebook-Kit.md"
 ---
 # Notebook Kit — Profile
 
-A profile of Observable Notebook Kit as it lives in this study (`studies/content-authoring-tools/notebook-kit`, pinned at `c74943a`, one commit past `v2.11.0`, 2026-11-19). ISC, TypeScript, from Observable, Inc.
+A profile of Observable Notebook Kit as it lives in this study (`studies/content-authoring-tools/notebook-kit`, pinned at `28b4701`, seven commits past `v2.11.0`, 2026-11-22). ISC, TypeScript, from Observable, Inc.
 
 This is the study's **HTML-as-source** entry. It is the open half of "Notebooks 2.0". The closed half is Observable Desktop (macOS) and the hosted platform (`docs/index.html:53-56`).
 
 ## TL;DR
 
-A notebook is a plain `.html` file: a `<notebook>` root, an optional `<title>`, and "one `<script>` element per cell" (`docs/kit.html:78-81`). The cell's `type` attribute is its language. The kit gives you `notebooks preview`, `notebooks build`, `notebooks download` (pulls an observablehq.com notebook down as HTML) and `notebooks query` (`docs/kit.html` CLI section), plus a Vite plugin and a low-level parse/transpile API.
+A notebook is a plain `.html` file: a `<notebook>` root, an optional `<title>`, and "one `<script>` element per cell" (`docs/kit.html:72-75`). The cell's `type` attribute is its language. The kit gives you `notebooks preview`, `notebooks build`, `notebooks download` (pulls an observablehq.com notebook down as HTML) and `notebooks query` (`docs/kit.html` CLI section), plus a Vite plugin and a low-level parse/transpile API.
 
 **One sentence:** *Notebook Kit makes the notebook a file any text editor, diff tool or agent can handle, and makes data a build artifact: queries run once, are cached as JSON next to the notebook, and readers get the snapshot.*
 
@@ -67,12 +67,12 @@ A notebook is a plain `.html` file: a `<notebook>` root, an optional `<title>`, 
 - **Format ↔ model.** `deserialize()` / `serialize()` map HTML to a `Notebook` object and back (`src/lib/serialize.ts:7`, `:32`). The model is small: `NotebookSpec` has `cells`, `title`, `theme`, `readOnly` (`src/lib/notebook.ts:54-63`). `CellSpec` has `id`, `value`, `mode`, `pinned`, `hidden`, `output`, `format`, `database`, `since` (`:72-90`).
 - **Twelve cell modes**: `js`, `ts`, `ojs`, `md`, `html`, `tex`, `dot`, `sql`, `sql.view`, `node`, `python`, `r` (`src/lib/notebook.ts:18-30`).
 - **Reactivity.** Each JS cell is parsed for top-level declarations and unbound references. `transpile()` turns the cell into a function whose parameters are its `inputs` and which returns its `outputs` (`src/javascript/transpile.ts:104-113`). That function is then defined on the Observable Runtime, which re-runs dependents when an input changes.
-- **Template cells.** Markdown, HTML and SQL cells are parsed as tagged template literals, so `${expr}` works inside prose and queries (`src/javascript/template.ts`; the docs use `${tex\`\TeX\`}` inside Markdown, `docs/kit.html:121`).
+- **Template cells.** Markdown, HTML and SQL cells are parsed as tagged template literals, so `${expr}` works inside prose and queries (`src/javascript/template.ts`; the docs use `${tex\`\TeX\`}` inside Markdown, `docs/kit.html:115`).
 - **Build.** A Vite plugin renders Markdown/HTML statically and swaps in dynamic content on load (`docs/kit.html` Vite API). Hot updates redefine only cells whose rendered hash changed: "unchanged cells continue running" (`src/runtime/hot.ts:50-53`).
 
 ## What's on disk
 
-The canonical hello-world (`docs/kit.html:87-96`):
+The canonical hello-world (`docs/kit.html:81-90`):
 
 ```html
 <!doctype html>
@@ -104,9 +104,9 @@ A real SQL cell from the docs, which are themselves notebooks (`docs/databases.h
 
 ## Agent reach
 
-**Read and write: yes, as text.** The docs say the format "is intended to be simple, human-readable, and human-editable … easy to review diffs … to search, to find-and-replace" (`docs/kit.html:72`). An agent edits `<script>` bodies and runs `notebooks build`.
+**Read and write: yes, as text.** The docs say the format "is intended to be simple, human-readable, and human-editable … easy to review diffs … to search, to find-and-replace" (`docs/kit.html:66`). An agent edits `<script>` bodies and runs `notebooks build`.
 
-- **Gotchas an agent must respect:** four-space indentation is trimmed from every cell line (`docs/kit.html:100`), a literal `</script>` inside a cell must be escaped as `<\/script>` (`:238`), and the optional `id` attribute "gives cells a stable identity for editing" (`:235`).
+- **Gotchas an agent must respect:** four-space indentation is trimmed from every cell line (`docs/kit.html:94`), a literal `</script>` inside a cell must be escaped as `<\/script>` (`:232`), and the optional `id` attribute "gives cells a stable identity for editing" (`:229`).
 - **Programmatic:** `deserialize` → edit `Notebook` → `serialize` is a full round-trip API (`src/index.ts:6-7`). `notebooks query --database duckdb '…'` runs a query from the shell.
 - **No MCP or AI hook in the kit.** AI is a stated selling point of the proprietary Desktop/web editor (`docs/index.html:80-92`), not of this repo.
 
@@ -126,7 +126,7 @@ A real SQL cell from the docs, which are themselves notebooks (`docs/databases.h
 
 - **Static output means frozen data.** Dynamic queries "are only suitable for use within Observable Desktop, while previewing … or when using a client-side database" (`docs/databases.html:157`).
 - **`.observable/` mixes secrets and data.** The docs recommend gitignoring the whole folder (`:135-141`), which also drops the cached results that make a notebook reproducible for anyone else.
-- **Indentation-sensitive cells.** Fixed four-space trimming is acknowledged as provisional (`docs/kit.html:100`).
+- **Indentation-sensitive cells.** Fixed four-space trimming is acknowledged as provisional (`docs/kit.html:94`).
 - **The editor is not open.** Desktop and the AI features are proprietary. The kit is the format plus build tooling.
 - **No citations, cross-references or numbering.** Markdown cells are rendered Markdown with interpolation, nothing more.
 
@@ -138,9 +138,18 @@ A real SQL cell from the docs, which are themselves notebooks (`docs/databases.h
 - **The counterpoint on syntax.** HTML `<script>` cells are very agent-legible but very un-Markdown. flave stays with LFM directives and fences. The kit is evidence that the cell boundary, not the language, is what makes a document addressable.
 - **Separate secrets from data.** Don't repeat `.observable/`'s mix. Keep credentials out of the bundle and keep cached data in it, under clearance.
 
+## Changes since the previous pin (2026-11-19 → 2026-11-22)
+
+`c74943aa13bf` → `28b4701794cf`, 6 commits, no release (still after `v2.11.0`). The file format, the cache and the Vite plugin's cell handling are unchanged.
+
+- **The README now documents the whole format for agents.** It grew from a link to the docs into a self-contained reference: cell types, `<script>` attributes, four-space trimming, data loaders, the `.observable/cache` and `databases.json`, and the CLI (`README.md`, commit `ccd3cb2`, "Help agents when they install notebook-kit").
+- **Snowflake key-pair authentication.** `databases.json` entries can set `privateKey`, `privateKeyPath` and `privateKeyPass`, which switch the driver to `SNOWFLAKE_JWT` (`src/databases/snowflake.ts`, `docs/databases.html`).
+- **Arrow and Parquet attachments decode 64-bit integers as `BigInt` by default**, and `arrow()` / `parquet()` accept Flechette options to override (`src/runtime/stdlib/fileAttachment.ts`). Code reading large-integer columns from Arrow or Parquet files may see a different type.
+- New `Generators.disposable` (`src/runtime/stdlib/generators/disposable.ts`). pnpm users no longer need to install the default fonts by hand (`src/vite/config.ts`), so that step left `docs/kit.html` and its line citations above shifted by six.
+
 ## Read next
 
-- `docs/kit.html:70-260`: the file format, written as a notebook
+- `docs/kit.html:64-254`: the file format, written as a notebook
 - `src/lib/notebook.ts` and `src/lib/serialize.ts`: the full model and round-trip
 - `src/vite/observable.ts:160-215`: how SQL and loader cells become cached file attachments
 - `docs/databases.html:20-160`: the caching FAQ, the clearest statement of the snapshot philosophy

@@ -10,11 +10,11 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/mcp-api
 profile_kind: applied-product
 date_created: 2026-05-05
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: ccb76823-c008-48c1-aeab-d5b1af096da5
 hex_code: c09mpg
 date_authored_initial_draft: 2026-05-05
-date_authored_current_draft: 2026-05-05
+date_authored_current_draft: 2026-11-23
 lede: >-
   However many APIs a user registers, the model only ever sees two tools:
   `ListAvailableApis` and `CallApi`.
@@ -443,6 +443,10 @@ MCP-API doesn't have a peer in this study; it's at a different layer than everyt
 It is the **only entry where you can `git clone` and `docker run` the result and have a working SaaS at the end.** Everything else in the study is either the standard, the convention, or the methodology that products like this are built *against*.
 
 The right way to read it in this study: as the **proof point for MCP**. The MCP profile makes the *N+M* claim; MCP-API is one of the *M*-side adapters that demonstrates the claim is real.
+
+## Changes since the previous pin (2026-02-08 → 2026-02-08)
+
+No upstream changes on `main`: it is still at `4031b980b106` (tag `v1.0.0`). The repo is not archived.
 
 ## One-line summary
 

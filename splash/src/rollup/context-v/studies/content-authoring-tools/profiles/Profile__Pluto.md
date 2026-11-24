@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/pluto
 profile_kind: Reactive notebook (Julia server + Preact frontend) whose file is a runnable .jl script
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -163,6 +163,10 @@ The grammar, all in `src/notebook/saving and loading.jl`:
 - **Keep outputs out of the source.** Pluto's `.jl` has zero outputs; results appear only in exports. flave's publish step is the equivalent of Pluto's HTML statefile export.
 - **Embed the environment, not just the code.** Pluto's in-file Manifest is the precedent for flave pinning its DuckDB version and `data/_sources.yaml` hashes so a query re-runs the same way six months later.
 - **Give agents the upstream slice, not the whole document.** Pluto's AI context builder is a small, copyable idea for flave's embedded chat.
+
+## Changes since the previous pin (2026-11-11 → 2026-11-11)
+
+No upstream change: `main` is still at `db2a5cdf1df2` as of the 2026-11-23 refresh (0 commits), so everything above still holds.
 
 ## Read next
 

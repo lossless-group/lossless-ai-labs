@@ -3,7 +3,7 @@ name: Weaviate Profile
 slug: weaviate
 upstream: https://github.com/weaviate/weaviate
 package: weaviate-server (Docker), weaviate-client (Python/Go/JS/Java/.NET)
-license: BSD-3-Clause
+license: "BSD-3-Clause outside wl/; code under wl/ (including namespaces) is under the Weaviate enterprise license and needs a license key, since v1.39.4 / v1.40.0"
 maintainer: Weaviate B.V. (weaviate org)
 study: studies/vector-databases
 profile_path: studies/vector-databases/weaviate
@@ -12,7 +12,7 @@ date_created: 2026-05-27
 site_uuid: 8b542dc0-425a-454d-b818-32f3b0622e3d
 hex_code: ch5gn5
 date_authored_initial_draft: 2026-05-27
-date_authored_current_draft: 2026-05-27
+date_authored_current_draft: 2026-11-23
 lede: >-
   The database itself calls OpenAI to embed on write and Cohere to rerank on
   read — the RAG pipeline lives inside the store, not the app.
@@ -34,7 +34,7 @@ summary: >-
 publish: true
 type: Profiles
 title: "Weaviate — Profile"
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 authors:
   - Michael Staton
 status: Reference
@@ -47,11 +47,11 @@ A profile of Weaviate as it lives in this study (`studies/vector-databases/weavi
 
 ## TL;DR
 
-Weaviate is a **schema-on-write** vector database written in Go (BSD-3-Clause, ~70 modules, Raft consensus, GraphQL + REST + gRPC). The thesis: an embedding store is more useful when the records around the embeddings are *typed* — classes with named properties, primitive types (`text`, `int`, `boolean`, `uuid`, `geoCoordinates`, `phoneNumber`, `blob`, plus `cref` for cross-references) — and when the database itself owns the **embedding-and-RAG pipeline** through pluggable modules (`text2vec-*`, `reranker-*`, `generative-*`, `multi2vec-*`).
+Weaviate is a **schema-on-write** vector database written in Go (BSD-3-Clause outside the `wl/` directory, with an enterprise-licensed `wl/` tree since v1.40.0; 74 module directories, Raft consensus, GraphQL + REST + gRPC). The thesis: an embedding store is more useful when the records around the embeddings are *typed* — classes with named properties, primitive types (`text`, `int`, `boolean`, `uuid`, `geoCoordinates`, `phoneNumber`, `blob`, plus `cref` for cross-references) — and when the database itself owns the **embedding-and-RAG pipeline** through pluggable modules (`text2vec-*`, `reranker-*`, `generative-*`, `multi2vec-*`).
 
-The architectural shape is hexagonal — `cmd/weaviate-server/` is the entry point, `adapters/handlers/{rest,grpc,graphql}/` are the inbound ports, `usecases/` is the application core (schema, traverser, objects, classification, multitenancy, backup), and `adapters/repos/db/` is the outbound storage adapter wrapping a custom LSM (`lsmkv`) plus three vector indexes (HNSW, flat, dynamic). Modules plug in via the `modulecapabilities.Module` interface (`entities/modulecapabilities/module.go:45-49`).
+The architectural shape is hexagonal — `cmd/weaviate-server/` is the entry point, `adapters/handlers/{rest,grpc,graphql}/` are the inbound ports, `usecases/` is the application core (schema, traverser, objects, classification, multitenancy, backup), and `adapters/repos/db/` is the outbound storage adapter wrapping a custom LSM (`lsmkv`) plus three vector indexes (HNSW, flat, dynamic). Modules plug in via the `modulecapabilities.Module` interface (`entities/modulecapabilities/module.go:44-48`).
 
-The distinguishing axis vs. [[Profile__Chroma]] is **schema-on-write**: classes and properties are declared, validated against a type system, and rejected if malformed *before* any object can be stored (`usecases/schema/class.go:1041-1091`). The distinguishing axis vs. [[Profile__Qdrant]] is the same trade-off as static-vs-dynamic typing in programming languages — Weaviate forces a class declaration; Qdrant accepts an arbitrary JSON payload per point. The distinguishing axis vs. [[Profile__Milvus]] is data-model framing — Weaviate is closer to a knowledge graph (cross-references are first-class, GraphQL is the primary query language); Milvus is closer to vectors-plus-metadata at k8s scale.
+The distinguishing axis vs. [[Profile__Chroma]] is **schema-on-write**: classes and properties are declared, validated against a type system, and rejected if malformed *before* any object can be stored (`usecases/schema/class.go:1266-1322`). The distinguishing axis vs. [[Profile__Qdrant]] is the same trade-off as static-vs-dynamic typing in programming languages — Weaviate forces a class declaration; Qdrant accepts an arbitrary JSON payload per point. The distinguishing axis vs. [[Profile__Milvus]] is data-model framing — Weaviate is closer to a knowledge graph (cross-references are first-class, GraphQL is the primary query language); Milvus is closer to vectors-plus-metadata at k8s scale.
 
 If you want one sentence: **Weaviate is a typed, modular, GraphQL-fronted vector database where classes have schemas, properties have data types (including cross-references between objects), embedding/reranking/generation lives in the DB as pluggable modules, hybrid search fuses BM25 and vectors via alpha-weighted RRF, multi-tenancy is a first-class collection-level switch, and cluster mode runs on Hashicorp Raft.**
 
@@ -59,26 +59,26 @@ If you want one sentence: **Weaviate is a typed, modular, GraphQL-fronted vector
 
 Three bets distinguish Weaviate from the rest of the field:
 
-1. **Typed schema at the storage layer is load-bearing.** Where [[Profile__Chroma]] accepts an arbitrary `metadata` dict per record and [[Profile__Qdrant]] accepts an arbitrary JSON `payload` per point, Weaviate requires you to declare a class with named properties and primitive types up front (`entities/schema/data_types.go:26-72`, `entities/models/class.go:31-72`). Class names must match `[A-Z][_0-9A-Za-z]{0,254}` (`entities/schema/validation.go:80`). Property writes that don't match the declared type are rejected at the validation gate. This buys you GraphQL auto-generation, cross-references, type-aware filters, and BM25 over `text`-typed fields — at the cost of a migration step every time the shape changes.
-2. **The database owns the embedding-and-RAG pipeline.** The 68 directories under `modules/` (`ls modules/ | wc -l = 68`) cover ~20 `text2vec-*` providers (OpenAI, Cohere, HuggingFace, Voyage, Jina, Google, AWS, Mistral, Ollama, transformers, and a built-in `text2vec-weaviate`), ~10 `generative-*` providers (Anthropic, OpenAI, Cohere, Google, Mistral, Anyscale, Databricks, Ollama, NVIDIA, xAI), ~7 `reranker-*` providers (Cohere, Jina, Voyage, NVIDIA, transformers, ContextualAI), plus `multi2vec-*`, `img2vec-*`, `qna-*`, `sum-*`, `ner-*`, `text-spellcheck`, and four backup providers (`backup-{azure,filesystem,gcs,s3}`). Every module implements `Name() / Init() / Type()` (`entities/modulecapabilities/module.go:45-49`); types are enumerated as an enum (`Text2Vec`, `Text2TextGenerative`, `Text2TextReranker`, `Multi2Vec`, `Ref2Vec`, `Backup`, `Offload`, `Usage`, etc. — same file, lines 24-43). The DB takes the burden of "embed before write, rerank before return, generate at query time" off the application.
-3. **GraphQL as the primary query language.** REST is generated from `openapi-specs/` via go-swagger; gRPC v1 lives in `adapters/handlers/grpc/v1/`; but the *expressive* surface — where you say "give me `Article { title, author { ... on Person { name } } }` with `nearText`, `where`, and `hybrid` arguments" — is GraphQL (`adapters/handlers/graphql/local/local.go:26-49`, `adapters/handlers/graphql/local/get/get.go:36-64`). Cross-references resolve as `graphql.NewUnion` types (`adapters/handlers/graphql/local/get/class_builder_references.go:25-65`), which is how a stored "ref to another object" becomes a first-class traversable edge in the query language.
+1. **Typed schema at the storage layer is load-bearing.** Where [[Profile__Chroma]] accepts an arbitrary `metadata` dict per record and [[Profile__Qdrant]] accepts an arbitrary JSON `payload` per point, Weaviate requires you to declare a class with named properties and primitive types up front (`entities/schema/data_types.go:26-72`, `entities/models/class.go:31-72`). Class names must match `[A-Z][_0-9A-Za-z]{0,254}` (`entities/schema/validation.go:81`). Property writes that don't match the declared type are rejected at the validation gate. This buys you GraphQL auto-generation, cross-references, type-aware filters, and BM25 over `text`-typed fields — at the cost of a migration step every time the shape changes.
+2. **The database owns the embedding-and-RAG pipeline.** The 74 directories under `modules/` (`ls modules/ | wc -l = 74`, up from 68 at the first pin) cover 20 `text2vec-*` providers (OpenAI, Cohere, HuggingFace, Voyage, Jina, Google, AWS, Mistral, Ollama, transformers, and a built-in `text2vec-weaviate`), 18 `generative-*` modules (Anthropic, OpenAI, Cohere, Google, AWS, Mistral, Anyscale, Databricks, DeepSeek, DigitalOcean, Meta, Ollama, NVIDIA, xAI, and others, plus a dummy), 9 `reranker-*` modules (Cohere, Jina, Voyage, NVIDIA, OpenAI, TypesafeAI, transformers, ContextualAI, plus a dummy), plus `multi2vec-*`, `img2vec-*`, `qna-*`, `sum-*`, `ner-*`, `text-spellcheck`, and four backup providers (`backup-{azure,filesystem,gcs,s3}`). Every module implements `Name() / Init() / Type()` (`entities/modulecapabilities/module.go:44-48`); types are enumerated as an enum (`Text2Vec`, `Text2TextGenerative`, `Text2TextReranker`, `Multi2Vec`, `Ref2Vec`, `Backup`, `Offload`, `Usage`, etc. — same file, lines 25-42). The DB takes the burden of "embed before write, rerank before return, generate at query time" off the application, but only for collections that name a vectorizer: since v1.40.0 a collection with no `vectorizer` defaults to `none`, and the `DEFAULT_VECTORIZER_MODULE` environment variable is ignored with a deprecation warning (`usecases/config/environment.go:914-917`).
+3. **GraphQL as the primary query language.** REST is generated from `openapi-specs/` via go-swagger; gRPC v1 lives in `adapters/handlers/grpc/v1/`; but the *expressive* surface — where you say "give me `Article { title, author { ... on Person { name } } }` with `nearText`, `where`, and `hybrid` arguments" — is GraphQL (`adapters/handlers/graphql/local/local.go:27-58`, `adapters/handlers/graphql/local/get/get.go:37-64`). Since v1.40.0 REST also has non-experimental search endpoints (`/search/{collection}/hybrid`, `near-text`, `near-vector`, `near-object` in `openapi-specs/schema.json`). Cross-references resolve as `graphql.NewUnion` types (`adapters/handlers/graphql/local/get/class_builder_references.go:25-65`), which is how a stored "ref to another object" becomes a first-class traversable edge in the query language.
 
 ## Storage topology
 
 | Layer | Backend | Purpose | Code |
 |---|---|---|---|
 | **REST** | go-swagger generated handlers | OpenAPI surface (objects, schema, batch, backup, tenants) | `adapters/handlers/rest/`, generated from `openapi-specs/` |
-| **gRPC v1** | Hand-written service | High-throughput `Search`, `BatchObjects`, `BatchDelete`, `BatchReferences`, `TenantsGet`, `Aggregate` | `adapters/handlers/grpc/v1/service.go:269` |
-| **GraphQL** | tailor-platform/graphql resolvers built from the live schema | Expressive query language: `Get`, `Aggregate`, `Explore`, cross-ref traversal, `nearText`/`nearVector`/`hybrid` | `adapters/handlers/graphql/local/local.go:26-49` |
+| **gRPC v1** | Hand-written service | High-throughput `Search`, `BatchObjects`, `BatchDelete`, `BatchReferences`, `TenantsGet`, `Aggregate` | `adapters/handlers/grpc/v1/service.go:319` |
+| **GraphQL** | tailor-platform/graphql resolvers built from the live schema | Expressive query language: `Get`, `Aggregate`, `Explore`, cross-ref traversal, `nearText`/`nearVector`/`hybrid` | `adapters/handlers/graphql/local/local.go:27-58` |
 | **Use-case core** | Pure Go business logic | Schema validation, object CRUD, traverser/explorer, multitenancy, backup, classification | `usecases/{schema,objects,traverser,multitenancy,backup,classification}/` |
 | **DB → Index → Shard → Store** | Custom LSM (`lsmkv`) + HNSW/flat/dynamic | Objects, inverted index, BM25 term frequencies, vector index per shard | `adapters/repos/db/` |
-| **LSM strategies** | `replace` / `setcollection` / `mapcollection` / `roaringset` / `roaringsetrange` | KV / inverted multi-value / BM25 frequencies / roaring bitmap filtering | `adapters/repos/db/lsmkv/strategies.go:22-50` |
+| **LSM strategies** | `replace` / `setcollection` / `mapcollection` / `roaringset` / `roaringsetrange` / `inverted` | KV / inverted multi-value / BM25 frequencies / roaring bitmap filtering / BlockMax WAND postings | `adapters/repos/db/lsmkv/strategies.go:22-30` |
 | **Vector index** | HNSW (primary), flat (brute-force), dynamic (auto-switch) | ANN with PQ/BQ/SQ compression | `adapters/repos/db/vector/{hnsw,flat,dynamic}/` |
-| **Cluster** | Hashicorp Raft + BoltDB log store + FileSnapshotStore | Distributed schema consensus, leader-only writes, snapshot restore | `cluster/store.go:24-25, 452, 506` |
-| **Persistence** | Filesystem under `PERSISTENCE_DATA_PATH` | Per-shard LSM directories + HNSW commit log + Raft `raft.db` | `cluster/store.go:60` (`raftDBName = "raft.db"`), `usecases/config/environment.go:649` |
-| **Modules** | 68 pluggable Go packages | Vectorization, reranking, generation, backup, usage | `modules/` |
+| **Cluster** | Hashicorp Raft + BoltDB log store + FileSnapshotStore | Distributed schema consensus, leader-only writes, snapshot restore | `cluster/store.go:27-28, 591, 659` |
+| **Persistence** | Filesystem under `PERSISTENCE_DATA_PATH` | Per-shard LSM directories + HNSW commit log + Raft `raft.db` | `cluster/store.go:68` (`raftDBName = "raft.db"`), `usecases/config/environment.go:736` |
+| **Modules** | 74 pluggable Go packages | Vectorization, reranking, generation, backup, usage | `modules/` |
 
-The CLAUDE.md inside the repo (`weaviate/CLAUDE.md`) gives the canonical reading order: *DB holds Indices (one per class), each Index manages Shards and multi-tenancy, each Shard contains an LSM Store for objects + properties, vector index(es), and an inverted index for filtering*. The three LSM bucket strategies — `Replace` (KV), `Set` (inverted multi-value), `Map` (BM25 term frequencies) — are the load-bearing primitives.
+The CLAUDE.md inside the repo (`CLAUDE.md`) gives the canonical reading order: *DB holds Indices (one per class), each Index manages Shards and multi-tenancy, each Shard contains an LSM Store for objects + properties, vector index(es), and an inverted index for filtering*. The three LSM bucket strategies — `Replace` (KV), `Set` (inverted multi-value), `Map` (BM25 term frequencies) — are the load-bearing primitives.
 
 ## Schema of a class (collection)
 
@@ -102,7 +102,7 @@ type Class struct {
 }
 ```
 
-The 17 primitive data types (`entities/schema/data_types.go:27-72`):
+The 17 primitive data types (`entities/schema/data_types.go:25-72`):
 
 ```
 cref            // cross-reference to another object — the graph-flavored primitive
@@ -126,32 +126,32 @@ Notable for what's **present** that [[Profile__Chroma]] doesn't have at the stor
 
 ## Write policy — schema-on-write, validated before storage
 
-The validation entry point is `validateClassInvariants` (`usecases/schema/class.go:1041-1091`):
+The validation entry point is `validateClassInvariants` (`usecases/schema/class.go:1266-1322`):
 
 ```go
-func (h *Handler) validateClassInvariants(ctx, class, originalName, classGetterWithAuth, relaxCrossRefValidation) error {
+func (h *Handler) validateClassInvariants(ctx, class, originalName, classGetterWithAuth, relaxCrossRefValidation, restoring) error {
     if _, err := schema.ValidateClassName(originalName); err != nil { return err }      // ^[A-Z][_0-9A-Za-z]{0,254}$
     for _, property := range class.Properties {
         if err := h.validateProperty(class, ..., property); err != nil { return err }     // type, name, tokenization, indexing
     }
-    if err := h.validateVectorSettings(class); err != nil { return err }                  // HNSW/flat/dynamic + PQ/BQ/SQ
+    if err := h.validateVectorSettingsFor(class, nil, restoring); err != nil { return err } // HNSW/flat/dynamic/hfresh + PQ/BQ/SQ/RQ
     if err := h.moduleConfig.ValidateClass(ctx, class); err != nil { return err }         // text2vec-* knows its own valid models
     if err := validateMT(class); err != nil { return err }                                // multi-tenancy + sharding incompatibility
     if err := replica.ValidateConfig(class, h.config.Replication); err != nil { return err }
-    // ObjectTTL + inverted-index validation also run here.
+    // Async-replication, ObjectTTL, and inverted-index validation also run here.
     return nil
 }
 ```
 
 This is the architectural contrast with [[Profile__Chroma]] (which has no schema validation — anything goes in `metadata`) and [[Profile__Qdrant]] (which validates only that the vector dimension matches the collection's declared dimension; payload is free-form JSON). Weaviate refuses the write if any of these gates fails.
 
-Cross-class-defined references are validated for target-class existence (`relaxCrossRefValidation: false`) except during restore, where the order of class creation is non-deterministic — the `relaxCrossRefValidation` parameter is the escape hatch for that one case (`class.go:1041, 1043`).
+Cross-class-defined references are validated for target-class existence (`relaxCrossRefValidation: false`) except during restore, where the order of class creation is non-deterministic — the `relaxCrossRefValidation` parameter is the escape hatch for that one case (`class.go:1266-1268`); a separate `restoring` flag, added since the first pin, relaxes vector-settings checks the same way.
 
-Object writes flow through `adapters/repos/db/crud.go` and `batch.go`. Cross-references between objects are added via `(db *DB) AddReference` (`adapters/repos/db/crud.go:276`), with the reference structure defined in `entities/models/single_ref.go:33` and `batch_reference.go:33-41` — the wire-format beacon is `weaviate://localhost/objects/<uuid>/<className>/<propertyName>`.
+Object writes flow through `adapters/repos/db/crud.go` and `batch.go`. Cross-references between objects are added via `(db *DB) AddReference` (`adapters/repos/db/crud.go:297`), with the reference structure defined in `entities/models/single_ref.go:33` and `entities/models/batch_reference.go:33-41` — the wire-format beacon is `weaviate://localhost/objects/<uuid>/<className>/<propertyName>`.
 
 ## Recall API — three surfaces, one query model
 
-REST (`/v1/objects`, `/v1/graphql`, `/v1/schema`, `/v1/batch/objects`, `/v1/batch/references`, `/v1/backups/{backend}`) is for control-plane and small reads. gRPC v1 (`adapters/handlers/grpc/v1/service.go:269-322`) is the high-throughput data-plane — `Search`, `BatchObjects`, `BatchDelete`, `BatchReferences`, `Aggregate`, `TenantsGet`, `BatchStream`. GraphQL (`adapters/handlers/graphql/local/`) is the expressive read surface.
+REST (`/v1/objects`, `/v1/graphql`, `/v1/schema`, `/v1/batch/objects`, `/v1/batch/references`, `/v1/backups/{backend}`) is for control-plane and small reads. gRPC v1 (`adapters/handlers/grpc/v1/service.go:114-335`) is the high-throughput data-plane — `Search`, `BatchObjects`, `BatchDelete`, `BatchReferences`, `Aggregate`, `TenantsGet`, `BatchStream`. GraphQL (`adapters/handlers/graphql/local/`) is the expressive read surface.
 
 A representative GraphQL query against a schema-declared class:
 
@@ -175,7 +175,7 @@ A representative GraphQL query against a schema-declared class:
 }
 ```
 
-Filter operators (`entities/filters/filters.go:21-39`) are the full set this study's checklist asks about:
+Filter operators (`entities/filters/filters.go:22-40`) are the full set this study's checklist asks about:
 
 ```
 OperatorEqual, OperatorNotEqual,
@@ -185,11 +185,11 @@ OperatorWithinGeoRange, OperatorLike, OperatorIsNull,
 ContainsAny, ContainsAll, ContainsNone
 ```
 
-15 operators including `Like` (regex via `entities/filters/like_regexp.go`), geo-distance (`WithinGeoRange` with a `GeoRange{*GeoCoordinates, Distance float32}` — `filters.go:159-164`), boolean composition (`And`/`Or`/`Not` as `Operands []Clause`), null-check, and three contains-variants. Filters compose to a nested `Clause` tree (`filters.go:152-157`). This is materially richer than [[Profile__Chroma]]'s `$eq/$ne/$gt/$in/$and/$or/$not` and on par with [[Profile__Qdrant]].
+15 operators including `Like` (regex via `adapters/repos/db/inverted/like_regexp.go`), geo-distance (`WithinGeoRange` with a `GeoRange{*GeoCoordinates, Distance float32}` — `filters.go:167-170`), boolean composition (`And`/`Or`/`Not` as `Operands []Clause`), null-check, and three contains-variants. Filters compose to a nested `Clause` tree (`filters.go:158-163`). This is materially richer than [[Profile__Chroma]]'s `$eq/$ne/$gt/$in/$and/$or/$not` and on par with [[Profile__Qdrant]].
 
 ## Hybrid search — alpha-weighted RRF or relative-score fusion
 
-The hybrid retrieval entry point is `hybrid.Search` (`usecases/traverser/hybrid/searcher.go:75-153`). The alpha parameter (`searcher.go:82`) is the dial: `alpha=0` is pure BM25, `alpha=1` is pure vector, intermediate values fuse both. The fusion runs two parallel searches and combines them:
+The hybrid retrieval entry point is `hybrid.Search` (`usecases/traverser/hybrid/searcher.go:77-155`). The alpha parameter (`searcher.go:84`) is the dial: `alpha=0` is pure BM25, `alpha=1` is pure vector, intermediate values fuse both. The fusion runs two parallel searches and combines them:
 
 ```go
 alpha := params.Alpha
@@ -212,13 +212,13 @@ score := float32(weights[resultSetIndex] / float64(i+60))  // TODO replace 60 wi
 
 — and **relative-score fusion** (same file, lines 93-182) — min/max-normalize each list's scores into `[0,1]`, then sum the weighted normalized scores. The relative-score path is the one Weaviate's docs recommend as default in modern versions because it preserves more signal than RRF when one stream has a long tail of low-confidence matches.
 
-Cutoff distance and Autocut are layered on top: `params.WithDistance` truncates the dense list at the vector-distance threshold (`searcher.go:102-116`); `params.Autocut` (`searcher.go:149-151`) applies the standard Weaviate autocut heuristic to the fused list.
+Cutoff distance and Autocut are layered on top: `params.WithDistance` truncates the dense list at the vector-distance threshold (`searcher.go:104-118`); `params.Autocut` (`searcher.go:151-153`) applies the standard Weaviate autocut heuristic to the fused list.
 
-BM25 defaults (`usecases/config/config_handler.go:57-58`): `k1 = 1.2`, `b = 0.75` — the textbook Robertson values — configurable per-class via `InvertedIndexConfig.BM25.K1` / `.B`.
+BM25 defaults (`usecases/config/config_handler.go:58-59`): `k1 = 1.2`, `b = 0.75` — the textbook Robertson values — configurable per-class via `InvertedIndexConfig.BM25.K1` / `.B`.
 
 ## Indexes — HNSW with PQ/BQ/SQ compression, dynamic switching
 
-HNSW is the default (`adapters/repos/db/vector/hnsw/index.go:285-462`). Defaults from `entities/vectorindex/hnsw/config.go:27-32`:
+HNSW is the default (`adapters/repos/db/vector/hnsw/index.go:321-510`). Defaults from `entities/vectorindex/hnsw/config.go:27-32`:
 
 ```
 MaxConnections (M)        = 32
@@ -228,7 +228,7 @@ DynamicEFMax              = 500
 DynamicEFFactor           = 8
 ```
 
-Three compression schemes ride on top (`entities/vectorindex/hnsw/config.go:60-114`):
+Three compression schemes ride on top, plus RQ (rotational quantization), which the first draft of this profile omitted (`entities/vectorindex/hnsw/config.go:61-115`). Since v1.41.0-rc a `rescoreFactor` setting bounds rescoring for every quantizer:
 
 - **PQ** (Product Quantization) — `Segments`, `Centroids`, `TrainingLimit`, `Encoder.{Type, Distribution}`. Train on first N vectors, then encode subsequent vectors against the trained codebook.
 - **BQ** (Binary Quantization) — single bit per dimension, ~32x compression with cheap Hamming distance.
@@ -236,11 +236,11 @@ Three compression schemes ride on top (`entities/vectorindex/hnsw/config.go:60-1
 
 The **flat** index (`adapters/repos/db/vector/flat/index.go`) is brute-force for small datasets — no graph overhead. The **dynamic** index (`adapters/repos/db/vector/dynamic/index.go`) auto-switches from flat to HNSW when the shard crosses a configured threshold, which is the "you don't have to choose at schema-creation time" answer to small-collection performance.
 
-Filter expressivity at search time is push-down through the inverted index (LSM `roaringset`/`roaringsetrange` strategies, `adapters/repos/db/lsmkv/strategies.go:25-26`) — filterable properties produce roaring bitmaps that intersect with the HNSW candidate set, rather than post-filtering after ANN return.
+Filter expressivity at search time is push-down through the inverted index (LSM `roaringset`/`roaringsetrange` strategies, `adapters/repos/db/lsmkv/strategies.go:27-28`) — filterable properties produce roaring bitmaps that intersect with the HNSW candidate set, rather than post-filtering after ANN return. The traversal strategy for filtered search is a per-index `filterStrategy`: `sweeping`, `acorn` (the default), or `pathseer`, an adaptive strategy added in this range (`entities/vectorindex/hnsw/config.go:36-40, 65`).
 
 ## Multi-tenancy — first-class, class-level toggle
 
-Multi-tenancy is a `MultiTenancyConfig` block on the class (`entities/models/multi_tenancy_config.go:28-38`):
+Multi-tenancy is a `MultiTenancyConfig` block on the class (`entities/models/multi_tenancy_config.go:29-39`):
 
 ```go
 type MultiTenancyConfig struct {
@@ -250,7 +250,7 @@ type MultiTenancyConfig struct {
 }
 ```
 
-A multi-tenant class **cannot** also declare a `ShardingConfig` (`usecases/schema/class.go:646-647`) — the two distribution models are mutually exclusive. The tenant API (`usecases/schema/tenant.go:35-94`) supports `AddTenants`, with a per-collection cap (`MaxTenantsPerCollection`, enforced as a typed `LimitExceededError`).
+A multi-tenant class **cannot** also declare a `ShardingConfig` (`usecases/schema/class.go:805-806`) — the two distribution models are mutually exclusive. The tenant API (`usecases/schema/tenant.go:40-116`) supports `AddTenants`, with a per-collection cap (`MaxTenantsPerCollection`, enforced as a typed `LimitExceededError`).
 
 Once enabled, every read/write request **must** carry a `tenant` parameter; the data lives in a per-tenant shard with its own LSM directory, its own HNSW index, its own inverted index. Tenant isolation is physical, not just logical — this is the answer to "I accidentally returned tenant A's data to tenant B," which is structurally impossible because the query never touches tenant A's files.
 
@@ -258,24 +258,24 @@ Compared to [[Profile__RetainDB]]'s `scope` column (USER / SESSION / PROJECT / A
 
 ## Cluster mode — Hashicorp Raft, schema consensus, write replication
 
-The cluster layer (`cluster/`) runs Hashicorp Raft (`go.mod:54-55`: `github.com/hashicorp/raft v1.7.2` + `github.com/hashicorp/raft-boltdb/v2 v2.3.1`). Architecture (`cluster/store.go`):
+The cluster layer (`cluster/`) runs Hashicorp Raft (`go.mod:53-54`: `github.com/hashicorp/raft v1.7.2` + `github.com/hashicorp/raft-boltdb/v2 v2.3.1`). Architecture (`cluster/store.go`):
 
-- One Raft store per node, BoltDB-backed log (`raftDBName = "raft.db"`, line 60).
-- `Store.Open` (`store.go:431`) creates the Raft node via `raft.NewRaft(st.raftConfig(), st, st.logCache, st.logStore, st.snapshotStore, st.raftTransport)` (line 452).
-- `FileSnapshotStore` for periodic snapshots (line 506).
-- `Raft` (`cluster/raft.go:31-44`) is the leader-aware client wrapper — `Apply` and `Query` operations forward to the current leader.
+- One Raft store per node, BoltDB-backed log (`raftDBName = "raft.db"`, line 68).
+- `Store.Open` (`store.go:569`) creates the Raft node via `raft.NewRaft(st.raftConfig(), st, st.logCache, st.logStore, st.snapshotStore, st.raftTransport)` (line 591).
+- `FileSnapshotStore` for periodic snapshots (line 659).
+- `Raft` (`cluster/raft.go:33-46`) is the leader-aware client wrapper — `Apply` and `Query` operations forward to the current leader.
 
-Schema changes are Raft-applied (`cluster/raft_apply_endpoints.go`, `cluster/store_apply.go`) — every node sees the same class definitions in the same order. Object writes are leader-coordinated with configurable replication factor (`entities/models/replication_config.go`). The `replication` and `replica` subpackages handle async replication, consistency levels, and read repair.
+Schema changes are Raft-applied (`cluster/raft_apply_endpoints.go`, `cluster/store_apply.go`) — every node sees the same class definitions in the same order. Since v1.41.0-rc, RBAC state is rebuilt from Raft rather than a `policy.csv` file (#13638). Object writes are leader-coordinated with configurable replication factor (`entities/models/replication_config.go`). The `replication` and `replica` subpackages handle async replication, consistency levels, and read repair.
 
 This is the only system in this study that ships a distributed consensus layer in the same repository (vs. [[Profile__Milvus]], which separates compute and storage into multiple processes coordinated through etcd, message queues, and object storage). Weaviate's "cluster mode" is closer to a single-process replicated system than a microservices architecture.
 
 ## Persistence & serialization
 
-- **Data directory**: `PERSISTENCE_DATA_PATH` env var (`usecases/config/environment.go:649`). Per-class indexes nest as `<data-path>/<class-lowercased>/<shard>/`.
-- **LSM segments**: Custom format under `adapters/repos/db/lsmkv/`. Five strategies (`strategies.go:22-50`) — `replace` (KV), `setcollection` (multi-value), `mapcollection` (BM25 frequencies), `roaringset` (roaring bitmap), `roaringsetrange` (range-queryable roaring). Segment files use a Weaviate-specific header layout; **a non-Weaviate program cannot parse these cleanly without the binary**. This fails the study checklist's "could a non-AI program parse it" question — contrast with [[Profile__LanceDB]] (Arrow-readable) and [[Profile__pgvector]] (vanilla Postgres tables).
-- **HNSW commit log**: Append-only commit log per shard with periodic snapshots (`adapters/repos/db/vector/hnsw/commit_logger.go`, `commit_logger_snapshot.go`). Crash-recovery replays the log.
+- **Data directory**: `PERSISTENCE_DATA_PATH` env var (`usecases/config/environment.go:736`). Per-class indexes nest as `<data-path>/<class-lowercased>/<shard>/`.
+- **LSM segments**: Custom format under `adapters/repos/db/lsmkv/`. Six strategies (`strategies.go:22-30`) — `replace` (KV), `setcollection` (multi-value), `mapcollection` (BM25 frequencies), `roaringset` (roaring bitmap), `roaringsetrange` (range-queryable roaring), and `inverted` (BlockMax WAND postings for BM25). Segment files use a Weaviate-specific header layout; **a non-Weaviate program cannot parse these cleanly without the binary**. This fails the study checklist's "could a non-AI program parse it" question — contrast with [[Profile__LanceDB]] (Arrow-readable) and [[Profile__pgvector]] (vanilla Postgres tables).
+- **HNSW commit log**: Append-only commit log per shard, now compacted by streaming merges into sorted files and snapshots (`adapters/repos/db/vector/hnsw/commit_logger.go`, `adapters/repos/db/vector/hnsw/compact/`, which replaced `commit_logger_snapshot.go` and the in-memory condensor). Crash-recovery replays the log.
 - **Raft**: BoltDB log (`raft.db`) + `FileSnapshotStore` for cluster-state snapshots.
-- **Object serialization**: Custom binary format (`entities/storobj/storage_object.go:69, 112, 126`) — `FromBinaryNetwork`, `FromBinaryDisk`, `FromBinaryUUIDOnlyDisk`. Not portable outside Weaviate.
+- **Object serialization**: Custom binary format (`entities/storobj/storage_object.go:75, 118, 132, 154`) — `FromObject`, `FromBinaryNetwork`, `FromBinaryDisk`, `FromBinaryUUIDOnlyDisk`. Not portable outside Weaviate.
 
 Migration cost out of Weaviate is non-trivial: there is no Arrow / Parquet / JSON-lines export at the storage layer. You go through REST/gRPC `/objects` paged reads or the cursor API to extract data — N round-trips per N records.
 
@@ -285,7 +285,7 @@ There is no record-level eviction analogous to [[Profile__Mem0]] / [[Profile__Re
 
 What it does have:
 
-- **Tombstone cleanup** on HNSW (`adapters/repos/db/vector/hnsw/` — `condensor.go`, `condensor_mmap.go`) reclaims deleted-vector slots periodically.
+- **Tombstone cleanup** on HNSW (`adapters/repos/db/vector/hnsw/`) reclaims deleted-vector slots periodically; commit-log condensing moved to the streaming `hnsw/compact/` package.
 - **LSM compaction** (`adapters/repos/db/lsmkv/`, multiple `compactor*.go` files) merges segments and drops tombstoned keys, same shape as RocksDB / LevelDB.
 - **ObjectTTLConfig** on the class (`entities/models/class.go:50`, `usecases/object_ttl/`) — optional per-object TTL with a sweeper that deletes expired objects. This is the closest Weaviate gets to "eviction."
 
@@ -296,7 +296,7 @@ If you need supersession-as-a-column semantics (the [[Profile__RetainDB]] bet), 
 Three concentric scoping mechanisms:
 
 1. **Class** (collection) — the top-level namespace. One class per logical entity type. Cross-references between classes are explicit (`cref` property type) and queryable as GraphQL union types.
-2. **Namespace** (a recent addition, `usecases/namespaces/`) — qualified class names of the form `<namespace>:<Class>` (`entities/schema/validation.go:67-80`, `IndexNameRegexCore`). Adds a logical grouping above class without forcing multi-tenancy.
+2. **Namespace** (a recent addition, `usecases/namespaces/`; since v1.40.0 the qualifier and REST handlers live in the enterprise-licensed `wl/namespaces/`, and without a license key the server installs a refusing qualifier, `adapters/handlers/rest/namespace_qualifier.go:47-56`) — qualified class names of the form `<namespace>:<Class>` (`entities/schema/validation.go:67-81`, `IndexNameRegexCore`). In this range namespaces gained suspend/resume endpoints (`/namespaces/{namespace_id}/suspend`, `/resume`) and per-namespace home nodes. Adds a logical grouping above class without forcing multi-tenancy.
 3. **Tenant** — per-tenant physical shard when `MultiTenancyConfig.Enabled = true`. The strongest isolation; required parameter on every operation against a MT-enabled class.
 
 The combination — class + namespace + tenant — gives you a three-level scope tree that maps cleanly onto org → project → user. No equivalent in [[Profile__Chroma]] (which has only collections) or [[Profile__pgvector]] (which inherits Postgres schemas / row-level security).
@@ -310,11 +310,11 @@ Two deployment modes:
 | **Single-node Docker** | One container, port 8080 (REST) + 50051 (gRPC) | Local filesystem under `PERSISTENCE_DATA_PATH` | Dev, small production |
 | **Distributed Kubernetes / Docker cluster** | N nodes with Raft consensus, optional sidecar inference modules | Local filesystem per node, replicated by config | Production at scale |
 
-The `docker-compose.yml` in the repo (`weaviate/docker-compose.yml`) is a **developer-tooling** file (per its own comment lines 2-4: *"intended only for Weaviate development … should not be used directly"*). It wires Prometheus, Grafana, Keycloak, plus every inference container (`t2v-transformers`, `qna-transformers`, `multi2vec-clip`, `reranker-transformers`, `ollama`, `text2vec-model2vec`, ...) on separate ports. Production users get a smaller compose file from the docs site or run via Helm.
+The `docker-compose.yml` in the repo (`docker-compose.yml`) is a **developer-tooling** file (per its own comment lines 2-5: *"intended only for Weaviate development … should not be used directly"*). It wires Prometheus, Grafana, Keycloak, plus every inference container (`t2v-transformers`, `qna-transformers`, `multi2vec-clip`, `reranker-transformers`, `ollama`, `text2vec-model2vec`, ...) on separate ports. Production users get a smaller compose file from the docs site or run via Helm.
 
 Inference modules deploy as **separate containers** that the Weaviate process talks to over HTTP — `text2vec-transformers` runs at `http://t2v-transformers:8080`, Weaviate calls it on every write to vectorize the text. Hosted modules (OpenAI, Cohere, etc.) are HTTP calls to the provider. This keeps the Weaviate Go binary small (CGO disabled, static linking — `make weaviate` per the repo CLAUDE.md) and the GPU workload isolated.
 
-Telemetry, observability (Prometheus metrics built-in, `docs/metrics.md`), backup (S3/GCS/Azure modules), and authorization (RBAC via Casbin — `go.mod:21` `github.com/casbin/casbin/v2`) are all built-in.
+Telemetry, observability (Prometheus metrics built-in, `docs/metrics.md`), backup (S3/GCS/Azure modules), and authorization (RBAC via Casbin — `go.mod:22` `github.com/casbin/casbin/v2`) are all built-in.
 
 ## What's inside this submodule
 
@@ -328,7 +328,7 @@ Telemetry, observability (Prometheus metrics built-in, `docs/metrics.md`), backu
 | `adapters/repos/db/` | Storage layer: LSM (`lsmkv/`), vector index (`vector/{hnsw,flat,dynamic,hfresh}/`), inverted index (`inverted/`) |
 | `usecases/{schema,objects,traverser,multitenancy,backup,classification,...}/` | Business logic; ~30 sub-packages |
 | `entities/{models,schema,filters,modulecapabilities,storobj,vectorindex,...}/` | Domain types and validation; the "what is a Class, what is a Property, what is a Filter" definitions |
-| `modules/` | **68 modules** — `text2vec-*` (20), `generative-*` (10), `reranker-*` (7), `multi2vec-*` (8), `multi2multivec-*` (2), `text2multivec-*` (1), `img2vec-*` (1), `qna-*` (2), `sum-*` (1), `ner-*` (1), `text-spellcheck` (1), `ref2vec-centroid`, `backup-*` (4), `offload-s3`, `usage-{gcs,s3}` |
+| `modules/` | **74 modules** — `text2vec-*` (20), `generative-*` (18), `reranker-*` (9), `multi2vec-*` (10), `multi2multivec-*` (2), `text2multivec-*` (1), `img2vec-*` (1), `qna-*` (2), `sum-*` (1), `ner-*` (1), `text-spellcheck` (1), `ref2vec-centroid`, `backup-*` (4), `offload-s3`, `usage-{gcs,s3}` |
 | `cluster/` | Hashicorp Raft cluster layer — `store.go`, `raft.go`, RBAC, replication, snapshots, distributed tasks |
 | `grpc/proto/` | Protobuf definitions (regenerate via `make grpc`) |
 | `openapi-specs/` | OpenAPI source-of-truth for REST (regenerate via `tools/gen-code-from-swagger.sh`) |
@@ -336,7 +336,7 @@ Telemetry, observability (Prometheus metrics built-in, `docs/metrics.md`), backu
 | `docs/` | Internal design notes — `metrics.md`, `usage_limits.md`, `runtime-reindex.md`, `proposals/` |
 | `test/{acceptance,modules}/` | E2E tests, mostly via testcontainers |
 
-If you only read one file: `usecases/schema/class.go` (1809 lines). Class creation, validation, defaults, multi-tenancy gating, vector-index configuration, module-config validation — the whole schema-on-write story is there.
+If you only read one file: `usecases/schema/class.go` (2362 lines). Class creation, validation, defaults, multi-tenancy gating, vector-index configuration, module-config validation — the whole schema-on-write story is there.
 
 ## Mental model for using it well
 
@@ -361,13 +361,13 @@ If you only read one file: `usecases/schema/class.go` (1809 lines). Class creati
 | Axis | Weaviate | [[Profile__Chroma]] | [[Profile__Qdrant]] | [[Profile__Milvus]] | [[Profile__LanceDB]] | [[Profile__pgvector]] |
 |---|---|---|---|---|---|---|
 | **Language** | Go | Python + Rust (core) | Rust | Go + C++ | Rust | C (Postgres ext) |
-| **License** | BSD-3-Clause | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | PostgreSQL |
+| **License** | BSD-3-Clause + enterprise `wl/` | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | PostgreSQL |
 | **Schema** | **On-write, typed** | On-read (free-form dict) | On-write for vector dim only; payload free-form | On-write, typed | On-write, Arrow schema | SQL DDL |
 | **Primary query** | **GraphQL** + REST + gRPC | Python/JS dict API + REST | REST + gRPC + Rust SDK | gRPC + Python SDK | Python/Rust/Node SDK | SQL |
 | **Filter operators** | 15 (`Equal..ContainsNone`, geo, `Like`, `IsNull`) | 7 (`$eq..$not`) | Full predicate + range + geo | Boolean + range + IN | SQL/DataFusion subset | Full SQL |
 | **Hybrid** | First-class (`alpha` + RRF/RelativeScore) | Recent (Search primitives) | Sparse + dense + RRF | BM25 + vector | Manual fusion | Manual SQL CTE |
 | **Cross-references** | **First-class `cref` + GraphQL union** | No | No (single payload) | No | No (one-to-many via join) | Yes (SQL FK) |
-| **Modules / RAG pipeline** | **68 built-in modules** | Embedding functions | None — bring-your-own | None — bring-your-own | Pluggable embedding fns | None |
+| **Modules / RAG pipeline** | **74 built-in modules** | Embedding functions | None — bring-your-own | None — bring-your-own | Pluggable embedding fns | None |
 | **ANN index** | HNSW + flat + dynamic; PQ/BQ/SQ | HNSW (SPANN in Cloud) | HNSW + quantization | HNSW / IVF / DiskANN / ScaNN / GPU | IVF-PQ + HNSW | HNSW + IVFFlat |
 | **Multi-tenancy** | **Per-class toggle → physical per-tenant shard** | Per-collection (logical) | Per-collection + payload filter | Partition keys | Per-table | Postgres schemas / RLS |
 | **Distribution** | Raft consensus, single binary | Single-node (Cloud: managed) | Cluster mode (Raft for schema) | Native distributed (k8s-first) | Embedded; OSS no cluster | Postgres replication |
@@ -383,6 +383,21 @@ If you only read one file: `usecases/schema/class.go` (1809 lines). Class creati
 
 These compose well: a memory-layer like RetainDB could store its memories in Weaviate by declaring a `Memory` class with the 13-value `memoryType` as a `text` property and the supersession columns as typed scalars — and would gain Weaviate's GraphQL traversal, cross-references between memories, and module-based embedding/reranking. RetainDB's current Postgres + pgvector choice ([[Profile__pgvector]]) is the simpler operational answer; the Weaviate path would be the answer if the memory model needed graph traversal and module-managed embedding more than it needed SQL-shaped joins.
 
+## Changes since the previous pin (2026-05-26 → 2026-11-20)
+
+Pin moved from `7a1b0f3e549b` (nearest tag v1.37.5) to `cf81225fb834`: about 7,000 commits across 397 first-parent merges. Minor releases in range: **v1.38.0** (2026-06-05), **v1.39.0** (2026-08-03), and **v1.40.0** (2026-10-06), with patch lines continuing in parallel; the newest stable tag is **v1.40.7** (2026-11-20), and this pin is tagged **v1.41.0-rc.1** (2026-11-20). There is no in-tree CHANGELOG; this summary comes from release-branch merges, the OpenAPI spec, and code. Every file:line citation above was re-located at the new pin.
+
+What matters for this profile:
+
+- **Licensing is no longer BSD-3-Clause throughout (first shipped in v1.39.4 / v1.40.0).** `LICENSE` now says code outside `wl/` is BSD-3-Clause (text moved to `LICENSE-BSD`) and code inside `wl/` is "only available under a separate enterprise license" and enabled by license key (`wl/LICENSE-WEAVIATE`). The `wl/` tree holds namespaces (`wl/namespaces/`), backup deduplication, database-user expiry, and self-recovery. The core database, modules, HNSW, hybrid search, and multi-tenancy remain BSD-3-Clause. The frontmatter `license:` key above still reads BSD-3-Clause and should be read with this caveat.
+- **The vectorizer default changed (v1.40.0).** A collection created without a `vectorizer` now gets `none`, and `DEFAULT_VECTORIZER_MODULE` is ignored with a deprecation warning (`usecases/config/environment.go:914-917`; field doc in `entities/models/class.go`). The lede's "the database embeds on write" holds only for collections that opt in explicitly. Anyone who relied on a server-wide default vectorizer has to set it per collection.
+- **REST got a first-class search surface (v1.40.0).** `/search/{collection}/hybrid`, `/near-text`, `/near-vector`, and `/near-object` lost their experimental flag (`openapi-specs/schema.json`). GraphQL is no longer the only expressive read path outside gRPC.
+- **Filtered HNSW search got a strategy switch.** Each HNSW index carries a `filterStrategy` of `sweeping`, `acorn` (default), or the new adaptive `pathseer` (`entities/vectorindex/hnsw/config.go:36-40, 65`). A `rescoreFactor` setting now bounds rescoring for every quantizer (v1.41.0-rc), and RQ gained a centered variant.
+- **More modules.** Six new module directories: `generative-deepseek`, `generative-digitalocean`, `generative-meta`, `multi2vec-twelvelabs`, `reranker-openai`, and `reranker-typesafeai` (74 total).
+- **Namespaces matured, behind a license key.** Suspend and resume endpoints, per-namespace home nodes, shard listing, and replicated object caps all landed in this range, but the feature now requires an enterprise license (see above). On an unlicensed server the class / namespace / tenant tree in Scopes & namespacing collapses to class / tenant.
+- **Vector index lifecycle.** Named vector indexes can be dropped through `/schema/{className}/vectors/{vectorIndexName}/index`, index creation can happen live, a reindex API went GA in v1.39, and the HFresh index lost its feature flag. HNSW commit-log compaction was rewritten as a streaming merge (`adapters/repos/db/vector/hnsw/compact/`).
+- **Cluster and ops.** RBAC state is rebuilt from Raft instead of `policy.csv` (#13638), shard rebalancing ("SACR") is being added with REST endpoints and a plan ledger, backups deduplicate across replicas, database users can have a TTL, and builds are reproducible. Raft and BoltDB versions are unchanged (`go.mod:53-54`).
+
 ## One-line summary
 
-> Weaviate is the schema-on-write, GraphQL-fronted, modules-included vector database — typed classes with cross-references between objects, ~68 pluggable modules that own the embedding/reranking/generation pipeline, alpha-weighted hybrid search built in, first-class multi-tenancy as a class-level toggle, Hashicorp Raft for cluster consensus, and BSD-3-Clause licensing throughout — which makes it the right default when the data has structure worth declaring and the wrong default when "just store the dict" is the whole brief.
+> Weaviate is the schema-on-write, GraphQL-fronted, modules-included vector database — typed classes with cross-references between objects, ~74 pluggable modules that own the embedding/reranking/generation pipeline, alpha-weighted hybrid search built in, first-class multi-tenancy as a class-level toggle, Hashicorp Raft for cluster consensus, and BSD-3-Clause licensing for everything outside the enterprise-only `wl/` directory — which makes it the right default when the data has structure worth declaring and the wrong default when "just store the dict" is the whole brief.

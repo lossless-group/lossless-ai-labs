@@ -26,6 +26,7 @@ from_path: "context-v/plans/index.md"
 * [Reconciling Perplexity Citations Against Retrieved Sources](Reconciling-Perplexity-Citations-Against-Retrieved-Sources.md) - Sonar hands us the sources it actually retrieved on every call, and we throw them away — so every URL in every memo is a guess.
 * [Reorganize Context-V Into Canonical Categories](Reorganize-Context-V-Into-Canonical-Categories.md) - Step-by-step prompt for reclassifying all context-v files into the four canonical categories: Specification, Reminder, Prompt, Blueprint.
 * [Render Previews and Exports with LFM](Render-Previews-and-Exports-with-LFM.md) - Render once on the server with LFM, so exports, previews and firm sites match, and agents in Claude or ChatGPT call a preview tool instead of rendering themselves.
+* [Notify Firm Sites When a Memo Compiles](Notify-Firm-Sites-When-a-Memo-Compiles.md) - A signed memo.compiled event to the firm's site after each new compiled version, so the site can cache memos and drop a deal's copy when it changes.
 * [Serve Compiled Memos to Firm Sites](Serve-Compiled-Memos-to-Firm-Sites.md) - A site-keyed read endpoint for a deal's latest compiled memo, so a partner's edit shows on the firm's LP page after a refresh.
 * [Serve the Method from the Server](Serve-the-Method-from-the-Server.md) - list_skills, get_skill, MCP prompts and editing-first server instructions, so Claude finds MemoPop without the plugin.
 * [Trustworthy Citations: Source Harvester Rollout](Trustworthy-Citations-Source-Harvester-Rollout.md) - Why the existing anti-hallucination work hasn't held, and the six-phase plan that ends in a Source Harvester / Section Writer split.
@@ -38,3 +39,7 @@ from_path: "context-v/plans/index.md"
 3. [Serve the Method from the Server](Serve-the-Method-from-the-Server.md), steps 1–2, any time.
 4. [Finish Turning the Agents into Connector Steps](Finish-Turning-Agents-into-Connector-Steps.md), step 1 (the rewrite step), then [Edit Tools for Finished Memos](Edit-Tools-for-Finished-Memos.md).
 5. [Serve Compiled Memos to Firm Sites](Serve-Compiled-Memos-to-Firm-Sites.md) once compiled versions are on the server, and the rest of the skills once the edit tools exist.
+
+## Next: drafting from scratch in Claude (2026-11-22)
+
+1. [Draft a Memo from Scratch in Claude](Draft-a-Memo-from-Scratch-in-Claude.md): `get_started`, suggested next steps, materials by reference, and the upload offered twice and at compile. No Google Drive integration: partners download and upload.

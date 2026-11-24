@@ -3,18 +3,18 @@ name: Anytype Profile
 title: Anytype — Profile
 slug: anytype
 upstream: https://github.com/anyproto/anytype-ts
-pinned_sha: 72af77e0eb
-pinned_date: 2026-11-10
-version_at_pin: "v0.57.8-alpha (client); middleware.version pins anytype-heart 0.51.9"
+pinned_sha: be98dc4f23
+pinned_date: 2026-11-21
+version_at_pin: "v0.57.9-alpha (client); middleware.version pins anytype-heart 0.51.11"
 license: Source-available — Any Source Available License 1.0 (ASAL-1.0)
 maintainer: Any Association
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/anytype-ts
 profile_kind: Electron + React/MobX desktop client over a prebuilt Go middleware (anytype-heart) spoken to via gRPC-web
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -51,9 +51,9 @@ from_path: "context-v/profiles/Profile__Anytype.md"
 ---
 # Anytype — Profile
 
-A profile of the Anytype desktop client as it lives in this study (`studies/content-authoring-tools/anytype-ts`, pinned at `72af77e0eb`, 2026-11-10, tag `v0.57.8-alpha`). Electron + React + MobX, built with Vite/Bun.
+A profile of the Anytype desktop client as it lives in this study (`studies/content-authoring-tools/anytype-ts`, pinned at `be98dc4f23c2`, 2026-11-21, tag `v0.57.9-alpha`). Electron + React + MobX, built with Vite/Bun.
 
-**The core is not here.** The client's `update.sh` downloads a prebuilt `grpc-server` from `anyproto/anytype-heart` releases, renames it `dist/anytypeHelper`, and unpacks its protobuf bindings into `dist/lib/` (`update.sh:3`, `:29-70`). The version is pinned in `middleware.version` (`0.51.9`). This profile works from the TS client, its command layer, and its interface definitions; anything about storage format or sync internals beyond what the client shows is out of reach here.
+**The core is not here.** The client's `update.sh` downloads a prebuilt `grpc-server` from `anyproto/anytype-heart` releases, renames it `dist/anytypeHelper`, and unpacks its protobuf bindings into `dist/lib/` (`update.sh:3`, `:29-70`). The version is pinned in `middleware.version` (`0.51.11`). This profile works from the TS client, its command layer, and its interface definitions; anything about storage format or sync internals beyond what the client shows is out of reach here.
 
 License: *"Any Association grants you … a license to use, modify, and redistribute the Software, but only (a) for Non-Commercial Use, or (b) for Commercial Use in Allowed Networks"* (`LICENSE.md:1-11`). Source-available, not open source.
 
@@ -104,7 +104,7 @@ Nothing an outside program should read directly; the store is owned by `anytype-
 - **The core is a binary download.** Studying or building on storage and sync means the separate `anytype-heart` repo.
 - **Source-available.** ASAL-1.0 restricts commercial use outside "Allowed Networks".
 - **Docs drift.** The README says AI "Agents" are explained in `AGENTS.md` (`README.md:19`), but `AGENTS.md` is a generic Electron/MobX architecture note describing a `webpack` layout the repo no longer uses (`AGENTS.md:28-44`, vs `vite.config.ts` at the root).
-- **Client/middleware version skew.** Client `0.57.8-alpha` pins middleware `0.51.9`; the protocol is whatever that binary ships.
+- **Client/middleware version skew.** Client `0.57.9-alpha` pins middleware `0.51.11`; the protocol is whatever that binary ships.
 
 ## Relevance to flave
 
@@ -112,6 +112,10 @@ Nothing an outside program should read directly; the store is owned by `anytype-
 - **Note "Copy MCP config" as a cheap affordance** worth copying: one button that emits a ready-to-paste client config with the key and port filled in.
 - **Avoid range-marks as the storage format.** It is good for merge, but it is exactly what flave's "the directory is the working format" principle rejects. If flave needs merge-friendly formatting later, it can be a CRDT-layer concern, not a file-format one.
 - **On the CRDT deferral:** Anytype doesn't change the case. Its sync story is in unpinned middleware, and its trade (no files) is one flave has already declined. [[Profile__Baalda]] is the entry that bears on the deferral; see [[Profile__Automerge]].
+
+## Changes since the previous pin (2026-11-10 → 2026-11-21)
+
+Old pin `72af77e0eb33`, new pin `be98dc4f23c2`: 3 commits, tag `v0.57.9-alpha`. The only changes are the client version (`package.json`, `0.57.8-alpha` → `0.57.9-alpha`) and the middleware pin (`middleware.version`, `0.51.9` → `0.51.11`). No client code changed, so the Local API, MCP config, and RPC citations above still hold; whatever changed in anytype-heart is outside this repo.
 
 ## Read next
 

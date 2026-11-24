@@ -189,7 +189,7 @@ then compile. Rules:
 
 ## The tools
 
-All fifteen, over both MCP and REST (with the two in §Revisions, seventeen). `RO` is `readOnlyHint`, `D` is
+All sixteen, over both MCP and REST (with the two in §Revisions, eighteen). `RO` is `readOnlyHint`, `D` is
 `destructiveHint`; Claude requires both on every tool.
 
 | Tool | REST | RO | D | Blocks? |
@@ -209,6 +209,7 @@ All fifteen, over both MCP and REST (with the two in §Revisions, seventeen). `R
 | `edit_final` | `POST /v1/deals/{deal}/final-edits` | no | no | no |
 | `get_outline` | `GET /v1/outlines` | yes | no | no |
 | `edit_outline` | `POST /v1/deals/{deal}/outline-edits` | no | no | no |
+| `preview` | `GET /v1/deals/{deal}/preview?artifact=…` | yes | no | no |
 
 \* `next_step` records skips and marks the step handed out, so it isn't
 read-only even though it changes no artifacts.
@@ -350,6 +351,19 @@ unless `discard_untracked: true`.
 playbook. An unknown name is `skill_not_found`, with `details.available`
 listing the names that exist.
 
+**`preview`** `{ deal, artifact }` → `{ deal, artifact, title, source,
+html_url, html }` (Render-Previews-and-Exports-with-LFM). `artifact` is `memo`
+(the current sections assembled as compile would, saving no version; every
+section needs a draft, else `drafts_incomplete`), a section's key, name or
+number (its current text), or an artifact id (`compile.assemble` is the last
+compiled memo). The text is rendered on the server with Lossless Flavored
+Markdown inside the firm's branded page, citations numbered from their hex
+keys in first-cited order; `html_url` is a signed link to it for seven days.
+Read-only: nothing in the deal changes, and the page is stored under
+`previews/<deal>/` in the firm's bucket for the link. Without Node or the LFM
+package on the server it is `service_unavailable`. Agents call it instead of
+rendering markdown or numbering citations themselves.
+
 ## Errors
 
 Every failure, on both transports, uses one envelope:
@@ -458,6 +472,16 @@ MCP tool ([[Serve-Compiled-Memos-to-Firm-Sites]]; code in
 - **The compile reply links to the page.** `firm.json` may carry
   `site_memo_url` (a pattern with `{slug}`) and `site_memo_slugs`
   (`{deal: slug}`). When both cover the deal, `compile` returns `site_url`.
+- **The site is told when a memo compiles.** `firm.json` may also carry
+  `site_hook_url`. After a compile saves a new version (or new exports), and
+  after the uploader's apply step changes a deal's compiled version, MemoPop
+  POSTs a `memo.compiled` event naming the firm, deal, version, label and
+  compile time to that URL, signed with HMAC-SHA256 over
+  `"<timestamp>.<raw body>"` with the firm's site key. No memo text, no links.
+  It runs in the background, never delays or fails the compile, and retries a
+  timeout, connection error or 5xx up to three times. No `site_hook_url` or no
+  site key, no request. Spec: [[Notify-Firm-Sites-When-a-Memo-Compiles]]; code
+  in `src/connector/site_hook.py`.
 
 ## Storage
 
@@ -895,6 +919,7 @@ renumber; retire one by striking it through. Status is derived by
 | `CONN-HIST-03` | When `save_snapshot` runs, then an archive is written to the firm's bucket under `snapshots/`, with change counts against the previous snapshot |
 | `CONN-HIST-04` | Given two firms, then their jj repositories and bucket locations are separate and neither can reach the other's |
 | `CONN-HIST-05` | Given binary materials, then none is inside the jj working copy |
+| `CONN-HIST-06` | Given a folder passed to `record` (as the uploader passes each deal), then every file under it is committed in that change and nothing under it is left in the working copy |
 
 ### Deploy and live health (Plan 2)
 
@@ -961,6 +986,17 @@ renumber; retire one by striking it through. Status is derived by
 | `CONN-SITE-03` | Given a deal with no compiled version, then `404` |
 | `CONN-SITE-04` | Given a firm with `site_memo_url` and a slug for the deal, when `compile` finishes, then its response includes `site_url` |
 
+### Site notifications (Notify-Firm-Sites-When-a-Memo-Compiles)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-HOOK-01` | Given a firm with `site_hook_url` and a site key, when a compile succeeds, then one signed `memo.compiled` request goes to that URL with the right body, a timestamp, and a signature verifiable with the firm's site key |
+| `CONN-HOOK-02` | Given a firm with no `site_hook_url` or no site key, when a compile succeeds, then no request is sent and the compile still succeeds |
+| `CONN-HOOK-03` | Given a hook that times out or returns 5xx, then it is retried up to 3 times and never fails or delays the compile reply; a 4xx is not retried |
+| `CONN-HOOK-04` | Given a compile that fails, then nothing is sent |
+| `CONN-HOOK-05` | Given the uploader's apply step, then it sends one notification per deal whose compiled version it changed, and none for unchanged deals |
+| `CONN-HOOK-06` | Given any notification, then its body has no memo text, no links and no key, and logs have neither the signature nor the key |
+
 ### Edit tools for finished memos (Edit-Tools-for-Finished-Memos)
 
 | ID | Given / When / Then |
@@ -980,6 +1016,7 @@ renumber; retire one by striking it through. Status is derived by
 | `CONN-UPL-02` | Given a staged firm and the server state after apply, when the check script runs, then it reports per deal the compiled label against the newest local memo, sections against the outline, and materials against the manifest |
 | `CONN-UPL-03` | Given an imported deal that isn't finished, with binaries among its materials, when `next_step` reaches `materials.brief`, then it hands the step out with each binary's extracted text, or a notice for a binary with none, never `artifact_not_found` |
 | `CONN-UPL-04` | Given the same bytes at two paths in one deal, then one material carries both paths and the manifest has two entries sharing its id |
+| `CONN-UPL-05` | Given macOS metadata files (`._*`, `.DS_Store`) beside a firm's files, then staging leaves them out, `apply` packs with `COPYFILE_DISABLE=1` and excludes them, and the server deletes any that arrive before copying |
 
 ### Hex-code citations (Hex-Code-Citations-and-a-Repair-Tool)
 
@@ -988,6 +1025,22 @@ renumber; retire one by striking it through. Status is derived by
 | `CONN-HEX-01` | Given two sections citing the same URL under different local keys, when a research step's submission is checked and the memo compiles, then both use one hex key from `source_key()`, and the compiled markdown has one definition for it |
 | `CONN-HEX-02` | Given a section submitted with numbered keys, then `submit_artifact` accepts it and compile converts its keys to hex; given a hex key that doesn't match its definition's source, the check names it |
 | `CONN-HEX-03` | Given the connector's `research.section` and `draft.section` instructions, then they ask for hex keys, never `[^1]` |
+| `CONN-HEX-04` | Given a research file a run appends new sources to, when the block is appended, then the file defines each key once (the block's keys are hex, a source already in the file keeps its key), and a section citing both blocks assembles with each footnote linked to its own block's source |
+| `CONN-HEX-05` | Given an existing research file whose appended block reused numbered keys, when the memo assembles, then each section part resolves against its own block, and in a one-part section a key the blocks define differently is left unlinked and reported in `refused_keys`, while the other keys resolve |
+| `CONN-HEX-06` | Given a finished memo assembled from such a file, when repaired, then each `### Added from` part is matched to its block, a one-part section refuses only the conflicting keys (status `partial`), counts by reason are reported, and prose is unchanged |
+| `CONN-HEX-07` | Given a region whose markers no longer pair one for one with its section file, when repaired, then markers on lines whose prose is byte-identical to the section file are repaired and the edited line's markers are kept and counted as `line edited after assembly`; a region that still pairs one for one is repaired whole |
+| `CONN-HEX-08` | Given research files with appended blocks and with collapsed keys, when scanned, then the scan reports "appended blocks" separately from "collapsed keys" |
+
+### Previews and exports rendered with LFM (Render-Previews-and-Exports-with-LFM)
+
+| ID | Given / When / Then |
+|---|---|
+| `CONN-LFM-01` | Given markdown with hex citations defined in one order and cited in another, and a callout, when the LFM renderer runs, then the citations are numbered by first citation, the sources list follows that order under the Citations heading, and the callout is plain HTML with its title; `@lossless-group/lfm` is pinned to exactly 0.11.0 in `package.json` and its lockfile |
+| `CONN-LFM-02` | Given no Node or no installed LFM package, then the renderer raises an error naming which is missing (and `npm ci --prefix src/connector/render` for the package); `compile` (renderer `lfm`) and `preview` return `service_unavailable` |
+| `CONN-LFM-03` | Given `MEMOPOP_EXPORT_RENDERER` unset, then compile renders with pandoc as before; set to `lfm`, compile's HTML is the firm's branded page with LFM's body (citations numbered from hex keys, one sources list) and the PDF is printed from it; any other value is refused at startup |
+| `CONN-LFM-04` | Given `cli/export_branded.py --renderer lfm`, then the branded HTML's body is rendered by LFM and local images are inlined; `--renderer` is a documented option |
+| `CONN-LFM-05` | Given a deal with drafts and no compile, when `preview` is called for a section or `memo`, then it returns the rendered page and a signed link that serves it, and the deal is unchanged; `memo` before every section has a draft is `drafts_incomplete`, an unknown target `artifact_not_found`; REST `GET /v1/deals/{deal}/preview` and MCP return the same, and the tool is read-only |
+| `CONN-LFM-06` | Given the server's instructions and skills, then they send agents to `preview` and say never to render markdown or invent citation numbers; a `preview-a-memo` playbook exists, and the skills that show a memo name `preview` |
 
 ## Done when
 

@@ -3,18 +3,18 @@ name: restic Profile
 title: restic — Profile
 slug: restic
 upstream: https://github.com/restic/restic
-pinned_sha: a80be1478
-pinned_date: 2026-08-01
-version_at_pin: "v0.19.1 (nearest tag)"
+pinned_sha: 8f4873d5d
+pinned_date: 2026-11-22
+version_at_pin: "v0.20.0 (nearest tag)"
 license: BSD-2-Clause
 maintainer: restic org — Alexander Neumann et al.
 study: studies/sync-and-content-version-control
 profile_path: studies/sync-and-content-version-control/restic
 profile_kind: Content-addressed snapshot backup program (Go, single binary)
 date_created: 2026-08-22
-date_modified: 2026-08-22
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-08-22
-date_authored_current_draft: 2026-08-22
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -48,7 +48,7 @@ from_path: "context-v/profiles/Profile__Restic.md"
 ---
 # restic — Profile
 
-A profile of restic as it lives in this study (`studies/sync-and-content-version-control/restic`, pinned at `a80be147`, nearest tag `v0.19.1`, 2026-08-01). BSD-2-Clause, Go, one static binary.
+A profile of restic as it lives in this study (`studies/sync-and-content-version-control/restic`, originally pinned at `a80be147`, nearest tag `v0.19.1`, 2026-08-01; now pinned at `8f4873d5`, just past `v0.20.0`, 2026-11-22). BSD-2-Clause, Go, one static binary.
 
 This entry exists to answer one question honestly: **is `corpora-builder`'s unbuilt Phase 4 just restic?** The HISTORY decision (`ai-labs/corpora-builder/context-v/plans/Corpora-Builder-MVP-R2-Native-With-Checkpoint-History.md`, 2026-08-08) proposed *"a content-addressed object store plus checkpoint manifests, written by corpora-builder into the same bucket… Git's data model, minus git, on a substrate that has neither."* restic has shipped exactly that since 2014.
 
@@ -155,6 +155,24 @@ Which points at a third option the plan never considered — **not "write it" an
 - The only thing corpora-builder writes is the thin part that was always the actual product: **the label, the feed that renders it, and the "save a version" gesture that never says commit.**
 
 That is worth costing before writing `history/cas.py`. The plan's own framing supports it — *"the sunk cost of reversing is roughly 250 lines of Python."* Deciding not to write those 250 lines costs nothing at all.
+
+## Changes since the previous pin (2026-08-01 → 2026-11-22)
+
+Pin moved from `a80be1478a4c` to `8f4873d5d799`: 96 commits, one release in range, **v0.20.0** (2026-11-19, `CHANGELOG.md`). The study pin sits a few commits past that release on `master`, with the version set to the 0.20.0 development line.
+
+The verdict above holds. Nothing in range touches the two gaps the profile turns on:
+
+- **Still no free-text reason on a snapshot.** `internal/data/snapshot.go:17-34` carries the same fields as before (`Time`, `Parent`, `Tree`, `Paths`, `Hostname`, `Username`, `UID`, `GID`, `Excludes`, `Tags`, `Original`, `ProgramVersion`, `Summary`). `SnapshotSummary` is unchanged at `:36-53`.
+- **Still no browsable tree in the bucket.** `doc/design.rst` is unchanged in range, so every repository-format citation above is still exact. `ExpirePolicy` is unchanged at `internal/data/snapshot_policy.go:14-28`.
+
+What did change, in the order a reader of this profile would care:
+
+- **Two restore-side security fixes.** `restore` now rejects trees whose node names are duplicated or out of order, which closed a path where a symlink and a directory of the same name could write outside the restore target (#22180, `internal/restorer/`). `restore --ownership-by-name` now falls back to the snapshot's numeric UID/GID instead of root when a name does not resolve (#22178).
+- **`restore --delete` no longer deletes a directory's contents when its tree cannot be loaded** (#22181). Relevant to the "restore is: read a manifest, write those blobs back" model: a missing pack now degrades to an error rather than data loss in the target.
+- **S3 backend options.** A `disable-dualstack` option (`internal/backend/s3/config.go:35`) for VPC endpoints, and experimental cold-storage warmup for `check` behind the `s3-restore` feature flag (#5248). Neither affects R2 use.
+- **Repair and robustness.** `repair snapshots --forget` removes broken snapshot files (#21892); a truncated key or config file no longer panics every command (#21977); the v1→v2 upgrade rollback no longer deletes `config` before rewriting it (#22136).
+- **`prune --json`** (#3129) and roughly 12% less memory for the in-memory index (#21937, vendor-reported).
+- Go 1.26.10 or newer is now required to build. The `b2` backend accepts multi-bucket application keys. The backend list under `internal/backend/` is unchanged.
 
 ## Read next
 

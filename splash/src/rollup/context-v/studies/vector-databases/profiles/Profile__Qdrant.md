@@ -12,7 +12,7 @@ date_created: 2026-05-27
 site_uuid: 97a386f8-a66a-4b3b-b4b3-1d12e9532184
 hex_code: rwroxw
 date_authored_initial_draft: 2026-05-27
-date_authored_current_draft: 2026-05-27
+date_authored_current_draft: 2026-11-23
 lede: >-
   Qdrant estimates a filter's cardinality *before* searching, which is why
   recall doesn't collapse the moment you filter on `tenant_id`.
@@ -32,7 +32,7 @@ summary: >-
 publish: true
 type: Profiles
 title: "Qdrant — Profile"
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 authors:
   - Michael Staton
 status: Reference
@@ -45,11 +45,11 @@ A profile of Qdrant as it lives in this study (`studies/vector-databases/qdrant/
 
 ## TL;DR
 
-Qdrant is a **payload-first** vector search engine written in Rust (`Cargo.toml:1-14`, version `1.18.1` on this pin). The thesis: a vector database isn't an ANN index with metadata bolted on — it's a **point store** where every point carries a rich JSON payload (`lib/segment/src/types.rs:2010-2012`), filters operate over that payload with full predicate expressivity (geo / range / full-text / nested / boolean composition — `lib/segment/src/types.rs:3370-3388, 3794-3825`), and the filter is **pushed into the HNSW graph traversal** rather than applied as a post-filter on dense-search results.
+Qdrant is a **payload-first** vector search engine written in Rust (`Cargo.toml:1-14`, version `1.20.2` on this pin). The thesis: a vector database isn't an ANN index with metadata bolted on — it's a **point store** where every point carries a rich JSON payload (`lib/segment/src/types.rs:2594`), filters operate over that payload with full predicate expressivity (geo / range / full-text / nested / boolean composition — `lib/segment/src/types.rs:4258-4283, 4734-4766`), and the filter is **pushed into the HNSW graph traversal** rather than applied as a post-filter on dense-search results.
 
-The filter-push-down is the headline differentiator. The strategy lives in `lib/segment/src/index/hnsw_index/hnsw/vector_index_impl.rs:107-172`: at query time, Qdrant calls `payload_index.estimate_cardinality(filter)` and picks between (a) plain payload-scan + brute scoring (when filter is selective), (b) HNSW graph traversal with the filter checked at every candidate (when filter is permissive), or (c) sample-based cardinality verification when fast estimation is ambiguous. When traversal is chosen and the filter is selective enough that the main HNSW graph would skip too many points, the build also constructs **additional payload links** (`payload_m` / `payload_m0`, `lib/segment/src/index/hnsw_index/config.rs:27-51`) — a second set of edges restricted to points matching each indexed payload condition. This is the "filterable HNSW" technique: the graph itself becomes filter-aware, so recall doesn't collapse when you filter by `tenant_id`.
+The filter-push-down is the headline differentiator. The strategy lives in `lib/segment/src/index/hnsw_index/hnsw/read_view/dispatch.rs:101-200` (moved there from `vector_index_impl.rs` in the read-view refactor of this range): at query time, Qdrant calls `payload_index.estimate_cardinality(filter)` and picks between (a) plain payload-scan + brute scoring (when filter is selective), (b) HNSW graph traversal with the filter checked at every candidate (when filter is permissive), or (c) sample-based cardinality verification when fast estimation is ambiguous. When traversal is chosen and the filter is selective enough that the main HNSW graph would skip too many points, the build also constructs **additional payload links** (`payload_m` / `payload_m0`, `lib/segment/src/index/hnsw_index/config.rs:12-34`) — a second set of edges restricted to points matching each indexed payload condition. This is the "filterable HNSW" technique: the graph itself becomes filter-aware, so recall doesn't collapse when you filter by `tenant_id`.
 
-Three deployment modes share one API: **embedded** (`qdrant-edge` Rust crate + `qdrant-edge-py` PyPI package, `lib/edge/README.md:1-43`), **single-node server** (Docker, port 6333, `Dockerfile`), and **distributed cluster** (Raft consensus via `tikv/raft-rs`, `Cargo.toml:108-118`; shards distributed via a hash ring, `lib/collection/src/hash_ring.rs:22-57`).
+Three deployment modes share one API: **embedded** (`qdrant-edge` Rust crate + `qdrant-edge-py` PyPI package, `lib/edge/README.md:1-43`), **single-node server** (Docker, port 6333, `Dockerfile`), and **distributed cluster** (Raft consensus via `tikv/raft-rs`, `Cargo.toml:111-120`; shards distributed via a hash ring, `lib/collection/src/hash_ring.rs:22-57`).
 
 If you want one sentence: **Qdrant is a Rust-core vector engine that treats the payload as the central indexing axis, pushes filters into the ANN graph (not after it), ships scalar/binary/product quantization as first-class knobs, supports sparse + named multi-vectors with reciprocal-rank fusion baked in, and scales from in-process embed to Raft cluster on the same wire protocol.**
 
@@ -57,11 +57,11 @@ If you want one sentence: **Qdrant is a Rust-core vector engine that treats the 
 
 Qdrant's bets, all visible in the type definitions:
 
-1. **Payload is JSON, not schema-on-write.** `Payload(pub Map<String, Value>)` (`lib/segment/src/types.rs:2010-2012`) — any `serde_json::Map`, no type enforcement at write time. Compare [[Profile__Weaviate]], which insists on declared classes and properties. Qdrant's contract is "write whatever; if you want it filterable, declare a payload index for that field."
-2. **Filter expressivity is a first-class surface.** `Filter` has `must`, `should`, `must_not`, and `min_should` — quadrant-style boolean composition (`lib/segment/src/types.rs:3794-3825`). `Condition` covers Field / IsEmpty / IsNull / HasId / HasVector / Nested / nested Filter (`lib/segment/src/types.rs:3370-3388`). `FieldCondition` carries Match / Range / GeoBoundingBox / GeoRadius / GeoPolygon / ValuesCount.
-3. **Filter push-down is the recall story.** Post-filtering after ANN search collapses recall when the filter is selective. Qdrant's cardinality-driven strategy (`lib/segment/src/index/hnsw_index/hnsw/vector_index_impl.rs:107-172`) and payload-aware HNSW edges (`payload_m`) keep recall high across the selectivity curve. See also the ACORN selectivity branch (`lib/segment/src/index/hnsw_index/hnsw/search.rs:38-86`) which switches algorithm when the filter is restrictive.
+1. **Payload is JSON, not schema-on-write.** `Payload(pub Map<String, Value>)` (`lib/segment/src/types.rs:2594`) — any `serde_json::Map`, no type enforcement at write time. Compare [[Profile__Weaviate]], which insists on declared classes and properties. Qdrant's contract is "write whatever; if you want it filterable, declare a payload index for that field."
+2. **Filter expressivity is a first-class surface.** `Filter` has `must`, `should`, `must_not`, and `min_should` — quadrant-style boolean composition (`lib/segment/src/types.rs:4734-4766`). `Condition` covers Field / IsEmpty / IsNull / HasId / HasVector / Slice / Nested / nested Filter (`lib/segment/src/types.rs:4258-4283`). `FieldCondition` carries Match / Range / GeoBoundingBox / GeoRadius / GeoPolygon / ValuesCount.
+3. **Filter push-down is the recall story.** Post-filtering after ANN search collapses recall when the filter is selective. Qdrant's cardinality-driven strategy (`lib/segment/src/index/hnsw_index/hnsw/read_view/dispatch.rs:101-200`) and payload-aware HNSW edges (`payload_m`) keep recall high across the selectivity curve. See also the ACORN selectivity branch (`lib/segment/src/index/hnsw_index/hnsw/read_view/dispatch.rs:262-294`) which switches algorithm when the filter is restrictive.
 4. **HNSW only for dense.** No IVF, no DiskANN backend in-tree — the choice is "tune HNSW + quantization." Compare [[Profile__Milvus]], where pluggable backends per-collection are the headline.
-5. **Quantization is configuration, not migration.** `QuantizationConfig` (`lib/segment/src/types.rs:891-899`) is an enum of `Scalar` / `Product` / `Binary` / `Turbo`, set per-collection at create time and re-applied per-segment without rewriting the original vectors.
+5. **Quantization is configuration, not migration.** `QuantizationConfig` (`lib/segment/src/types.rs:1165-1170`) is an enum of `Scalar` / `Product` / `Binary` / `Turbo`, set per-collection at create time and re-applied per-segment without rewriting the original vectors.
 6. **One API across embed / server / cluster.** Same REST + gRPC schema (`lib/api/src/rest/schema.rs`, `lib/api/src/grpc/`). Edge skips the network layer and exposes the same operations as Rust/Python bindings (`lib/edge/src/lib.rs`).
 
 ## Storage topology
@@ -76,7 +76,7 @@ The unit of storage is a **point**: ID + (named) vectors + payload. Points live 
 | HNSW dense index | `segment` | `lib/segment/src/index/hnsw_index/` |
 | Sparse inverted index (BM25-style) | `sparse` | `lib/sparse/src/index/inverted_index/` |
 | Quantization (scalar / binary / PQ / Turbo) | `quantization` | `lib/quantization/src/` |
-| Write-ahead log (append-only segment files) | `wal` | `lib/wal/src/segment.rs`, `lib/wal/src/lib.rs:12-63` |
+| Write-ahead log (append-only segment files) | `wal` | `lib/wal/src/segment.rs`, `lib/wal/src/lib.rs:24-44` |
 | Shard (WAL + segment-holder + optimizers + update worker) | `shard` | `lib/shard/src/{wal.rs,segment_holder/,optimizers/,update.rs}` |
 | Collection (shard set + Raft + replica routing) | `collection` | `lib/collection/src/{config.rs,shards/,hash_ring.rs}` |
 | Storage / RBAC / dispatcher | `storage` | `lib/storage/src/{rbac/,dispatcher.rs,content_manager/}` |
@@ -84,24 +84,24 @@ The unit of storage is a **point**: ID + (named) vectors + payload. Points live 
 | Edge (in-process Python + Rust) | `edge` | `lib/edge/{src/,python/}` |
 | Snapshots (per-shard restorable archives) | `shard` | `lib/shard/src/snapshots/{snapshot_data.rs,snapshot_manifest.rs}` |
 
-The interesting structural point: **payload is stored separately from vectors**. `on_disk_payload: bool` (`lib/collection/src/config.rs:128-135`) controls whether the payload values get loaded into RAM or read from disk on demand — *but indexed payload fields stay in RAM unconditionally*, because the cardinality estimator and filter checker need them hot.
+The interesting structural point: **payload is stored separately from vectors**. `on_disk_payload` (`lib/collection/src/config.rs:134-147`; deprecated since 1.19.0 in favour of `payload.memory`) controls whether the payload values get loaded into RAM or read from disk on demand — *but indexed payload fields stay in RAM unconditionally*, because the cardinality estimator and filter checker need them hot.
 
 ## Schema of a point
 
 A point in Qdrant carries:
 
 ```rust
-// lib/segment/src/types.rs:2010-2012
+// lib/segment/src/types.rs:2594
 pub struct Payload(pub Map<String, Value>);   // serde_json::Map<String, Value>
 
-// lib/segment/src/types.rs:173 (ExtendedPointId)
+// lib/segment/src/types.rs:184 (ExtendedPointId)
 enum ExtendedPointId { NumId(u64), Uuid(Uuid) }   // ID is u64 OR UUID
 
 // Vectors are named (one or many per point), each can be:
 //   Dense (Vec<f32 | f16 | u8>)  — sized + Distance::{Cosine,Dot,Euclid,Manhattan}
 //   Sparse (SparseVector with indices + values)
 //   MultiDense (e.g. ColBERT-style late-interaction, MaxSim comparator)
-// See lib/segment/src/data_types/vectors.rs and lib/segment/src/types.rs:1620-1646
+// See lib/segment/src/data_types/vectors.rs and lib/segment/src/types.rs:2141-2144
 ```
 
 A REST upsert body looks like:
@@ -124,7 +124,7 @@ A REST upsert body looks like:
 }
 ```
 
-Notable for what's **present**: nested JSON paths are first-class (`JsonPath`, `lib/segment/src/json_path/`). Filters can match `"address.city"` directly. Geo and datetime are native, not stringly-typed. Named multi-vectors (`MultiVectorConfig`, `lib/segment/src/types.rs:1620-1646`) compare via `MaxSim` for late-interaction retrieval (ColBERT et al.).
+Notable for what's **present**: nested JSON paths are first-class (`JsonPath`, `lib/segment/src/json_path/`). Filters can match `"address.city"` directly. Geo and datetime are native, not stringly-typed. Named multi-vectors (`MultiVectorConfig`, `lib/segment/src/types.rs:2141-2144`) compare via `MaxSim` for late-interaction retrieval (ColBERT et al.).
 
 ## Payload indexes — the eight first-class types
 
@@ -134,9 +134,9 @@ Declared per-field via `create_payload_index`:
 Keyword | Integer | Float | Geo | Text | Bool | Datetime | Uuid
 ```
 
-Defined as an enum at `lib/segment/src/types.rs:2155-2164`, each with parameter struct at `lib/segment/src/types.rs:2190-2199` (e.g. `TextIndexParams` controls tokenizer + stopwords + min/max gram, `FloatIndexParams` controls range-bucket histogram). Implementations live in `lib/segment/src/index/field_index/{map_index,numeric_index,geo_index/,full_text_index/,bool_index/,null_index/}/`.
+Defined as an enum at `lib/segment/src/types.rs:2720-2729`, each with parameter struct at `lib/segment/src/types.rs:2755-2764` (e.g. `TextIndexParams` controls tokenizer + stopwords + min/max gram, `FloatIndexParams` controls range-bucket histogram). Implementations live in `lib/segment/src/index/field_index/{map_index,numeric_index,geo_index/,full_text_index/,bool_index/,null_index/}/`.
 
-The `Text` index is the load-bearing one for hybrid lexical match: tokenizer + token-to-postings map, used by `Match::Text(MatchText { text })` and `Match::Phrase(MatchPhrase { phrase })` (`lib/segment/src/types.rs:2518-2553`).
+The `Text` index is the load-bearing one for hybrid lexical match: tokenizer + token-to-postings map, used by `Match::Text(MatchText { text })` and `Match::Phrase(MatchPhrase { phrase })` (`lib/segment/src/types.rs:3259-3289`). Since 1.20.0 a text index can also record document lengths and rank by BM25 (`TextIndexParams.scoring`, `lib/segment/src/data_types/index.rs:380`).
 
 ## Filter push-down — the headline trick
 
@@ -144,44 +144,44 @@ A standard "vector + metadata" engine does **post-filtering**: run ANN, then dro
 
 ### Step 1 — cardinality-driven strategy selection
 
-At query time (`lib/segment/src/index/hnsw_index/hnsw/vector_index_impl.rs:107-172`):
+At query time (`lib/segment/src/index/hnsw_index/hnsw/read_view/dispatch.rs:101-200`):
 
 ```rust
 // estimate how many points the filter will admit
-let query_point_cardinality = payload_index
-    .with_view(|v| v.estimate_cardinality(query_filter, &hw_counter))?;
+let query_point_cardinality =
+    self.payload_index.estimate_cardinality(query_filter)?;
 
 if query_cardinality.max < self.config.full_scan_threshold {
     // Filter is so selective it's cheaper to enumerate matches + brute-score
-    return self.search_vectors_plain(/* ... */);   // line 122-133
+    return self.search_vectors_plain(/* ... */);   // line 134-146
 }
 
 if query_cardinality.min > self.config.full_scan_threshold {
     // Filter is permissive enough that traversing the graph wins
-    return self.search_vectors_with_graph(/* ... */);   // line 135-146
+    return self.search_vectors_with_graph_filtered(/* ... */);   // line 148-158
 }
 
 // Ambiguous — run a sampled cardinality check against the actual data
-let use_graph = sample_check_cardinality(/* ... */);    // line 152-160
+let use_graph = sample_check_cardinality(/* ... */);    // line 160-176
 ```
 
 `full_scan_threshold` is configurable per HNSW config (`lib/segment/src/index/hnsw_index/config.rs`); default expresses "how many points × bytes is it cheaper to brute-score than traverse." This branch — *small cardinality → plain, large cardinality → graph, ambiguous → sample* — is the recall-preserving move post-filter engines can't make.
 
 ### Step 2 — filter as an in-graph predicate
 
-When the graph path is taken, the filter doesn't run *after* — it runs *during* candidate scoring via `FilteredScorer` (`lib/segment/src/index/hnsw_index/point_scorer.rs:53-80`):
+When the graph path is taken, the filter doesn't run *after* — it runs *during* candidate scoring via `FilteredScorer` (`lib/segment/src/index/hnsw_index/point_scorer.rs:53-123`):
 
 ```rust
 pub struct FilteredScorer<'a> {
     raw_scorer: Box<dyn RawScorer + 'a>,
-    filters: ScorerFilters<'a>,  // wraps a FilterContext compiled from the Filter
+    filters: ScorerFilters<'a>,  // wraps an OptimizedFilter compiled from the Filter
     scores_buffer: Vec<ScoreType>,
 }
 
 // ScorerFilters::check_vector — every neighbor visit consults this:
 pub fn check_vector(&self, point_id: PointOffsetType) -> bool {
-    check_deleted_condition(point_id, self.vec_deleted, self.point_deleted)
-        && self.filter_context.as_ref().is_none_or(|f| f.check(point_id))
+    self.deleted.check_infallible(point_id)
+        && self.filter_context.as_ref().is_none_or(|f| f.check_infallible(point_id))
 }
 ```
 
@@ -189,24 +189,27 @@ The HNSW traversal greedily walks neighbors, but only adds points to the candida
 
 ### Step 3 — additional payload links (filterable HNSW)
 
-The risk in step 2 is graph disconnection: if a filter cuts the graph into islands, traversal can't reach matching points it would have found unfiltered. Qdrant's answer is to build **extra edges restricted to indexed payload blocks** during index construction (`lib/segment/src/index/hnsw_index/hnsw/build.rs:121-148, 502-525, 600-625, 627-690`):
+The risk in step 2 is graph disconnection: if a filter cuts the graph into islands, traversal can't reach matching points it would have found unfiltered. Qdrant's answer is to build **extra edges restricted to indexed payload blocks** during index construction. After the build refactor in this range the code is split across `lib/segment/src/index/hnsw_index/hnsw/build.rs:94-140` (main vs. block graph params), `hnsw/build/payload_blocks.rs` (which fields and blocks get graphs), `hnsw/build/block.rs` (building one block's subgraph and merging it in), and `hnsw/old_index.rs:269-274` (`payload_m` defaulting):
 
 ```rust
-// build.rs:121-124
-let payload_m = HnswM::new(
-    config.payload_m.unwrap_or(config.m),
-    config.payload_m0.unwrap_or(config.m0),
-);
+// old_index.rs:269-274
+pub(super) fn payload_hnsw_m(config: &HnswGraphConfig) -> HnswM {
+    HnswM::new(
+        config.payload_m.unwrap_or(config.m),
+        config.payload_m0.unwrap_or(config.m0),
+    )
+}
 
-// For each indexed payload field, find the points satisfying typical
-// conditions on that field, and build an additional small HNSW subgraph
-// over just those points — link them into the main graph.
-let additional_links_params: Option<_> = (payload_m.m > 0)
-    .then(|| payload_index_ref.with_view(|v| v.indexed_fields()))
-    .filter(|fields| !fields.is_empty())
-    .map(/* ... */);
+// payload_blocks.rs:70-90 — indexed fields (with enable_hnsw) get block graphs,
+// sorted for reproducible builds; a later field skips blocks the graph built
+// so far already connects well.
+let mut fields = payload_index
+    .with_view(|v| v.indexed_fields())
+    .into_iter()
+    .filter(|(field, payload_schema)| payload_schema.enable_hnsw())
+    .collect::<Vec<_>>();
 
-// build.rs:600-625 — for a given FieldCondition, enumerate matching points
+// payload_blocks.rs:175-196 — for a given FieldCondition, enumerate matching points
 fn condition_points(
     condition: FieldCondition,
     payload_index: &StructPayloadIndex,
@@ -215,23 +218,23 @@ fn condition_points(
 ) -> OperationResult<Vec<PointOffsetType>> {
     let filter = Filter::new_must(Field(condition));
     payload_index.with_view(|v| {
-        let cardinality_estimation = v.estimate_cardinality(&filter, &hw)?;
+        let cardinality_estimation = v.estimate_cardinality(&filter)?;
         Ok(v.iter_filtered_points(/* ... */).collect())
     })
 }
 
-// build.rs:630-690 — build_filtered_graph adds these per-condition edges
+// block.rs — each block's subgraph is built and merged into the main graph
 ```
 
-Net effect: the graph carries both unfiltered edges (`m` / `m0`) and per-payload-block edges (`payload_m` / `payload_m0`). When a filter restricts to one block, the payload-edge subgraph is a connected backbone, so traversal stays effective even at high selectivity. This is what `qdrant.tech` documentation calls "filterable HNSW"; the actual code paths are `build.rs:502-525` (build) + `point_scorer.rs:53-80` (search-time check) + `vector_index_impl.rs:107-172` (which-path-to-take).
+Net effect: the graph carries both unfiltered edges (`m` / `m0`) and per-payload-block edges (`payload_m` / `payload_m0`). When a filter restricts to one block, the payload-edge subgraph is a connected backbone, so traversal stays effective even at high selectivity. This is what `qdrant.tech` documentation calls "filterable HNSW"; the actual code paths are `hnsw/build/payload_blocks.rs` + `hnsw/build/block.rs` (build) + `point_scorer.rs:117-123` (search-time check) + `hnsw/read_view/dispatch.rs:101-200` (which-path-to-take).
 
 ### Step 4 (optional, opt-in) — ACORN for highly selective filters
 
-`SearchAlgorithm::Acorn` (`lib/segment/src/index/hnsw_index/hnsw/search.rs:60-86`) is an alternative traversal strategy turned on via `params.acorn.enable`. It re-routes graph search when the filter's selectivity falls below `acorn_max_selectivity` (`ACORN_MAX_SELECTIVITY_DEFAULT`, `lib/segment/src/types.rs:582`). The point: even within the filterable-HNSW model, Qdrant lets you swap the traversal heuristic when the workload is filter-dominated.
+`SearchAlgorithm::Acorn` (`lib/segment/src/index/hnsw_index/graph_layers.rs:80, 157`) is an alternative traversal strategy turned on via `params.acorn.enable`. It re-routes graph search when the filter's selectivity falls below `acorn.max_selectivity` (`ACORN_MAX_SELECTIVITY_DEFAULT = 0.4`, `lib/segment/src/types.rs:654`); the choice is made in `lib/segment/src/index/hnsw_index/hnsw/read_view/dispatch.rs:262-294`. The point: even within the filterable-HNSW model, Qdrant lets you swap the traversal heuristic when the workload is filter-dominated.
 
 ## Recall API — Query, prefetch, fusion
 
-The current query API (`lib/api/src/rest/schema.rs:566-670`) is a **composable pipeline**:
+The current query API (`lib/api/src/rest/schema.rs:570-678`) is a **composable pipeline**:
 
 ```jsonc
 POST /collections/<name>/points/query
@@ -247,24 +250,25 @@ POST /collections/<name>/points/query
 }
 ```
 
-Query types (`lib/api/src/rest/schema.rs:640-670`):
+Query types (`lib/api/src/rest/schema.rs:645-678`):
 
 - `Nearest` — classic ANN.
 - `Recommend` — positive + negative example vectors.
 - `Discover` — context-constrained search (the `discover_search_with_graph` path).
 - `Context` — points in positive regions only.
 - `OrderBy` — payload-field ordering (non-vector retrieval).
-- `Fusion` — `rrf` (Reciprocal Rank Fusion, with `k` and weights — `schema.rs:524-551`) or `dbsf` (Distribution-Based Score Fusion).
+- `Fusion` — `rrf` (Reciprocal Rank Fusion, with `k` and weights — `schema.rs:528-555`) or `dbsf` (Distribution-Based Score Fusion).
 - `Rrf` — explicit RRF with parameters.
 - `Formula` — score boosting via arbitrary formula.
 - `Sample` — random sampling.
 - `RelevanceFeedback` — oracle-driven re-ranking.
+- `Text` — BM25 ranking over the text index of a payload field (new in 1.20.0, `schema.rs:676-677`).
 
 The **hybrid retrieval** primitive is `prefetch` + `Fusion::Rrf` — you run multiple sub-queries (typically one dense, one sparse / BM25) and fuse the rank lists. This is what Mem0's adapter uses (`studies/memory-layers-for-agents/mem0/mem0/vector_stores/qdrant.py:82-86`) — the `bm25` named sparse vector slot is created at collection-init, then queried alongside the dense vector via prefetch.
 
 ## Quantization — first-class, three options
 
-`QuantizationConfig` (`lib/segment/src/types.rs:891-899`):
+`QuantizationConfig` (`lib/segment/src/types.rs:1165-1170`):
 
 ```rust
 pub enum QuantizationConfig {
@@ -280,11 +284,11 @@ Implementations under `lib/quantization/src/`:
 - `encoded_vectors_u8.rs` — scalar (8-bit) quantization
 - `encoded_vectors_pq.rs` — product quantization
 - `encoded_vectors_binary.rs` — binary quantization
-- `turboquant/` — Qdrant's optimized binary variant
+- `turboquant/` and `encoded_vectors_tq.rs` — TurboQuant, which in this range gained an 8-bit variant
 
-Configured per-collection at create time; the index keeps **both** the quantized form (used as a fast filter during HNSW traversal) and an oversampled rescoring step with the original vectors (the `oversampled_top` parameter at `lib/segment/src/index/hnsw_index/hnsw/search.rs:58`). The trade-off is RAM: binary quantization on a 768-dim collection cuts vector storage to 96 bytes/point, but the full vectors must still be readable for rescoring.
+Configured per-collection at create time; the index keeps **both** the quantized form (used as a fast filter during HNSW traversal) and an oversampled rescoring step with the original vectors (the `oversampled_top` value at `lib/segment/src/index/hnsw_index/hnsw/read_view/search.rs:56`). The trade-off is RAM: binary quantization on a 768-dim collection cuts vector storage to 96 bytes/point, but the full vectors must still be readable for rescoring.
 
-Scalar / product quantization require a rebuild when changed (`supports_appendable() == false`, `lib/segment/src/types.rs:919-924`). Binary and Turbo are appendable — you can flip the knob without re-ingesting.
+Scalar / product quantization require a rebuild when changed (`supports_appendable() == false`, `lib/segment/src/types.rs:1190-1195`). Binary and Turbo are appendable, but only when the `appendable_quantization` feature flag is on (`types.rs:1175-1179`).
 
 ## Persistence & operational story
 
@@ -298,7 +302,7 @@ client → REST/gRPC → dispatcher (lib/storage/src/dispatcher.rs)
     → async: optimizer merges + builds HNSW over closed segments
 ```
 
-The WAL is the durability story (`lib/wal/src/lib.rs:12-63`): every write hits an append-only mmap'd file before the in-memory state changes. Closed WAL segments are retained per `num_closed_segments_to_retain` (default 1) so a restart can replay.
+The WAL is the durability story (`lib/wal/src/lib.rs:24-44`): every write hits an append-only mmap'd file before the in-memory state changes. Closed WAL segments are retained per `retain_closed` (default 1, `lib/wal/src/lib.rs:32-41`) so a restart can replay. Edge shards can now run without a WAL (#11085).
 
 ### Segments and optimization
 
@@ -312,11 +316,11 @@ A shard holds **multiple segments**, each a self-contained mini-database (vector
 
 Cluster mode uses Raft (`tikv/raft-rs`, `Cargo.toml:108-118`) for **metadata consensus** (collection config, shard placement). Data is **not** routed through Raft — each shard is independent and the hash ring (`lib/collection/src/hash_ring.rs:22-57`) maps point IDs to shards. Resharding maintains *two* hash rings during transition (`HashRing::Resharding { old, new }`) so reads see both topologies until the migration completes.
 
-Each shard has `replication_factor` copies (`lib/collection/src/config.rs:104-114`). Write consistency is configurable via `write_consistency_factor` — how many replicas must ack before success. The default is 1 (write to leader, replicate asynchronously); set to `replication_factor` for full quorum.
+Each shard has `replication_factor` copies (`lib/collection/src/config.rs:110-120`). Write consistency is configurable via `write_consistency_factor` — how many replicas must ack before success. The default is 1 (write to leader, replicate asynchronously); set to `replication_factor` for full quorum.
 
 ### Three deployment modes — same API
 
-1. **Edge (embedded)** — `qdrant-edge` (Rust) and `qdrant-edge-py` (PyPI), `lib/edge/`. `EdgeShard::create(path, EdgeConfig{...})` (`README.md:80-93`) gives you a single shard in-process. Same `upsert / query / scroll / count` surface as the server.
+1. **Edge (embedded)** — `qdrant-edge` (Rust) and `qdrant-edge-py` (PyPI), `lib/edge/`. `EdgeShard::create(path, EdgeConfig{...})` (`README.md:81-94`) gives you a single shard in-process. Same `upsert / query / scroll / count` surface as the server.
 2. **Single-node server** — `docker run -p 6333:6333 qdrant/qdrant` (`README.md:46-52`). REST on 6333, gRPC on 6334, web UI bundled (`pkg/`).
 3. **Distributed cluster** — `docker compose` with multiple `qdrant` nodes joining via Raft. Shards distributed by hash ring; replicas placed across nodes. Re-clustering, resharding, and replica transfer are online operations (`lib/collection/src/shards/transfer/`, `lib/collection/src/shards/resharding.rs`).
 
@@ -329,7 +333,7 @@ JWT-based, with RBAC under `lib/storage/src/rbac/{auth.rs,ops_checks.rs,auditabl
 Three nested levels:
 
 1. **Collection** — schema-level boundary; one HNSW + payload-index set per collection.
-2. **Shard key** — within a collection, points can be routed to specific shards via `sharding_method: "custom"` + `shard_key` (`lib/collection/src/config.rs:98-103`). Used for tenant isolation: each tenant gets its own shards, queries pass `shard_key: "tenant_acme"` to scope the search.
+2. **Shard key** — within a collection, points can be routed to specific shards via `sharding_method: "custom"` + `shard_key` (`lib/collection/src/config.rs:104-109`). Used for tenant isolation: each tenant gets its own shards, queries pass `shard_key: "tenant_acme"` to scope the search.
 3. **Payload filter** — `must: [{"key": "tenant_id", "match": {"value": "acme"}}]` — the cheapest scope, but filter selectivity drives the cardinality strategy above.
 
 The opinionated tenancy advice from Qdrant's own skills (`README.md:42` → `https://github.com/qdrant/skills`): use a **payload filter + payload index on `tenant_id`** for hundreds of tenants; use **custom shard keys** for tens of large tenants where physical isolation matters.
@@ -346,7 +350,7 @@ A shard's directory under `storage/collections/<name>/<shard-id>/` contains:
   - `hnsw_graph/` — HNSW edges + per-level structure
   - `segment.json` — metadata (creation time, point count, indexed fields)
 
-The format is **not portable** to non-Qdrant programs — vectors are stored as compact binary blobs, HNSW edges as serialized link containers (`lib/segment/src/index/hnsw_index/graph_links.rs`), payload as `rmp-serde` (MessagePack) or a custom format under `lib/gridstore/`. A snapshot tar is the portable unit; a directory walk by a non-Qdrant program is not.
+The format is **not portable** to non-Qdrant programs — vectors are stored as compact binary blobs, HNSW edges as serialized link containers (`lib/segment/src/index/hnsw_index/graph_links/`), payload as `rmp-serde` (MessagePack) or the Gridstore format, which now lives inside the `blobstore` crate next to a new Logstore (`lib/blobstore/src/blobstore/{gridstore,logstore}/`). A snapshot tar is the portable unit; a directory walk by a non-Qdrant program is not.
 
 Compare [[Profile__LanceDB]], where the on-disk form is Apache Arrow / Lance columnar files readable by DuckDB / Polars / Pandas directly.
 
@@ -381,8 +385,8 @@ If you want the cleanest reference for how to drive Qdrant from a real applicati
 
 ## Mental model for using it well
 
-- **Declare a payload index for every field you filter by.** Without one, the filter still works, but cardinality estimation degrades to a full scan and the push-down advantage is lost. The `indexed_fields()` call at `lib/segment/src/index/hnsw_index/hnsw/build.rs:131` is what makes filterable HNSW *filterable*.
-- **Use `prefetch + rrf` for hybrid, not application-side fusion.** RRF is implemented in-process per shard (`lib/api/src/rest/schema.rs:524-551`), so the rank-fusion math doesn't pay a network round-trip.
+- **Declare a payload index for every field you filter by.** Without one, the filter still works, but cardinality estimation degrades to a full scan and the push-down advantage is lost. The `indexed_fields()` call at `lib/segment/src/index/hnsw_index/hnsw/build/payload_blocks.rs:78` is what makes filterable HNSW *filterable*.
+- **Use `prefetch + rrf` for hybrid, not application-side fusion.** RRF is implemented in-process per shard (`lib/api/src/rest/schema.rs:528-555`), so the rank-fusion math doesn't pay a network round-trip.
 - **Set `payload_m` if you have a few high-selectivity tenants.** Letting the index build extra edges per indexed-block is the structural fix for "Tenant A is 0.1% of the corpus and recall tanks." Cost: longer index build, more RAM per indexed field.
 - **Use scalar quantization first, binary only when you've measured.** Binary cuts RAM by ~30× but is workload-sensitive; scalar gets you 4× with little quality loss on most real models.
 - **Prefer shard-key isolation only when you have <100 large tenants.** For 10k small tenants, payload filter + index is dramatically cheaper than 10k shards.
@@ -390,10 +394,24 @@ If you want the cleanest reference for how to drive Qdrant from a real applicati
 ## When NOT to reach for this
 
 - **You want one in-process Python import and a `Client()` constructor.** Qdrant Edge exists (`lib/edge/python/`), but its developer ergonomics still trail [[Profile__Chroma]] for "I want a vector DB for this notebook."
-- **Your storage layer must be readable by non-Qdrant tools.** The on-disk form is Qdrant-specific (`lib/segment/src/index/hnsw_index/graph_links.rs`, custom mmap structures). For Arrow / Parquet portability, [[Profile__LanceDB]] is the right choice.
+- **Your storage layer must be readable by non-Qdrant tools.** The on-disk form is Qdrant-specific (`lib/segment/src/index/hnsw_index/graph_links/`, custom mmap structures). For Arrow / Parquet portability, [[Profile__LanceDB]] is the right choice.
 - **You're already operating Postgres and "just need vectors."** [[Profile__pgvector]] is one `CREATE EXTENSION` away and inherits all of Postgres's operational story.
 - **You need a typed graph of objects with references, not points.** [[Profile__Weaviate]]'s schema-on-write + cross-references is a closer fit; Qdrant has nested-payload filters but no concept of a `references` field type.
 - **You want billions of points distributed across compute and storage tiers from day one.** [[Profile__Milvus]] is distributed-by-design; Qdrant is "scale up first, distribute when you must." Both can do it; Milvus is the bet that distribution is the only thing that matters.
+
+## Changes since the previous pin (2026-05-22 → 2026-11-16)
+
+Pin moved from `e01c207f40a2` (v1.18.1) to `23065a0bf685`: 1,384 commits. Releases in range: **v1.18.2**, **v1.18.3**, **v1.19.0** (2026-08-04), **v1.19.1**, **v1.19.2** (2026-10-05), **v1.20.0** (2026-10-21), **v1.20.1**, and **v1.20.2** (2026-11-16), which is this pin; `Cargo.toml:3` reads `version = "1.20.2"`. Qdrant keeps no in-tree CHANGELOG; this summary comes from the commit log and code. Every file:line citation above was re-located; several moved to new files.
+
+What matters for this profile:
+
+- **The filter push-down mechanism is intact but moved.** The cardinality dispatch (plain below `full_scan_threshold`, graph above it, sampling in between) now lives in `lib/segment/src/index/hnsw_index/hnsw/read_view/dispatch.rs:101-200`, and ACORN selection in the same file at 262-294. `hnsw/search.rs` and the flat `graph_links.rs` were removed; the HNSW build was split into `hnsw/build/` with separate payload-block logic (`payload_blocks.rs`), and payload blocks can now be reused from an old index on rebuild. A read-only HNSW index (`hnsw/read_only/`) was added for serving segments from object storage.
+- **Server-side BM25 (v1.20.0).** Text indexes take a `scoring` parameter that records document lengths and ranks by BM25 (`lib/segment/src/data_types/index.rs:380, 397`), and the Query API gained a `Text` query that ranks by BM25 over a payload field's text index (`lib/api/src/rest/schema.rs:676-677`). Until now hybrid search in Qdrant meant a client-computed BM25 sparse vector, as in the Mem0 adapter; this makes a dense `prefetch` plus a server-side `Text` query a second option. There is also a new `code` tokenizer and a `match: { substring }` condition (`MatchSubstring`, `lib/segment/src/types.rs:3318`).
+- **Quantization and vector types.** 8-bit TurboQuant, standalone Binary and TurboQuant encoders, and new `Turbo8` / `Turbo16` vector datatypes. Appendable Binary/Turbo quantization sits behind the `appendable_quantization` feature flag (`lib/segment/src/types.rs:1172-1179`).
+- **PiPNN graph construction (off by default).** A new builder (`lib/segment/src/index/hnsw_index/pipnn/`, based on arXiv:2602.21247) builds HNSW links by partitioning and leaf k-NN rather than point-by-point insertion. The `pipnn_graph_building` flag defaults to `false` because it ignores `ef_construct` (`lib/common/common/src/flags.rs:103-111, 141`).
+- **Storage placement.** `on_disk_payload` is deprecated since 1.19.0 in favour of `payload.memory` (`lib/collection/src/config.rs:134-147`), part of a unified `memory` placement setting across components, including a `cached` placement for the id tracker. Gridstore now sits inside a new `blobstore` crate alongside a Logstore (`lib/blobstore/`). Snapshots can go to GCS and Azure Blob Storage as well as S3.
+- **Edge and serverless.** Edge shards gained WAL-less mode, batched queries, read-only shards backed by object storage, and a UniFFI crate for mobile SDKs. Much of the remaining volume is groundwork for a serverless deployment (update-only segments, delete logs, object-storage reads). None of it changes the server API described above.
+- **Licensing note.** `LICENSE` stays Apache-2.0; its copyright line now names Qdrant Solutions GmbH.
 
 ## How this compares to the rest of the study
 

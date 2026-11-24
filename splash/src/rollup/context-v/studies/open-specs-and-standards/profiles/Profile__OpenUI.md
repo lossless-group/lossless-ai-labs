@@ -14,11 +14,11 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/openui
 profile_kind: framework
 date_created: 2026-05-06
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 42e091c5-28c9-498f-88da-720da80ed710
 hex_code: e212hh
 date_authored_initial_draft: 2026-05-06
-date_authored_current_draft: 2026-05-06
+date_authored_current_draft: 2026-11-23
 lede: >-
   JSON spends ~30% of its bytes on punctuation an LLM has no reason to emit;
   the same seven UIs cost 47–67% fewer tokens in OpenUI Lang.
@@ -30,9 +30,11 @@ summary: >-
   matters, the three streaming-safety mechanics (auto-close on incomplete input, ternary
   peek-ahead across newlines, forward references resolved in later chunks), the
   library-as-system-prompt pattern that collapses Zod types, LLM contract, and renderer grammar
-  into one source of truth, and the constrained-output tradeoff. Includes an honest fit note: the
-  runtime is React-only and therefore collides with the astro-knots prohibition, so read this for
-  the patterns worth stealing rather than as an adoption recommendation.
+  into one source of truth, the constrained-output tradeoff, and the OpenUI 1.0 written
+  specification with conformance fixtures. Includes an honest fit note: the main runtime and chat
+  UI are React, which collides with the astro-knots prohibition, though Svelte, Vue, and Angular
+  bindings and a framework-agnostic core now exist. Read this for the patterns worth stealing
+  rather than as an adoption recommendation.
 authors:
   - Michael Staton
 status: Reference
@@ -49,15 +51,17 @@ A profile of OpenUI as it lives in this study (`studies/open-specs-and-standards
 
 ## TL;DR
 
-OpenUI is a full-stack framework for **Generative UI** — interfaces that an LLM emits at runtime rather than a developer writing by hand. Its center of gravity is **OpenUI Lang**: a tiny, streaming-first declarative language designed to be (a) cheap for the model to emit, (b) safe against incomplete tokens mid-stream, and (c) confined to a typed component library so the model can't "make up" elements. On the published benchmarks it uses **47–67% fewer tokens** than equivalent JSON formats for the same UI (`benchmarks/README.md:36-45`).
+OpenUI is a full-stack framework for **Generative UI** — interfaces that an LLM emits at runtime rather than a developer writing by hand. Its center of gravity is **OpenUI Lang**: a tiny, streaming-first declarative language designed to be (a) cheap for the model to emit, (b) safe against incomplete tokens mid-stream, and (c) confined to a typed component library so the model can't "make up" elements. On the vendor-reported benchmarks it uses **47–67% fewer tokens** than equivalent JSON formats for the same UI (`benchmarks/README.md:36-45`).
 
-The framework ships four npm packages, a React-based runtime that parses tokens *as they arrive* and updates the DOM progressively, a CLI that scaffolds a working Next.js chat app, and an Agent Skill so AI coding assistants can author OpenUI Lang correctly.
+The framework now ships about twenty npm packages under `@openuidev/` (it was nine at the previous pin): a framework-agnostic core (`lang-core`), runtimes for React, Vue 3, Svelte 5, and Angular that parse tokens *as they arrive* and update the DOM progressively, chat UI packages, integrations (LangChain, assistant-ui, A2UI, React Email), server and observability packages, a CLI that scaffolds a working chat app, and an Agent Skill (now maintained in `thesysdev/skills`) so AI coding assistants can author OpenUI Lang correctly (`README.md:89-129`, `:230-243`).
+
+Since October 2026 the language also has a **written specification**: OpenUI 1.0, in `spec/` (`overview.md`, `language.md`, `prompt.md`) with plain-text conformance fixtures so a client in any language can check that it parses, streams, evaluates, and runs actions the same way (`spec/overview.md:1-23`). That moves OpenUI Lang from "a format defined by its parser" to a spec with a reference implementation, which is why it belongs in this study.
 
 It is **not** a UI library, **not** a markdown extension, and **not** a JSON schema. It is a *language* with its own grammar, paired with a runtime that does three jobs that JSON-render formats cannot cleanly do: (1) handle interactivity (state, conditions, refs), (2) handle partial token streams, and (3) compress the wire-format below what JSON can mathematically reach.
 
 ## Why a new language? Four wins worth understanding
 
-OpenUI's central argument is that JSON is the wrong medium for streamed, interactive, model-emitted UI. They explain this most directly in `docs/content/blog/stop-making-ai-write-json.mdx:8-14`:
+OpenUI's central argument is that JSON is the wrong medium for streamed, interactive, model-emitted UI. They explain this most directly in `docs/content/blog/stop-making-ai-write-json.mdx:10-16`:
 
 > "JSON is a data format pretending to be a language. When you need a UI that can fetch data, manage state, and respond to user input, that distinction stops being theoretical. We learnt this the hard way. Thesys V1 shipped a JSON-based Generative UI SDK… Then we tried to make the UI interactive (state, live data, conditional rendering, form submissions) and JSON started fighting us at every step."
 
@@ -78,7 +82,7 @@ Same UI, three formats, counted with `tiktoken` against the GPT-5 encoder (`benc
 | e-commerce-product | 2145 | 2449 | 2381 | **1166** | **−52.4%** |
 | **TOTAL** | **9122** | **10180** | **9948** | **4800** | **−52.8%** |
 
-(Source: `benchmarks/README.md:36-45`.)
+(Source: `benchmarks/README.md:36-45`; vendor-reported, generated by GPT-5.2 at temperature 0, unchanged since the previous pin. The README's newer comparison table puts OpenUI at "1x" tokens against 3x for json-render and A2UI, `README.md:207-219`.)
 
 The "why" is structural, not tricks: JSON spends ~30% of its bytes on punctuation (`{`, `}`, `"`, `:`, `,`) that an LLM has no reason to emit. OpenUI Lang's syntax for the same simple-table looks like this (`benchmarks/samples/simple-table.oui:1-5`):
 
@@ -100,7 +104,7 @@ The hard problem with model-generated UI isn't "render the final tree." It's "re
 
 OpenUI Lang's parser handles this with two cooperating mechanisms:
 
-**(a) Auto-close on incomplete input.** The streaming parser tracks open brackets and string state, and when asked to render mid-stream it emits a synthetic close for anything still open (`packages/lang-core/src/parser/statements.ts:18-59`):
+**(a) Auto-close on incomplete input.** The streaming parser tracks open brackets and string state, and when asked to render mid-stream it emits a synthetic close for anything still open (`packages/lang-core/src/parser/statements.ts:21-62`):
 
 ```typescript
 export function autoClose(input: string): { text: string; wasIncomplete: boolean } {
@@ -135,7 +139,7 @@ It's not "tokens to act on instructions." It's "tokens the model writes to descr
 > Roughly: shorter output language = cheaper, faster, and more headroom.
 > A useful analogy: if you asked five people to describe the same chess position, one in standard algebraic notation (Nf3), one in long-form English ("the knight on g1 moves to f3"), one in coordinate format ("g1-f3"), and one in PGN with metadata — they'd all encode the same move, but the costs would differ by 3-5×. OpenUI Lang vs. JSON is the same shape of comparison: same content, different verbosity, and the verbose one charges more per move.
 
-**(b) Ternary peek-ahead across newlines.** The parser also has to know when a newline ends a statement vs. when the next line is a continuation. The clever case is multi-line ternaries: a `?` on one line and a `:` on the next. The parser peeks past whitespace before splitting (`packages/lang-core/src/parser/parser.ts:433-485`):
+**(b) Ternary peek-ahead across newlines.** The parser also has to know when a newline ends a statement vs. when the next line is a continuation. The clever case is multi-line ternaries: a `?` on one line and a `:` on the next. The parser peeks past whitespace before splitting (`packages/lang-core/src/parser/parser.ts:571-629`; the excerpt below is from the previous pin, and the current code iterates `cleaned` rather than `buf` but keeps the same peek):
 
 ```typescript
 else if (c === "\n" && depth <= 0 && ternaryDepth <= 0) {
@@ -176,7 +180,7 @@ The model emits `root` first (the layout skeleton), then fills in details. The r
 
 This is the single most generalizable idea in the project, even for people who'll never use the React runtime.
 
-You define your components with `defineComponent()`, passing a Zod schema for props (`packages/react-lang/src/library.ts:40-47`):
+You define your components with `defineComponent()`, passing a Zod schema for props (`packages/react-lang/src/library.ts:55-62`; it now delegates to a framework-agnostic `defineComponent` in `lang-core`):
 
 ```typescript
 export function defineComponent<T extends $ZodObject>(config: {
@@ -187,7 +191,7 @@ export function defineComponent<T extends $ZodObject>(config: {
 }): DefinedComponent<T>
 ```
 
-A real component definition from the built-in chat library (`packages/react-ui/src/genui-lib/openuiChatLibrary.tsx:81-100`):
+A real component definition from the built-in chat library (`packages/react-ui/src/genui-lib/openuiChatLibrary.tsx:192-215` at this pin; excerpt from the previous pin):
 
 ```typescript
 const ChatCard = defineComponent({
@@ -202,7 +206,7 @@ const ChatCard = defineComponent({
 });
 ```
 
-A library is then turned into a **system prompt** by walking those Zod schemas and generating the syntax rules + signature list (`packages/lang-core/src/parser/prompt.ts:1-249`). The output looks like (from a generated prompt — `examples/openui-chat/src/generated/system-prompt.txt:1-12`):
+A library is then turned into a **system prompt** by walking those Zod schemas and generating the syntax rules + signature list (`packages/lang-core/src/parser/prompt.ts`, `generatePrompt` at `:621` and `generateSystemPrompt` at `:766-769`). The spec now defines this formally as the LibrarySpec and system prompt (`spec/prompt.md`). The output looked like this in the previous pin's generated example prompt (`examples/openui-chat/src/generated/system-prompt.txt`, since removed when examples were reorganized; `benchmarks/system-prompt.txt` is a current generated prompt):
 
 ```
 You are an AI assistant that responds using openui-lang…
@@ -222,9 +226,9 @@ This collapses three things that are normally separate — **the type system** (
 
 ### 4. Constrained output
 
-Because every accepted shape is registered in the library, output is bounded. The Renderer rejects (or treats as best-effort) anything that doesn't parse. The blog post is direct about this trade-off (`docs/content/blog/stop-making-ai-write-json.mdx:8-14` and following): you give up the freedom to say "make me anything" in exchange for a UI surface that is type-safe, brand-consistent, and won't render the model's hallucinated `<DancingPancake>` component.
+Because every accepted shape is registered in the library, output is bounded. The Renderer rejects (or treats as best-effort) anything that doesn't parse. The blog post is direct about this trade-off (`docs/content/blog/stop-making-ai-write-json.mdx:10-16` and following): you give up the freedom to say "make me anything" in exchange for a UI surface that is type-safe, brand-consistent, and won't render the model's hallucinated `<DancingPancake>` component.
 
-The AST itself is a discriminated union — fewer node kinds than even JSON has (`packages/lang-core/src/parser/ast.ts:30-47`):
+The AST itself is a discriminated union — fewer node kinds than even JSON has (`packages/lang-core/src/parser/ast.ts:30-54`; a few node kinds were added since the excerpt below):
 
 ```typescript
 export type ASTNode =
@@ -239,25 +243,29 @@ export type ASTNode =
   | { k: "BinOp" | "UnaryOp" | "Ternary" | "Member" | "Index" | … };
 ```
 
-The grammar is small enough to fit on a postcard, which is part of why the system prompt is short enough to leave the model real budget for the UI itself.
+The grammar is small enough to fit on a postcard, which is part of why the system prompt is short enough to leave the model real budget for the UI itself. The complete grammar is now written down in `spec/language.md` §1.6, alongside the program model, evaluation, streaming, state and forms, and data and actions.
 
 ## What's actually inside this submodule
 
 | Path | What's there |
 |---|---|
-| `openui/README.md` | Pitch, packages table, quickstart, benchmarks summary |
-| `openui/packages/react-lang/` | Core runtime — `defineComponent`, `createLibrary`, `Renderer`, prompt generation |
-| `openui/packages/react-headless/` | Headless chat state, streaming adapters (OpenAI, LangGraph, ag-UI), message format converters |
-| `openui/packages/react-ui/` | Prebuilt chat layouts (Copilot, FullScreen, BottomTray) and two component libraries |
-| `openui/packages/openui-cli/` | `npx @openuidev/cli@latest create …`, plus `generate` for system prompts |
-| `openui/packages/lang-core/` | Internal — the actual parser, AST, prompt generator. This is where the language *lives*. |
-| `openui/skills/openui/SKILL.md` | The Agent Skill — single file, 5.3k |
-| `openui/examples/openui-chat/` | Working Next.js chat app — the canonical demo |
+| `openui/README.md` | Pitch, packages table, quickstart, benchmarks summary, comparison table |
+| `openui/spec/` | **OpenUI 1.0 specification**: `overview.md`, `language.md` (grammar and semantics), `prompt.md` (LibrarySpec, system prompt, message protocol), `fixtures/1.0/` (conformance cases) |
+| `openui/packages/lang-core/` | Framework-agnostic parser, AST, evaluator, prompt generator (v1.1.1). This is where the language *lives*. Sends pseudonymous install telemetry on `postinstall`; runtime telemetry is opt-in (`packages/lang-core/README.md:157-167`) |
+| `openui/packages/react-lang/` | React runtime — `defineComponent`, `createLibrary`, `Renderer` (v1.1.1) |
+| `openui/packages/vue-lang/`, `svelte-lang/`, `angular-lang/` | Vue 3, Svelte 5, and Angular runtimes (v0.4.2) |
+| `openui/packages/react-headless/` | Headless chat state, streaming adapters (OpenAI, LangGraph, ag-UI, Vercel AI SDK), message format converters |
+| `openui/packages/react-ui/` | Prebuilt chat layouts (Copilot, FullScreen, BottomTray), component libraries, D3 charts, artifact renderers |
+| `openui/packages/a2ui/`, `langchain/`, `assistant-ui/`, `react-email/`, `server/`, `observability*/`, `channels/`, `devtools/`, `browser-bundle/` | Integrations, server, observability, and embed packages |
+| `openui/packages/openui-cli/` | `npx @openuidev/cli@latest create …`, plus `generate` for system prompts or JSON schema |
+| `openui/examples/` | Organized by category: `agent-frameworks/`, `app-frameworks/` (Svelte, Vue, Angular, React Native, Lynx, FastAPI), `design-systems/`, `cookbooks/`, `harnesses/`, `miscellaneous/` |
 | `openui/benchmarks/` | Reproducible token-cost measurements with seven scenarios |
 | `openui/docs/content/blog/stop-making-ai-write-json.mdx` | The manifesto — read this for the *why* |
 
+The Agent Skill that lived at `skills/openui/SKILL.md` was removed from this repo (commit `337cfb41`) and is maintained in `thesysdev/skills`; install with `npx skills add thesysdev/skills --skill openui` (`README.md:230-243`).
+
 Two artifacts to read in the upstream for vivid examples:
-- `openui/packages/lang-core/src/parser/parser.ts` — the entire streaming parser is in one file. ~600 lines, very readable.
+- `openui/packages/lang-core/src/parser/parser.ts` — the entire streaming parser is in one file. 814 lines at this pin, very readable. Read `spec/language.md` next to it.
 - `openui/benchmarks/samples/contact-form.oui` vs `contact-form.c1.json` — the same 12-line form costs 294 tokens in OpenUI Lang and 849 in JSON.
 
 ## How a real project uses it (the everyday loop)
@@ -274,16 +282,13 @@ flowchart LR
     H -.->|onAction / onStateUpdate| C
 ```
 
-### Quickstart (verified from `README.md:54-71`)
+### Quickstart (`README.md:53-66`)
 
 ```bash
 npx @openuidev/cli@latest create --name genui-chat-app
-cd genui-chat-app
-echo "OPENAI_API_KEY=sk-…" > .env
-npm run dev
 ```
 
-This scaffolds a Next.js app with:
+The README no longer lists the follow-up steps; recent CLI versions add a backend-framework choice at scaffold time, can install examples as templates, end with an optional OpenUI Cloud sign-in, and run non-interactively for agents. At the previous pin the scaffold was a Next.js app with:
 - A pre-generated system prompt at `src/generated/system-prompt.txt` (~19k of text)
 - A pre-wired `/api/chat` route streaming LLM tokens through the parser
 - A `Renderer` mounted on the page rendering as tokens arrive
@@ -293,7 +298,7 @@ The prompt is *not* regenerated at runtime — it's a build artifact. Add a comp
 
 ### Mental model for using it well
 
-- **`root` is the entry point.** Every response begins with `root = …`. The model is trained-by-prompt to do this. (`examples/openui-chat/src/generated/system-prompt.txt:5`)
+- **`root` is the entry point.** Every response begins with `root = …`. The model is trained-by-prompt to do this. (The spec's program model, `spec/language.md` §2.2 "Entry", now states the rule normatively.)
 - **Variables are forward-referenceable.** Define `root` first as the layout skeleton, then fill in details. Streaming-friendly.
 - **Component calls are positional, not named-arg.** `Card(children, title?)` not `Card({ children, title })`. This is part of the token saving.
 - **Zod schemas are the contract.** If the model emits a prop the schema rejects, that prop is dropped (or the call errors, depending on validation mode). Keep schemas tight; let the parser do the policing.
@@ -302,7 +307,7 @@ The prompt is *not* regenerated at runtime — it's a build artifact. Add a comp
 
 ## The Agent Skill they ship
 
-Inside the repo at `openui/skills/openui/SKILL.md` is a single-file skill — no `references/`, no `templates/`, no `scripts/`. Frontmatter verbatim (`skills/openui/SKILL.md:1-4`):
+At the previous pin, the repo held `openui/skills/openui/SKILL.md`, a single-file skill — no `references/`, no `templates/`, no `scripts/`. It has since moved to `thesysdev/skills` (not pinned in this study), so the observations below describe the file as it was. Frontmatter verbatim (from the previous pin, `skills/openui/SKILL.md:1-4`):
 
 ```yaml
 ---
@@ -322,9 +327,11 @@ That's worth filing away. We've been adding `references/` directories by default
 
 The blog post `stop-making-ai-write-json.mdx` is the comparison document. Highlights:
 
-**vs. JSON (general).** "JSON is a data format pretending to be a language." State binding requires `{"$bindState": "/path/to/var"}` wrapper objects; conditional rendering requires `{"$cond": …, "$then": …, "$else": …}`. OpenUI Lang has `cond ? then : else` (`docs/content/blog/stop-making-ai-write-json.mdx:56-129`).
+**vs. JSON (general).** "JSON is a data format pretending to be a language." State binding requires `{"$bindState": "/path/to/var"}` wrapper objects; conditional rendering requires `{"$cond": …, "$then": …, "$else": …}`. OpenUI Lang has `cond ? then : else` (`docs/content/blog/stop-making-ai-write-json.mdx:58-131`).
 
-**vs. Vercel `json-render`.** Acknowledged as "serious system." Cited as hitting the same ceiling: streaming works, interactivity doesn't compose. (`docs/content/blog/stop-making-ai-write-json.mdx:49-52`)
+**vs. Vercel `json-render`.** Acknowledged as "serious system." Cited as hitting the same ceiling: streaming works, interactivity doesn't compose. (`docs/content/blog/stop-making-ai-write-json.mdx:51-54`)
+
+**vs. A2UI (Google).** Newer since the previous pin: the README's comparison table rates A2UI at 3x OpenUI's tokens (vendor-reported, `README.md:207-219`), and OpenUI also *implements* A2UI: `@openuidev/a2ui` is an A2UI v1.0 client that carries OpenUI Lang component payloads.
 
 **vs. JSX directly.** Not addressed head-on in the docs, but the structural answer is: JSX is a *programming language* the model would have to write — no constraint on the component set, no streaming guarantees, no built-in token efficiency. OpenUI Lang gives up Turing-completeness in exchange for safety + brevity.
 
@@ -334,14 +341,14 @@ The blog post `stop-making-ai-write-json.mdx` is the comparison document. Highli
 
 - **Static UI.** If the UI is fixed at build time, write it in your framework directly. OpenUI is for runtime generation.
 - **Pure content / long-form text.** Use markdown (or LFM, or MDX). OpenUI's strength is structured, interactive UI; it's not built for prose.
-- **Non-React stacks (today).** All the runtime packages are React-only. There is no Svelte, Vue, or Astro renderer. You could in principle write your own renderer over the AST, but it's not on the upstream roadmap.
+- **Stacks without a runtime.** This profile previously said the runtime was React-only; that was already out of date at the previous pin, which had `svelte-lang` and `vue-lang`. At this pin there are Vue 3, Svelte 5, and Angular runtimes and a framework-agnostic `lang-core`, but no Astro renderer, and the prebuilt chat UI is React. With the 1.0 spec and conformance fixtures, writing your own renderer is now a supported path rather than a reverse-engineering job.
 - **Open-ended creative output.** A constrained component library is a feature, but it's also a ceiling. If you want the model to invent novel UI primitives, OpenUI's whole shape pushes the other way.
 
 ## Fit with our context (honest note)
 
 This profile is a study, not an adoption recommendation. A few real tensions between OpenUI's shape and our standing conventions:
 
-- **React-only.** OpenUI is built around React, which our `astro-knots` skill explicitly prohibits for our Astro sites. Adopting OpenUI as-is in any Astro Knots property would require a hard exception.
+- **React-first.** OpenUI's chat UI and main runtime are React, which our `astro-knots` skill explicitly prohibits for our Astro sites. Adopting the React packages in any Astro Knots property would require a hard exception. The Svelte 5 runtime (`@openuidev/svelte-lang`) is the more plausible route for us and is worth a separate look.
 - **Generative UI vs. content-first sites.** Most of our work is content-first marketing/documentation sites where UI is authored, not generated. OpenUI's value proposition only kicks in when an LLM is producing UI live.
 - **OpenUI Lang is a wire format, not a content format.** For our needs (LFM, AGENTS.md, content authoring), OpenUI Lang is downstream of the problem. It's the LLM-emit step, not the human-author step.
 
@@ -352,8 +359,20 @@ What's still worth learning from OpenUI even if we don't adopt the runtime:
 3. **Single-file `SKILL.md` ergonomics** — proof that a tightly-scoped skill doesn't need `references/`. Useful counterweight to our default of building out reference docs.
 4. **Compact-language-as-LLM-output** — the structural argument that JSON is the wrong medium for streamed, interactive output. Aligns with our suspicion of JSON-everywhere conventions.
 
-If the question on the table is "should we build something that lets an LLM generate UI in our stack?" — OpenUI is the most thoughtful prior art we've found. If the question is "should we adopt OpenUI directly?" — answer is almost certainly no, because of the React dependency.
+If the question on the table is "should we build something that lets an LLM generate UI in our stack?" — OpenUI is the most thoughtful prior art we've found. If the question is "should we adopt OpenUI directly?" — for the React packages the answer is almost certainly no; the Svelte runtime is an open question.
+
+## Changes since the previous pin (2026-05-06 → 2026-11-21)
+
+`e21b6d986e44` → `f93f28d46bc8`, 665 commits. The repo has no git tags; releases are per-package via changesets. `@openuidev/lang-core` and `@openuidev/react-lang` went from 0.2.4 to **1.1.1**. License unchanged (MIT; `react-email`'s `package.json` declares none).
+
+- **OpenUI 1.0 specification** (`spec/`, added 2026-10-14): overview, language, and prompt documents plus conformance fixtures, a message protocol, backward-compatibility rules for libraries, custom `@` functions and actions, and `library.extend()`.
+- **More runtimes and integrations**: Angular runtime (new); A2UI v1.0 client, assistant-ui, LangChain, server, observability, channels, and devtools packages; Vercel AI SDK and Eve stream adapters.
+- **Agent Skill moved out** to `thesysdev/skills`; `skills/openui/` and `examples/openui-chat/` no longer exist here. Examples were reorganized by category.
+- **Charts**: `react-ui` replaced Recharts with D3 (breaking).
+- **Hosted features**: dashboards, cloud artifact renderers and sharing, and an OpenUI Gateway, which tie parts of the stack to Thesys's hosted service.
+- **Telemetry**: `lang-core` sends pseudonymous install telemetry on `postinstall` (opt-out) and opt-in runtime telemetry.
+- Benchmarks are unchanged, so the lede's numbers still match `benchmarks/README.md`.
 
 ## One-line summary
 
-> OpenUI replaces "model emits JSON, we render it" with "model emits a tiny declarative language whose grammar is generated from your typed component library, parsed token-by-token by a streaming-safe parser, and rendered progressively in React" — for a 50%+ token reduction and the ability to express interactivity, conditions, and state that JSON-render formats cannot.
+> OpenUI replaces "model emits JSON, we render it" with "model emits a tiny declarative language — now with a written 1.0 spec — whose grammar is generated from your typed component library, parsed token-by-token by a streaming-safe parser, and rendered progressively in React (or Vue, Svelte, Angular)" — for a 50%+ token reduction and the ability to express interactivity, conditions, and state that JSON-render formats cannot.

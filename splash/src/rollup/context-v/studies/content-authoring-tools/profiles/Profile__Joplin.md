@@ -3,18 +3,18 @@ name: Joplin Profile
 title: Joplin — Profile
 slug: joplin
 upstream: https://github.com/laurent22/joplin
-pinned_sha: 6d514ce39
-pinned_date: 2026-11-19
-version_at_pin: "server-v3.7.6-44-g6d514ce39 (nearest tag)"
+pinned_sha: 58fbd837c
+pinned_date: 2026-11-22
+version_at_pin: "server-v3.7.6-57-g58fbd837c (nearest tag)"
 license: Open core — AGPL-3.0-or-later for the apps and libraries; packages/server under the Joplin Server Personal Use License
 maintainer: Laurent Cozic (laurent22) and the Joplin contributors; trademark held by JOPLIN SAS
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/joplin
 profile_kind: Offline-first Markdown notes app — SQLite locally, file-per-item sync with optional E2EE, plugin API, REST Data API, and a built-in MCP server
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -50,7 +50,7 @@ from_path: "context-v/profiles/Profile__Joplin.md"
 ---
 # Joplin — Profile
 
-A profile of Joplin as it lives in this study (`studies/content-authoring-tools/joplin`, pinned at `6d514ce39`, nearest tag `server-v3.7.6`, 2026-11-19). TypeScript monorepo: desktop (Electron), mobile (React Native), CLI, web clipper, and Joplin Server.
+A profile of Joplin as it lives in this study (`studies/content-authoring-tools/joplin`, pinned at `58fbd837cac2`, nearest tag `server-v3.7.6`, 2026-11-22). TypeScript monorepo: desktop (Electron), mobile (React Native), CLI, web clipper, and Joplin Server.
 
 This is the study's **encrypted-sync-but-readable-locally** entry, and the counterweight to [[Profile__Notesnook]]. Both encrypt end to end; only Joplin leaves the local store in plaintext, which is what makes its agent surface possible.
 
@@ -138,6 +138,14 @@ Yes: an agent can both read and write the human's store, through a surface Jopli
 - **Encryption is not clearance; note the envelope.** Joplin's `keepKeys` shows that even good E2EE publishes the *shape* of the content (tree, timestamps, sharing). Flave's v1 leak scan should treat headings, block ids, and file names in a public artifact as content, not metadata.
 - **Copy `mustConfirmPlaintextUploads`'s posture for publishing.** A downgrade (here encrypted→plaintext, in flave `team`→`public`) needs an explicit confirmation or setting, never an implicit default.
 - **Avoid the SQLite-as-truth store.** Joplin needs a Data API and an MCP server *because* the notes aren't files. Flave's "the directory is the working format" gets that reach for free.
+
+## Changes since the previous pin (2026-11-19 → 2026-11-22)
+
+Old pin `6d514ce3904a`, new pin `58fbd837cac2`: 13 commits, no release tags in range (`server-v3.7.6` is still the nearest tag; the desktop changelog in `readme/about/changelog/desktop.md` gained pre-release entries). The MCP design, the serialization format, and the E2EE envelope described above are unchanged. Small changes that touch the agent surface:
+
+- **Better ranking for multi-word searches.** The search engine now weights how many query terms hit the title and marks notes that contain the whole phrase (`packages/lib/services/search/SearchEngine.ts`, `ftsPhraseRegex.ts`). The MCP `search_notes` tool calls `SearchEngine` (`packages/lib/services/ai/tools/global/searchNotes.ts`), so agent searches get the same ranking.
+- **Embedding indexer waits 30 s after startup** before its first tick and switches back to the fast cadence whenever a batch is full, for example after a large import (`packages/lib/services/ai/EmbeddingIndexer.ts`). The spec still says the first tick fires at startup (`readme/dev/spec/ai_embeddings.md:41`), so the spec now lags the code.
+- **Server:** an `API_EMAIL_LOGIN_ENABLED` option can force apps to use the browser login, and users are nudged to enable MFA (`packages/server/src/env.ts`, `packages/server/src/routes/api/sessions.ts`).
 
 ## Read next
 

@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/deepnote
 profile_kind: Open-sourced notebook format, converter, CLI, MCP server, and local runner (TypeScript pnpm monorepo) for a commercial cloud notebook
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -151,6 +151,10 @@ And the format itself has an **`agent` block**: a prompt instead of code; when r
 - **Model `sql` fences on Deepnote's SQL block, in fence form.** Plain SQL body, connection by reference (flave: a `data/` path or DuckDB), a required result name, and dependencies from references. flave's ` ```sql name=arr_by_segment ` already has the right parts.
 - **Expose fences to agents as operations, not just text.** Deepnote's `add_block` / `edit_block` / `reorder_blocks` / `run` MCP tools are a ready vocabulary for flave's "one operation set with four callers."
 - **Do not copy the file shape.** flave's promise is that the document is LFM; Deepnote's YAML record is what you get when the format serves the app first.
+
+## Changes since the previous pin (2026-11-19 → 2026-11-19)
+
+No change: the pin is still `10992a61d3b3` (two commits past `@deepnote/cli@0.13.0`), the latest commit on upstream `main` as of 2026-11-23, so every citation above stands.
 
 ## Read next
 

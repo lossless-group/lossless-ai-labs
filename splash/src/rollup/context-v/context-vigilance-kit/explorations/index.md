@@ -7,3 +7,4 @@ from_path: "context-v/explorations/index.md"
 
 * [Context-V as a Claude Code Plugin](Context-V-as-a-Claude-Code-Plugin.md) - Making context-v conventions checkable with commands, hooks, and a status index, not just remembered.
 * [Context-V as a Portable Plugin Any Agent Can Install](Context-V-as-a-Portable-Plugin-Any-Agent-Can-Install.md) - How the kit installs into any coding agent, with Claude Code first: the design and its decisions log.
+* [Memory for Context-V, and the Hindsight Question](Memory-for-Context-V-and-the-Hindsight-Question.md) - Should the kit add an agent-memory layer, and is Hindsight the one to recommend?

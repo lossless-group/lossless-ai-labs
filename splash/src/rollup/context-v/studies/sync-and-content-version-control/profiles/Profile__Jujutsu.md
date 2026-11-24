@@ -3,18 +3,18 @@ name: Jujutsu Profile
 title: Jujutsu (`jj`) — Profile
 slug: jujutsu
 upstream: https://github.com/jj-vcs/jj
-pinned_sha: 9d905d5432869c7aa9539e6e5c7fece5842bed37
-pinned_date: 2026-08-21
-version_at_pin: 0.44.0
+pinned_sha: 8f7518a2e0ddd4e0ec90c77e8925f3951e3b4fcf
+pinned_date: 2026-11-23
+version_at_pin: 0.47.1
 license: Apache-2.0
 maintainer: jj-vcs org — originated at Google (Martin von Zweigbergk), now community-governed (GOVERNANCE.md)
 study: studies/sync-and-content-version-control
 profile_path: studies/sync-and-content-version-control/jj
 profile_kind: Version control system (Rust library + CLI)
 date_created: 2026-08-22
-date_modified: 2026-08-22
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-08-22
-date_authored_current_draft: 2026-08-22
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -24,13 +24,14 @@ status: Reference
 site_uuid: db950edb-0c90-4a69-a977-59f93ee0d3fe
 hex_code: nyrny9
 lede: >-
-  The storage layer is five pluggable backends, not one — and only two of the
-  five have a shipped implementation you could put in a bucket.
+  The storage layer is six pluggable stores, not one (five at the first pin;
+  v0.46 added a workspace store), and only two of them have a shipped
+  implementation you could put in a bucket.
 summary: >-
   Profile of Jujutsu as pinned in the sync-and-content-version-control study.
   Establishes the study's "history in the VCS" data point and settles the
   feasibility question flave's spec 8.2 depends on. Covers the Backend trait
-  and why it is explicitly cloud-shaped, the five separate store factories a
+  and why it is explicitly cloud-shaped, the six separate store factories a
   real remote backend would have to implement (not one), SimpleBackend as an
   acknowledged proof of concept, and the finding that most affects the Lossless
   decision: a colocated repo's git half is interchangeable but the operation
@@ -49,7 +50,7 @@ from_path: "context-v/profiles/Profile__Jujutsu.md"
 ---
 # Jujutsu (`jj`) — Profile
 
-A profile of Jujutsu as it lives in this study (`studies/sync-and-content-version-control/jj`, pinned at `9d905d5` / v0.44.0 / 2026-08-21). Every claim cites a pinned path so you can read the source rather than trust the paraphrase.
+A profile of Jujutsu as it lives in this study (`studies/sync-and-content-version-control/jj`, first written at `9d905d5` / v0.44.0 / 2026-08-21, citations re-checked at `8f7518a2e0dd` / past v0.47.1 / 2026-11-23). Every claim cites a pinned path so you can read the source rather than trust the paraphrase.
 
 This is the study's **history-lives-in-the-VCS** entry, and it is here for one specific reason: `flave-ai/context-v/specs/Master-Flave-An-Agent-Native-Document-Format-and-Publisher.md` §8.2 resolved on 2026-08-14 that **every `.flave` bundle is a `jj` repo**, driven by an agent under the hood. That decision rests on two load-bearing claims — *"git compatibility is retained, not sacrificed"* and *"the operation log with `jj undo` … is the single strongest argument for `jj` here."* This profile tests both against source.
 
@@ -57,21 +58,22 @@ This is the study's **history-lives-in-the-VCS** entry, and it is here for one s
 
 `jj` is a Git-compatible VCS whose distinguishing move is that **the working copy *is* a commit**, auto-snapshotted on every command — there is no staging area and no "did I forget to commit." On top of that sits an **operation log**: a second, higher-level history of *repository operations*, which is what makes `jj undo` able to reverse "the agent restructured six blocks and moved a chart" as one gesture.
 
-Storage is deliberately abstracted. The architecture doc states the design principle outright (`docs/technical/architecture.md:29-38`):
+Storage is deliberately abstracted. The architecture doc states the design principle outright (`docs/technical/architecture.md:29-32`):
 
 > One overarching principle in the design is that it should be easy to change where data is stored. The goal was to be able to put storage on local-disk by default **but also be able to move storage to the cloud** at Google (and for anyone).
 
 That principle is real in the trait design and **unimplemented in the shipped code**. Two things follow, and they pull in opposite directions for anyone hoping to marry `jj` to blob storage.
 
-**One sentence:** *Jujutsu is a Git-compatible VCS with an operation-log undo model and a genuinely storage-agnostic five-backend architecture, of which exactly one backend (Git) is production-grade and none targets object storage.*
+**One sentence:** *Jujutsu is a Git-compatible VCS with an operation-log undo model and a genuinely storage-agnostic six-store architecture, of which exactly one backend (Git) is production-grade and none targets object storage.*
 
-## Where history lives — and it is five places, not one
+## Where history lives — and it is six places, not one
 
-The single most useful correction this profile makes to the casual reading: **`jj` does not have "a backend."** `StoreFactories` (`lib/src/repo.rs:434-440`) registers **five independent factory kinds**:
+The single most useful correction this profile makes to the casual reading: **`jj` does not have "a backend."** `StoreFactories` (`lib/src/store_factories.rs:122-129`) registers **six independent factory kinds** (five at the first pin; `workspace_store` joined in the v0.46 cycle):
 
 ```rust
 pub struct StoreFactories {
     backend_factories: HashMap<String, BackendFactory>,              // commits, trees, files
+    workspace_store_factories: HashMap<String, WorkspaceStoreFactory>, // workspace names and paths
     op_store_factories: HashMap<String, OpStoreFactory>,             // the operation log
     op_heads_store_factories: HashMap<String, OpHeadsStoreFactory>,  // heads of that log
     index_store_factories: HashMap<String, IndexStoreFactory>,       // the commit index
@@ -79,29 +81,29 @@ pub struct StoreFactories {
 }
 ```
 
-Each is selected by a type file on disk — `.jj/repo/store/type`, `.jj/repo/index/type`, `.jj/repo/op_store/type`, `.jj/repo/op_heads/type` (`docs/technical/architecture.md:41-44`) — and each resolves to a directory under `.jj/repo/` (`lib/src/repo.rs:221-255`). The working copy is a sixth store, at `.jj/working_copy/` (`lib/src/workspace.rs:139`), holding `tree_state` and `checkout` (`lib/src/local_working_copy.rs:1110`, `:2574`).
+Each is selected by a type file on disk — `.jj/repo/store/type`, `.jj/repo/index/type`, `.jj/repo/op_store/type`, `.jj/repo/op_heads/type` (`docs/technical/architecture.md:41-44`) — and each resolves to a directory under `.jj/repo/` (`StoreFactories::load_repo`, `lib/src/store_factories.rs:342-364`; this logic moved out of `repo.rs` after the first pin). The working copy is a seventh store, at `.jj/working_copy/` (`lib/src/workspace.rs:165`), holding `tree_state` and `checkout` (`lib/src/local_working_copy.rs:1164`, `:2756`).
 
-**Consequence for "put `jj` on R2":** implementing `Backend` gets you commits, trees, and file blobs in the bucket. The operation log — the feature §8.2 calls the strongest argument for `jj` — is `OpStore`, a *different* trait, and would need its own implementation, as would `OpHeadsStore` and `IndexStore`. "Write a jj backend" is four backends.
+**Consequence for "put `jj` on R2":** implementing `Backend` gets you commits, trees, and file blobs in the bucket. The operation log — the feature §8.2 calls the strongest argument for `jj` — is `OpStore`, a *different* trait, and would need its own implementation, as would `OpHeadsStore`, `IndexStore`, and now `WorkspaceStore`. "Write a jj backend" is at least four backends.
 
 ### The `Backend` trait is explicitly cloud-shaped
 
-Credit where due: this is not a local-only interface retrofitted with async. `pub trait Backend` (`lib/src/backend.rs:728`) is `#[async_trait]` throughout, `read_file` returns a streaming `Pin<Box<dyn AsyncRead + Send>>` rather than a `Vec<u8>` (`lib/src/backend.rs:764-769`), and `concurrency()` documents the remote case in as many words (`lib/src/backend.rs:751-761`):
+Credit where due: this is not a local-only interface retrofitted with async. `pub trait Backend` (`core/src/backend.rs:794`, in the `jj-core` crate since v0.45) is `#[async_trait]` throughout, `read_file` returns a streaming `Pin<Box<dyn AsyncRead + Send>>` rather than a `Vec<u8>` (`core/src/backend.rs:830-834`), and `concurrency()` documents the remote case in as many words (`core/src/backend.rs:818-827`):
 
 > An estimate of how many concurrent requests this backend handles well. A local backend like the Git backend … may want to set this to 1. **A cloud-backed backend may want to set it to 100 or so.**
 
-`get_copy_records` returns a `BoxStream` and the doc says why: *"Streaming by design to better support large backends which may have very large single-file histories"* (`lib/src/backend.rs:847-853`). The door is deliberately open. Nobody has walked through it in-tree.
+`get_copy_records` returns a `BoxStream` and the doc says why: *"Streaming by design to better support large backends which may have very large single-file histories"* (`core/src/backend.rs:924-933`). The trait also regained an async `gc(heads, keep_newer)` method (`core/src/backend.rs:940`), which a remote backend would have to implement too. The door is deliberately open. Nobody has walked through it in-tree.
 
 ### What actually ships
 
-`default_backend_factories()` (`lib/src/default_backend_factories.rs:31-56`) registers exactly three, one of which is test-only:
+`default_backend_factories()` (`lib/src/default_backend_factories.rs:43-108`) registers exactly three commit backends, one of which is test-only:
 
 | Backend | Status | Storage |
 |---|---|---|
-| `GitBackend` | Production, feature-gated on `git` | A real Git object database, via [gitoxide](https://github.com/GitoxideLabs/gitoxide) |
-| `SimpleBackend` | **"just a proof of concept"** (`docs/technical/architecture.md:92-95`) | One file per object, Blake2b-512 hashes |
+| `GitBackend` | Production, feature-gated on `git`; its own crate `jj-git-backend` (`git-backend/`) since v0.45 | A real Git object database, via [gitoxide](https://github.com/GitoxideLabs/gitoxide) |
+| `SimpleBackend` | **"just a proof of concept"** (`docs/technical/architecture.md:94`); now in the `jj-simple-stores` crate | One file per object, Blake2b-512 hashes |
 | `SecretBackend` | `#[cfg(feature = "testing")]` | Test fixture |
 
-`SimpleBackend` is the closest thing to a content-addressed store you could naively map onto a bucket — `init` creates five flat directories, `commits/`, `trees/`, `files/`, `symlinks/`, `conflicts/`, and writes one file per hash (`lib/src/simple_backend.rs:107-112`, `:137-149`), with 64-byte commit IDs (`:71`). That shape is a near-exact match for `objects/<ab>/<sha256>` in corpora-builder's HISTORY layout. But it is a proof of concept by the maintainers' own label, and it is **not** what a colocated repo uses.
+`SimpleBackend` is the closest thing to a content-addressed store you could naively map onto a bucket — `init` creates five flat directories, `commits/`, `trees/`, `files/`, `symlinks/`, `conflicts/`, and writes one file per hash (`simple-stores/src/simple_backend.rs:107-112`, `:137-151`), with 64-byte commit IDs (`:69`). That shape is a near-exact match for `objects/<ab>/<sha256>` in corpora-builder's HISTORY layout. But it is a proof of concept by the maintainers' own label, and it is **not** what a colocated repo uses.
 
 **There is no S3/R2 backend in the open-source tree.** Google's cloud-backed deployment (Piper/CitC-shaped) is the motivating use case named in the architecture doc; it is not code you can read here.
 
@@ -111,11 +113,11 @@ Credit where due: this is not a local-only interface retrofitted with async. `pu
 
 > `jj` uses a git-compatible backend and colocates (`jj git init --colocate`), so … any user or CI system that only speaks git sees a normal git repo. **`jj` is our interface to history; git remains the interchange format.**
 
-That is true, and **it is only half the repository.** The `GitBackend` cannot store everything `jj`'s model carries, so it keeps the remainder outside git (`docs/technical/architecture.md:76-86`):
+That is true, and **it is only half the repository.** The `GitBackend` cannot store everything `jj`'s model carries, so it keeps the remainder outside git (`docs/technical/architecture.md:81-87`):
 
 > Commit data that is available in Jujutsu's model but not in Git's model is stored in a `StackedTable` in **`.jj/repo/store/extra/`**. That is currently the **change ID** and the **list of predecessors**. For commits that don't have any data in that table, which is any commit created by `git`, we use an empty list as predecessors, and **the bit-reversed commit ID as change ID**.
 
-Confirmed in code: `store_path.join("extra")` and the `extra_metadata_store: TableStore` field (`lib/src/git_backend.rs:293`, `:179`). Separately, `jj` writes `refs/jj/keep/` refs so Git GC does not collect commits still reachable from the operation log (`lib/src/git_backend.rs:99`).
+Confirmed in code: `store_path.join("extra")` and the `extra_metadata_store: TableStore` field (`git-backend/src/git_backend.rs:300`, `:194`). Separately, `jj` writes `refs/jj/keep/` refs so Git GC does not collect commits still reachable from the operation log (`git-backend/src/git_backend.rs:94`).
 
 So a colocated `.flave` bundle has two halves with different portability:
 
@@ -161,7 +163,7 @@ Guardrail: `ai-labs/context-v/reminders/Never-Run-JJ-In-A-Git-LFS-Repo.md`.
 
 ### And `.jj/` is the thing you must not blind-sync
 
-The working copy takes a real file lock — `working_copy.lock` via `FileLock::lock` (`lib/src/local_working_copy.rs:2645`, `lib/src/lock/unix.rs:32`) — and `workspace_store` locks with a sibling `.lock` file (`lib/src/workspace_store.rs:112`). The operation log is an append-only DAG whose heads are separate mutable state (`lib/src/op_store.rs:359`, `Operation { view_id, parents, metadata, … }`).
+The working copy takes a real file lock — `working_copy.lock` via `FileLock::lock` (`lib/src/local_working_copy.rs:2828-2829`, `local-util/src/lock/unix.rs:32`) — and the workspace store locks with a sibling `.lock` file (`lib/src/simple_workspace_store.rs:81-82`, `:120-121`). The operation log is an append-only DAG whose heads are separate mutable state (`core/src/op_store.rs:295`, `Operation { view_id, parents, metadata, … }`).
 
 That is a live database with lock files, which is precisely the shape the 2026-07-08 exploration warned about:
 
@@ -171,20 +173,20 @@ That is a live database with lock files, which is precisely the shape the 2026-0
 
 ## Conflict semantics — the genuinely differentiated part
 
-`jj` records conflicts as **first-class values in the tree** rather than as a blocked operation. A merge never hard-fails; the resulting commit *contains* conflicts, which are represented (`lib/src/conflicts.rs`, `lib/src/merge.rs`, `lib/src/conflict_labels.rs`) and resolvable later. §8.4 leans on this correctly — *"the only tolerable behavior for a non-developer receiving a colleague's edits."*
+`jj` records conflicts as **first-class values in the tree** rather than as a blocked operation. A merge never hard-fails; the resulting commit *contains* conflicts, which are represented (`core/src/conflicts.rs`, `core/src/merge.rs`, `core/src/conflict_labels.rs`) and resolvable later. §8.4 leans on this correctly — *"the only tolerable behavior for a non-developer receiving a colleague's edits."*
 
 Measured against this study's checklist, that is a real advantage over every file-sync entry, all of which resolve conflicts by **renaming and keeping both** and thereby handing a non-technical person two files and no guidance. It is worth being precise about what it buys, though: `jj` makes the conflict *representable and non-blocking*. It does not make it *understood*. Someone still has to resolve it, and for prose the resolution UI is entirely on the application.
 
 ## Operational story
 
-Single static binary, no daemon, no server. Optional Watchman integration for large working copies — and note that Watchman is the **only** non-test fsmonitor (`lib/src/fsmonitor.rs:39-49`), so "watch the filesystem" means "install Watchman," not "we ship a watcher." For a `.flave` bundle (small, single-author) this is irrelevant; for a 517-file / 156MB client corpus it is a real dependency question.
+Single static binary, no daemon, no server. Optional Watchman integration for large working copies — and note that Watchman is the **only** non-test fsmonitor (`lib/src/fsmonitor.rs:39-54`), so "watch the filesystem" means "install Watchman," not "we ship a watcher." For a `.flave` bundle (small, single-author) this is irrelevant; for a 517-file / 156MB client corpus it is a real dependency question.
 
 ## How it scores against the study checklist
 
 | Checklist item | jj |
 |---|---|
 | **Unit of sync** | The repository. Nesting is submodules — a `SubmoduleStore` factory exists but `DefaultSubmoduleStore` is minimal |
-| **Where history lives** | In the VCS, split across five stores |
+| **Where history lives** | In the VCS, split across six stores |
 | **Content addressing** | Yes, whole-object. Git backend: SHA-1/SHA-256 per git. SimpleBackend: Blake2b-512 |
 | **Blob-storage story** | **Trait-ready, implementation-absent.** Four traits to write, in Rust, against a fast-moving upstream |
 | **Large binaries** | **Git LFS unsupported.** In an LFS repo jj commits the real bytes over the pointers, silently |
@@ -196,10 +198,24 @@ Single static binary, no daemon, no server. Optional Watchman integration for la
 
 ## Read next
 
-- `lib/src/backend.rs:728-880` — the whole `Backend` trait in one sitting; note every `async` and every stream return
-- `lib/src/default_backend_factories.rs:31-56` — the shortest possible proof of what actually ships
+- `core/src/backend.rs:794-941` — the whole `Backend` trait in one sitting; note every `async` and every stream return
+- `lib/src/default_backend_factories.rs:43-108` — the shortest possible proof of what actually ships
 - `docs/technical/architecture.md:29-98` — the storage-independence principle, then `GitBackend`'s extra-metadata section, back to back
-- `lib/src/simple_backend.rs:107-149` — the object layout that most resembles corpora-builder's `objects/<ab>/<sha256>`
+- `simple-stores/src/simple_backend.rs:107-151` — the object layout that most resembles corpora-builder's `objects/<ab>/<sha256>`
+
+## Changes since the previous pin (2026-08-21 → 2026-11-23)
+
+`9d905d543286` → `8f7518a2e0dd`, 723 commits on `main`. Releases in range: v0.45.0 (2026-09-02), v0.45.1, v0.46.0 (2026-10-07), v0.47.0 and v0.47.1 (both 2026-11-04). The new pin sits past v0.47.1 on unreleased work. License is still Apache-2.0; repo and org unchanged.
+
+What matters for this profile:
+
+- **The library was split into crates.** The traits this profile reads now live in `jj-core` (`core/src/backend.rs`, `core/src/op_store.rs`, `core/src/conflicts.rs`, `core/src/merge.rs`, `core/src/workspace_store.rs`). `GitBackend` moved to `jj-git-backend` (`git-backend/src/git_backend.rs`), `SimpleBackend` and the simple op stores to `jj-simple-stores` (`simple-stores/src/`), the default index to `jj-default-index`, and file locks to `jj-local-util` (`local-util/src/lock/`). `jj-lib` (`lib/`) now mostly wires them together. All path citations above were re-located; the claims they support did not change. The split makes an out-of-tree backend easier to write, since it can depend on `jj-core` alone, but no object-storage backend was added.
+- **A sixth store kind.** `StoreFactories` gained `workspace_store_factories` (`lib/src/store_factories.rs:124`, introduced 2026-09-08, first released in v0.46.0), loaded from `.jj/repo/workspace_store/` (`:354`). Repo loading moved from `repo.rs` to `StoreFactories::load_repo()` (`lib/src/store_factories.rs:342`). A remote-storage design now has one more piece of `.jj/` state to carry.
+- **`Backend::gc()` is back and async** (`core/src/backend.rs:940`), used by `jj util gc`.
+- **Colocated workspaces via Git worktrees (v0.46.0).** `jj workspace add --colocate` creates a Git worktree for extra workspaces; `jj undo`/`jj redo` now refuse to undo an operation from another workspace without `--allow-cross-workspace` (`CHANGELOG.md`, 0.46.0). The op log remains in `.jj/`, so the "git half is portable, undo is not" finding stands.
+- **Colocation race fixes (v0.47.0).** Concurrent `jj git fetch` could import partially fetched refs, and concurrent Git index writes could be lost; both are fixed (`CHANGELOG.md`, 0.47.0, #7349). This matters to anyone driving jj from an agent alongside git.
+- **`jj converge` (v0.45.0)** resolves divergent commits automatically and has a non-interactive mode. `jj resolve` gained a built-in `:editor` tool that handles conflicts with more than two sides (0.47.0).
+- **Unchanged:** Git LFS is still "No" (`docs/git-compatibility.md:72`), and the Rust source has no `lfs` or `smudge` handling outside one CLI test. "Better support for large files" is still roadmap work (`docs/roadmap.md:78`). `docs/technical/architecture.md` did not change.
 
 ## Related
 

@@ -3,18 +3,18 @@ name: Logseq Profile
 title: Logseq — Profile
 slug: logseq
 upstream: https://github.com/logseq/logseq
-pinned_sha: 4f754fccee
-pinned_date: 2026-11-19
-version_at_pin: "nightly-37-g4f754fccee (nearest tag: nightly)"
+pinned_sha: c4e4711d70
+pinned_date: 2026-11-23
+version_at_pin: "nightly-3-gc4e4711d70 (nearest tag: nightly)"
 license: AGPL-3.0
 maintainer: The Logseq team (logseq org)
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/logseq
 profile_kind: Block outliner — ClojureScript app over a DataScript graph persisted to SQLite
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -49,7 +49,7 @@ from_path: "context-v/profiles/Profile__Logseq.md"
 ---
 # Logseq — Profile
 
-A profile of Logseq as it lives in this study (`studies/content-authoring-tools/logseq`, pinned at `4f754fccee`, 2026-11-19, `nightly` channel). AGPL-3.0, ClojureScript (shadow-cljs), React via Rum, DataScript, Electron desktop plus Capacitor mobile.
+A profile of Logseq as it lives in this study (`studies/content-authoring-tools/logseq`, pinned at `c4e4711d700a`, 2026-11-23, `nightly` channel). AGPL-3.0, ClojureScript (shadow-cljs), React via Rum, DataScript, Electron desktop plus Capacitor mobile.
 
 The study README pinned Logseq to ask *"how does a block-first model serialize to plain files, and what happens as the project moves toward a database-backed version?"* The pinned source answers the second half definitively: the move already happened.
 
@@ -118,6 +118,14 @@ Read: yes, several ways. Write: yes, but **never through the files**.
 - **Borrow `dry-run` on every agent write path** — the planned-ops response is a natural preview for flave's "four callers, one operation set".
 - **Borrow the `*` vs `-` split** for properties vs blocks if flave ever needs block-level metadata in prose; it is unambiguous to parse.
 - **Note `logseq skill install`**: a tool that ships the agent skill for itself is a cheap, high-leverage habit flave could copy.
+
+## Changes since the previous pin (2026-11-19 → 2026-11-23)
+
+Old pin `4f754fccee54`, new pin `c4e4711d700a`: 29 commits, no versioned release in range (the rolling `nightly` tag moved; `2.0.2` is the last numbered tag). None of the files this profile cites changed: the Markdown Mirror ADR, the MCP server, the HTTP API, the CLI, and AgentBridge are as described. The DB-as-truth thesis stands. What moved:
+
+- **Sync assets got larger and more direct.** The asset limit is now 200 MiB (`deps/common/src/logseq/common/config.cljs`), and sync clients negotiate uploads: bodies over 100 MiB get a presigned R2 PUT followed by a `complete` call (`deps/db-sync/README.md`, `deps/db-sync/worker/r2_asset_upload.mjs`, `deps/db-sync/src/logseq/db_sync/worker/handler/assets.cljs`).
+- **Search ranking for page titles.** Prefix matches on page titles are kept and unique prefix candidates rank higher (`src/main/frontend/worker/search.cljs`). This is the worker search that the API and MCP read paths sit on.
+- Outliner and editor fixes (outdenting multi-level selections, converting a page to a block re-points descendants, selected-block EDN export keeps sibling order in `deps/db/src/logseq/db/sqlite/export.cljs`), plus `file:` links opening correctly in Electron.
 
 ## Read next
 

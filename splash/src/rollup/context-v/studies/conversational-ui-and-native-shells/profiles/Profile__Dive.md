@@ -10,11 +10,11 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/dive
 profile_kind: Dual-shell (Tauri + Electron) MCP Host desktop app, React + Jotai frontend, Python MCP host subprocess
 date_created: 2026-07-13
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 62991315-6e2d-49a4-9ba7-3ddbcd995b17
 hex_code: 0qs4ix
 date_authored_initial_draft: 2026-07-13
-date_authored_current_draft: 2026-07-13
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 lede: >-
@@ -128,6 +128,15 @@ If you read three files: `src-tauri/src/host.rs` alongside `electron/main/servic
 | **Best fit** | Local-first, credential-private multi-provider chat client, backend as trust boundary | Reference for "shell as thin process supervisor around a language-agnostic agent backend," and for realistic dual-shell migration cost/timeline | (see `Profile__AnythingLLM.md`) |
 
 Dive's load-bearing contribution to this study is **evidence that a dual Tauri/Electron shell strategy is tractable specifically because the agent/MCP logic was pushed out of both shells entirely** — into a separately-versioned Python subprocess reached over plain HTTP — and **honest, dated evidence of how migrations actually go**: incremental, platform-by-platform, with at least one explicit revert (macOS) that has stayed reverted for the better part of a year.
+
+## Changes since the previous pin (2026-03-24 → 2026-07-31)
+
+Old pin `4010d87686b9`, new pin `5fb62b91b55c`: 6 commits including merges. One release in range, `v0.14.3` (`package.json` and `src-tauri/Cargo.toml` bumped from 0.14.2). The upstream has been quiet since 2026-07-31. The shell-as-supervisor architecture, the `mcp-host/` submodule, the config files, and the per-tool toggle model are unchanged, and the cited paths still exist.
+
+- **The built-in file tool now matches its allow-list by path component.** `is_path_allowed` in `packages/dive-mcp/src/service/fs.rs` used to do a string `starts_with`, so approving `/home/user/docs` also approved `/home/user/docs_backup`. It now uses `Path::starts_with`, rejects relative or `..`-bearing paths, and ignores empty allow-list entries. A new `lexical_normalize` resolves `.` and `..` for paths that do not exist yet.
+- **Rendered markdown is sanitized.** `src/views/Chat/Message.tsx` now runs `rehype-sanitize` after `rehype-raw`, with the schema in `src/helper/messageSanitizeSchema.ts`. It keeps the app's own render tags (`tool-call`, `system-tool-call`, `think`, `chat-error`) and KaTeX output, and strips scripts, iframes, and `on*` handlers from assistant messages and marketplace server descriptions (`src/views/Overlay/Tools/Popup/OAPServerList.tsx`).
+
+No commit in range touches the macOS Tauri build, so the README still lists macOS as Electron-only.
 
 ## One-line summary
 

@@ -3,18 +3,18 @@ name: Evidence Profile
 title: Evidence — Profile
 slug: evidence
 upstream: https://github.com/evidence-dev/evidence
-pinned_sha: b0aa37512
-pinned_date: 2026-11-19
-version_at_pin: "@evidence-dev/bigquery@2.0.12-184-gb0aa37512 (nearest tag is a legacy-era package tag from 2026-02-06; `cli/` and `core/` package.json read 0.0.1)"
+pinned_sha: 5e44dad26
+pinned_date: 2026-11-22
+version_at_pin: "@evidence-dev/bigquery@2.0.12-189-g5e44dad26 (nearest tag is a legacy-era package tag from 2026-02-06; `cli/` and `core/` package.json read 0.0.1)"
 license: MIT
 maintainer: Evidence (evidence-dev); this repo is a read-only mirror of a larger private repo
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/evidence
 profile_kind: Markdown + SQL report format, Bun CLI and SvelteKit renderer, fronting the Evidence Studio SaaS
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -52,7 +52,7 @@ from_path: "context-v/profiles/Profile__Evidence.md"
 ---
 # Evidence — Profile
 
-A profile of Evidence as it lives in this study (`studies/content-authoring-tools/evidence`, pinned at `b0aa37512`, 2026-11-19). MIT (`LICENSE`: "Copyright (c) 2026 Evidence"). TypeScript/Svelte, with a Bun-built CLI.
+A profile of Evidence as it lives in this study (`studies/content-authoring-tools/evidence`, pinned at `5e44dad26a4d`, 2026-11-22). MIT (`LICENSE`: "Copyright (c) 2026 Evidence"). TypeScript/Svelte, with a Bun-built CLI.
 
 This is the study's **Markdown-as-BI-report** entry. Read the pinned tree as a **new product**, not as the Evidence you may remember. `AGENTS.md:7` says "This is a read-only projection of a larger repo", and `docs/migration-guide.mdx:6` draws the line itself: *"Legacy Evidence is a static website generator: Markdown and DuckDB SQL which queries data you package up in a build step. Evidence Studio has a live connection to a database, and an updated set of components that can generate SQL."*
 
@@ -129,6 +129,14 @@ A real fixture page (`cli/test-environment/pages/order-analysis.md`) shows input
 - **Typed attributes are the missing half of trigger-packs.** A trigger-pack is "a Svelte component plus one line of registration". Evidence's `attributes:` frontmatter (typed, `required`, `default`, `options`, `preview:` fixture) is a declarative schema a pack could carry alongside its component. It gives agents validation and autocomplete without an inverse serializer. Compare MyST's `DirectiveSpec` in [[Profile__mystmd]].
 - **Aggregate-expression attributes (`y="sum(sales)"`)** are a good model for flave Figures (§7.6): a figure that names a dataset and an expression, not a full query.
 - **`validate --json` and `lineage --json` are the agent loop flave needs**: write, check, see what depends on it. `agent/skills/*/SKILL.md` inside the project is a direct precedent for shipping a document's own agent instructions inside the `.flave` bundle.
+
+## Changes since the previous pin (2026-11-19 → 2026-11-22)
+
+Old pin `b0aa37512924`, new pin `5e44dad26a4d`: 5 commits, no tags in range (this mirror has no release tags for Studio). The Markdown authoring surface, named fences, component-generated SQL, CLI and agent folders described above are unchanged. Small changes worth knowing:
+
+- **Filter state can be quoted in prose.** `table_filter` gains `.literal` (active values as comma-separated text) and `.summary` (an English clause such as *"Region is West or East and Order Total is between 100 and 500"*), usable as `{{orders.summary | all records match}}` in page text (`core/src/user-components/tags/table_filter/schema.ts:133-150`, `docs/components/table_filter.mdx`). Prose that describes its own filters is a pattern a generated report can use.
+- **Inline SQL is checked by planning, not running.** The editor's inline-query validation now asks the query engine for a plan instead of executing the query (`core/src/metadata/inline-query-metadata.svelte.ts`, `core/src/user-components/interfaces/query-service.ts`). This is the in-editor counterpart of `evidence validate`.
+- Excel exports now keep table formatting (ExcelJS replaced by `hucre`, `core/src/shims/excel/`), and the toolchain moved to Node 24 (`AGENTS.md`).
 
 ## Read next
 

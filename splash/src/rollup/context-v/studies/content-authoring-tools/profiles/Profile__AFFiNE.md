@@ -3,18 +3,18 @@ name: AFFiNE Profile
 title: AFFiNE — Profile
 slug: affine
 upstream: https://github.com/toeverything/AFFiNE
-pinned_sha: dc2b221244
-pinned_date: 2026-11-17
-version_at_pin: "v2026.11.18-canary.905"
+pinned_sha: 8e549b05d2
+pinned_date: 2026-11-23
+version_at_pin: "v2026.11.22-canary.1003"
 license: Open core — MIT for the client and everything outside packages/backend and packages/common/native; those two are under the AFFiNE Enterprise Edition (EE) license
 maintainer: toeverything (TOEVERYTHING PTE. LTD.) and contributors
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/affine
 profile_kind: Docs + whiteboard + database app on BlockSuite, Yjs-family CRDT store (y-octo in Rust), Electron desktop + NestJS server
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -52,7 +52,7 @@ from_path: "context-v/profiles/Profile__AFFiNE.md"
 ---
 # AFFiNE — Profile
 
-A profile of AFFiNE as it lives in this study (`studies/content-authoring-tools/affine`, pinned at `dc2b221244`, 2026-11-17, tag `v2026.11.18-canary.905`). A TypeScript monorepo (BlockSuite editor framework vendored under `blocksuite/`) with Rust native modules, an Electron desktop, and a NestJS + Prisma server.
+A profile of AFFiNE as it lives in this study (`studies/content-authoring-tools/affine`, pinned at `8e549b05d2c6`, 2026-11-23, nearest tag `v2026.11.22-canary.1003`). A TypeScript monorepo (BlockSuite editor framework vendored under `blocksuite/`) with Rust native modules, an Electron desktop, and a NestJS + Prisma server.
 
 The license is split by directory: *"All content that resides under the `packages/backend` and `packages/common/native` directory … is licensed under … `packages/backend/server/LICENSE`"* — the EE license, production use only under the AFFiNE Subscription Terms — and everything else is MIT (`LICENSE:3-7`, `packages/backend/server/LICENSE:1-10`).
 
@@ -93,14 +93,14 @@ A non-AFFiNE program can open the file but gets Yjs binary per doc. Decoded, a b
 ## Agent reach
 
 - **Files — only with Disk Markdown Sync, and only on canary.** The flag `enable_disk_sync` (*"Sync workspace pages with Markdown files in a local folder"*) is configurable only on Electron canary builds and defaults off (`packages/frontend/core/src/modules/feature-flag/constant.ts:299-305`). When on, an agent can edit the `.md` files.
-- **MCP (server).** `/api/workspaces/:workspaceId/mcp` (`plugins/copilot/mcp/controller.ts:51`) serves `read_document`, `doc_search`, `create_document`, `update_document`, `update_document_meta` (`provider.ts:114-323`). Access tokens default to `READ_ONLY`; write tools appear only for `READ_WRITE` (`provider.ts:109`, `:206`). `update_document` takes a full Markdown body and *"uses structural diffing to apply minimal changes, preserving document history and enabling real-time collaboration"*; it does not yet handle database or image blocks (`provider.ts:271-275`).
+- **MCP (server).** `/api/workspaces/:workspaceId/mcp` (`plugins/copilot/mcp/controller.ts:51`) serves `read_document`, `doc_search`, `create_document`, `update_document`, `update_document_meta` (`provider.ts:119-367`). Access tokens default to `READ_ONLY`; write tools appear only for `READ_WRITE` (`provider.ts:114`, `:211`). `update_document` takes a full Markdown body and *"uses structural diffing to apply minimal changes, preserving document history and enabling real-time collaboration"*; it does not yet handle database or image blocks (`provider.ts:315-319`).
 - **No local API.** The MCP endpoint lives on the (EE-licensed) server, so a purely local workspace has no agent surface other than the experimental folder sync.
 
 ## What's clever or unique
 
-**1. Three-way Markdown merge against a CRDT checkpoint.** The disk-sync session (`packages/frontend/native/src/disk_sync/`, ~4,100 lines of Rust) keeps a `SourceCheckpoint` per doc: the CRDT snapshot *and* the Markdown it produced. When a file changes, `merge_markdown` is called with `baseline` (checkpoint snapshot), `current` (live doc), `source_before` (checkpoint Markdown) and `source_after` (the file) and returns a CRDT delta (`session/source_import.rs:124-185`). This is structurally the right merge: it diffs Markdown-to-Markdown and maps the change into the block tree, rather than re-importing the file.
+**1. Three-way Markdown merge against a CRDT checkpoint.** The disk-sync session (`packages/frontend/native/src/disk_sync/`, ~4,250 lines of Rust) keeps a `SourceCheckpoint` per doc: the CRDT snapshot *and* the Markdown it produced. When a file changes, `merge_markdown` is called with `baseline` (checkpoint snapshot), `current` (live doc), `source_before` (checkpoint Markdown) and `source_after` (the file) and returns a CRDT delta (`session/source_import.rs:130-191`). This is structurally the right merge: it diffs Markdown-to-Markdown and maps the change into the block tree, rather than re-importing the file.
 
-**2. Review candidates instead of silent loss.** If the merged result does not re-export to exactly the file's Markdown — i.e. the block model could not represent the edit — the merged text is written to `.affine-sync/candidates/<hash>.md` and the import is refused with *"has concurrent edits; review …"* (`source_import.rs:169-176`, `session/mod.rs:106-111`). The export side is symmetric: if the file on disk is dirty relative to the checkpoint, export pauses; if it differs from what would be written, a candidate is written rather than overwriting (`session/source_export.rs:153-181`). The TypeScript storage surfaces this as `DISK_SOURCE_REVIEW_REQUIRED` (`packages/common/nbstore/src/impls/disk/doc.ts:63`).
+**2. Review candidates instead of silent loss.** If the merged result does not re-export to exactly the file's Markdown — i.e. the block model could not represent the edit — the merged text is written to `.affine-sync/candidates/<hash>.md` and the import is refused with *"has concurrent edits; review …"* (`source_import.rs:175-182`, `session/mod.rs:106-111`). The export side is symmetric: if the file on disk is dirty relative to the checkpoint, export pauses; if it differs from what would be written, a candidate is written rather than overwriting (`session/source_export.rs:157-185`). The TypeScript storage surfaces this as `DISK_SOURCE_REVIEW_REQUIRED` (`packages/common/nbstore/src/impls/disk/doc.ts:63`).
 
 **3. Identity rides in frontmatter.** A file is bound to its doc by an `id:` frontmatter key; title, tags, favorite and trash are mirrored there too (`disk_sync/frontmatter.rs:1-60`). An unmarked file gets a generated id.
 
@@ -110,9 +110,9 @@ A non-AFFiNE program can open the file but gets Yjs binary per doc. Decoded, a b
 
 ## Costs / limits
 
-- **Markdown is not the native format.** Whiteboards, databases, and images do not round-trip; the MCP tool says so (`provider.ts:274-275`), and the review-candidate machinery exists because Markdown→block→Markdown is not an identity.
+- **Markdown is not the native format.** Whiteboards, databases, and images do not round-trip; the MCP tool says so (`provider.ts:318-319`), and the review-candidate machinery exists because Markdown→block→Markdown is not an identity.
 - **The folder bridge is experimental.** Canary-only, default off, Electron-only.
-- **Key merge code is not in this repo.** `merge_markdown`, `export_markdown_source`, and `build_full_doc` come from the external crate `affine_doc_loader = "0.2.1"` (`Cargo.toml:19`); this profile could not read their implementation.
+- **Key merge code is not in this repo.** `merge_markdown`, `export_markdown_source`, and `build_full_doc` come from the external crate `affine_doc_loader = "0.4.0"` (`Cargo.toml:19`; it was `0.2.1` at the previous pin); this profile could not read their implementation.
 - **The agent API is in the EE half.** MCP lives in `packages/backend`, under the EE license.
 - **Opaque by default.** Without the flag, a workspace is SQLite rows of Yjs binary.
 
@@ -123,11 +123,20 @@ A non-AFFiNE program can open the file but gets Yjs binary per doc. Decoded, a b
 - **Avoid block-tree-as-truth.** AFFiNE shows the cost: every Markdown edit goes through a lossy projection, so an agent writing plain LFM can be refused. flave's "the directory is the working format" stance is the opposite bet and should stay that way.
 - **On the CRDT deferral:** AFFiNE confirms the [[Profile__Automerge]] finding from the other side. A structured CRDT over a rich document is what makes the file secondary. If flave ever adds CRDT, [[Profile__Baalda]]'s string-level `Y.Text` is the shape that keeps LFM primary; AFFiNE's is the shape that doesn't.
 
+## Changes since the previous pin (2026-11-17 → 2026-11-23)
+
+Old pin `dc2b22124416`, new pin `8e549b05d2c6`: 8 commits, canary tags `v2026.11.21-canary.904` and `v2026.11.22-canary.1003` in range. The three-way merge and review-candidate design described above is unchanged. What moved:
+
+- **Disk sync defers instead of failing on a bad workspace root.** `prepare_root_meta_from_file` now returns `Applied`, `NoChange`, or `DeferredInvalidRootShape`; a deferred file keeps its old meta hash and the session queues *"deferred root metadata sync … workspace root requires coordinated migration"* (`packages/frontend/native/src/disk_sync/session/source_import.rs:3-7`, `:243-253`, `:328-335`). Export clears the scan cache so deferred files retry on the next scan (`session/source_export.rs:60-62`). Root-metadata parsing moved into a new `packages/frontend/native/src/workspace_meta.rs` (534 lines), and `disk_sync/root_meta.rs` shrank by about 330 lines.
+- **MCP `create_document` can be retried without duplicating content.** A new optional `docId` input finishes an incomplete registration via `DocWriter.recoverDocCreation`, and a `DocCreateIncompleteError` comes back as a retryable `doc_create_incomplete` error (`packages/backend/server/src/plugins/copilot/mcp/provider.ts:222-310`). The same path exists for the copilot chat tool (`plugins/copilot/tools/doc-write.ts`).
+- **Merge engine moved to y-octo 0.3.0**, and the external `affine_doc_loader` / `affine_importer` crates to 0.4.0 (`Cargo.toml:19-20`, `:114`). The server's `experimental.yocto` doc-merge switch is gone from `.docker/selfhost/schema.json`, which reads as y-octo merging now being the only path.
+- Not relevant to the thesis: SVG MIME sniffing on the server, Turkish translations, an equation-editor fix, and server licensing work for the 0.27.5 cutover (`packages/backend/native/src/license_v2.rs`, EE half).
+
 ## Read next
 
-- `packages/frontend/native/src/disk_sync/session/source_import.rs:124-200` — the three-way merge and candidate refusal
-- `packages/frontend/native/src/disk_sync/session/source_export.rs:117-196` — dirty check before export
-- `packages/backend/server/src/plugins/copilot/mcp/provider.ts:100-330` — the MCP tool set
+- `packages/frontend/native/src/disk_sync/session/source_import.rs:130-206` — the three-way merge and candidate refusal
+- `packages/frontend/native/src/disk_sync/session/source_export.rs:121-200` — dirty check before export
+- `packages/backend/server/src/plugins/copilot/mcp/provider.ts:105-375` — the MCP tool set
 - `packages/frontend/native/schema/src/lib.rs` — what is actually on disk
 
 ## Related

@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/milkdown
 profile_kind: WYSIWYG Markdown editor framework — ProseMirror + remark (unified), plugin-composed, with Crepe as the batteries-included build
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -129,6 +129,10 @@ There is no file, API or MCP surface; an out-of-process agent reaches a Milkdown
 - **Borrow streaming-as-diff and diff review for the agent caller.** Re-parse the buffer, apply only changed ranges, then let the human accept or reject chunks. In flave this is easier: the diff can be computed on source text and LFM blocks, and each accepted chunk becomes a named operation in the log.
 - **Note: `$command` is "one operation set" at editor scope.** Named, keyed commands callable from keymaps, toolbars, slash menu and AI are Milkdown's version of flave's four callers — but they mutate the ProseMirror tree. flave's ops should mutate source and let the render follow; avoid letting the rendered pane become a second source of truth.
 - **Avoid the WYSIWYG normalization trap.** remark-stringify rewrites what the author typed. A CodeMirror source pane preserves bytes; keep it the editable canonical surface and treat the rendered pane as a projection.
+
+## Changes since the previous pin (2026-10-27 → 2026-10-27)
+
+No upstream change: `main` is still at `0655111f3bb8` as of the 2026-11-23 refresh (0 commits; latest release still `v7.23.0`), so everything above still holds.
 
 ## Read next
 

@@ -3,8 +3,8 @@ name: Kopia Profile
 title: Kopia — Profile
 slug: kopia
 upstream: https://github.com/kopia/kopia
-pinned_sha: 4ebb2be6
-pinned_date: 2026-08-21
+pinned_sha: 35678189
+pinned_date: 2026-11-20
 version_at_pin: "v0.23.1 (nearest tag)"
 license: Apache-2.0
 maintainer: kopia org — Jarek Kowalski et al.
@@ -12,9 +12,9 @@ study: studies/sync-and-content-version-control
 profile_path: studies/sync-and-content-version-control/kopia
 profile_kind: Content-addressed snapshot backup with per-directory policy tree (Go, single binary + server)
 date_created: 2026-08-22
-date_modified: 2026-08-22
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-08-22
-date_authored_current_draft: 2026-08-22
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -49,7 +49,7 @@ from_path: "context-v/profiles/Profile__Kopia.md"
 ---
 # Kopia — Profile
 
-A profile of Kopia as it lives in this study (`studies/sync-and-content-version-control/kopia`, pinned at `4ebb2be6`, nearest tag `v0.23.1`, 2026-08-21). Apache-2.0, Go, one binary that is also a server.
+A profile of Kopia as it lives in this study (`studies/sync-and-content-version-control/kopia`, originally pinned at `4ebb2be6` (2026-08-21) and re-pinned on 2026-11-23 at `35678189`, 2026-11-20; nearest tag still `v0.23.1`). Apache-2.0, Go, one binary that is also a server.
 
 Read this immediately after [[Profile__Restic]]. They make the same bet — content-addressed snapshots natively into a bucket — and the differences are exactly where the Lossless ask lives.
 
@@ -188,6 +188,21 @@ Which sharpens the split proposed in [[Profile__Restic]] into something more spe
 - `snapshot/policy/actions_policy.go:6-14` — the hook seam
 - `repo/blob/readonly/readonly_storage.go` — structural read-only in 60 lines
 - `repo/splitter/splitter.go:88-89` — the default, then `snapshot/policy/splitter_policy.go` for why it is per-directory
+
+## Changes since the previous pin (2026-08-21 → 2026-11-20)
+
+`4ebb2be6c503` → `356781892296`, 149 commits on `master`. No release was tagged in range: the nearest tag is still `v0.23.1`. Nothing this profile relies on moved. `snapshot/manifest.go`, `snapshot/policy/actions_policy.go`, `repo/splitter/splitter.go` and `repo/blob/readonly/readonly_storage.go` are byte-identical to the old pin, so every line citation above still holds. The only edits under `snapshot/policy/` are two `strings.Cut` refactors (`policy_tree.go`, and `prefixSuffix` at the bottom of `retention_policy.go`).
+
+What changed that a reader of this profile might care about:
+
+- **S3 Object Lock retention dates are now rounded to whole seconds** (`ff26c954`, `repo/blob/s3/`). Strict S3-compatible stores rejected Go's nanosecond timestamps during full maintenance. Relevant if a Kopia history repo sits in a locked bucket; R2's behaviour here is not tested upstream.
+- **Locked retention mode no longer pulls in the Azure SDK** (`5c424dda`, `repo/blob/storage.go`), and Azure point-in-time reads use the delete-marker timestamp when a version ID is missing (`e5831a39`, `repo/blob/azure/`).
+- **`repository upgrade` validation was reworked** (`e8c18a83`, `cli/command_repository_upgrade.go`): it checks every mismatched field of a content info and actually returns an error when index validation fails (`69fa1b2f`).
+- **Server hardening:** secure cookies (`ef380ffd`), certificate re-validation on reconnect (`7de9f36a`), and removal of `tls.Config.VerifyPeerCertificate` (`e8daf113`) in `internal/server/` and `internal/tlsutil/`.
+- **`snapshot verify --parallel` is now marked deprecated and a no-op** (`edcd1171`); `--file-parallelism` is the flag that works.
+- Smaller: the webdav mount stops dropping a directory entry in `Readdir` (`internal/webdavmount/`), KopiaUI can disable update checks via `KOPIA_CHECK_FOR_UPDATES`, and the bundled HTML UI was bumped several times.
+
+The rest is test hardening, lint cleanup, and dependency bumps. The profile's thesis is unchanged.
 
 ## Related
 

@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/marktext
 profile_kind: WYSIWYG desktop Markdown editor — Electron + Vue 3 shell over the Muya block engine
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -113,6 +113,10 @@ It also preserves encoding (via `iconv-lite` plus a guesser), line endings, mixe
 - **Borrow the raw-byte baseline** (`DiskBaseline` with `rawSha256`, separate from the normalized editor hash) so "did the file change?" is answered by content, not `mtime`. Both [[Profile__Zettlr]] and [[Profile__VNote]] arrived at the same rule independently.
 - **Avoid the WYSIWYG-serializer trap.** flave's CM6 source pane keeps the author's (or agent's) bytes authoritative, which is exactly what MarkText gives up. Do not add a rendered-pane editing path that writes back by re-serializing an AST.
 - **Note the conformance ratchet** as a cheap discipline for LFM: an expected-failures list that fails when something *starts* passing keeps the numbers honest.
+
+## Changes since the previous pin (2026-11-17 → 2026-11-17)
+
+No upstream change: `develop` is still at `e4ed4cf4a3de` as of the 2026-11-23 refresh (0 commits), so everything above still holds.
 
 ## Read next
 

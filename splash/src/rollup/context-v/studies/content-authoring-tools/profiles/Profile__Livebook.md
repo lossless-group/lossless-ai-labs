@@ -3,8 +3,8 @@ name: Livebook Profile
 title: Livebook — Profile
 slug: livebook
 upstream: https://github.com/livebook-dev/livebook
-pinned_sha: 427774a1
-pinned_date: 2026-11-17
+pinned_sha: 08a56062
+pinned_date: 2026-11-22
 version_at_pin: "nightly (rolling tag); mix.exs @version 0.20.0-dev"
 license: Apache-2.0
 maintainer: livebook-dev org — most active recent committers Jonatan Kłosko, Alexandre de Souza, Wojtek Mach
@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/livebook
 profile_kind: Interactive notebook (Elixir/Phoenix LiveView web app) whose file is a Markdown subset
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -49,7 +49,7 @@ from_path: "context-v/profiles/Profile__Livebook.md"
 ---
 # Livebook — Profile
 
-A profile of Livebook as it lives in this study (`studies/content-authoring-tools/livebook`, pinned at `427774a1`, 2026-11-17; the only tag reachable is the rolling `nightly`, and `mix.exs:9` says `0.20.0-dev`). Apache-2.0. An Elixir / Phoenix LiveView web app, also shipped as a desktop app and a Docker image.
+A profile of Livebook as it lives in this study (`studies/content-authoring-tools/livebook`, pinned at `08a560624971`, 2026-11-22; the only tag reachable is the rolling `nightly`, and `mix.exs:9` says `0.20.0-dev`). Apache-2.0. An Elixir / Phoenix LiveView web app, also shipped as a desktop app and a Docker image.
 
 ## TL;DR
 
@@ -141,6 +141,10 @@ The doc then gives a **ready-made Claude Code `PreToolUse`/`PostToolUse` hook** 
 - **Do better on identity than Livebook does.** Livebook's random-on-load cell ids are its main gap; flave §8.1 already freezes deterministic block ids at M0, and executable fences should get them too (`name=` is the natural key).
 - **Copy `/dev/sync` almost literally.** flave's "file watching" next step is exactly this: re-parse, diff into operations, apply through the same op set the UI uses. Livebook's version proves the diff-into-ops approach keeps collaborators and autosave coherent.
 - **Stamping is a model for clearance.** A signature over the file that carries permissions is close to what flave's monotonic clearance check needs at publish time.
+
+## Changes since the previous pin (2026-11-17 → 2026-11-22)
+
+Old pin `427774a143ad`, new pin `08a560624971`: 1 commit (*"Update deps"*, `mix.lock` only). Nothing in the profile changed; the rolling `nightly` tag moved to the new commit.
 
 ## Read next
 

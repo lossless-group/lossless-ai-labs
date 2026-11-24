@@ -10,11 +10,11 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/agent-2-agent
 profile_kind: wire-protocol
 date_created: 2026-05-05
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 198dcc8c-0c37-435f-ab0c-85d0b730dc2e
 hex_code: dwyigb
 date_authored_initial_draft: 2026-05-05
-date_authored_current_draft: 2026-05-05
+date_authored_current_draft: 2026-11-23
 lede: >-
   The load-bearing commitment isn't the JSON-RPC — it's *opacity*. An A2A
   agent publishes skills, never its prompts, memory, or tools.
@@ -24,10 +24,10 @@ summary: >-
   Covers the four primitives read straight out of `specification/a2a.proto` (AgentCard, Task,
   Message, Part, plus Artifact), the eight-state TaskState lifecycle including the two
   non-terminal interrupted states, the eleven RPCs and their REST bindings, the three update modes
-  (sync, SSE streaming, push webhook), the eight-company TSC governance, and the v0.3 to v1.0
-  breaking changes (kind-discriminator removal, SCREAMING_SNAKE_CASE enums). Use it to decide
-  whether a service belongs behind an A2A endpoint, and as the map to the normative .proto before
-  reading the 3611-line prose spec.
+  (sync, SSE streaming, push webhook), the nine-company TSC governance under the Agentic AI
+  Foundation, and the v0.3 to v1.0 breaking changes (kind-discriminator removal,
+  SCREAMING_SNAKE_CASE enums). Use it to decide whether a service belongs behind an A2A endpoint,
+  and as the map to the normative .proto before reading the 3616-line prose spec.
 authors:
   - Michael Staton
 status: Reference
@@ -42,13 +42,13 @@ A profile of the A2A protocol as it lives in this study (`studies/open-specs-and
 
 ## TL;DR
 
-A2A is **an open wire protocol for one AI agent to talk to another over HTTP** (`README.md:48-50`):
+A2A is **an open wire protocol for one AI agent to talk to another over HTTP** (`README.md:50-52`):
 
 > An open protocol enabling communication and interoperability between opaque agentic applications.
 >
 > The Agent2Agent (A2A) protocol addresses a critical challenge in the AI landscape: enabling gen AI agents, built on diverse frameworks by different companies running on separate servers, to communicate and collaborate effectively — as agents, not just as tools.
 
-Concretely, it specifies (`README.md:84-88`):
+Concretely, it specifies (`README.md:86-90`):
 
 - **Standardized communication:** JSON-RPC 2.0 over HTTP(S), or gRPC, or HTTP+JSON — the same semantic model in three transport bindings.
 - **Agent discovery:** via "Agent Cards" — a self-describing manifest at a known URL.
@@ -56,23 +56,25 @@ Concretely, it specifies (`README.md:84-88`):
 - **Rich data exchange:** text, files, structured JSON.
 - **Enterprise-ready:** signed Agent Cards (JWS), security schemes, multi-tenancy, OAuth 2.0 with PKCE.
 
-A2A v1.0 shipped as a stable, production-ready standard (`docs/announcing-1.0.md:1-7`). Stewardship: Linux Foundation, donated by Google, governed by an 8-company Technical Steering Committee — Google, Microsoft, Cisco, AWS, Salesforce, ServiceNow, SAP, IBM Research (`GOVERNANCE.md:5-14`). The partner ecosystem is large: `docs/partners.md` lists **166 named organizations**.
+A2A v1.0 shipped as a stable, production-ready standard (`docs/blog/posts/announcing-1.0.md:8-16`). Stewardship: Linux Foundation, donated by Google, and since August 2026 a Growth Stage project of the Agentic AI Foundation (AAIF), alongside MCP and AGENTS.md (`docs/blog/posts/a2a-joins-aaif.md`). It is governed by a 9-company Technical Steering Committee — Google, Microsoft, Cisco, AWS, Salesforce, ServiceNow, SAP, IBM, Bloomberg (`GOVERNANCE.md:5-15`). The partner ecosystem is large: `docs/partners.md` lists **181 named organizations**.
 
 If OpenSpec/Spec Kit/GSD/AGENTS.md govern *how a developer drives an AI assistant*, and 12-Factor Agents governs *how you architect an agent application*, A2A governs **how two agentic applications talk to each other across organizational and technology boundaries** — the public-internet layer for agents.
 
 ## Why a wire protocol — and why not just MCP?
 
-MCP confusion has been the most common framing question in the ecosystem, so the v1.0 announcement addresses it head-on (`docs/announcing-1.0.md:28-32`):
+MCP confusion has been the most common framing question in the ecosystem, so the v1.0 announcement addresses it head-on (`docs/blog/posts/announcing-1.0.md:37-41`):
 
 > MCP and A2A solve different layers of the problem. MCP is commonly used for tool and context integration **at the individual agent level**. A2A focuses on **communication and coordination between agents**. In practice, many systems will use both: MCP inside agents, A2A between agents.
 
-The site puts it as a memorable triangle (`docs/index.md:21-26`):
+The site's landing page at the previous pin put it as a memorable triangle:
 
 > Build with **ADK** *(or any framework)*, equip with **MCP** *(or any tool)*, and communicate with **A2A** to remote agents, local agents, and humans.
 
-So: **MCP = agent ↔ tool. A2A = agent ↔ agent.** Different layer, complementary. The v1.0 announcement adds context (`docs/index.md:128-130`): IBM ACP was incorporated into A2A; Cisco's `agntcy` framework leverages both A2A and MCP. A2A is positioned as "the public internet that allows AI agents to interoperate."
+The September 2026 revamp of `docs/index.md` dropped that line, along with the note that IBM ACP was incorporated into A2A. The new hero rotates taglines such as "An open standard enabling users to connect agents to tools and data through MCP, and to other agents through A2A," and leads with an install command for the A2A CLI. The AAIF announcement frames the split as vertical (MCP: agent to tools and data) versus horizontal (A2A: peer-to-peer between agents) (`docs/blog/posts/a2a-joins-aaif.md`).
 
-The structural problem the protocol solves (`README.md:73-80`):
+So: **MCP = agent ↔ tool. A2A = agent ↔ agent.** Different layer, complementary.
+
+The structural problem the protocol solves (`README.md:75-82`):
 
 - **Break down silos** — connect agents across ecosystems built on different frameworks (LangGraph, CrewAI, Semantic Kernel, custom).
 - **Enable complex collaboration** — let specialized agents delegate sub-tasks to other specialized agents.
@@ -87,7 +89,7 @@ You can read the entire wire spec out of one file: `specification/a2a.proto` (79
 
 ### 1. `AgentCard` — the self-describing manifest
 
-`a2a.proto:356-393`. The fixed-location JSON document an agent serves so other agents can discover it. Required fields:
+`a2a.proto:362-399`. The fixed-location JSON document an agent serves so other agents can discover it. Required fields:
 
 ```protobuf
 message AgentCard {
@@ -108,9 +110,9 @@ message AgentCard {
 
 Three structural points:
 
-- **Multiple interfaces, multiple protocol versions per agent.** `AgentInterface` (`a2a.proto:336-350`) bundles `url + protocol_binding + protocol_version`, and `AgentCard.supported_interfaces` is a list. The same agent can advertise *both* a v0.3 JSON-RPC interface and a v1.0 gRPC interface — backward-compatible migration is built into the format. The v1.0 announcement (`docs/announcing-1.0.md:34-38`) calls this out as the migration story.
-- **Skills are discoverable, not hidden.** `AgentSkill` (`a2a.proto:430-447`) declares `id + name + description + tags + examples + input_modes + output_modes + security_requirements`. A client agent can scan an Agent Card and decide whether the remote agent has what it needs without invoking it.
-- **Signed Agent Cards are first-class.** `AgentCardSignature` (`a2a.proto:451-461`) holds RFC 7515 JWS signatures of the card itself. v1.0 highlights this as a cryptographic-trust primitive (`docs/announcing-1.0.md:15`): *"establishing trust before interaction across organizational boundaries."*
+- **Multiple interfaces, multiple protocol versions per agent.** `AgentInterface` (`a2a.proto:336-356`) bundles `url + protocol_binding + protocol_version`, and `AgentCard.supported_interfaces` is a list. The same agent can advertise *both* a v0.3 JSON-RPC interface and a v1.0 gRPC interface — backward-compatible migration is built into the format. The v1.0 announcement (`docs/blog/posts/announcing-1.0.md:43-47`) calls this out as the migration story.
+- **Skills are discoverable, not hidden.** `AgentSkill` (`a2a.proto:436-453`) declares `id + name + description + tags + examples + input_modes + output_modes + security_requirements`. A client agent can scan an Agent Card and decide whether the remote agent has what it needs without invoking it.
+- **Signed Agent Cards are first-class.** `AgentCardSignature` (`a2a.proto:457-467`) holds RFC 7515 JWS signatures of the card itself. v1.0 highlights this as a cryptographic-trust primitive (`docs/blog/posts/announcing-1.0.md:24`): *"establishing trust before interaction across organizational boundaries."*
 
 ### 2. `Task` — the core unit of action
 
@@ -163,7 +165,7 @@ Three things worth noticing:
 
 - **Role is binary, not LLM-style.** `ROLE_USER` means the *client agent* (regardless of whether a human or another agent is actually behind it). `ROLE_AGENT` means the *server agent*. There is no `system` or `tool` role — A2A is between two opaque parties, not three (`a2a.proto:245-252`).
 - **Cross-task references are first-class.** `reference_task_ids` lets a message in one task pull in context from another. This is how multi-agent orchestration patterns (Task A's output feeds Task B) are wired without joining state across servers.
-- **Extensions are URI-identified.** A message declares which extensions are present via `extensions[]` URIs (`a2a.proto:417-427`), and an extension can require client compliance (`required = true`). This is the protocol's evolution mechanism.
+- **Extensions are URI-identified.** A message declares which extensions are present via `extensions[]` URIs (`a2a.proto:423-433`), and an extension can require client compliance (`required = true`). This is the protocol's evolution mechanism.
 
 ### 4. `Part` — the content fragment
 
@@ -209,32 +211,32 @@ The `A2AService` definition (`a2a.proto:18-140`) declares exactly 11 operations.
 
 Three things worth noticing:
 
-- **Three transport bindings, equivalent semantics.** Every RPC is reachable as JSON-RPC 2.0, gRPC, or HTTP+JSON. The v1.0 announcement frames this as the deliberate web-alignment move (`docs/announcing-1.0.md:20-25`): *"In its simplest form, an A2A interaction can begin with a single HTTP request."*
+- **Three transport bindings, equivalent semantics.** Every RPC is reachable as JSON-RPC 2.0, gRPC, or HTTP+JSON. The v1.0 announcement frames this as the deliberate web-alignment move (`docs/blog/posts/announcing-1.0.md:29-34`): *"In its simplest form, an A2A interaction can begin with a single HTTP request."*
 - **Three update modes.** Synchronous (`SendMessage` waits for terminal state, controlled by `return_immediately` in `SendMessageConfiguration` — `a2a.proto:155-160`); streaming (`SendStreamingMessage` / `SubscribeToTask` over SSE); push (webhook config registered via `*PushNotificationConfig` RPCs). A client picks the mode that fits its workload.
-- **Multi-tenancy is in the URL shape.** Every RPC has an additional binding under `/{tenant}/...` (`a2a.proto:24-28` and elsewhere). One endpoint can host many agents — a v1.0 enterprise commitment (`docs/announcing-1.0.md:14`).
+- **Multi-tenancy is in the URL shape.** Every RPC has an additional binding under `/{tenant}/...` (`a2a.proto:24-28` and elsewhere). One endpoint can host many agents — a v1.0 enterprise commitment (`docs/blog/posts/announcing-1.0.md:23`). The proto now defines `tenant` as an opaque routing string: when an `AgentInterface` sets it, clients MUST send that value in every request, and the protocol does not define its format (`a2a.proto:344-350`).
 
 ## What's actually inside this submodule
 
 ```text
 agent-2-agent/
-├── README.md                       # 128 lines — pitch, SDKs, what's next
-├── GOVERNANCE.md                   # 84 lines — TSC composition, Linux Foundation charter
+├── README.md                       # 131 lines — pitch, SDKs, what's next
+├── GOVERNANCE.md                   # 87 lines — TSC composition, Linux Foundation charter
 ├── MAINTAINERS.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md
 ├── CHANGELOG.md
 ├── LICENSE                         # Apache 2.0
 ├── specification/
-│   ├── a2a.proto                   # 796 lines — the normative source of truth (v1.0 elevated this)
+│   ├── a2a.proto                   # 812 lines — the normative source of truth (v1.0 elevated this)
 │   ├── buf.gen.yaml, buf.yaml, buf.lock  # Buf toolchain for proto codegen
-│   └── json/                       # JSON Schema generated from the proto
+│   └── json/                       # README only; JSON Schema is generated from the proto at build time
 ├── adrs/
 │   ├── adr-001-protojson-serialization.md  # The first architecture decision record
 │   └── adr-template.md
 ├── docs/                           # MkDocs source for a2a-protocol.org
 │   ├── index.md                    # Landing page
-│   ├── specification.md            # 3611 lines — prose normative specification
-│   ├── announcing-1.0.md           # 55 lines — v1.0 launch post
-│   ├── whats-new-v1.md             # 990 lines — v0.3 → v1.0 migration guide, breaking changes
-│   ├── partners.md                 # 173 lines, 166 partner orgs
+│   ├── specification.md            # 3616 lines — prose normative specification
+│   ├── blog/posts/                 # announcing-1.0.md (64 lines, moved here), a2a-joins-aaif.md, introducing-a2a-cli.md
+│   ├── whats-new-v1.md             # 975 lines — v0.3 → v1.0 migration guide, breaking changes
+│   ├── partners.md                 # 188 lines, 181 partner orgs
 │   ├── community.md, definitions.md, roadmap.md
 │   ├── topics/, tutorials/, sdk/   # Per-topic docs
 │   ├── llms.txt                    # LLM-friendly site index (opt-in convention)
@@ -245,9 +247,9 @@ agent-2-agent/
 └── scripts/
 ```
 
-If you only have time for three files: `specification/a2a.proto` (the wire spec — read it directly), `docs/announcing-1.0.md` (the v1.0 framing in 55 lines), and `docs/whats-new-v1.md` (the v0.3 → v1.0 breaking-change ledger — useful even if you weren't on v0.3, because it shows the design tensions the protocol has resolved).
+If you only have time for three files: `specification/a2a.proto` (the wire spec — read it directly), `docs/blog/posts/announcing-1.0.md` (the v1.0 framing in 64 lines), and `docs/whats-new-v1.md` (the v0.3 → v1.0 breaking-change ledger — useful even if you weren't on v0.3, because it shows the design tensions the protocol has resolved).
 
-The SDKs are *not* in this repo — they're in sibling repositories under the `a2aproject` org (`README.md:94-99`):
+The SDKs are *not* in this repo — they're in sibling repositories under the `a2aproject` org (`README.md:96-101`):
 
 | Language | Package | Repo |
 |----------|---------|------|
@@ -256,31 +258,37 @@ The SDKs are *not* in this repo — they're in sibling repositories under the `a
 | JavaScript | `@a2a-js/sdk` | `a2aproject/a2a-js` |
 | Java | (Maven) | `a2aproject/a2a-java` |
 | .NET | `A2A` | `a2aproject/a2a-dotnet` |
+| Rust | `a2a-lf` (crate) | `a2aproject/a2a-rs` |
 
-## Governance — the eight-company TSC
+The Rust SDK is new since the previous pin. The project also now ships an A2A CLI with an Agent Skill, installable via Homebrew or WinGet, so a coding assistant can discover and message A2A agents (`docs/blog/posts/introducing-a2a-cli.md`).
 
-`GOVERNANCE.md:3-14` names the Technical Steering Committee at v1.0:
+## Governance — the nine-company TSC
+
+`GOVERNANCE.md:3-15` names the Technical Steering Committee as of the November 2026 pin ("nine seats"):
 
 | Company | Representative |
 |---------|----------------|
-| Google | Todd Segal — Principal Engineer |
+| Google | Todd Segal — Distinguished Engineer |
 | Microsoft | Darrel Miller — Partner API Architect |
 | Cisco | Luca Muscariello — Distinguished Engineer |
 | Amazon Web Services | Abhimanyu Siwach — Senior Software Engineer |
 | Salesforce | Stephen Petschulat — Principal Architect |
-| ServiceNow | Sean Hughes — Director of Open Science |
+| ServiceNow | Sugandh Rakha — Head of Product (MCP & A2A) |
 | SAP | Sivakumar N. — Vice President |
-| IBM Research | Kate Blair — Director of Incubation |
+| IBM | Stefano Maestri — Principal Software Engineer |
+| Bloomberg | Vinay Ramesh — AI Team Lead |
 
-This is the structural fact that makes A2A different from "a Google protocol." The TSC has the same shape as OCI (Open Container Initiative) and CNCF projects: each org gets one voting seat, decisions require quorum + majority, meetings are public, GitHub is the source of truth for significant decisions (`GOVERNANCE.md:78-82`). The "startup phase" (8 founding orgs as appointment-based seats) transitions to a "steady state" composition 18 months in (`GOVERNANCE.md:33-37`).
+At v1.0 the TSC had eight seats (IBM's was held by IBM Research). Bloomberg joined through the GOVERNANCE file's add-an-organization vote, and the ServiceNow and IBM representatives changed. In August 2026 the project was accepted into the Agentic AI Foundation as a Growth Stage project; the AAIF post says this places A2A under the same Linux Foundation-directed umbrella as MCP, goose, and AGENTS.md (`docs/blog/posts/a2a-joins-aaif.md`). The repo also added the LF Projects antitrust policy.
 
-The Mission and Scope (`GOVERNANCE.md:18-26`) is narrowly drawn: the protocol, an SDK, and documentation. Specifically *not* in scope: agent runtimes, frameworks, hosting, or implementations of agents themselves. That narrowness is intentional — it's what makes the standard a standard rather than a product.
+This is the structural fact that makes A2A different from "a Google protocol." The TSC has the same shape as OCI (Open Container Initiative) and CNCF projects: each org gets one voting seat, decisions require quorum + majority, meetings are public, GitHub is the source of truth for significant decisions (`GOVERNANCE.md:81-85`). The "startup phase" (8 founding orgs as appointment-based seats) transitions to a "steady state" composition 18 months in (`GOVERNANCE.md:34-38`).
 
-The partner list (`docs/partners.md`) — 166 named organizations — is the breadth signal: AWS, Adobe, Atlassian, Bloomberg, Box, Cohere, Datadog, Deloitte, Salesforce, ServiceNow, and 156 others. Whether all 166 ship A2A endpoints today is a separate question; the list is the public commitment surface.
+The Mission and Scope (`GOVERNANCE.md:19-27`) is narrowly drawn: the protocol, an SDK, and documentation. Specifically *not* in scope: agent runtimes, frameworks, hosting, or implementations of agents themselves. That narrowness is intentional — it's what makes the standard a standard rather than a product.
+
+The partner list (`docs/partners.md`) — 181 named organizations, up from 166 at the previous pin — is the breadth signal: AWS, Adobe, Atlassian, Bloomberg, Box, Cohere, Datadog, Deloitte, Salesforce, ServiceNow, and 171 others. Whether all 181 ship A2A endpoints today is a separate question; the list is the public commitment surface.
 
 ## What v1.0 actually changed
 
-`docs/whats-new-v1.md` (990 lines) is the migration ledger from v0.3.0. Four themes (`whats-new-v1.md:5-44`):
+`docs/whats-new-v1.md` (975 lines) is the migration ledger from v0.3.0. Four themes (`whats-new-v1.md:5-44`):
 
 1. **Protocol maturity.** The .proto file was elevated from a gRPC-specific implementation artifact to the *normative source of truth*. Formal references to RFC 8785 (JSON canonicalization, used for Agent Card signatures) and RFC 7515 (JWS).
 2. **Type safety and clarity.** Discriminator `kind` fields removed in favor of JSON member-based polymorphism (so `Part` uses a real `oneof` rather than a `kind: "text" | "file" | "data"` tag). Enums moved from `kebab-case` to `SCREAMING_SNAKE_CASE` for ProtoJSON conformance — **breaking**.
@@ -295,15 +303,15 @@ The most consequential breaking change is the JSON polymorphism shift: any v0.3 
 
 There is no install step *for the protocol*. Read three files in order:
 
-1. `specification/a2a.proto` (the wire spec — 796 lines).
-2. `docs/announcing-1.0.md` (the framing — 55 lines).
-3. `docs/whats-new-v1.md` (what changed — 990 lines, but skim).
+1. `specification/a2a.proto` (the wire spec — 812 lines).
+2. `docs/blog/posts/announcing-1.0.md` (the framing — 64 lines).
+3. `docs/whats-new-v1.md` (what changed — 975 lines, but skim).
 
-Then `docs/specification.md` (3611 lines, prose normative spec) for the parts the .proto can't express — error semantics, push notification flows, mTLS handshakes, etc.
+Then `docs/specification.md` (3616 lines, prose normative spec) for the parts the .proto can't express — error semantics, push notification flows, mTLS handshakes, etc.
 
 ### Build an A2A server
 
-Pick an SDK and stand up a minimal agent. Python is the canonical path (`README.md:95`):
+Pick an SDK and stand up a minimal agent. Python is the canonical path (`README.md:97`):
 
 ```bash
 pip install a2a-sdk
@@ -315,7 +323,7 @@ Minimum viable A2A server:
 2. Implement at least `SendMessage` and `GetTask`. Optionally add streaming and push notifications.
 3. Declare your skills, supported input/output media types, and security schemes in the Agent Card.
 
-The DeepLearning.AI course (`README.md:59-71`) walks the full server-side flow — *Make agents A2A-compliant: expose agents built with frameworks like Google ADK, LangGraph, or BeeAI as A2A servers.*
+The DeepLearning.AI course (`README.md:61-73`) walks the full server-side flow — *Make agents A2A-compliant: expose agents built with frameworks like Google ADK, LangGraph, or BeeAI as A2A servers.*
 
 ### Build an A2A client
 
@@ -328,7 +336,7 @@ Inverse path:
 
 ### Compose multi-agent workflows
 
-The DLAI course's later modules (`README.md:69-71`) cover sequential and hierarchical orchestration of A2A agents — including "build a healthcare multi-agent system using different frameworks." That's the canonical worked example for multi-agent A2A.
+The DLAI course's later modules (`README.md:71-73`) cover sequential and hierarchical orchestration of A2A agents — including "build a healthcare multi-agent system using different frameworks." That's the canonical worked example for multi-agent A2A.
 
 ## Mental model for using it well
 
@@ -336,9 +344,9 @@ The DLAI course's later modules (`README.md:69-71`) cover sequential and hierarc
 - **Tasks are long-lived; messages are not.** A Message is one turn of conversation; a Task is the unit of state across turns. Multi-turn conversations live in the Task's `history`. Cross-Task work uses `Message.reference_task_ids`. Don't flatten everything into messages.
 - **Lean on `INPUT_REQUIRED` / `AUTH_REQUIRED`.** Don't busy-loop the client when human input is needed. Transition to the interrupted state, let the client decide whether to subscribe via SSE, register a push webhook, or poll.
 - **Pick the update mode by client deployment, not by preference.** Streaming SSE is great for interactive chat clients; push notifications win for long-running tasks where the client may not be online; polling fits CI/CD and batch systems. The protocol supports all three from the same Task.
-- **Don't expose tools or memory in the Agent Card.** That defeats the opacity guarantee (`README.md:80`). Skills are *behaviors*, not *implementations*.
-- **Use extensions for nonstandard fields, not metadata.** `Message.metadata` and `Task.metadata` are escape hatches for private use. Real cross-vendor extensions go in `AgentExtension` (`a2a.proto:417-427`) with a stable URI and a `required` flag so clients know whether they need to understand it.
-- **Always implement v0.3 and v1.0 in parallel during migration.** The Agent Card's multi-interface design (`docs/announcing-1.0.md:34-38`) exists for exactly this — advertise both, retire v0.3 once your clients have moved.
+- **Don't expose tools or memory in the Agent Card.** That defeats the opacity guarantee (`README.md:82`). Skills are *behaviors*, not *implementations*.
+- **Use extensions for nonstandard fields, not metadata.** `Message.metadata` and `Task.metadata` are escape hatches for private use. Real cross-vendor extensions go in `AgentExtension` (`a2a.proto:423-433`) with a stable URI and a `required` flag so clients know whether they need to understand it.
+- **Always implement v0.3 and v1.0 in parallel during migration.** The Agent Card's multi-interface design (`docs/blog/posts/announcing-1.0.md:43-47`) exists for exactly this — advertise both, retire v0.3 once your clients have moved.
 
 ## When NOT to reach for this
 
@@ -359,15 +367,26 @@ A2A operates at a different layer of the stack than the other artifacts in this 
 | **Layer** | Network — between agent processes | Repo — context for the AI editing your code | Repo — feature-level specs for AI to implement | Repo — feature-level specs + phase gates | Repo — orchestrated end-to-end build | App architecture — how *you* design an agent |
 | **Audience** | Engineers building agentic services that interoperate | Developers using AI assistants in a codebase | Developers using AI assistants in a codebase | Developers using AI assistants in a codebase | Solo / small-team builders using AI assistants | Engineers building agent products |
 | **Primary artifact** | `AgentCard`, `Task`, `Message`, `Part`, `Artifact` (proto messages on the wire) | `AGENTS.md` file at root + nested | `openspec/specs/` + `openspec/changes/` | `specs/NNN-feature/` + `.specify/` | `.planning/` directory | 13 essays |
-| **Toolchain** | Five SDKs (Python, Go, JS, Java, .NET) + any HTTP client | None | Node/npm | Python (uv/pipx) | Node/npm + multi-runtime install | None |
-| **Ecosystem reach** | 8-company TSC + 166 partner orgs + Linux Foundation | 23 agents + 60k+ repos + Linux Foundation | ~25 integrations | ~30 integrations | 16 runtimes | N/A |
+| **Toolchain** | Six SDKs (Python, Go, JS, Java, .NET, Rust) + A2A CLI + any HTTP client | None | Node/npm | Python (uv/pipx) | Node/npm + multi-runtime install | None |
+| **Ecosystem reach** | 9-company TSC + 181 partner orgs + Linux Foundation / AAIF | 23 agents + 60k+ repos + Linux Foundation | ~25 integrations | ~30 integrations | 16 runtimes | N/A |
 | **Versioning** | Per-`AgentInterface` declared protocol version (v0.3 + v1.0 advertisable simultaneously) | None | Schema-driven | Constitution + extensions/presets | Tier system | None |
 | **Security** | Signed Agent Cards (JWS), security schemes, OAuth 2.0 + PKCE, mTLS | Advisory text in markdown | None first-class | Phase-gate driven | Hooks + injection scanning | Factor 7 (human approval as a tool) |
 
 The clean way to think about how they fit together: a developer building a customer-facing agent product might use **12-Factor Agents** principles to architect the service, **AGENTS.md** at the root of the codebase so AI assistants know the build/test commands, **OpenSpec or Spec Kit or GSD** to drive the AI through implementing each feature, and **A2A** as the protocol that the resulting service exposes to other agents on the open internet. They are stackable, not competitive.
 
-The most important thing A2A shares with AGENTS.md (and only AGENTS.md): both are stewarded by the Linux Foundation as neutral standards. That governance shape is what separates a real ecosystem standard from a vendor's marketing artifact, and it's the structural reason A2A is positioned to do for agent communication what HTTP did for client-server communication.
+The most important thing A2A shares with AGENTS.md (and, outside this table, MCP): all three are now projects of the Agentic AI Foundation under the Linux Foundation, stewarded as neutral standards. That governance shape is what separates a real ecosystem standard from a vendor's marketing artifact, and it's the structural reason A2A is positioned to do for agent communication what HTTP did for client-server communication.
+
+## Changes since the previous pin (2026-04-23 → 2026-11-18)
+
+`ae6a562d5d97` → `5f931b8a25fe`, 105 commits. Release in range: **v1.0.1** (2026-05-26). A `v1.1.0-rc` tag exists (2026-10-29) but is not on `main`, so it is not part of this pin.
+
+- **Governance moved.** A2A joined the Agentic AI Foundation as a Growth Stage project in August 2026 (`docs/blog/posts/a2a-joins-aaif.md`), and the TSC grew from eight to nine seats with Bloomberg (`GOVERNANCE.md:3-15`). The site header now shows the AAIF affiliation (`docs/index.md`).
+- **v1.0.1 spec fixes** (`CHANGELOG.md`): the HTTP binding prefers `application/a2a+json`; transcoding-related error handling was revised; TaskStatus values in the prose spec were corrected. The prose spec now names terminal states by their enum values (`TASK_STATE_COMPLETED`, …) instead of lowercase words.
+- **`tenant` is defined as opaque routing.** Every request's `tenant` field must match the selected `AgentInterface.tenant` when set; gRPC interface URLs take `hostname:port` (`a2a.proto:336-356`).
+- **Docs aligned with the v1.0 model**: `PushNotificationConfig` references in `docs/specification.md` now point to the flattened `TaskPushNotificationConfig`; the in-task authorization scope was clarified.
+- **New tooling**: a Rust SDK (`a2a-lf` crate) and an A2A CLI with an Agent Skill. JSON Schema is generated from the proto by `scripts/proto_to_json_schema.sh`.
+- **Docs reorganized**: `docs/announcing-1.0.md` moved to `docs/blog/posts/`; the landing page was rewritten; the partner list grew from 166 to 181.
 
 ## One-line summary
 
-> A2A wins by being the only artifact in this study that lives **on the wire between processes**: a Linux-Foundation-governed, eight-company-TSC, Apache-2.0-licensed protocol with Agent Cards (signed manifests), Tasks (long-lived units of work), and three transport bindings (JSON-RPC, gRPC, HTTP+JSON) — making it the standard for two opaque agentic applications, built on different frameworks by different vendors, to discover each other and collaborate without exposing internal state, memory, or tools.
+> A2A wins by being the only artifact in this study that lives **on the wire between processes**: a Linux-Foundation-governed (via the Agentic AI Foundation), nine-company-TSC, Apache-2.0-licensed protocol with Agent Cards (signed manifests), Tasks (long-lived units of work), and three transport bindings (JSON-RPC, gRPC, HTTP+JSON) — making it the standard for two opaque agentic applications, built on different frameworks by different vendors, to discover each other and collaborate without exposing internal state, memory, or tools.

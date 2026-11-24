@@ -12,9 +12,9 @@ study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/siyuan
 profile_kind: Block-based PKM — Go kernel + TypeScript/Electron UI, one JSON AST file per document
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -134,6 +134,10 @@ The MCP surface is wide: ~56 tool files (`kernel/mcp/tools/`), consolidated as a
 - **Avoid AST-as-file.** SiYuan shows the cost: the store is reachable but not authorable by anything except the kernel. flave's Markdown-first source keeps a plain-text diff meaningful.
 - **Note the skills-in-workspace pattern with revision-checked writes** — a skill directory beside the documents, edited with optimistic concurrency, is a good fit for trigger-pack definitions.
 - **Note the memory design** (Markdown records, provenance, explicit forget) as prior art if flave ever keeps agent memory per document.
+
+## Changes since the previous pin (2026-11-19 → 2026-11-19)
+
+No upstream change: `master` is still at `e6794a0c4497` (`v3.8.11`) as of the 2026-11-23 refresh (0 commits), so everything above still holds.
 
 ## Read next
 

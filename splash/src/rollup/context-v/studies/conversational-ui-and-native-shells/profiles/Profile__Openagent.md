@@ -10,20 +10,25 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/openagent
 profile_kind: Tauri desktop chat client — Rust backend + SvelteKit webview, MCP-native
 date_created: 2026-07-13
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 8e1f608d-fdcf-4dfe-8f02-130565870676
 hex_code: xi1ebf
 date_authored_initial_draft: 2026-07-13
-date_authored_current_draft: 2026-07-13
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 lede: >-
-  Delegation recursion is prevented not by a depth counter but by never
-  registering `spawn_agent` on the child's tool server.
+  In July 2026, delegation recursion was blocked by never registering
+  `spawn_agent` on the child's tool server. That code is now private.
 summary: >-
   Source-cited profile of the OpenAgent submodule for the
-  conversational-UI-and-native-shells study. It is the study's most literal
-  `agentskills.io`-shaped Skills implementation and, more usefully, its most legible
+  conversational-UI-and-native-shells study. Since the 2026-11-23 pin refresh, the body
+  is a record of v0.21.1 (July 2026): the upstream reset its public history on 2026-07-27
+  and moved delegation, memory, the MCP client, and skills loading into a private
+  `openagent-runtime` repo, leaving a thin Tauri host that supervises a runtime binary
+  over authenticated loopback HTTP. The new "Changes since the previous pin" section
+  covers that split. In July it was the study's most literal
+  `agentskills.io`-shaped Skills implementation and its most legible
   codebase — delegation, long-term memory, MCP client, and skills each fit in one or two
   files under about 300 lines. Documents all four: the non-recursive `spawn_agent` tool
   and its cascading cancellation fix; the SQLite + FTS5 + `fastembed` hybrid memory store,
@@ -45,7 +50,9 @@ from_path: "context-v/profiles/Profile__Openagent.md"
 
 A profile of OpenAgent as it lives in this study (`studies/conversational-ui-and-native-shells/openagent/`). `LICENSE:1-4` plus `package.json:"license": "GPL-3.0-or-later"` and `src-tauri/Cargo.toml:7-8` (`license = "GPL-3.0-or-later"`, `license-file = "../LICENSE"`) confirm **GPL-3.0-or-later** — a copyleft choice, not the permissive MIT/Apache licensing common elsewhere in this study (`kaas/LICENSE:1` is MIT; `dive/LICENSE:1` is MIT). Read alongside [`Profile__Kaas.md`](./Profile__Kaas.md) and [`Profile__Dive.md`](./Profile__Dive.md) — the three are the study's closest analogs to a shell that dynamically loads skills/MCP servers per context, and OpenAgent is the only one of the three with an explicit "Skills" concept as a first-class, user-editable filesystem construct.
 
-**Maturity, stated plainly up front:** this is an early-stage, low-adoption repo. `gh repo view` reports **4 stars, 0 forks, 0 watchers** as of this profile's date, despite a first commit on 2026-05-18 and a most recent commit on 2026-07-13 (today) — under two months old, but committed to nearly every day by what is functionally a two-person team (BANG404 + iumm, 567 human commits between them) plus an automated release bot. Versioning is pre-1.0 (`package.json:"version": "0.21.1"`) with alpha/beta/rc pre-release tags per `CLAUDE.md`'s release-process section. Treat every claim below as "this is what the code does today," not "this is a proven pattern" — the repo is a fast-moving solo/duo project, not a widely-adopted reference implementation.
+**Maturity, stated plainly up front:** this is an early-stage, low-adoption repo. `gh repo view` reported **4 stars, 0 forks, 0 watchers** on 2026-07-13 (11 stars and 2 forks on 2026-11-23), despite a first commit on 2026-05-18 and a most recent commit on 2026-07-13 (today) — under two months old, but committed to nearly every day by what is functionally a two-person team (BANG404 + iumm, 567 human commits between them) plus an automated release bot. Versioning is pre-1.0 (`package.json:"version": "0.21.1"`) with alpha/beta/rc pre-release tags per `CLAUDE.md`'s release-process section. Treat every claim below as "this is what the code does today," not "this is a proven pattern" — the repo is a fast-moving solo/duo project, not a widely-adopted reference implementation.
+
+> **Read this first (pin refreshed 2026-11-23).** Everything from the TL;DR through "How this compares" describes OpenAgent v0.21.1 as pinned on 2026-07-13 (`94a06584a41f`). That commit no longer exists upstream: on 2026-07-27 the maintainer reset the public history (`1ae0851f chore(repo): reset public history` is now the root commit). The new pin is `9455a61d9a9b` (v0.89.0-beta.1, 2026-10-21). None of the Rust source files cited below (`src-tauri/src/sub_agent.rs`, `conversation_memory.rs`, `mcp.rs`, `skills.rs`, `state.rs`, `commands/skills_files_mcp.rs`) exist at the new pin. The execution engine that held delegation, memory, MCP and skills moved into a private repository (`runtime/`, a gitlink to `BANG404/openagent-runtime` with `update = none` in `.gitmodules`). So the mechanisms below cannot be re-checked against current source. Treat them as a record of the July code. See "Changes since the previous pin" near the end.
 
 ## TL;DR
 
@@ -166,6 +173,19 @@ If you read three files: `src-tauri/src/sub_agent.rs` (delegation, and the exact
 | **Best fit for this study's question** | Clearest, smallest, most literally `agentskills.io`-shaped Skills implementation to copy the *shape* of — but copy the idea, not the code, given GPL and immaturity | — | — |
 
 The crucial axis OpenAgent owns in this study is **legibility**: every one of the four features this study cares about (delegation, memory, MCP, skills) fits in one or two files under 300 lines each and can be read start-to-finish in an afternoon — a useful worked example of "the smallest version of each of these four systems that actually functions," even though none of the four should be assumed production-hardened.
+
+## Changes since the previous pin (2026-07-13 → 2026-10-21)
+
+Old pin `94a06584a41f` (v0.21.1), new pin `9455a61d9a9b` (v0.89.0-beta.1). A commit count is not possible: the old SHA is not in the new history, because the upstream reset its public history on 2026-07-27. The rewritten history has 2,183 commits, and `CHANGELOG.md` lists releases from 0.1.0-beta.1 through 0.89.0-beta.1, roughly 70 beta releases since the old pin. The changes that matter to this profile:
+
+- **The agent engine is no longer public.** `AGENTS.md` describes the repo as "a Tauri 2 app: SvelteKit owns UI, `crates/` owns public product Rust, `sdk/typescript` owns public clients, `runtime` is the private execution submodule, and `src-tauri` is a thin desktop host." The `CHANGELOG.md` trail: "Integrate private headless SDK" (0.26.0-beta.1, 2026-07-30), "Isolate private runtime compilation" (0.57.0-beta.1, 2026-09-06), and "Complete public product and private Runtime split" (0.83.0-beta.1, 2026-10-16). Delegation, memory, the MCP client, skills loading, and conversation storage all sit behind that boundary. The study can no longer read them.
+- **The shell became a process supervisor.** The README's architecture diagram shows the Tauri host talking to a "Supervised SDK Runtime" over "Authenticated loopback HTTP / SSE". `crates/openagent-app/src/runtime_process.rs` launches a runtime binary with a `RuntimeLaunchSpec` (binary path, workspace, `OPENAGENT_HOME`, embedding seed), passes a token in `OPENAGENT_DESKTOP_RUNTIME_TOKEN`, and checks a protocol version range. This is now the same shape as Dive: a thin native shell supervising a separately shipped agent process. The typed client is public (`sdk/typescript/src/runtime.ts`, `httpTransport.ts`, `tauriTransport.ts`) and the wire types are generated from `crates/openagent-protocol/`.
+- **Skills paths changed.** Global skills now live at `~/.agents/skills/<name>/SKILL.md`, not `~/.config/openagent/skills/` (README "Skills, roles, and plugins"; `AGENTS.md` data table). Workspace skills stay at `<workspace>/.agents/skills/`. The README still describes progressive discovery with full instructions loaded when relevant, so the lazy-load design appears to survive, but its code is private.
+- **Memory is now two stores.** User memory is a markdown file (`<OPENAGENT_HOME>/memory.md`, `<workspace>/.agents/memory.md`); structured agent memory is kept separately with "local hybrid text/vector retrieval", and automatic retrieval is off by default (README "Memory and local data"). Embedding models ship as versioned resources under `resources/embedding/<model>/<version>/` (`.agents/skills/openagent-configuration/references/data-and-startup.md`). Whether retrieval still uses rank fusion cannot be checked.
+- **New extension surfaces.** Agent Plugins (`plugin.json` packages with commands, MCP tools, skills, automation, and sidebar UI; `.agents/skills/openagent-plugin-development/`), reusable Roles, messaging channels (Feishu/Lark, Telegram, QQ, WeChat, Discord, Slack), and a paired-browser Gateway. "Child-agent coordination is a Runtime capability" (README), described as Multi-Agent V2.
+- **Licensing added a commercial option.** The code is still GPL-3.0-or-later (`LICENSE`, `package.json`), now with a separate commercial license (`COMMERCIAL_LICENSE.md`, `NOTICE`) and trademark terms (`TRADEMARKS.md`). The private runtime's license cannot be checked from here.
+
+For this study, OpenAgent has moved from "the most legible small codebase" to a second example of the Dive pattern, with the interesting parts hidden. Its public value now is the host/runtime boundary (`crates/openagent-app/`, `crates/openagent-protocol/`, `sdk/typescript/`) and its agent-facing docs under `.agents/skills/`.
 
 ## One-line summary
 

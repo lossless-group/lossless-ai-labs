@@ -9,22 +9,22 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/superpowers
 profile_kind: methodology
 date_created: 2026-05-07
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 9e3c8cc9-d1ce-49df-b80f-f3d138fbd91c
 hex_code: v8etlx
 date_authored_initial_draft: 2026-05-07
-date_authored_current_draft: 2026-05-07
+date_authored_current_draft: 2026-11-23
 lede: >-
   A SessionStart hook injects the bootstrap skill as `<EXTREMELY_IMPORTANT>`
   before the agent has written its first word.
 summary: >-
   Profile of Superpowers as pinned in this study. Framed correctly, it is a software-development
   methodology delivered as a multi-harness plugin, not a skill collection — the study's clearest
-  example of behavior-shaping over capability-extending. Covers the 14 skills and their Iron Laws,
+  example of behavior-shaping over capability-extending. Covers the 15 skills and their Iron Laws,
   the SessionStart context-injection bootstrap and why the bundle is dead weight without it, the
-  subagent-driven-development pattern with its two-stage review and its prohibition on parallel
-  implementers, the seven-harness substrate that works because skills name roles rather than tool
-  names, the behavioral test suite that plants real bugs and checks the agent catches them, and the
+  subagent-driven-development pattern with its per-task review and its prohibition on parallel
+  implementers, the multi-harness substrate (now 15+ harnesses) that works because skills name
+  roles rather than tool names, the behavioral tests that check the agent does the right thing, and the
   contributor guide's 94%-rejection anti-slop posture. Ends with an honest fit note against
   Lossless conventions: the techniques are worth lifting; wholesale adoption probably is not.
 authors:
@@ -45,19 +45,21 @@ Superpowers is **not a skill collection — it is a software-development methodo
 
 Concretely, you get:
 
-- **14 carefully-tuned skills** covering the full SDLC (`README.md:154-196`)
-- **A SessionStart hook** that injects a bootstrap skill (`using-superpowers`) into context before the agent says its first word (`hooks/session-start:1-58`)
-- **A "subagent-driven-development" pattern** that dispatches a fresh subagent per task with a two-stage review (spec compliance first, then code quality) and explicit instructions to the reviewer to *not trust the implementer's report* (`skills/subagent-driven-development/spec-reviewer-prompt.md:20-56`)
-- **Cross-harness support** for Claude Code, Codex, Gemini CLI, OpenCode, Cursor, Factory Droid, and GitHub Copilot CLI — same skill files, platform-specific tool mappings (`README.md:35-152`)
-- **A measured, anti-slop stance** documented as 94% PR rejection from AI agents that didn't read the contributor guide (`CLAUDE.md:3-19`)
+- **15 carefully-tuned skills** covering the full SDLC (`README.md:340-365`)
+- **A SessionStart hook** that injects a bootstrap skill (`using-superpowers`) into context before the agent says its first word (`hooks/session-start`)
+- **A "subagent-driven-development" pattern** that dispatches a fresh subagent per task, reviews each task for both spec compliance and code quality, finishes with one whole-branch review, and tells the reviewer to *not trust the implementer's report* (`skills/subagent-driven-development/task-reviewer-prompt.md:64-71`)
+- **Cross-harness support** for Claude Code, Codex (App and CLI), Antigravity, Cursor, Devin CLI, Factory Droid, Gemini CLI, GitHub Copilot CLI, Grok Build CLI, Kimi Code, OpenCode, Pi, Qwen Code, Hermes Agent, and Muse — same skill files, platform-specific tool mappings (`README.md:52-306`)
+- **A measured, anti-slop stance** documented as 94% PR rejection from AI agents that didn't read the contributor guide (`AGENTS.md:3-20`)
 
 It is **the most aggressive behavior-shaping skill bundle in the public agent-tooling space.** Every skill has an "Iron Law" (all-caps absolute) and most have a "Red Flags" table mapping common rationalizations to the reality the skill exists to enforce.
 
 ## Why this exists — the central argument
 
-Jesse Vincent's pitch in the README (`README.md:11-19`):
+Jesse Vincent's pitch in the README (`README.md:36-46`):
 
 > "It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow."
+
+The README pitch is unchanged, but the `writing-plans` skill itself moved away from it in v6.4.2: the plan's reader is now "an engineer who … write[s] idiomatic code in the project's language once they know the exact interface and the exact test" (`skills/writing-plans/SKILL.md:10`), replacing "zero context, questionable taste."
 
 The mental model embedded there is the project's philosophy: **assume the agent has poor taste and will skip steps if it can.** Then build the rails that make skipping impossible.
 
@@ -68,43 +70,45 @@ Read [the original release announcement](https://blog.fsck.com/2025/10/09/superp
 | Path | What's there |
 |---|---|
 | `superpowers/README.md` | Pitch, install per harness, basic workflow, philosophy |
-| `superpowers/CLAUDE.md` (= `AGENTS.md`) | Contributor guidelines — the 94%-rejection-rate audit, what they will not accept |
-| `superpowers/skills/` | 14 skills, each a directory with `SKILL.md` and supporting files |
-| `superpowers/hooks/hooks.json` | SessionStart hook config (Claude Code, Codex, Copilot CLI) |
+| `superpowers/AGENTS.md` | Contributor guidelines — the 94%-rejection-rate audit, what they will not accept. Canonical since v6.4.1; `CLAUDE.md` was removed from the repo in v6.4.2 |
+| `superpowers/skills/` | 15 skills, each a directory with `SKILL.md` and supporting files (several now split detail into `references/`) |
+| `superpowers/hooks/hooks.json` | SessionStart hook config (Claude Code, Copilot CLI; now with a `powershell` form) |
 | `superpowers/hooks/hooks-cursor.json` | Cursor-specific hook config |
 | `superpowers/hooks/session-start` | Bash script — reads `using-superpowers/SKILL.md` and injects it as `<EXTREMELY_IMPORTANT>` context at session start |
-| `superpowers/scripts/` | Marketplace sync tooling (e.g., `sync-to-codex-plugin`), maintenance scripts |
-| `superpowers/tests/claude-code/` | **Behavioral tests** — invoke headless Claude Code, plant bugs, verify the skill-driven agent catches them |
-| `superpowers/docs/` | Per-harness install guides, plus blog-post-style essays |
+| `superpowers/.<harness>-plugin/` | Per-harness manifests: `.claude-plugin`, `.codex-plugin`, `.cursor-plugin`, `.antigravity-plugin`, `.devin-plugin`, `.hermes-plugin`, `.kimi-plugin`, `.muse-plugin`, plus `.opencode/` and `.pi/` |
+| `superpowers/scripts/` | Marketplace sync and packaging (`sync-to-codex-plugin.sh`, `package-codex-plugin.sh`), version bumping, shell lint |
+| `superpowers/tests/` | Per-harness and per-skill test directories; `tests/claude-code/` holds **behavioral tests** that run headless Claude Code (`claude -p`) |
+| `superpowers/docs/` | Per-harness install guides, `porting-to-a-new-harness.md`, design specs and plans |
 | `superpowers/gemini-extension.json` | Gemini CLI extension manifest (points at `GEMINI.md` for context) |
-| `superpowers/RELEASE-NOTES.md` | Active changelog — currently at v5.1.0 |
+| `superpowers/RELEASE-NOTES.md` | Active changelog — at v7.0.2 as of this pin |
 
-### The 14 skills
+### The 15 skills
 
-Verbatim from the upstream `README.md:154-196` plus directory listing. Each lives at `skills/<slug>/SKILL.md`:
+From the upstream `README.md:340-365` plus directory listing. Each lives at `skills/<slug>/SKILL.md`:
 
 | Slug | One-line role |
 |---|---|
 | `using-superpowers` | **Bootstrap.** The skill the SessionStart hook injects at startup. Establishes the "Red Flags" discipline and mandates `Skill` tool invocation before any other response. |
-| `brainstorming` | Socratic spec refinement. Hard-gates code on design approval. Saves design to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`. |
-| `writing-plans` | Implementation plan authoring with bite-sized (2-5 min) tasks, exact file paths, complete code per step. Saves to `docs/superpowers/plans/YYYY-MM-DD-<feature>.md`. |
-| `using-git-worktrees` | Isolation discipline — detects existing worktrees (with submodule guard), prefers native harness tools, falls back to `git worktree add`. |
-| `subagent-driven-development` | Fresh subagent per task with two-stage review (spec → code quality). The distinctive pattern. |
-| `executing-plans` | Single-session batch alternative to SDD for harnesses without subagent support. |
+| `brainstorming` | Draws out why you want the thing, sizes the work, then proposes approaches. Hard-gates building on approval of a design doc. Saves design to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`. |
+| `writing-plans` | Implementation plan authoring: bite-sized tasks that record decisions (files, signatures, spec values, tests) rather than transcribing code, plus Global Constraints and Review Focus sections. Saves to `docs/superpowers/plans/YYYY-MM-DD-<feature>.md`. |
+| `using-git-worktrees` | Isolation discipline — detects existing worktrees (with submodule guard), prefers native harness tools, falls back to `git worktree add` inside the project (`.worktrees/`). |
+| `subagent-driven-development` | Fresh subagent per task, one reviewer per task returning spec and quality verdicts, one whole-branch review at the end. The distinctive pattern. |
+| `executing-plans` | Native (inline) execution: the session implements every task itself under the same workspace and ledger rules as SDD, with one final review. Rebuilt in v6.4.1 from a 64-line stub. |
 | `test-driven-development` | RED-GREEN-REFACTOR enforcement. Iron Law: NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST. |
 | `systematic-debugging` | Root-cause-first. Iron Law: NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST. |
 | `verification-before-completion` | Iron Law: NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE. |
 | `requesting-code-review` | Dispatches a code-reviewer subagent with precision-crafted context (never session history). |
 | `receiving-code-review` | Anti-performative-agreement — forbids "You're absolutely right!" responses; mandates technical evaluation. |
 | `dispatching-parallel-agents` | Pattern for delegating 2+ independent tasks with isolated context per agent. |
-| `finishing-a-development-branch` | Verify tests → detect environment → present merge/PR/keep/discard menu → cleanup with provenance discipline. |
+| `finishing-a-development-branch` | Verify tests → detect environment → present merge/PR/keep menu → cleanup with provenance discipline. "Discard" left the menu in v6.2.0; it happens only on explicit request. |
 | `writing-skills` | **Meta.** Applies TDD to skill authoring: pressure-test scenarios are tests, the SKILL.md is production code, agent violations are test failures. |
+| `diagnosing-superpowers` | **New in v6.4.1.** Works out what went wrong in a session with evidence, then exports a scrubbed bundle or drafts an issue. |
 
 ## The bootstrap mechanic (the most interesting technical detail)
 
 How does Superpowers get a skill to "auto-trigger" without the user invoking it? Through a SessionStart hook that **injects the bootstrap skill's full content into context** at startup.
 
-The hook config (`hooks/hooks.json:1-16`):
+The hook config (`hooks/hooks.json:1-18`):
 
 ```json
 {
@@ -116,6 +120,8 @@ The hook config (`hooks/hooks.json:1-16`):
           {
             "type": "command",
             "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd\" session-start",
+            "powershell": "& \"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd\" session-start",
+            "shell": "bash",
             "async": false
           }
         ]
@@ -125,21 +131,16 @@ The hook config (`hooks/hooks.json:1-16`):
 }
 ```
 
-It fires at session startup, after `/clear`, and after `/compact`.
+It fires at session startup, after `/clear`, and after `/compact`. The `powershell` form (v7.0.2) lets Copilot on Windows run it.
 
-The hook script reads the bootstrap skill and emits it as a context injection (`hooks/session-start:30-58`):
+The hook script reads the bootstrap skill and emits it as a context injection (`hooks/session-start:24-49`). Since v7.0 it avoids `cat`, `dirname`, and command substitution so that it survives a broken `PATH` and starts no child processes:
 
 ```bash
-using_superpowers_content=$(cat "${PLUGIN_ROOT}/skills/using-superpowers/SKILL.md")
+IFS= read -r -d '' using_superpowers_content < "$skill_md" || true
 
-session_context="<EXTREMELY_IMPORTANT>
-You have superpowers.
-
-**Below is the full content of your 'superpowers:using-superpowers' skill -
-your introduction to using skills. For all other skills, use the 'Skill' tool:**
-
-${using_superpowers_escaped}
-</EXTREMELY_IMPORTANT>"
+session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your
+'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills,
+use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n</EXTREMELY_IMPORTANT>"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context (snake_case).
@@ -149,7 +150,11 @@ ${using_superpowers_escaped}
 
 The body of `using-superpowers/SKILL.md` then contains the discipline that drives auto-loading of *other* skills (`skills/using-superpowers/SKILL.md:10-16`):
 
-> "If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill. IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT. This is not negotiable. This is not optional. You cannot rationalize your way out of this."
+> "If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill. IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT. This is not negotiable. You cannot rationalize your way out of this."
+
+The bootstrap itself shrank: v6.1.0 compressed `using-superpowers/SKILL.md` (it is about 3.2 KB at this pin, down from about 5.4 KB) to cut per-session token cost.
+
+Not every harness uses a hook. Codex dropped its SessionStart hook in v6.1.0 because it triggers skills reliably on its own, and Antigravity has no session-start event, so it bootstraps through skill discovery: the `using-superpowers` description says "Use when starting any conversation."
 
 The technique generalizes: **a SessionStart hook is a hammer for installing always-on behavior**, and the strength of the behavior is purely a function of how forcefully the injected text speaks. Superpowers leans hard on this. Most other skill collections (including ours) do not.
 
@@ -167,7 +172,7 @@ flowchart LR
     S -.->|tdd / debug / review<br/>fire inside each task| S
 ```
 
-The flow is end-to-end: the agent doesn't write code until brainstorming has produced an approved spec, doesn't execute until writing-plans has produced a plan with no placeholders, and doesn't merge until finishing-a-development-branch has verified the test suite. Each gate is enforced by the skill itself, not by user vigilance.
+The flow is end-to-end: the agent doesn't write code until brainstorming has produced an approved design doc, doesn't execute until you have reviewed the saved plan, and doesn't merge until finishing-a-development-branch has verified the test suite. Since v6.3.0 the ceremony scales: brainstorming sizes the work and does a quick, clear task right away, agrees a small change in chat, and writes a full design document only for a project. Each gate is enforced by the skill itself, not by user vigilance.
 
 ### Specs and plans live in known places
 
@@ -183,9 +188,9 @@ Each skill has an Iron Law — an all-caps absolute that gates the skill's purpo
 | Skill | Iron Law | Citation |
 |---|---|---|
 | test-driven-development | "NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST." | `skills/test-driven-development/SKILL.md` |
-| verification-before-completion | "NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE." | `skills/verification-before-completion/SKILL.md:19-20` |
-| systematic-debugging | "NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST." | `skills/systematic-debugging/SKILL.md:16-22` |
-| brainstorming | "Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it." | `skills/brainstorming/SKILL.md:12-14` |
+| verification-before-completion | "NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE." | `skills/verification-before-completion/SKILL.md:14-17` |
+| systematic-debugging | "NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST." | `skills/systematic-debugging/SKILL.md:14-20` |
+| brainstorming | "Nothing gets built until your human partner approves the design doc: the short one for a small change, the full one for a project." (a `<HARD-GATE>` block; it replaced the earlier "Do NOT invoke any implementation skill…" wording and moved from the top of the file to near the end) | `skills/brainstorming/SKILL.md:269-283` |
 
 Each Iron Law is paired with a "Red Flags" table of common rationalizations agents use to avoid the law, mapped to the reality the law enforces. From `skills/test-driven-development/SKILL.md:37-45`:
 
@@ -203,54 +208,54 @@ Of all the skills, `subagent-driven-development` (SDD) is the one most worth und
 
 1. **Implementer subagent.** Fresh dispatch (no shared session history). Implements, tests, commits, and self-reviews. Reports one of four statuses: `DONE`, `DONE_WITH_CONCERNS`, `NEEDS_CONTEXT`, `BLOCKED`.
 
-2. **Spec compliance review.** Fresh `Task (general-purpose)` subagent. The reviewer's prompt template is at `skills/subagent-driven-development/spec-reviewer-prompt.md` and includes this striking instruction (lines 20-56):
+2. **Task review.** One fresh reviewer subagent per task, using `skills/subagent-driven-development/task-reviewer-prompt.md`. Until v6.0.0 this was two stages with two templates (`spec-reviewer-prompt.md`, then `code-quality-reviewer-prompt.md`); they were merged so the reviewer reads the diff once and returns both a spec-compliance verdict and a quality verdict, plus a "can't verify from the diff" verdict. The skeptical instruction survives (`task-reviewer-prompt.md:64-71`):
 
-   > "## CRITICAL: Do Not Trust the Report
+   > "## Do Not Trust the Report
    >
-   > The implementer finished suspiciously quickly. Their report may be incomplete, inaccurate, or optimistic. You MUST verify everything independently.
-   >
-   > **DO NOT:**
-   > - Take their word for what they implemented
-   > - Trust their claims about completeness
-   > - Accept their interpretation of requirements
-   >
-   > **DO:**
-   > - Read the actual code they wrote
-   > - Compare actual implementation to requirements line by line"
+   > Treat the implementer's report as unverified claims about the code. It may be incomplete, inaccurate, or optimistic. Verify the claims against the diff. Design rationales in the report are claims too … Judge the code on its merits — a stated rationale never downgrades a finding's severity."
 
-3. **Code quality review.** Only after spec passes. Different reviewer subagent, different prompt template, focused on file decomposition, single responsibility, interface clarity, structure.
+   Reviewers are read-only, and the controller may not tell a reviewer what to ignore or pre-rate severity.
 
-4. **Fix loops.** If either reviewer finds issues, the *same* implementer (not a fresh one) fixes them and the reviewer re-reviews. Loops until approved.
+3. **Fix loops.** If the reviewer finds issues, the *same* implementer is resumed to fix them, and a scoped re-review checks the fixes. Loops until approved.
 
-**One striking constraint** (`skills/subagent-driven-development/SKILL.md:238`): "Dispatch multiple implementation subagents in parallel" is **forbidden**. Only the reviewers can run in parallel; implementers are sequential within each task. The rationale is conflicts: parallel implementers stomp on each other's files. Reviewers only read.
+4. **One broad review at the end.** A single whole-branch review on the most capable model, instead of re-reviewing task by task.
 
-**Continuous execution** (`skills/subagent-driven-development/SKILL.md:12-14`):
+Task text and diffs move as files (`scripts/task-brief`, `scripts/review-package` under the skill), and a per-plan workspace at `.superpowers/sdd/<plan-basename>/` holds the progress ledger so a controller that loses context can resume.
 
-> "Continuous execution: Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping."
+**One striking constraint** (`skills/subagent-driven-development/SKILL.md:235`): "Never dispatch multiple implementation subagents in parallel (conflicts)." Implementers are sequential. The rationale is conflicts: parallel implementers stomp on each other's files.
 
-That last quote captures the SDD bet: *the human partner did the work upfront in brainstorming and writing-plans*; if those gates were honored, the agent should be able to run uninterrupted for the duration of the plan. Jesse claims (`README.md:17`) "It's not uncommon for Claude to be able to work autonomously for a couple hours at a time without deviating from the plan you put together."
+**Continuous execution** (`skills/subagent-driven-development/SKILL.md:17`):
+
+> "Continuous execution: Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping. The only reasons to stop are the four named below, or all tasks complete."
+
+The four are an irreversible or destructive operation, a security-sensitive action, an outside side effect such as a merge or push, and a plan too broken to proceed. Everything else gets a recorded "Ruling" in the ledger and work continues (added in v6.3.0 after a session sat blocked for almost nine hours).
+
+That captures the SDD bet: *the human partner did the work upfront in brainstorming and writing-plans*; if those gates were honored, the agent should be able to run uninterrupted for the duration of the plan. Jesse claims (`README.md:42`) "It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together."
 
 ## Multi-harness substrate
 
-Superpowers ships the *same skill files* to seven harnesses. The substrate is:
+Superpowers ships the *same skill files* to many harnesses. At the previous pin (v5.1.0) the README listed seven; at this pin it has install sections for fifteen (`README.md:52-306`). A selection:
 
-| Harness | Install command | Hook file | Tool mapping |
+| Harness | Install command | Bootstrap | Tool mapping |
 |---|---|---|---|
-| Claude Code | `/plugin install superpowers@claude-plugins-official` | `hooks/hooks.json` | Native (Read, Write, Edit, Bash, Task) |
-| Codex CLI | `/plugins` → search "superpowers" → install | `hooks/hooks.json` | Codex tool names |
-| Gemini CLI | `gemini extensions install …superpowers` | (extension lifecycle) | `skills/using-superpowers/references/gemini-tools.md` (Read→read_file, Write→write_file, Task→@generalist) |
-| OpenCode | `opencode.json` plugin entry | (plugin's own hook) | `.opencode/INSTALL.md:99-105` (TodoWrite→todowrite, Task→@mention, Skill→skill) |
+| Claude Code | `/plugin install superpowers@claude-plugins-official` | `hooks/hooks.json` | `skills/using-superpowers/references/claude-code-tools.md` |
+| Codex CLI / App | `/plugins` → search "superpowers" → install | None since v6.1.0; Codex triggers skills itself | `references/codex-tools.md` |
+| Antigravity | `agy plugin install https://github.com/obra/superpowers` | Skill discovery (no hook event) | `references/antigravity-tools.md` |
+| Gemini CLI | `gemini extensions install …superpowers` | (extension lifecycle) | `references/gemini-tools.md` (removed in v6.1.0, restored in v6.2.0) |
+| OpenCode (V1 and 2.0.4+) | `opencode.json` plugin entry | plugin's own injection | `.opencode/INSTALL.md` |
+| Pi | Pi package entry | `.pi/` extension | `references/pi-tools.md` |
+| Hermes Agent | git clone | native loader, first turn | `references/hermes-tools.md` |
+| Muse | `muse plugins install ./` | `.muse-plugin/` SessionStart | `references/muse-tools.md` |
 | Cursor | `/add-plugin superpowers` | `hooks/hooks-cursor.json` | (cursor tool names) |
-| Factory Droid | `droid plugin install superpowers@superpowers` | (droid lifecycle) | (droid tool names) |
-| GitHub Copilot CLI | `copilot plugin install superpowers@superpowers-marketplace` | (copilot lifecycle) | (copilot tool names) |
+| Devin CLI, Factory Droid, GitHub Copilot CLI, Grok Build CLI, Kimi Code, Qwen Code | per-harness commands in the README | various | (native names) |
 
-**Key insight:** the skills do not contain hardcoded tool names. They reference *roles* (read a file, write a file, dispatch a subagent). Per-harness tool-mapping reference docs translate roles into local tool names. This is how the same skill text works across so many tools.
+**Key insight:** the skills do not contain hardcoded tool names. They reference *roles* (read a file, write a file, dispatch a subagent). Per-harness tool-mapping reference docs translate roles into local tool names. This is how the same skill text works across so many tools. v6.1.0 trimmed those reference files to the notes that still carry weight (subagent dispatch, task tracking, instruction-file paths), and `docs/porting-to-a-new-harness.md` now documents the three pieces a new integration needs.
 
-There's a synchronization script at `scripts/sync-to-codex-plugin` that mirrors the upstream into OpenAI's plugin marketplace as `prime-radiant-inc/openai-codex-plugins`. Path-agnostic and clones fresh per run.
+There's a synchronization script at `scripts/sync-to-codex-plugin.sh` that mirrors the upstream into OpenAI's plugin marketplace as `prime-radiant-inc/openai-codex-plugins`, and `scripts/package-codex-plugin.sh` builds a deterministic Codex archive.
 
-## The opinionated stance (the CLAUDE.md / AGENTS.md)
+## The opinionated stance (AGENTS.md)
 
-The project's contributor guide opens with a direct address to AI agents (`CLAUDE.md:3-19`):
+The project's contributor guide (now `AGENTS.md`; `CLAUDE.md` is gone) opens with a direct address to AI agents (`AGENTS.md:3-9`):
 
 > "If You Are an AI Agent
 >
@@ -260,7 +265,9 @@ The project's contributor guide opens with a direct address to AI agents (`CLAUD
 >
 > Your job is to protect your human partner from that outcome. Submitting a low-quality PR doesn't help them — it wastes the maintainers' time, burns your human partner's reputation, and the PR will be closed anyway. That is not being helpful. That is being a tool of embarrassment."
 
-What they explicitly will not accept (`CLAUDE.md:29-66`):
+Since the previous pin it adds two rules: every contribution discloses model, harness, version, and installed plugins (`AGENTS.md:17`), and every PR carries a human-written summary under 200 words (`AGENTS.md:26`). v7.0.1 added that agent-written PRs fixing someone else's issue are closed unless a maintainer asked for one (`AGENTS.md:52`).
+
+What they explicitly will not accept (`AGENTS.md:36-76`):
 
 - **Third-party dependencies.** "Superpowers is a zero-dependency plugin by design."
 - **"Compliance" rewrites of skill content** without eval evidence. They've extensively tuned the language; rewriting it to match Anthropic's published guidance gets rejected.
@@ -272,7 +279,7 @@ What they explicitly will not accept (`CLAUDE.md:29-66`):
 - **Fabricated content.** Invented claims, hallucinated functionality.
 - **Bundled unrelated changes.** One problem per PR.
 
-**Acceptance test for new harness support** (`CLAUDE.md:73-86`): a real integration must auto-trigger `brainstorming` when the user says "Let's make a react todo list" — proving the SessionStart hook is wired correctly. Manually copying skill files in or wrapping with `npx skills` shims doesn't count.
+**Acceptance test for new harness support** (`AGENTS.md:78-88`): a real integration must auto-trigger `brainstorming` when the user says "Let's make a react todo list" — proving the SessionStart hook is wired correctly. Manually copying skill files in or wrapping with `npx skills` shims doesn't count.
 
 This document is itself a study artifact. The fact that it had to be written, and had to be this direct, is evidence about the state of agentic open-source contribution.
 
@@ -280,26 +287,24 @@ This document is itself a study artifact. The fact that it had to be written, an
 
 The `tests/claude-code/` directory contains **behavioral tests, not unit tests** — they invoke `claude -p` (headless mode) and check whether the skill-loaded agent actually does the right thing.
 
-The most striking example is the code-review test (`tests/claude-code/test-requesting-code-review.sh`):
+The most striking example at the previous pin was the code-review test, `tests/claude-code/test-requesting-code-review.sh`, which planted a SQL injection and a plaintext-password bug and asserted the reviewer flagged them at Critical/Important severity and refused to approve. It was deleted on 2026-05-06 (commit `12ef68d`), with the commit message saying a cross-harness, semantically judged "drill" (`code-review-catches-planted-bugs`) replaces it. Since v6.0.2 that eval harness lives in a separate repository rather than a submodule here, so the planted-bug scenario is no longer readable in this pin. What remains in `tests/claude-code/` (SDD integration, worktree policy, executing-plans scripts) still runs `claude -p` and checks behavior.
 
-> "Behavioral test. Builds tiny project with baseline, adds second commit planting SQL injection + plaintext password bugs, dispatches reviewer via requesting-code-review skill, asserts reviewer flags bugs at Critical/Important severity and refuses to approve."
-
-This is meaningful. It is not asking "does the SKILL.md parse?" It is asking "given this skill is loaded, does the agent under test catch a planted SQL injection?" The skills are evaluated against the behavior they shape, end-to-end.
+This is meaningful. It is not asking "does the SKILL.md parse?" It is asking "given this skill is loaded, does the agent under test catch a planted SQL injection?" The skills are evaluated against the behavior they shape, end-to-end. The release notes now routinely report blind-graded eval counts for skill wording changes (for example, brainstorming's filler questions dropping from 41 to 23 in v7.0.2); these are vendor-reported.
 
 ## Mental model for using it well
 
 - **Trust the discipline; don't rationalize past it.** Most of the work the skills do is anti-rationalization. If you find yourself saying "this case is different," the Red Flags table almost certainly anticipated that exact rationalization.
 - **Each skill is the answer to a specific failure mode.** The skill exists because someone observed an agent failing in that way. Don't read the skill as ceremony; read it as a recovered lesson.
-- **"Human partner" is deliberate** (`CLAUDE.md:99`). The terminology centers the human as a collaborator in shared decision-making, not a passive consumer of agent output. Agent-tool projects that say "the user" are subtly different.
+- **"Human partner" is deliberate** (`AGENTS.md:114`). The terminology centers the human as a collaborator in shared decision-making, not a passive consumer of agent output. Agent-tool projects that say "the user" are subtly different.
 - **The bootstrap is the wedge.** Once `using-superpowers` is loaded, the rest of the discipline propagates because it forces the agent to invoke the `Skill` tool before anything else. Without the SessionStart hook, the bundle is dead weight.
-- **SDD is the differentiator.** If your harness has subagent support, prefer SDD. If not, executing-plans is the fallback (the executing-plans skill itself recommends installing on a subagent-capable harness — `skills/executing-plans/SKILL.md:14-15`).
+- **SDD is the differentiator.** If your harness has subagent support, SDD is usually preferred. Since v6.4.1, executing-plans is a real alternative rather than a stub: the plan handoff offers both and recommends one per plan (`skills/executing-plans/SKILL.md:49-60`).
 
 ## When NOT to reach for this
 
 - **You already have a workflow you're satisfied with.** Superpowers is not subtle; it changes how the agent behaves at every step. If the changes you want are surgical, write a custom skill or two; don't adopt the whole methodology.
 - **You prefer lightweight skill content.** The discipline-density of these skills is intentional but heavy. If your team's preference is lean SKILL.md files (like ours typically are), Superpowers will feel over-instrumented.
 - **Your skills are domain-specific.** Superpowers core won't accept domain-specific contributions. You can fork or build alongside, but you can't merge.
-- **You don't want SessionStart context injection.** The bootstrap mechanic loads ~5k of `<EXTREMELY_IMPORTANT>` text into every session. If your context budget is already tight, that's a real cost.
+- **You don't want SessionStart context injection.** The bootstrap mechanic loads about 3 KB of `<EXTREMELY_IMPORTANT>` text into every session (down from about 5 KB before v6.1.0). If your context budget is already tight, that's a real cost.
 
 ## Comparisons
 
@@ -326,14 +331,27 @@ A few real tensions between Superpowers' shape and our standing conventions:
 What's worth learning from Superpowers regardless of whether we adopt it:
 
 - **The SessionStart context-injection pattern.** A hammer for installing always-on behavior. Worth keeping in our toolkit.
-- **The two-stage review with explicit reviewer skepticism.** Spec compliance first, then code quality. Tell the reviewer "don't trust the implementer's report." This is sophisticated subagent orchestration that we could lift directly.
+- **Per-task review with explicit reviewer skepticism.** One reviewer returns both a spec-compliance and a quality verdict (two separate stages before v6.0.0). Tell the reviewer "don't trust the implementer's report." This is sophisticated subagent orchestration that we could lift directly.
 - **TDD applied to skill authoring** (`writing-skills`). The pressure-scenario-as-test methodology is principled and we should consider it for high-stakes skills.
 - **Behavioral tests** (plant SQL injection → verify reviewer catches it). Most skill repos test that the SKILL.md parses; Superpowers tests that the agent behaves correctly. Bar is higher.
 - **Iron Laws as a writing technique.** When a skill has one absolute that must hold, name it in all caps and make it the load-bearing claim of the document.
-- **The anti-slop posture.** Their CLAUDE.md is pointed and effective. We don't have the same scale problem (low-volume contributions, mostly internal), but if we ever did, this is the template.
+- **The anti-slop posture.** Their AGENTS.md is pointed and effective. We don't have the same scale problem (low-volume contributions, mostly internal), but if we ever did, this is the template.
 
 This profile is a study, not an adoption recommendation. We are unlikely to install Superpowers wholesale — our skills are too domain-specific to coexist cleanly, and we'd lose more than we gained. But the techniques are worth knowing in detail.
 
+## Changes since the previous pin (2026-05-04 → 2026-11-03)
+
+`f2cbfbefebbf` → `22f0b463e7a5`, 247 commits. Releases in range: v6.0.0–v6.0.3 (June), v6.1.0, v6.1.1, v6.2.0, v6.3.0, v6.4.1, v6.4.2, **v7.0.0** (2026-10-09), v7.0.1, **v7.0.2** (2026-11-03). License unchanged (MIT). The lede of this profile still holds for Claude Code, Cursor, and Copilot.
+
+- **SDD restructured (v6.0.0).** Two reviewer prompts became one `task-reviewer-prompt.md` with two verdicts; a final whole-branch review was added; diffs and briefs move as files via `task-brief` and `review-package`; every dispatch must name a model. v6.2.0 made the workspace plan-scoped and v6.3.0 replaced stalls with recorded rulings.
+- **Brainstorming rewritten (v7.0.x).** It asks why first, sizes the work, offers options with a recommendation, uses a "builder check" subagent instead of a spec-document reviewer, and gates building on an approved design doc (`skills/brainstorming/SKILL.md:269-283`).
+- **Planning changed (v6.4.x).** Plans record decisions instead of transcribing code, carry Global Constraints, Interfaces, and Review Focus sections, and must be reviewed by you before anything runs. `executing-plans` became a real inline mode.
+- **Harness spread.** New: Kimi Code, Pi, Antigravity (v6.0.0), Devin CLI, Hermes Agent, Grok Build (v6.3.0), OpenCode 2, Muse, Qwen Code (v6.4.1). Codex dropped its SessionStart hook; Gemini CLI was removed then restored.
+- **New skill**: `diagnosing-superpowers` (v6.4.1). Skill count is now 15.
+- **Contributor rules**: `AGENTS.md` replaced `CLAUDE.md`; disclosure of model/harness and a human-written PR summary are required.
+- **Tests**: the planted-SQL-injection bash test was removed in favor of an out-of-repo eval drill; the `evals` submodule was dropped in v6.0.2.
+- **Worktrees** now live in the project (`.worktrees/`) instead of `~/.config/superpowers/worktrees/`.
+
 ## One-line summary
 
-> Superpowers is a complete agent-development methodology delivered as a multi-harness plugin: a SessionStart hook injects a bootstrap skill that mandates `Skill`-tool invocation before any response, fourteen tightly-tuned skills enforce Iron Laws (no production code without failing tests, no completion claims without verification, no fixes without root cause investigation) via Red Flags rationalization tables, and a "subagent-driven-development" pattern dispatches a fresh subagent per task with a two-stage review whose spec reviewer is explicitly told *not to trust* the implementer's report.
+> Superpowers is a complete agent-development methodology delivered as a multi-harness plugin: a SessionStart hook injects a bootstrap skill that mandates `Skill`-tool invocation before any response, fifteen tightly-tuned skills enforce Iron Laws (no production code without failing tests, no completion claims without verification, no fixes without root cause investigation) via Red Flags rationalization tables, and a "subagent-driven-development" pattern dispatches a fresh subagent per task with a per-task reviewer that is explicitly told *not to trust* the implementer's report.

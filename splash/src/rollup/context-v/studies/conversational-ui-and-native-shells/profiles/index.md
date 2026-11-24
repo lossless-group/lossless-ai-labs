@@ -11,5 +11,5 @@ from_path: "context-v/profiles/index.md"
 * [Dive — Profile](Profile__Dive.md) - Two native shells, neither containing a line of agent logic — both are thin supervisors spawning the same Python subprocess.
 * [Kaas — Profile](Profile__Kaas.md) - Every credential, provider quirk, and even context assembly lives in Rust; React gets typed `invoke()` calls and nothing else.
 * [Open Vibe — Profile](Profile__Open-Vibe.md) - One real OS child process per workspace — but only ever one binary. What varies per workspace is the invocation, not the backend.
-* [OpenAgent — Profile](Profile__Openagent.md) - Delegation recursion is prevented not by a depth counter but by never registering `spawn_agent` on the child's tool server.
+* [OpenAgent — Profile](Profile__Openagent.md) - In July 2026, delegation recursion was blocked by never registering `spawn_agent` on the child's tool server. That code is now private.
 * [Routa — Profile](Profile__Routa.md) - The swappable unit turns out to be the session, not the workspace: two sessions in one workspace can run two different agent CLIs.

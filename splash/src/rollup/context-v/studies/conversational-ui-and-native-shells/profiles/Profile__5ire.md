@@ -10,18 +10,18 @@ study: studies/conversational-ui-and-native-shells
 profile_path: studies/conversational-ui-and-native-shells/5ire
 profile_kind: Electron (React renderer), MCP client + local-first chat app mid-migration from SQLite to PGlite/Postgres
 date_created: 2026-07-13
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 9fd5b9ae-14ee-4a79-90d5-1321b93d1216
 hex_code: 6lscdz
 date_authored_initial_draft: 2026-07-13
-date_authored_current_draft: 2026-07-13
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 lede: >-
   5ire's MCP layer has no apply button — editing a server row in PGlite makes
   the client reconnect via the live-query changefeed.
 summary: >-
-  Source-cited profile of the 5ire submodule (pinned at `c7fabb9`) for the
+  Source-cited profile of the 5ire submodule (pinned at `1d814ce`) for the
   conversational-UI-and-native-shells study. Serves as the study's Electron
   comparison point and its most complete MCP-client reference. Documents four
   things an agent may need: (1) the in-progress SQLite/LanceDB → PGlite/Drizzle/pgvector
@@ -43,7 +43,7 @@ from_path: "context-v/profiles/Profile__5ire.md"
 ---
 # 5ire — Profile
 
-A profile of 5ire as it lives in this study (`studies/conversational-ui-and-native-shells/5ire/`, pinned at `c7fabb9`, tag-derived version `v0.15.4-5-gc7fabb9`). Cites pinned paths so you can jump to source rather than trust paraphrase. Included as the study's **Electron comparison point** — its local-persistence story and MCP-server-marketplace maturity are the load-bearing reasons it's here, despite the study otherwise leaning Tauri. Read alongside `Profile__Dive.md` (Tauri+Electron dual-shell, MCP host) and `Profile__Anything-Llm.md` (Electron, workspace-switching).
+A profile of 5ire as it lives in this study (`studies/conversational-ui-and-native-shells/5ire/`, pinned at `1d814ce`, tag-derived version `v0.15.4-17-g1d814ce`; first written against `c7fabb9`). Cites pinned paths so you can jump to source rather than trust paraphrase. Included as the study's **Electron comparison point** — its local-persistence story and MCP-server-marketplace maturity are the load-bearing reasons it's here, despite the study otherwise leaning Tauri. Read alongside `Profile__Dive.md` (Tauri+Electron dual-shell, MCP host) and `Profile__Anything-Llm.md` (Electron, workspace-switching).
 
 ## Characterizing the license
 
@@ -138,6 +138,15 @@ If you read three files: `src/main/services/legacy-data-migrator.ts` (the migrat
 | **Best fit** | Studying a live SQLite→Postgres(WASM) migration in a shipping desktop app, and/or the most complete MCP-client+marketplace pairing in this study | Cross-shell (Tauri/Electron) MCP-host comparison | Workspace-switching UX comparison |
 
 5ire's load-bearing contribution to this study is **a real, in-progress persistence migration (SQLite/LanceDB → PGlite/pgvector) caught mid-flight in the source tree, paired with the study's most complete MCP-client implementation — SDK-native transports, a retry/abort connection state machine, and reconnection driven entirely by the new database's live-query changefeed — plus a working, minimal community marketplace (a static JSON feed with a TTL cache) that any MCP-client-building project could copy almost verbatim.**
+
+## Changes since the previous pin (2026-06-17 → 2026-11-19)
+
+Old pin `c7fabb9028ae`, new pin `1d814ce0be0c`: 12 commits including merges, 6 of them substantive. No release was tagged in range; `package.json` still says `0.15.4`. Nothing this profile describes changed. None of the cited persistence, migrator, MCP-manager, marketplace, bookmark, or search files were touched, so every path and line citation above still holds.
+
+- **Five more built-in providers.** UnoRouter, TokenDos, Atlas Cloud, UberLLM, and TrustedRouter each arrive as a ~32-line config object (`src/providers/TrustedRouter.ts` and siblings) plus an 11-line chat service (`src/intellichat/services/TrustedRouterChatService.ts`), registered in `src/providers/index.ts` and `src/providers/types.ts`. All five are OpenAI-compatible gateways with a customizable base URL and a `/models` endpoint. This is the provider-adapter pattern at its cheapest: a new backend is a config object, not new transport code.
+- **Gemini stream parsing fix.** `src/intellichat/readers/GoogleReader.ts` no longer trims its buffer at the last `}`, which dropped text containing braces or split across events; it now advances past each parsed item (test: `test/intellichat/google-reader-braces.spec.ts`).
+
+The persistence migration has not moved: chats, messages, and bookmarks are still on legacy SQLite.
 
 ## One-line summary
 

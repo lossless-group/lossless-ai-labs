@@ -10,11 +10,11 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/agents-md
 profile_kind: file-convention
 date_created: 2026-05-05
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 42eb0a4a-c72c-4139-bda5-573687fae0dd
 hex_code: agwg0r
 date_authored_initial_draft: 2026-05-05
-date_authored_current_draft: 2026-05-05
+date_authored_current_draft: 2026-11-23
 lede: >-
   The entire specification is one precedence rule: the closest `AGENTS.md` to
   the edited file wins. No schema, no validator.
@@ -132,6 +132,7 @@ The repo is the **marketing site for the convention**, not an implementation. Th
 agents-md/
 ├── README.md                           # 49 lines — pitch + the minimal AGENTS.md example
 ├── AGENTS.md                           # 43 lines — the repo dogfooding its own convention (Next.js dev rules)
+├── Technical_Charter.pdf               # LF Projects charter, adopted 2025-12-08 (added to the repo Sept 2026)
 ├── package.json                        # Next.js + Tailwind + TypeScript app
 ├── pages/
 │   ├── _app.tsx, _document.tsx
@@ -214,6 +215,8 @@ That's almost the entire current-generation coding-agent ecosystem on a single f
 
 That move is the convention's most consequential governance event: it takes the format out of any single vendor's hands and gives it the same kind of neutral home that Open Container Initiative (OCI) and CNCF give container/cloud-native standards. For a file-format convention to become a real standard rather than a marketing label, it needs that. AGENTS.md has it.
 
+The governance paperwork is now in the repo. `Technical_Charter.pdf` is the charter for "AGENTS.md a Series of LF Projects, LLC", adopted 2025-12-08. It sets a Contributors → Maintainers → Core Maintainers → Lead Core Maintainer hierarchy, with the TSC made up of the Core Maintainers plus the Lead; seats are held by individuals, and none are reserved for companies. Outbound code is MIT and documentation is CC BY 4.0.
+
 ## How to use it
 
 The site lays out a four-step adoption (`HowToUseSection.tsx:6-41`):
@@ -286,6 +289,10 @@ You unify under AGENTS.md and keep the old filename as a symlink so any tool tha
 | **Layering** | Sits *under* OpenSpec/Spec Kit/GSD | Replaces prose specs | Replaces prose PRDs | Drives implementation end-to-end | Architectural advice for agents you build |
 
 The relationship to the other tools is **subordinate, not competitive**: a project using OpenSpec, Spec Kit, or GSD typically *also* has an `AGENTS.md` at root telling the agent how to build, test, and lint the code that those tools have planned. The site's own framing (`WhySection.tsx:50-51`) — "*provide precise, agent-focused guidance that complements existing README and docs*" — extends naturally to "complements existing spec and workflow tooling," too.
+
+## Changes since the previous pin (2026-03-12 → 2026-09-10)
+
+`d1ac7f063d20` → `d001185d792e`, 3 commits, no tags. The convention itself did not change: `README.md`, `AGENTS.md`, and every component under `components/` are byte-identical. Two things landed: the LF Projects `Technical_Charter.pdf` at the repo root (added as `agents-md_Charter.pdf`, then renamed), which puts the governance described under Stewardship in writing; and a refreshed Codex logo in `public/logos/codex.svg`.
 
 ## One-line summary
 

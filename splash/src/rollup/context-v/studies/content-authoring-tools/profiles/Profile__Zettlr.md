@@ -3,18 +3,18 @@ name: Zettlr Profile
 title: Zettlr — Profile
 slug: zettlr
 upstream: https://github.com/Zettlr/Zettlr
-pinned_sha: 450e040c8
-pinned_date: 2026-11-19
-version_at_pin: "v4.10.0-21-g450e040c8 (nearest tag)"
+pinned_sha: c6ca54a9c
+pinned_date: 2026-11-22
+version_at_pin: "v4.10.0-30-gc6ca54a9c (nearest tag)"
 license: GPL-3.0
 maintainer: Zettlr project — Hendrik Erz (lead maintainer), with community contributors
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/zettlr
 profile_kind: Academic Markdown editor — Electron + Vue 3, CodeMirror 6 with live-preview widgets, Pandoc/citeproc publishing
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -53,7 +53,7 @@ from_path: "context-v/profiles/Profile__Zettlr.md"
 ---
 # Zettlr — Profile
 
-A profile of Zettlr as it lives in this study (`studies/content-authoring-tools/zettlr`, pinned at `450e040c8`, nearest tag `v4.10.0`, 2026-11-19). GPL-3.0, Electron 44 + Vue 3 + Pinia, CodeMirror 6 + Lezer, chokidar, citeproc-js, Pandoc for publishing.
+A profile of Zettlr as it lives in this study (`studies/content-authoring-tools/zettlr`, pinned at `c6ca54a9c`, nearest tag `v4.10.0`, 2026-11-22). GPL-3.0, Electron 44 + Vue 3 + Pinia, CodeMirror 6 + Lezer, chokidar, citeproc-js, Pandoc for publishing.
 
 This is the study's **source-first, citation-native** entry, and the one whose architecture is closest to flave's. Read it as a parts catalogue.
 
@@ -84,7 +84,7 @@ Markdown files, plus an optional `.ztr-directory` JSON sidecar per folder that o
 }
 ```
 
-`profiles` names Pandoc defaults files. Those ship as YAML in `static/defaults/`, for example `XeLaTeX PDF.yaml` (`reader: markdown`, `writer: pdf`, `filters: [{type: citeproc}]`, `pdf-engine: xelatex`). The citation library is per document: frontmatter `bibliography:` wins, else the global library (`common/util/get-bibliography-for-descriptor.ts`). Only the first entry is used when several are listed. Zettelkasten IDs default to `idRE: '(\d{14})'` / `idGen: '%Y%M%D%h%m%s'` (`config/get-config-template.ts:374-375`).
+`profiles` names Pandoc defaults files. Those ship as YAML in `static/defaults/`, for example `XeLaTeX PDF.yaml` (`reader: markdown`, `writer: pdf`, `filters: [{type: citeproc}]`, `pdf-engine: xelatex`). The citation library is per document: frontmatter `bibliography:` wins, else the global library (`common/util/get-bibliography-for-descriptor.ts`). Only the first entry is used when several are listed. Zettelkasten IDs default to `idRE: '(\d{14})'` / `idGen: '%Y%M%D%h%m%s'` (`config/get-config-template.ts:375-376`).
 
 ## Agent reach
 
@@ -117,6 +117,14 @@ Markdown files, plus an optional `.ztr-directory` JSON sidecar per folder that o
 - **Copy the remote-change guards.** Newer-`mtime` only, then content-equals-last-saved, then a clean-buffer silent reload behind a remembered preference. This matches [[Profile__MarkText]]'s decision table.
 - **Note what is missing.** No agent surface at all. flave's "one operation set with four callers" (menu, palette, page, agent) is the step Zettlr never took.
 - **Avoid a single-bibliography assumption.** flave's sources bibliography should merge multiple libraries from the start.
+
+## Changes since the previous pin (2026-11-19 → 2026-11-22)
+
+`450e040c893e` → `c6ca54a9cc7a`, 9 commits, no release (still after `v4.10.0`). Nothing in the editor, parser, renderers, document authority or FSAL changed; the only touch under `source/common/modules/` is a one-line removal in `table-editor/widget.ts`.
+
+- **Custom export commands no longer run in a shell by default.** Each entry in `export.customCommands` gains a `shell` flag (default off), and `runShellCommand` now escapes or quotes every argument with `shescape` (`source/app/service-providers/commands/exporter/run-shell-command.ts`). The changelog ties this to advisory GHSA-qp9r-5xcv-35gx. Commands that relied on a shell to find files must opt back in.
+- **Links ask before opening an untrusted protocol.** A new `system.allowedURIProtocols` setting (default `http:`, `https:`) backs a confirm prompt (`source/app/util/attach-app-navigation-handlers.ts`, `config/get-config-template.ts:540`).
+- The rest is log-window and toolbar styling. Still no agent, API or AI surface.
 
 ## Read next
 

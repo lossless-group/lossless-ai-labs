@@ -10,23 +10,25 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/modelcontextprotocol
 profile_kind: wire-protocol
 date_created: 2026-05-05
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: 4da2393b-3484-4a26-9ff2-1d8d60c7e79a
 hex_code: tp297c
 date_authored_initial_draft: 2026-05-05
-date_authored_current_draft: 2026-05-05
+date_authored_current_draft: 2026-11-23
 lede: >-
-  The three *client* primitives — Sampling, Roots, Elicitation — let a server
-  use the host's model without ever getting the user's key.
+  The 2026-07-28 revision made MCP stateless: no initialize handshake, no
+  sessions, and Sampling and Roots deprecated in favor of retry-based requests.
 summary: >-
   Profile of the Model Context Protocol as pinned in this study. MCP is the agent-to-tool wire
   protocol; A2A is agent-to-agent. Read the two profiles together — the intended composition is
   MCP inside agents, A2A between them. Covers the LSP analogy and the N x M to N + M argument, the
   eight published design principles (with "stability over velocity" and "capability over
-  compensation" doing most of the work), initialize-time capability negotiation, the three server
-  and three client primitives, stdio versus Streamable HTTP transports, OAuth 2.0 authorization,
+  compensation" doing most of the work), capability negotiation (at initialize through 2025-11-25,
+  per request since 2026-07-28), the three server primitives, the client primitives and the
+  Multi Round-Trip Requests pattern that replaced server-initiated requests, the deprecation of
+  Sampling, Roots, and Logging, stdio versus Streamable HTTP transports, OAuth 2.0 authorization,
   date-based rather than semantic versioning, the TypeScript-first schema with generated JSON
-  Schema, the SEP process, and the Linux Foundation BDFL governance model. Note that the protocol
+  Schema, the SEP process and feature-lifecycle policy, and the Linux Foundation BDFL governance model. Note that the protocol
   cannot enforce its own security model — consent and tool-description distrust are the host's job.
 authors:
   - Michael Staton
@@ -42,13 +44,13 @@ A profile of MCP as it lives in this study (`studies/open-specs-and-standards/mo
 
 ## TL;DR
 
-MCP is **the open wire protocol for an LLM application to talk to tools, data sources, and prompt templates** — the standard surface across "Hosts, Clients, and Servers" that lets an agent fetch resources, invoke tools, and load prompts the same way regardless of which model is in the host (`docs/specification/2025-11-25/index.mdx:7-11`):
+MCP is **the open wire protocol for an LLM application to talk to tools, data sources, and prompt templates** — the standard surface across "Hosts, Clients, and Servers" that lets an agent fetch resources, invoke tools, and load prompts the same way regardless of which model is in the host (`docs/specification/2026-07-28/index.mdx:7-11`):
 
 > Model Context Protocol (MCP) is an open protocol that enables seamless integration between LLM applications and external data sources and tools. Whether you're building an AI-powered IDE, enhancing a chat interface, or creating custom AI workflows, MCP provides a standardized way to connect LLMs with the context they need.
 
-The shape (`docs/specification/2025-11-25/index.mdx:35-46`):
+The shape (`docs/specification/2026-07-28/index.mdx:35-66`):
 
-- **JSON-RPC 2.0** message format, **stateful** connections, capability negotiation up front.
+- **JSON-RPC 2.0** message format. Through `2025-11-25` connections were **stateful** with capability negotiation up front; the current `2026-07-28` revision is **stateless, self-contained requests** with **per-request capability negotiation** (`index.mdx:50-54`).
 - Three roles: **Hosts** (LLM applications that initiate connections), **Clients** (connectors inside the host), **Servers** (services that provide context and capabilities).
 - Inspired explicitly by the **Language Server Protocol** — *"In a similar way, MCP standardizes how to integrate additional context and tools into the ecosystem of AI applications."*
 
@@ -58,74 +60,74 @@ What servers offer to clients:
 - **Prompts** — templated messages and workflows.
 - **Tools** — functions for the model to execute.
 
-What clients offer to servers:
+What clients offer to servers: the `2026-07-28` index lists only **Elicitation** (requests for additional information from users). **Sampling** (recursive LLM calls through the host) and **Roots** (filesystem/URI boundaries) still exist but are **Deprecated** under the new feature-lifecycle policy (`docs/specification/2026-07-28/deprecated.mdx`). All three now travel through the Multi Round-Trip Requests pattern instead of server-initiated requests; see "The client-side primitives" below.
 
-- **Sampling** — server-initiated agentic behaviors (recursive LLM calls).
-- **Roots** — server-initiated inquiries into URI/filesystem boundaries it may operate in.
-- **Elicitation** — server-initiated requests for additional information from users.
+Optional **extensions** sit beyond the core: Tasks (moved out of core in 2026-07-28), Skills over MCP, and MCP Apps (`index.mdx:75-89`).
 
 The repo at `modelcontextprotocol/` is **the spec, the schema, and the docs** — not the SDKs. SDK packages live in sibling repos under the same org (Python, TypeScript, Java, C#, Go, Kotlin, Rust, Swift…).
 
-Created by **David Soria Parra** and **Justin Spahr-Summers** (`README.md:20`). Now stewarded by the **Linux Foundation** as *Model Context Protocol a Series of LF Projects, LLC* (`GOVERNANCE.md:3`, `docs/community/governance.mdx:10`). License: code and spec under Apache 2.0; documentation under CC BY 4.0.
+Created by **David Soria Parra** and **Justin Spahr-Summers** (`README.md:20`). Now stewarded by the **Linux Foundation** as *Model Context Protocol a Series of LF Projects, LLC* (`GOVERNANCE.md:3`, `docs/community/governance.mdx:10`), and since December 2025 a project of the Agentic AI Foundation (`blog/content/posts/2025-12-09-mcp-joins-agentic-ai-foundation.md`). License: code and spec under Apache 2.0; documentation under CC BY 4.0.
 
 If A2A is the public-internet protocol *between* opaque agents, MCP is **the inside-the-agent protocol from the agent to the tools that agent uses**. The two were designed to compose, and both ended up at the Linux Foundation as Apache-2.0 standards.
 
 ## Why a wire protocol — and the LSP analogy
 
-The single best framing is the explicit Language Server Protocol comparison (`docs/specification/2025-11-25/index.mdx:42-46`). LSP solved a combinatorial problem: *N* editors × *M* languages = *N×M* integrations, until LSP turned it into *N + M*. MCP attempts the same trick for AI: *N* AI applications × *M* tool/data sources = *N×M* integrations, until MCP makes it *N + M*. Every host that speaks MCP can use every server that speaks MCP.
+The single best framing is the explicit Language Server Protocol comparison (`docs/specification/2026-07-28/index.mdx:42-46`). LSP solved a combinatorial problem: *N* editors × *M* languages = *N×M* integrations, until LSP turned it into *N + M*. MCP attempts the same trick for AI: *N* AI applications × *M* tool/data sources = *N×M* integrations, until MCP makes it *N + M*. Every host that speaks MCP can use every server that speaks MCP.
 
 The eight design principles in `docs/community/design-principles.mdx` are the project's published priors for evaluating proposals. They are unusually clear; if you only read one supporting doc, read this one. The condensed argument:
 
 | Principle | Plain reading |
 |-----------|---------------|
 | **Convergence over choice** | One way to solve a problem; harder decisions upfront beat fragmentation. *(`design-principles.mdx:8-12`)* |
-| **Composability over specificity** | Don't add features that can be built from existing primitives. The surface stays small. *(`:14-18`)* |
-| **Interoperability over optimization** | Features must degrade gracefully across widely varying hosts/servers/models. Capability negotiation is the mechanism. *(`:20-22`)* |
-| **Stability over velocity** | "Adding to a protocol as widely adopted as MCP is easy. Removing from it is nearly impossible." Optimize for decades, not quarters. *(`:24-28`)* |
-| **Capability over compensation** | Don't add permanent structure to work around temporary model limitations — the limitation fades, the complexity remains. *(`:30-34`)* |
-| **Demonstration over deliberation** | Working implementations beat theoretical debate. *(`:36-38`)* |
-| **Pragmatism over purity** | Theoretical elegance loses to real-world utility. *(`:40-42`)* |
-| **Standardization over innovation** | Codify what already works across multiple implementations; experiment via extensions, not the spec. *(`:44-48`)* |
+| **Composability over specificity** | Don't add features that can be built from existing primitives (now listed as resources, tools, and prompts; tasks moved to an extension). The surface stays small. *(`:14-16`)* |
+| **Interoperability over optimization** | Features must degrade gracefully across widely varying hosts/servers/models. Capability negotiation is the mechanism. *(`:18-20`)* |
+| **Stability over velocity** | "Adding to a protocol as widely adopted as MCP is easy. Removing from it is nearly impossible." Optimize for decades, not quarters. Removal now follows the Feature Lifecycle and Deprecation policy. *(`:22-24`)* |
+| **Capability over compensation** | Don't add permanent structure to work around temporary model limitations — the limitation fades, the complexity remains. *(`:26-30`)* |
+| **Demonstration over deliberation** | Working implementations beat theoretical debate; a SEP now needs a working prototype before acceptance. *(`:32-34`)* |
+| **Pragmatism over purity** | Theoretical elegance loses to real-world utility. *(`:36-38`)* |
+| **Standardization over innovation** | Codify what already works across multiple implementations; experiment via extensions, not the spec. *(`:40-42`)* |
 
 Two of those — **stability** and **convergence** — are doing most of the day-to-day work. Together they explain why MCP says "no" to a lot.
 
 ## The four primitives (server side)
 
-You can grok MCP from four primitives plus the lifecycle that connects them. The schema (`schema/2025-11-25/schema.ts`) is 2587 lines, ~150 exported types — but the conceptual surface is small.
+You can grok MCP from four primitives plus the lifecycle that connects them. The current schema (`schema/2026-07-28/schema.ts`) is 3212 lines and 165 exports (the `2025-11-25` schema was 2582 lines) — but the conceptual surface is small.
 
-### 1. `Initialize` + capability negotiation
+### 1. Capability negotiation
 
-`schema/2025-11-25/schema.ts` exports `InitializeRequest` / `InitializeResult` / `InitializedNotification` / `ClientCapabilities` / `ServerCapabilities`. Every connection opens with a handshake: client says "here are the protocol versions and features I can speak"; server replies with the version it picked and which capabilities it offers. Nothing else fires until both sides have agreed.
+Through `2025-11-25`, `schema.ts` exported `InitializeRequest` / `InitializeResult` / `InitializedNotification`: every connection opened with a handshake in which the client offered protocol versions and features and the server replied with its choice. Nothing else fired until both sides agreed.
 
-This is the mechanism that makes "interoperability over optimization" work: a smart client and a basic server can still talk; a fancy server and a minimal client still get useful interaction. Servers don't assume; they advertise.
+`2026-07-28` removed that handshake (`docs/specification/2026-07-28/changelog.mdx`, major changes 1–3). Every request now carries its protocol version and client capabilities in `_meta` (`io.modelcontextprotocol/protocolVersion`, `io.modelcontextprotocol/clientCapabilities`), and servers MUST implement a `server/discover` RPC that advertises supported versions, capabilities, and identity. Clients may call it first for up-front version selection. Protocol-level sessions and the `Mcp-Session-Id` header are gone; servers that need cross-call state mint explicit handles passed as tool arguments.
+
+The purpose is the same as before. Negotiation is what makes "interoperability over optimization" work: a smart client and a basic server can still talk. Servers don't assume; they advertise. What changed is that the advertisement travels with each request, so any server instance can answer any request without shared session storage.
 
 ### 2. `Resources` — addressable context
 
-`docs/specification/2025-11-25/server/resources.mdx`. URI-addressable units of context (files, database rows, API responses, anything fetchable). The server lists them via `ListResourcesRequest`, the client reads via `ReadResourceRequest`, and both sides can subscribe (`SubscribeRequest` / `ResourceUpdatedNotification`) for change notifications. Resources are *for the user or model to use* — they're not action; they're context.
+`docs/specification/2026-07-28/server/resources.mdx`. URI-addressable units of context (files, database rows, API responses, anything fetchable). The server lists them via `ListResourcesRequest` and the client reads via `ReadResourceRequest`. Change notifications used to come from `resources/subscribe`; since `2026-07-28` the client opens one long-lived `subscriptions/listen` stream and opts in to the notification types it wants. List and read results now carry `ttlMs` and `cacheScope` caching hints. Resources are *for the user or model to use* — they're not action; they're context.
 
 ### 3. `Tools` — model-invocable functions
 
-`docs/specification/2025-11-25/server/tools.mdx`. Functions an LLM can call. Each tool has a name, description, and input schema. The host typically requests user consent before invoking. The protocol is explicit (`docs/specification/2025-11-25/index.mdx:96-103`):
+`docs/specification/2026-07-28/server/tools.mdx`. Functions an LLM can call. Each tool has a name, description, and input schema (since `2026-07-28`, any JSON Schema 2020-12 keywords, with `$ref` resolution rules). Servers SHOULD return `tools/list` in a deterministic order so clients and LLM prompt caches can reuse it. The host typically requests user consent before invoking. The protocol is explicit (`docs/specification/2026-07-28/index.mdx:110-115`):
 
 > Tools represent arbitrary code execution and must be treated with appropriate caution. In particular, descriptions of tool behavior such as annotations should be considered untrusted, unless obtained from a trusted server. Hosts must obtain explicit user consent before invoking any tool.
 
 ### 4. `Prompts` — templated user-invokable workflows
 
-`docs/specification/2025-11-25/server/prompts.mdx`. Server-provided prompt templates the user can pick (often surfaced as slash commands in the client UI — see `docs/specification/2025-11-25/server/slash-command.png`). The user, not the model, triggers them.
+`docs/specification/2026-07-28/server/prompts.mdx`. Server-provided prompt templates the user can pick (often surfaced as slash commands in the client UI — see `docs/specification/2025-11-25/server/slash-command.png`). The user, not the model, triggers them.
 
-## The three client-side primitives
+## The client-side primitives
 
-Less well known than tools/resources/prompts, but they're what differentiates MCP from a one-way "tool-calling" interface. The server can request work from the client too, when the client has declared the capability.
+Less well known than tools/resources/prompts, but they're what differentiates MCP from a one-way "tool-calling" interface. The server can request work from the client too, when the client has declared the capability. Through `2025-11-25` there were three, all sent as server-initiated requests:
 
-- **Sampling** (`docs/specification/2025-11-25/client/sampling.mdx`) — the server can ask the host's LLM to perform a recursive completion. Lets a server orchestrate agentic behaviors using the host's model and credentials, with **explicit user approval** built into the contract (`docs/specification/2025-11-25/index.mdx:104-110`): users approve sampling, control the prompt, and control what the server gets to see.
-- **Roots** (`docs/specification/2025-11-25/client/roots.mdx`) — server asks "what URIs/filesystem paths am I allowed to operate in?" The client returns the explicit boundary set. This is the per-session sandbox surface, exposed as a protocol primitive instead of a per-server config.
-- **Elicitation** (`docs/specification/2025-11-25/client/elicitation.mdx`) — server requests additional information from the user (think structured forms in-flow). The client renders the prompt, gathers the input, returns it.
+- **Sampling** (`docs/specification/2025-11-25/client/sampling.mdx`) — the server can ask the host's LLM to perform a recursive completion. Lets a server orchestrate agentic behaviors using the host's model and credentials, with **explicit user approval** built into the contract (`docs/specification/2025-11-25/index.mdx:104-110`): users approve sampling, control the prompt, and control what the server gets to see. **Deprecated in `2026-07-28`** (SEP-2577); the suggested migration is to integrate directly with LLM provider APIs.
+- **Roots** (`docs/specification/2025-11-25/client/roots.mdx`) — server asks "what URIs/filesystem paths am I allowed to operate in?" The client returns the explicit boundary set. **Deprecated in `2026-07-28`**; the suggested migration is to pass directories or files via tool parameters, resource URIs, or server configuration.
+- **Elicitation** (`docs/specification/2026-07-28/client/elicitation.mdx`) — server requests additional information from the user (think structured forms in-flow). The client renders the prompt, gathers the input, returns it. Still active, and the only client feature the `2026-07-28` index lists.
 
-These three flip the directionality: not just "model calls tool," but "tool needs the model to decide something" or "tool needs more from the user." This is what distinguishes MCP from MCP-shaped JSON-RPC layers.
+These flip the directionality: not just "model calls tool," but "tool needs the model to decide something" or "tool needs more from the user." That idea survives in `2026-07-28`, but the mechanism changed. **Multi Round-Trip Requests** (MRTR, SEP-2322, `docs/specification/2026-07-28/basic/patterns/mrtr.mdx`) replace server-initiated requests: the server answers the client's original request with an `InputRequiredResult` (`resultType: "input_required"`) listing what it needs, the client gathers it and retries the original request with the answers, and the server completes. Every result now carries `resultType` (`"complete"` or `"input_required"`). This is what lets a stateless, load-balanced server ask for more without shared storage. Logging was deprecated alongside Sampling and Roots; log level is now set per request in `_meta`.
 
 ## The lifecycle and base protocol
 
-`docs/specification/2025-11-25/basic/`. Four files anchor the wire format:
+`docs/specification/2025-11-25/basic/` anchored the wire format in four files:
 
 | File | What it covers |
 |------|----------------|
@@ -134,12 +136,14 @@ These three flip the directionality: not just "model calls tool," but "tool need
 | `transports.mdx` | stdio, Streamable HTTP, SSE — how to actually carry the JSON-RPC frames |
 | `authorization.mdx` | OAuth 2.0 + RFC 8628 device flow + PKCE for HTTP-based servers |
 
+`docs/specification/2026-07-28/basic/` has no `lifecycle.mdx`, since there is no connection lifecycle to describe. It is organized as `index.mdx` (framing, `_meta`, error-code allocation), `versioning.mdx`, `transports/` (`stdio.mdx`, `streamable-http.mdx`), `authorization/` (four files), and `patterns/` (`mrtr.mdx`, `subscriptions.mdx`, `progress.mdx`, `cancellation.mdx`).
+
 Two transport bindings cover most deployments:
 
 - **stdio** — the parent process spawns the server as a subprocess and communicates over stdin/stdout. The default for local MCP servers (filesystem, git, sqlite, etc.).
-- **Streamable HTTP** — server is a remote HTTP endpoint; client sends JSON-RPC requests, server can respond either inline or stream multiple messages back. Replaces the older SSE-only transport.
+- **Streamable HTTP** — server is a remote HTTP endpoint; client sends JSON-RPC requests, server can respond either inline or stream multiple messages back. Replaces the older SSE-only transport, which is now formally Deprecated. In `2026-07-28` it lost sessions, the HTTP GET endpoint, and SSE resumability (a broken stream means re-issuing the request), and gained required `Mcp-Method` / `Mcp-Name` headers.
 
-Auth (`authorization.mdx`) is OAuth 2.0 with the standard enterprise plumbing — Authorization Server Metadata (RFC 8414), Protected Resource Metadata (RFC 9728), Dynamic Client Registration (RFC 7591), and PKCE-required Authorization Code flow (RFC 7636). SEPs in `seps/` extend this — e.g., `seps/991-enable-url-based-client-registration-using-oauth-c.md`, `seps/2207-oidc-refresh-token-guidance.md`.
+Auth is OAuth 2.0 with the standard enterprise plumbing — Authorization Server Metadata (RFC 8414), Protected Resource Metadata (RFC 9728), and PKCE-required Authorization Code flow (RFC 7636). In `2026-07-28`, Dynamic Client Registration (RFC 7591) is Deprecated in favor of Client ID Metadata Documents, clients must validate the `iss` parameter (RFC 9207), and credentials are bound to the issuing authorization server. SEPs in `seps/` extend this — e.g., `seps/991-enable-url-based-client-registration-using-oauth-c.md`, `seps/2207-oidc-refresh-token-guidance.md`.
 
 ## Versioning — date-based, not SemVer
 
@@ -150,17 +154,20 @@ Auth (`authorization.mdx`) is OAuth 2.0 with the standard enterprise plumbing �
 > - `schema/[YYYY-MM-DD]/` and `docs/specification/[YYYY-MM-DD]/` — released versions
 > - `schema/draft/` and `docs/specification/draft/` — in-progress work
 
-In this checkout, four released versions are present:
+In this checkout, five released versions are present:
 
 ```
 schema/2024-11-05/   ← initial public release (the version Claude Desktop shipped)
 schema/2025-03-26/
 schema/2025-06-18/
-schema/2025-11-25/   ← current LATEST_PROTOCOL_VERSION
+schema/2025-11-25/
+schema/2026-07-28/   ← current LATEST_PROTOCOL_VERSION (tagged 2026-07-28)
 schema/draft/        ← in-progress next version
 ```
 
-The `LATEST_PROTOCOL_VERSION` constant in `schema/2025-11-25/schema.ts` is the marker. Date versioning composes well with the "stability over velocity" principle: each frozen date is permanent and citable; the draft is a moving target.
+The `LATEST_PROTOCOL_VERSION` constant in `schema/2026-07-28/schema.ts:30` is the marker (the draft carries the same value until the next release). Date versioning composes well with the "stability over velocity" principle: each frozen date is permanent and citable; the draft is a moving target.
+
+`2026-07-28` also added the first formal **feature lifecycle**: features move Active → Deprecated → Removed, with a minimum twelve-month deprecation window and a registry at `docs/specification/2026-07-28/deprecated.mdx` (SEP-2596, `docs/community/feature-lifecycle.mdx`). Nothing has been removed under it yet.
 
 ## TypeScript-first schema
 
@@ -184,7 +191,7 @@ This is a structurally different choice than A2A's `.proto`-first approach (wher
 
 ## SEPs — Specification Enhancement Proposals
 
-`seps/` (32 files in this checkout). Each `NNN-slug.md` file is one proposal. Procedure documented in `docs/community/sep-guidelines.mdx`. The README pointer is intentionally minimal (`seps/README.md`):
+`seps/` (48 files in this checkout, up from 32). Each `NNN-slug.md` file is one proposal. Procedure documented in `docs/community/sep-guidelines.mdx`. The README pointer is intentionally minimal (`seps/README.md`):
 
 > See https://modelcontextprotocol.io/community/sep-guidelines
 
@@ -207,8 +214,14 @@ A sample of in-flight or recently-landed SEPs gives a sense of the surface:
 | `2133` | Extensions |
 | `2148` | Contributor ladder |
 | `2243` | HTTP standardization |
+| `2322` | Multi Round-Trip Requests (MRTR) |
+| `2567` / `2575` | Sessionless and stateless MCP |
+| `2577` | Deprecate Roots, Sampling, and Logging |
+| `2596` | Specification feature lifecycle and deprecation |
+| `2640` | Skills extension |
+| `2663` | Tasks extension (tasks moved out of core) |
 
-Read `932` (governance) and `2133` (extensions) first if you want the meta-process. `1865` (MCP Apps) and `2133` (Extensions) are the experimentation-vs-spec membrane the design principles describe.
+Read `932` (governance) and `2133` (extensions) first if you want the meta-process; read `2575` and `2322` to understand the `2026-07-28` redesign. `1865` (MCP Apps) and `2133` (Extensions) are the experimentation-vs-spec membrane the design principles describe.
 
 ## Governance — LF Project, BDFL technical model
 
@@ -229,18 +242,18 @@ This is the Python/PyTorch model — Benevolent Dictator for Life at the top, Co
 
 > Membership in the technical governance process is for individuals, not companies. That is, there are no seats reserved for specific companies, and membership is associated with the person rather than the company employing that person.
 
-That's a deliberate and non-trivial divergence from A2A's company-seated TSC. A2A has named org seats (Google / Microsoft / Cisco / AWS / Salesforce / ServiceNow / SAP / IBM Research). MCP has named individuals. Different governance philosophies, both stewarded by the Linux Foundation.
+That's a deliberate and non-trivial divergence from A2A's company-seated TSC. A2A has named org seats (nine at this pin, Bloomberg the newest). MCP has named individuals. Different governance philosophies, both stewarded by the Linux Foundation.
 
 Decision cadence: Core Maintainers meet biweekly; Steering Group meets in-person every 3–6 months. All discussion recorded on Discord (`docs/community/governance.mdx:42`).
 
-The contributor ladder lives at `docs/community/contributor-ladder.mdx` (and SEP `2148`).
+The contributor ladder lives at `docs/community/contributor-ladder.mdx` (and SEP `2148`). Since the previous pin the README says specification changes are discussed in the relevant working group before a PR or SEP is opened, and only members of the `modelcontextprotocol` GitHub organization may open pull requests; everyone else files issues or joins a working group (`README.md:24-34`).
 
 ## What's actually inside this submodule
 
 ```text
 modelcontextprotocol/
-├── README.md                      # 28 lines — pitch, schema/docs pointers
-├── AGENTS.md                      # 90 lines — repo-level agent instructions
+├── README.md                      # 38 lines — pitch, schema/docs pointers, contribution rules
+├── AGENTS.md                      # 128 lines — repo-level agent instructions
 ├── CLAUDE.md → AGENTS.md          # Symlink
 ├── GOVERNANCE.md                  # 11 lines — LF Project legal frame
 ├── ANTITRUST.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, MAINTAINERS.md, SECURITY.md
@@ -252,28 +265,33 @@ modelcontextprotocol/
 │   ├── 2024-11-05/                # Initial release
 │   ├── 2025-03-26/
 │   ├── 2025-06-18/
-│   ├── 2025-11-25/                # Current LATEST_PROTOCOL_VERSION
-│   │   ├── schema.ts              # 2587 lines — TypeScript source of truth
+│   ├── 2025-11-25/                # Previous release (2582-line schema.ts)
+│   ├── 2026-07-28/                # Current LATEST_PROTOCOL_VERSION
+│   │   ├── schema.ts              # 3212 lines — TypeScript source of truth
 │   │   ├── schema.json            # Generated JSON Schema
 │   │   └── schema.mdx             # Generated reference docs
 │   └── draft/                     # In-progress next version
 │
 ├── docs/                          # Mintlify documentation site
 │   ├── specification/             # Per-version normative spec
-│   │   ├── 2024-11-05/, 2025-03-26/, 2025-06-18/, 2025-11-25/, draft/
-│   │   └── 2025-11-25/
-│   │       ├── index.mdx          # Spec landing page
+│   │   ├── 2024-11-05/, 2025-03-26/, 2025-06-18/, 2025-11-25/, 2026-07-28/, draft/
+│   │   └── 2026-07-28/
+│   │       ├── index.mdx          # Spec landing page (154 lines)
 │   │       ├── architecture/      # Hosts/Clients/Servers diagrams + framing
-│   │       ├── basic/             # Base protocol, lifecycle, transports, authorization
+│   │       ├── basic/             # Base protocol, versioning, transports/, authorization/, patterns/ (MRTR, subscriptions)
 │   │       ├── server/            # Resources, prompts, tools, utilities
-│   │       ├── client/            # Sampling, roots, elicitation
+│   │       ├── client/            # Elicitation; Sampling and Roots (deprecated)
 │   │       ├── changelog.mdx
+│   │       ├── deprecated.mdx     # Registry of Deprecated features
 │   │       └── schema.mdx
 │   ├── community/                 # Governance, design principles, SEP process, ladders
 │   │   ├── design-principles.mdx
+│   │   ├── feature-lifecycle.mdx  # New: Active → Deprecated → Removed policy
 │   │   ├── governance.mdx
 │   │   ├── sep-guidelines.mdx
+│   │   ├── sdk-tiers.mdx
 │   │   ├── contributor-ladder.mdx
+│   │   ├── working-groups/, interest-groups/
 │   │   └── working-interest-groups.mdx
 │   ├── docs/                      # Guides and tutorials
 │   ├── extensions/                # Extension docs (MCP Apps, others)
@@ -281,9 +299,9 @@ modelcontextprotocol/
 │   ├── examples.mdx, clients.mdx, snippets/, images/, logo/
 │   └── docs.json                  # Mintlify navigation manifest
 │
-├── seps/                          # Specification Enhancement Proposals (32 files)
+├── seps/                          # Specification Enhancement Proposals (48 files)
 │   ├── README.md, TEMPLATE.md
-│   └── NNN-slug.md ×30
+│   └── NNN-slug.md ×46
 │
 ├── blog/                          # Hugo blog (announcements, posts)
 ├── plugins/                       # Mintlify-side skill/plugin scaffolds
@@ -291,7 +309,7 @@ modelcontextprotocol/
 └── migrate_seps.js                # SEP migration utility
 ```
 
-If you only have time for four files, in this order: `docs/specification/2025-11-25/index.mdx` (the spec landing page, ~150 lines), `docs/community/design-principles.mdx` (the project's published priors, ~50 lines), `schema/2025-11-25/schema.ts` (the wire spec — skim the ~150 exported types), and `docs/community/governance.mdx` (the BDFL + LF model). That's the spine.
+If you only have time for five files, in this order: `docs/specification/2026-07-28/index.mdx` (the spec landing page, 154 lines), `docs/specification/2026-07-28/changelog.mdx` (what the stateless redesign changed), `docs/community/design-principles.mdx` (the project's published priors, 42 lines), `schema/2026-07-28/schema.ts` (the wire spec — skim the 165 exports), and `docs/community/governance.mdx` (the BDFL + LF model). That's the spine.
 
 ## How to get started
 
@@ -303,18 +321,18 @@ The intended path: pick an SDK (Python, TypeScript, Java, C#, Go, Kotlin, Rust, 
 - **Tools** — expose functions.
 - **Prompts** — expose templated user workflows.
 
-You don't need all three. Servers declare capabilities at handshake; the client adapts. `docs/specification/2025-11-25/server/index.mdx` walks the contract; `schema/2025-11-25/schema.ts` is the type surface.
+You don't need all three. Servers declare capabilities (in `server/discover` since `2026-07-28`, at the handshake before that); the client adapts. `docs/specification/2026-07-28/server/index.mdx` walks the contract; `schema/2026-07-28/schema.ts` is the type surface.
 
 ### As a client / host author
 
-Implement the JSON-RPC 2.0 lifecycle (`docs/specification/2025-11-25/basic/lifecycle.mdx`), pick your transport (stdio for local servers; Streamable HTTP for remote), and decide which client capabilities to advertise — sampling/roots/elicitation are all opt-in. `docs/specification/2025-11-25/client/` covers each.
+Send the required `_meta` fields (protocol version, client capabilities, ideally client info) on every request, optionally call `server/discover` first, pick your transport (stdio for local servers; Streamable HTTP for remote), and handle `input_required` results by retrying with the requested answers (`docs/specification/2026-07-28/basic/`). Elicitation is the client capability to support; Sampling and Roots are Deprecated and new implementations should not add them. If you target `2025-11-25` servers, the old lifecycle is at `docs/specification/2025-11-25/basic/lifecycle.mdx`.
 
-The non-negotiables in any host implementation come from the **Security and Trust & Safety** section (`docs/specification/2025-11-25/index.mdx:80-121`):
+The non-negotiables in any host implementation come from the **Security and Trust & Safety** section (`docs/specification/2026-07-28/index.mdx:91-126`; the `2025-11-25` version at `docs/specification/2025-11-25/index.mdx:80-121` also covered sampling controls):
 
 - **User consent and control** — explicit consent for all data access and operations; clear UI for review.
 - **Data privacy** — explicit consent before exposing user data; no transmit-elsewhere without consent.
 - **Tool safety** — treat tool descriptions/annotations as untrusted unless from a trusted server; explicit consent before any tool invocation.
-- **LLM sampling controls** — explicit user approval; user controls whether sampling occurs, the prompt, and what the server sees; *the protocol intentionally limits server visibility into prompts*.
+- **LLM sampling controls** (`2025-11-25` only; dropped from the `2026-07-28` key principles along with Sampling's deprecation) — explicit user approval; user controls whether sampling occurs, the prompt, and what the server sees; *the protocol intentionally limits server visibility into prompts*.
 
 The spec is candid that it cannot enforce these at the protocol level; hosts SHOULD build them in.
 
@@ -328,17 +346,17 @@ npm run generate:schema  # JSON + MDX from schema.ts
 npm run check            # All checks
 ```
 
-Substantive changes go through the SEP process (`docs/community/sep-guidelines.mdx`, SEP `1850` for the PR-based workflow). Issues in this repo are template-gated: blank issues are disabled, SDK bugs go to the SDK repos, Claude-specific behavior goes to `anthropics/claude-ai-mcp` (per `CLAUDE.md`). SEPs are *pull requests*, not issues — they add a file to `seps/`.
+Substantive changes go through the SEP process (`docs/community/sep-guidelines.mdx`, SEP `1850` for the PR-based workflow), after discussion in the relevant working group; pull requests are limited to organization members. Issues in this repo are template-gated: blank issues are disabled, SDK bugs go to the SDK repos, Claude-specific behavior goes to `anthropics/claude-ai-mcp` (per `CLAUDE.md`). SEPs are *pull requests*, not issues — they add a file to `seps/`.
 
 ## Mental model for using it well
 
-- **Capabilities, not assumptions.** Don't probe; declare. Both client and server announce what they can do at `initialize`. Code that assumes a remote feature works without checking the negotiated capability set is broken.
+- **Capabilities, not assumptions.** Don't probe; declare. The client announces what it can do on every request; the server announces its side in `server/discover` (both did it once at `initialize` through `2025-11-25`). Code that assumes a remote feature works without checking the negotiated capability set is broken.
 - **Tool descriptions are untrusted by default.** A malicious or compromised server can craft tool descriptions that try to manipulate the model. Treat them as data from the network, not as instructions. Host UIs should display tool descriptions to users in a way that doesn't get injected back into the model's context as authority.
 - **Resources are read; tools are write-shaped (probably).** Reading a resource is informational. Calling a tool is action — even if the tool happens to read. The user-consent threshold differs accordingly.
-- **Stateful is a feature, not an accident.** MCP connections are explicitly stateful. Reconnection logic, retry on disconnect, and session resumption are real concerns. Sessions enable subscriptions, sampling round-trips, and elicitation.
-- **Hosts own the model; servers ask politely.** A server that wants the host's LLM uses **sampling**, with the user's explicit per-request approval. The server doesn't get the user's API key; it gets a result back. This is the trust boundary that makes "expose my agent's brain to a third-party tool" safe.
-- **Roots are the boundary; servers stay inside.** A filesystem MCP server should ask for roots, not assume `/`. Servers crossing root boundaries is a security bug, not a feature request.
-- **Use extensions for experimentation; SEPs to standardize what wins.** This is the explicit design loop (`design-principles.mdx:8-12`, `:44-48`). MCP Apps, registry, and similar live as extensions until enough implementations converge.
+- **Stateless is now the design point.** Through `2025-11-25`, connections were stateful and sessions carried subscriptions, sampling round-trips, and elicitation. `2026-07-28` reversed that: any request can land on any server instance, cross-call state is an explicit server-minted handle passed as a tool argument, and a dropped stream means re-issuing the request. If your server design depends on session memory, plan the migration.
+- **Hosts own the model; servers ask politely, and less.** Under `2025-11-25`, a server that wanted the host's LLM used **sampling**, with the user's explicit per-request approval; the server got a result back, never the user's API key. Sampling is now Deprecated, and the spec's suggested path is for servers to call LLM provider APIs directly. Treat sampling as legacy unless you need compatibility.
+- **Boundaries go in arguments, not Roots.** A filesystem MCP server should not assume `/`. With Roots Deprecated, the boundary is passed as tool parameters, resource URIs, or server configuration. Servers crossing that boundary is a security bug, not a feature request.
+- **Use extensions for experimentation; SEPs to standardize what wins.** This is the explicit design loop (`design-principles.mdx:8-12`, `:40-42`). MCP Apps, Skills over MCP, and similar live as extensions until enough implementations converge, and the loop now runs both ways: Tasks moved *out* of core into an extension in `2026-07-28`.
 - **Don't compensate for current model weakness in the spec.** "Capability over compensation" is a real constraint. Workarounds for what gpt-N can't do today become permanent if added to the protocol; better to layer them in the host.
 
 ## When NOT to reach for this
@@ -346,8 +364,8 @@ Substantive changes go through the SEP process (`docs/community/sep-guidelines.m
 - **Inside one process, or one SDK, or one runtime.** MCP is JSON-RPC 2.0 over a transport. If your tools are functions in the same process, calling them as functions is faster and simpler. MCP is for *cross-process / cross-vendor* tool-calling.
 - **Agent-to-agent communication.** Wrong layer. Use **A2A** for agent ↔ agent ([`Profile__Agent-2-Agent.md`](./Profile__Agent-2-Agent.md)). MCP is agent ↔ tool.
 - **Realtime / streaming media.** Not the protocol's design point. JSON-RPC framing is request/response with notifications layered on top. For streaming media or low-latency control, use a domain-appropriate protocol.
-- **You can't tolerate the trust boundary.** Servers are untrusted by default; hosts must enforce consent. If your environment cannot accept a "server can request the model do X, user must approve" loop, sampling/elicitation aren't usable.
-- **You need fine-grained semantic types.** MCP's tool input schemas are JSON Schema (now standardizing on JSON Schema 2020-12 per SEP `1613`). If you need richer type machinery (linear types, refinement types, dependent types), MCP isn't your layer.
+- **You can't tolerate the trust boundary.** Servers are untrusted by default; hosts must enforce consent. If your environment cannot accept a "server asks for more, user must approve" loop, elicitation (and legacy sampling) aren't usable.
+- **You need fine-grained semantic types.** MCP's tool input schemas are JSON Schema (JSON Schema 2020-12 per SEP `1613`, with any 2020-12 keyword allowed since SEP `2106`). If you need richer type machinery (linear types, refinement types, dependent types), MCP isn't your layer.
 - **You're committed to a vendor's proprietary tool integration.** MCP's whole pitch is the open standard — the LSP-shaped escape from N×M integration. If you're locked to a proprietary substitute, you're getting most of the cost and none of the network effects.
 
 ## MCP vs. A2A — the close pair
@@ -360,11 +378,11 @@ The two protocols are deliberately complementary. From the A2A v1.0 announcement
 | **Audience** | LLM application authors integrating tools | Service authors exposing agentic functionality |
 | **Roles** | Hosts / Clients / Servers | Client agents / Server agents (peer roles) |
 | **Wire format** | JSON-RPC 2.0 | JSON-RPC 2.0, gRPC, or HTTP+JSON (three bindings) |
-| **Connection model** | Stateful, capability-negotiated | Task-oriented, with `INPUT_REQUIRED` / `AUTH_REQUIRED` interrupted states |
-| **Discovery** | Capability negotiation at `initialize` | `AgentCard` (signed JWS, advertised at known URL) |
-| **Versioning** | Date-based (YYYY-MM-DD), latest = `2025-11-25` | Per-`AgentInterface` declared protocol version (v0.3 + v1.0 advertisable simultaneously) |
-| **Extension model** | SEPs + extensions catalog (e.g. MCP Apps) | `AgentExtension` with stable URI + `required` flag |
-| **Steward** | Linux Foundation (LF Projects, LLC); BDFL governance with individual seats | Linux Foundation; 8-company TSC with named org seats |
+| **Connection model** | Stateless requests with per-request capabilities since `2026-07-28` (stateful sessions before); `input_required` results for multi-round-trip | Task-oriented, with `INPUT_REQUIRED` / `AUTH_REQUIRED` interrupted states |
+| **Discovery** | `server/discover` RPC (since `2026-07-28`); `initialize` before | `AgentCard` (signed JWS, advertised at known URL) |
+| **Versioning** | Date-based (YYYY-MM-DD), latest = `2026-07-28`; formal deprecation policy | Per-`AgentInterface` declared protocol version (v0.3 + v1.0 advertisable simultaneously) |
+| **Extension model** | SEPs + extensions catalog (MCP Apps, Tasks, Skills) | `AgentExtension` with stable URI + `required` flag |
+| **Steward** | Linux Foundation (LF Projects, LLC) via AAIF; BDFL governance with individual seats | Linux Foundation via AAIF; 9-company TSC with named org seats |
 | **Origin** | Anthropic (Soria Parra + Spahr-Summers) | Google donation |
 | **License** | Code/spec Apache 2.0; docs CC BY 4.0 | Apache 2.0 |
 | **First normative artifact** | `schema/[version]/schema.ts` (TypeScript) | `specification/a2a.proto` (protobuf) |
@@ -388,6 +406,18 @@ Updating the seven-way comparison from the A2A profile to position MCP:
 
 Stack them: a project's published docs site has `/llms.txt` at root for inference-time external LLM use; the repo has `AGENTS.md` for coding agents; features are specced via OpenSpec/Spec-Kit/GSD; the agent product the project ships follows 12-Factor principles; that agent talks to its tools via **MCP** and to peer agents via **A2A**; in operations, a daemon like Symphony picks tickets and dispatches Codex into per-issue workspaces. All eight artifacts compose; none replace each other.
 
+## Changes since the previous pin (2026-04-27 → 2026-11-21)
+
+`6523895fcdc4` → `862397cec702`, 1232 commits. Release in range: protocol version **`2026-07-28`** (tags `2026-07-28-RC` on 2026-05-29 and `2026-07-28`), the first new spec revision since `2025-11-25`. The draft has moved on since but still reports `2026-07-28` as latest.
+
+- **Stateless MCP.** No `initialize`/`initialized` handshake; protocol version and client capabilities ride in each request's `_meta`; servers MUST implement `server/discover`; no `Mcp-Session-Id` sessions (`docs/specification/2026-07-28/changelog.mdx`, SEP-2567, SEP-2575). This invalidates the previous lede of this profile.
+- **Multi Round-Trip Requests** replace server-initiated requests: `InputRequiredResult` plus client retry (`basic/patterns/mrtr.mdx`, SEP-2322). Every result carries `resultType`.
+- **Deprecated**: Roots, Sampling, Logging, Dynamic Client Registration, and (reclassified) HTTP+SSE and `includeContext` values (`docs/specification/2026-07-28/deprecated.mdx`). Removed outright: `ping`, `logging/setLevel`, `notifications/roots/list_changed`, `resources/subscribe`, SSE resumability, URL-elicitation completion notifications.
+- **Tasks moved to an extension** (`io.modelcontextprotocol/tasks`, SEP-2663) with polling instead of blocking `tasks/result`. Skills over MCP is a new extension (SEP-2640).
+- **Caching and HTTP**: `ttlMs`/`cacheScope` on list and read results, deterministic `tools/list` order, required `Mcp-Method`/`Mcp-Name` headers, an error-code allocation policy.
+- **Process**: a feature lifecycle and deprecation policy with a twelve-month minimum window (SEP-2596); SEPs need a working prototype; PRs restricted to org members after working-group discussion. Three Core Maintainers moved to emeritus.
+- Schema `schema/2026-07-28/schema.ts` is 3212 lines (from 2582); `seps/` grew from 32 to 48 files.
+
 ## One-line summary
 
-> MCP wins by being the LSP-of-AI: an open, JSON-RPC-2.0, capability-negotiated, stateful wire protocol that takes the *N×M* integration problem of "every AI app × every tool/data source" and collapses it to *N+M* — with three server-side primitives (Resources / Tools / Prompts), three client-side primitives (Sampling / Roots / Elicitation), an explicit security model that hosts (not the protocol) enforce, a TypeScript-first schema, date-based versioning, and Linux Foundation BDFL governance with individual rather than corporate seats — making it the natural complement to A2A: MCP inside agents, A2A between them.
+> MCP wins by being the LSP-of-AI: an open, JSON-RPC-2.0, capability-negotiated wire protocol — stateful through `2025-11-25`, stateless since `2026-07-28` — that takes the *N×M* integration problem of "every AI app × every tool/data source" and collapses it to *N+M* — with three server-side primitives (Resources / Tools / Prompts), client-side Elicitation carried by multi-round-trip requests (Sampling and Roots now deprecated), an explicit security model that hosts (not the protocol) enforce, a TypeScript-first schema, date-based versioning, and Linux Foundation BDFL governance with individual rather than corporate seats — making it the natural complement to A2A: MCP inside agents, A2A between them.

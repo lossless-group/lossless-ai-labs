@@ -3,18 +3,18 @@ name: Syncthing Profile
 title: Syncthing — Profile
 slug: syncthing
 upstream: https://github.com/syncthing/syncthing
-pinned_sha: 38ac58c82
-pinned_date: 2026-08-20
-version_at_pin: "v2.1.4-rc.1 (nearest tag)"
+pinned_sha: 992ae894a
+pinned_date: 2026-11-23
+version_at_pin: "v2.1.7 (nearest tag)"
 license: MPL-2.0
 maintainer: The Syncthing Foundation / syncthing org
 study: studies/sync-and-content-version-control
 profile_path: studies/sync-and-content-version-control/syncthing
 profile_kind: Peer-to-peer continuous file synchronization daemon (Go)
 date_created: 2026-08-22
-date_modified: 2026-08-22
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-08-22
-date_authored_current_draft: 2026-08-22
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -48,7 +48,7 @@ from_path: "context-v/profiles/Profile__Syncthing.md"
 ---
 # Syncthing — Profile
 
-A profile of Syncthing as it lives in this study (`studies/sync-and-content-version-control/syncthing`, pinned at `38ac58c8`, nearest tag `v2.1.4-rc.1`, 2026-08-20). MPL-2.0, Go, single binary, no server.
+A profile of Syncthing as it lives in this study (`studies/sync-and-content-version-control/syncthing`, pinned at `992ae894`, nearest tag `v2.1.7`, 2026-11-23; first written at `38ac58c8`, 2026-08-20). MPL-2.0, Go, single binary, no server.
 
 This is the study's **transport-only** entry, and the one the Lossless tree has leaned toward twice without ever installing it — first in `self-host-stack/context-v/explorations/Instantly-Synced-Team-Folder-Nextcloud-vs-Alternatives.md` (2026-07-08), then in `ai-labs/augment-it/context-v/explorations/Syncthing-For-Collaborator-Access-To-The-Corpus.md` (2026-07-17). The second doc ended with five genuinely open questions. **Two of them are answered by thirty lines of source, and this profile answers them.**
 
@@ -101,7 +101,7 @@ Note the failure-open default in `UnmarshalText` (`foldertype.go:38-50`): an unr
 
 ## Blocks — fixed-size, and that is a deliberate difference
 
-`lib/protocol/protocol.go:47-57`: `MinBlockSize = 128 KiB`, `MaxBlockSize = 16 MiB`, `DesiredPerFileBlocks = 2000`. Valid block sizes are powers of two between those bounds (`lib/protocol/bep_fileinfo.go:96-101`), and the size for a given file is chosen so it lands near 2000 blocks. Hashing is SHA-256 (`lib/scanner/blocks.go:12,34,125`).
+`lib/protocol/protocol.go:47-58`: `MinBlockSize = 128 KiB`, `MaxBlockSize = 16 MiB`, `DesiredPerFileBlocks = 2000`. Valid block sizes are powers of two between those bounds (`lib/protocol/bep_fileinfo.go:96-101`), and the size for a given file is chosen so it lands near 2000 blocks. Hashing is SHA-256 (`lib/scanner/blocks.go:12,34,125`).
 
 **This is fixed-size chunking, not content-defined chunking.** Contrast [[Profile__Seafile]] (Rabin, 1 MiB average) and [[Profile__Restic]] / [[Profile__Kopia]] (both CDC). The consequence is the classic one: insert a byte at the front of a large file and every subsequent block boundary shifts, so every block re-hashes and re-transfers. For markdown, CSV appends, and whole-file rewrites — the actual Lossless workload — this is irrelevant, since files are far below `MinBlockSize` and are transferred whole either way. For a large PDF that gets re-exported, Syncthing re-sends more than restic would store.
 
@@ -109,7 +109,7 @@ Also worth knowing: **no dedup across files.** Blocks are per-file in the index;
 
 ## Conflicts — rename and keep both
 
-`conflictName` (`lib/model/folder_sendrecv.go:2237-2239`):
+`conflictName` (`lib/model/folder_sendrecv.go:2277-2279`):
 
 ```go
 return name[:len(name)-len(ext)] + time.Now().Format(".sync-conflict-20060102-150405-") + lastModBy + ext
@@ -173,8 +173,18 @@ One static Go binary per device, a local web UI, and a device-ID exchange to pai
 - `lib/model/folder_recvonly.go:29-57` — the doc comment that closes the open question; read it before designing any collaborator tier
 - `lib/config/foldertype.go` — 50 lines, all four types, including the failure-open default
 - `lib/versioner/staggered.go:49-54` — the thinning curve
-- `lib/protocol/protocol.go:47-57` — fixed block sizes, and why they are fixed
-- `lib/model/folder_sendrecv.go:2237-2248` — the conflict name a client will actually see
+- `lib/protocol/protocol.go:47-58` — fixed block sizes, and why they are fixed
+- `lib/model/folder_sendrecv.go:2277-2288` — the conflict name a client will actually see
+
+## Changes since the previous pin (2026-08-20 → 2026-11-23)
+
+`38ac58c82e50` → `992ae894a44d`, 44 commits (about a quarter of them translation and docs syncs). Releases in range: `v2.1.4` (2026-09-07), `v2.1.5`, `v2.1.6`, and `v2.1.7` (2026-10-20). Still MPL-2.0, still `syncthing/syncthing`.
+
+- **Receive-only reconciliation now compares content.** `d6d0181f7` (fixes #10928) changes `reconcileReceiveOnlyToGlobal` (`lib/model/folder.go:921`, the changed line is `:940`) from `IgnoreBlocks: true` to ignoring blocks only on `receiveencrypted` folders. Before, a local edit whose size and mtime matched the global file could be judged equal to it and lose its locally-changed status. This tightens the finding above: the `FlagLocalReceiveOnly` count is now based on block hashes as well as metadata. `lib/model/folder_recvonly.go` itself is unchanged, and the doc comment at `:29-57` still reads as quoted.
+- **Untrusted-peer hardening.** Incoming protocol messages are validated at unmarshal time with protovalidate limits (`7eee65afc`, `proto/bep/bep.proto`), and panics that a remote peer could trigger become protocol errors (`ab8dcf844`, `lib/protocol/encryption.go`, `lib/protocol/protocol.go`). This bears on the `receiveencrypted` case, where the peer is untrusted by design. A related fix stops deleted receive-encrypted files from being garbage-collected early (`84329b277`, `internal/db/sqlite/db_service.go`).
+- **Introducers are bounded.** An introducer device can no longer add itself to folders not shared with it (`466857ae7`, `lib/model/model.go`). Relevant if a client mesh ever uses introducers to onboard collaborators.
+- **GUI login without a password.** `syncthing browse` and `syncthing serve` can log the local user in with a one-time token (`9da9c11ef`, `lib/api/tokenmanager.go`, `lib/api/api_auth.go`). The PR states the goal of eventually making token-only auth the default.
+- **Conflict handling is unchanged.** `conflictName` moved down 40 lines in `lib/model/folder_sendrecv.go` (now `:2277-2279`) with the same format string. A metadata-only shortcut in the same file now verifies the local change first (`f07853b51`). The versioner package (`lib/versioner/`), the staggered curve (`staggered.go:49-54`), the folder types (`lib/config/foldertype.go`), and fixed-size SHA-256 blocking (`lib/scanner/blocks.go`) are untouched.
 
 ## Related
 

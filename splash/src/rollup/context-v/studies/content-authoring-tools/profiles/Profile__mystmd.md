@@ -3,18 +3,18 @@ name: mystmd Profile
 title: mystmd — Profile
 slug: mystmd
 upstream: https://github.com/jupyter-book/mystmd
-pinned_sha: 1a09ee32
-pinned_date: 2026-11-18
-version_at_pin: "citation-js-utils@1.2.11-12-g1a09ee32 (nearest tag, a monorepo package tag; the `mystmd` CLI package reads 1.13.0)"
+pinned_sha: 29234ccc
+pinned_date: 2026-11-22
+version_at_pin: "citation-js-utils@1.2.11-17-g29234ccc (nearest tag, a monorepo package tag; the `mystmd` CLI package reads 1.13.0)"
 license: MIT
 maintainer: Project Jupyter / jupyter-book org (Jupyter Book and MyST community)
 study: studies/content-authoring-tools
 profile_path: studies/content-authoring-tools/mystmd
 profile_kind: Markdown dialect + AST spec + TypeScript build toolchain (CLI, parser, transforms, exporters)
 date_created: 2026-11-19
-date_modified: 2026-11-19
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-11-19
-date_authored_current_draft: 2026-11-19
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -50,7 +50,7 @@ from_path: "context-v/profiles/Profile__mystmd.md"
 ---
 # mystmd — Profile
 
-A profile of mystmd as it lives in this study (`studies/content-authoring-tools/mystmd`, pinned at `1a09ee32`, 2026-11-18). MIT (`LICENSE`: "Copyright (c) 2024 Project Jupyter"), TypeScript monorepo, about forty packages under `packages/`.
+A profile of mystmd as it lives in this study (`studies/content-authoring-tools/mystmd`, pinned at `29234ccc`, 2026-11-22). MIT (`LICENSE`: "Copyright (c) 2024 Project Jupyter"), TypeScript monorepo, about forty packages under `packages/`.
 
 This is the study's **Markdown-as-a-real-language** entry. Where most entries treat Markdown as a storage format and put the smarts in the app, MyST puts them in the syntax and the AST, and makes the app a build tool.
 
@@ -132,6 +132,14 @@ Directives can use backtick or colon fences; the colon fence "has better fallbac
 - **flave's parked cross-refs and figures exist here.** The master spec budgets `remarkCrossRefs` and a **Figure** noun (§7.1, §7.6). MyST's `:label:` + `[](#label)` → "Figure 3" + `myst.xref.json` is a worked design to copy into LFM.
 - **Executable plugins over JSON AST** are a cheap way to let agents add transforms in Python or anything else, without touching the Svelte renderer.
 - **Hash-keyed execution caching** (`transform.ts:28-65`) is the right shape for flave's `sql` fences: re-run only when query text or inputs change.
+
+## Changes since the previous pin (2026-11-18 → 2026-11-22)
+
+`1a09ee329f73` → `29234cccc35d`, 5 commits, no release (the `mystmd` package still reads 1.13.0; three changesets are pending). None of the files cited above changed.
+
+- **Markdown inside directive options is parsed once.** Option values written as `:a:` lines or inline (`{ab a="[A](a.md) **b**"}`) were tokenized twice; `inlineOptionsToTokens` now takes the core rule its nested parse runs up to (`run_directives` or `run_roles`) (`packages/markdown-it-myst/src/inlineAttributes.ts`, `directives.ts`; PR #3118).
+- **Remote media in figures.** `myst-cli` downloads remote videos as well as images, and keeps the original URL when a download fails instead of writing `/undefined` (`packages/myst-cli/src/transforms/images.ts`, PR #3103).
+- LaTeX import fixes for inline code and listings (`packages/tex-to-myst/src/verbatim.ts`) and new docs on URL redirects (`docs/website-templates.md`).
 
 ## Read next
 

@@ -22,6 +22,7 @@ Sources rolled up:
 - `studies`
 - `studies/adhd-and-executive-function-skills`
 - `studies/agent-harnesses`
+- `studies/agent-skill-packs`
 - `studies/agent-workspace-bundles`
 - `studies/content-authoring-tools`
 - `studies/conversational-ui-and-native-shells`

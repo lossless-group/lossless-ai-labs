@@ -4,16 +4,16 @@ title: Seafile — Profile
 slug: seafile
 upstream: https://github.com/haiwen/seafile
 upstream_secondary: https://github.com/haiwen/seafile-server
-pinned_sha: 2ebf6ac8 (seafile, v9.0.21, 2026-08-07) · 8c47d5f (seafile-server, v13.0.15-server+32, 2026-08-11)
+pinned_sha: af6539ce (seafile, v9.0.22, 2026-10-16) · 6b13248 (seafile-server, v13.0.30-server, 2026-11-21)
 license: GPLv2 (client/daemon) · AGPLv3 (server) — both with an OpenSSL linking exception
 maintainer: haiwen (Seafile Ltd.) — open-core; Community Edition here, Professional Edition closed
 study: studies/sync-and-content-version-control
 profile_path: studies/sync-and-content-version-control/seafile
 profile_kind: File sync-and-share system (C daemon + C/Go server)
 date_created: 2026-08-22
-date_modified: 2026-08-22
+date_modified: 2026-11-23
 date_authored_initial_draft: 2026-08-22
-date_authored_current_draft: 2026-08-22
+date_authored_current_draft: 2026-11-23
 authors:
   - Michael Staton
 augmented_with:
@@ -50,7 +50,7 @@ from_path: "context-v/profiles/Profile__Seafile.md"
 ---
 # Seafile — Profile
 
-A profile of Seafile Community Edition as it lives in this study, pinned across two repos: `seafile/` (the client daemon and CLI, `2ebf6ac8`, v9.0.21, 2026-08-07) and `seafile-server/` (`8c47d5f`, nearest tag `v13.0.15-server`, 2026-08-11). Both are needed — the object model is duplicated across them and the server carries the Go fileserver where the storage seam lives.
+A profile of Seafile Community Edition as it lives in this study, pinned across two repos: `seafile/` (the client daemon and CLI, `af6539ce`, v9.0.22, 2026-10-16) and `seafile-server/` (`6b13248e`, tagged `v13.0.30-server`, 2026-11-21). It was first written at `2ebf6ac8` / `8c47d5f`; see the changes section near the end. Both are needed — the object model is duplicated across them and the server carries the Go fileserver where the storage seam lives.
 
 **Why two repos and why this one first.** Seafile is the closest existing system to the ask that opened this study — *per-directory sync, blob storage underneath, real version history, non-technical users on the other end*. It is also the system reached indirectly: the [seasync](https://github.com/seasync) org that prompted the search publishes **unofficial Seafile clients** (Android/Kotlin, a macOS menubar app). There is no separate "seasync" engine. Anyone arriving at seasync has arrived at Seafile, which the 2026-07-08 exploration already evaluated and passed over — so this profile exists to make that pass-over an informed one rather than a repeat.
 
@@ -60,7 +60,7 @@ Seafile stores each **library** (its name for a synced directory) as **git's dat
 
 Objects are namespaced per library and split into three stores — `commit`, `fs`, `block` (`seafile-server/fileserver/objstore/objstore.go:10-14`). Each store goes through a `storageBackend` interface (`:16-27`) with four methods, which is a well-drawn seam.
 
-**And in the open-source tree there is exactly one implementation of it.** `New()` hardwires `newFSBackend` (`:31-36`); the C side ships `common/obj-backend-fs.c` and `common/obj-backend-riak.c`. `grep -ril s3` across `seafile-server/` returns three files, all of them tests or the Rabin checksum table. **The S3 / Ceph / Swift backends are Seafile Professional**, per the [admin manual's Pro deployment section](https://haiwen.github.io/seafile-admin-docs/12.0/setup/setup_with_s3/).
+**And in the open-source tree there is exactly one implementation of it.** `New()` hardwires `newFSBackend` (`:31-36`); the C side ships `common/obj-backend-fs.c` and `common/obj-backend-riak.c`. A case-insensitive `git grep -il s3` over the Go, C, and Python sources of `seafile-server/` (tests excluded) matches one file, the Rabin checksum table; the other hits in the tree are `LIB_WS32`, `-lsqlite3`, and `go.sum` checksums. **The S3 / Ceph / Swift backends are Seafile Professional**, per the [admin manual's Pro deployment section](https://haiwen.github.io/seafile-admin-docs/12.0/setup/setup_with_s3/).
 
 **One sentence:** *Seafile is git's object model plus content-defined chunking plus a sync daemon plus a web UI, engineered as one product for exactly this use case — and the blob-storage half of the ask is behind the commercial license.*
 
@@ -124,7 +124,7 @@ This is **rename-and-keep-both**, the same family as Syncthing's `.sync-conflict
 
 Three separately-built C/Go/Python components (`seaf-daemon`, `seafile-controller`, `fileserver`, `notification-server`, Seahub/Django), a MySQL or SQLite database, and a data directory. Platform-specific filesystem watchers written by hand — `wt-monitor-macos.c` (FSEvents), `wt-monitor-linux.c` (inotify), `wt-monitor-win32.c`. The daemon is GPLv2; the server is AGPLv3, which is worth flagging for anything hosted.
 
-Also worth flagging: `seafile-server/configure.ac:5` still declares `AC_INIT([seafile], [6.0.1])` while the client declares `9.0.21` and the server's own nearest tag is `v13.0.15-server`. Build-file version strings in this project are not a reliable signal; use tags and commit dates.
+Also worth flagging: `seafile-server/configure.ac:5` still declares `AC_INIT([seafile], [6.0.1])` while the client declares `9.0.22` and the server's pinned commit is tagged `v13.0.30-server`. The server's `master` also carries `v14.0.8-server` and `v14.0.9-server` (September 2026), older by date than `v13.0.30`. Build-file version strings and tag numbers in this project are not a reliable signal; use commit dates.
 
 ## How it scores against the study checklist
 
@@ -156,6 +156,19 @@ It does the job. The costs are specific, and none is about quality:
 - `seafile-server/common/cdc/cdc.c:25-32` — the chunking constants, then ask what they do to a 4 KB markdown file
 - `seafile/common/vc-common.c:584-617` — the entire non-technical conflict experience
 - `seafile-server/python/seaserv/api.py:394-404`, `:776` — per-library history retention, the question CAS designs postpone
+
+## Changes since the previous pin (2026-08-07 / 2026-08-11 → 2026-10-16 / 2026-11-21)
+
+**seafile (client daemon):** `2ebf6ac8b075` → `af6539cebf84`, 7 commits, release `v9.0.22`. Maintenance only. The client refuses to sync a drive root (`af6539ce`, `daemon/clone-mgr.c`), clears the Windows read-only attribute before deleting files (`10da0d9c`, `daemon/repo-mgr.c`), and adds a `server` field to sync errors (`8aa89820`, `lib/repo.c`). Nothing here touches the object model, the conflict naming in `common/vc-common.c:584-617`, or `is_readonly` (`daemon/repo-mgr.h:88`, `daemon/sync-mgr.c:1446`, `:3043`); all three citations still hold.
+
+**seafile-server:** `8c47d5f5810e` → `6b13248efe65`, 23 commits, now tagged `v13.0.30-server` (`v14.0.8-server` and `v14.0.9-server` also landed on `master` in range). The changes are correctness work on upload and GC, which supports the profile's reading of Seafile as a hardened product:
+
+- **Block-order corruption fixed.** `2e207a5` ("Fix file corruption caused by blocks being uploaded in the wrong order") adds upload-order and size checks in `server/upload-file.c` and `fileserver/fileop.go`. Resumable uploads now restart from zero when the file's `last_modify` changes mid-upload (`39d5a73`; `get_upload_tmp_file_offset` in `python/seaserv/api.py` gains a `last_modify` argument).
+- **GC on network filesystems.** `b6179eb` makes `common/obj-backend-fs.c` and `common/block-backend-fs.c` list a store's directories before deleting them, fixing orphaned objects on NFS-style mounts. `17e4b87` adds a test for GC running during concurrent upload (`tests/test_gc/test_gc.py`). For a design that will also need a GC, this is a concrete list of races to test.
+- **Write-side validation.** Blocks and fs objects are checked for existence before writing (`5afb45c`, `4b19df2`), fs content size is validated (`d9ed57e`), and `Commit.FromData` now rejects an invalid commit ID (`fileserver/commitmgr/commitmgr.go`). Uploads preserve per-file mtime (`1d8a67f`).
+- **MySQL defaults to `utf8mb4`** (`6ffdaca`, `scripts/sql/mysql/*.sql`).
+
+Unchanged and re-verified at the new pin: the storage seam (`fileserver/objstore/objstore.go`, still 56 lines, `New()` still hardwires `newFSBackend`), the commit struct (`commitmgr.go:19-46`), the file and directory objects (`fsmgr.go:28-35`, `:184-190`), the CDC constants (`common/cdc/cdc.c:25-32`), and the retention API (`api.py:394-404`, `:776-777`). The open-source tree still has no S3 backend.
 
 ## Related
 

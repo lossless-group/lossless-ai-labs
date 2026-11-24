@@ -10,11 +10,11 @@ study: studies/open-specs-and-standards
 profile_path: studies/open-specs-and-standards/frictionless-specs
 profile_kind: standard
 date_created: 2026-05-03
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 site_uuid: ee323d4a-eb28-4aa1-a6d1-7e77e28151d5
 hex_code: 4i6p5l
 date_authored_initial_draft: 2026-05-03
-date_authored_current_draft: 2026-05-03
+date_authored_current_draft: 2026-11-23
 lede: >-
   This one specs *datasets*: every RFC 2119 "MUST" in the prose maps onto a
   constraint in a published JSON-Schema profile.
@@ -311,6 +311,10 @@ If you're building or evaluating a new open spec for the agent era, Data Package
 | **Best fit** | Brownfield human+AI iteration | Greenfield enterprise SDD | Publishing or consuming data |
 
 The first two are workflow tools that produce specs as a side effect. Frictionless *is* the spec. Different category.
+
+## Changes since the previous pin (2026-01-08 → 2026-08-25)
+
+`fb989190714b` → `da3526c4ed19`, 2 commits, still at tag `v2.0`. Nothing meaningful changed: both commits fix typos in `content/docs/overview/changelog.md`, one of which corrects the v2 changelog entry for Table Dialect's versioning property to read `dialect.$schema`. No profile, schema, or standard page changed.
 
 ## One-line summary
 

@@ -12,7 +12,7 @@ date_created: 2026-05-27
 site_uuid: e3908ae9-d9da-41e7-9fe2-29692458a975
 hex_code: 6qhgg8
 date_authored_initial_draft: 2026-05-27
-date_authored_current_draft: 2026-05-27
+date_authored_current_draft: 2026-11-23
 lede: >-
   The hybrid retrieval in Chroma's docs raises `NotImplementedError` on a
   laptop — `Collection.search()` is gated behind Cloud.
@@ -33,7 +33,7 @@ summary: >-
 publish: true
 type: Profiles
 title: "Chroma — Profile"
-date_modified: 2026-08-18
+date_modified: 2026-11-23
 authors:
   - Michael Staton
 status: Reference
@@ -56,8 +56,8 @@ If you want one sentence: **Chroma is an embedded vector DB whose API surface (C
 
 The phrase "AI-native search database" appears on the README — not "vector DB." Three bets follow from that framing:
 
-1. **Embedded should be the default, not the deployment of last resort.** `chromadb.PersistentClient(path=...)` and `chromadb.EphemeralClient()` are the headline constructors (`chromadb/__init__.py:170-228`); `HttpClient`/`AsyncHttpClient` (`chromadb/__init__.py:260-370`) and `CloudClient` (`chromadb/__init__.py:373-443`) are layered above the same `ClientAPI` interface. Three deployment modes, one Python surface. The contrast with [[Profile__Qdrant]] (server-first) and [[Profile__Milvus]] (k8s-first) is the entire point.
-2. **Collections are the namespacing primitive, not a convenience.** Every read/write is `(tenant, database, collection)`-scoped (`chromadb/api/models/Collection.py:60-77, 119-127`). Multi-tenancy in Chroma is "give each tenant their own collection (or their own database)" — there is no per-row tenant index because there doesn't need to be.
+1. **Embedded should be the default, not the deployment of last resort.** `chromadb.PersistentClient(path=...)` and `chromadb.EphemeralClient()` are the headline constructors (`chromadb/__init__.py:172-230`); `HttpClient`/`AsyncHttpClient` (`chromadb/__init__.py:262-372`) and `CloudClient` (`chromadb/__init__.py:375-445`) are layered above the same `ClientAPI` interface. Three deployment modes, one Python surface. The contrast with [[Profile__Qdrant]] (server-first) and [[Profile__Milvus]] (k8s-first) is the entire point.
+2. **Collections are the namespacing primitive, not a convenience.** Every read/write is `(tenant, database, collection)`-scoped (`chromadb/api/models/Collection.py:78-95, 137-145`). Multi-tenancy in Chroma is "give each tenant their own collection (or their own database)" — there is no per-row tenant index because there doesn't need to be.
 3. **The wire format hides whether you're embedded or networked.** The same `Collection.add(ids=, documents=, metadatas=, embeddings=)` call works against `PersistentClient`, `HttpClient`, or `CloudClient`. That symmetry is the migration story when local Chroma outgrows its host — and it is also why Chroma Cloud's Schema + Search additions could be backfilled into OSS without a breaking change.
 
 ## Storage topology
@@ -72,7 +72,7 @@ For the OSS single-node path (`PersistentClient`):
 | Full-text segment | `embedding_fulltext_search` FTS5 virtual table | trigram-tokenized document text | `chromadb/migrations/metadb/00003-full-text-tokenize.sqlite.sql:1-3` |
 | Vector segment | per-collection HNSW index dir | `index_metadata.pickle` + hnswlib binary files | `chromadb/segment/impl/vector/local_persistent_hnsw.py:60-96` |
 
-The architecturally interesting move is the **WAL + segments** split (`chromadb/types.py:49-53, 237-265`, `chromadb/segment/impl/metadata/sqlite.py:58-93`). Writes land in `embeddings_queue` first; metadata and vector segments are independent consumers that catch up off the WAL by `seq_id`. That is why `Collection.count(read_level=ReadLevel.INDEX_ONLY)` exists (`chromadb/api/models/Collection.py:43-60`) — to ask "what's actually in the compacted segment" vs. "what's in the index plus pending WAL." MemPalace's CHANGELOG documents the operational consequence: there's a 30–60 second window after bulk writes where HNSW segment metadata is still flushing, and reads can transiently fail with `Error finding id` (mempalace `CHANGELOG.md:13`).
+The architecturally interesting move is the **WAL + segments** split (`chromadb/types.py:49-53, 237-265`, `chromadb/segment/impl/metadata/sqlite.py:58-93`). Writes land in `embeddings_queue` first; metadata and vector segments are independent consumers that catch up off the WAL by `seq_id`. That is why `Collection.count(read_level=ReadLevel.INDEX_ONLY)` exists (`chromadb/api/models/Collection.py:61-78`) — to ask "what's actually in the compacted segment" vs. "what's in the index plus pending WAL." MemPalace's CHANGELOG documents the operational consequence: there's a 30–60 second window after bulk writes where HNSW segment metadata is still flushing, and reads can transiently fail with `Error finding id` (mempalace `CHANGELOG.md:13`).
 
 For the distributed / Cloud path, the same logical layers are remapped onto an S3-backed segment store, an external sysdb, and a separate compactor service — see the entire `rust/` tree (`rust/sysdb/`, `rust/segment/`, `rust/log-service/`, `rust/garbage_collector/`, `rust/worker/`). Single-node Chroma keeps `Collection.version` and `log_position` at 0 (`chromadb/types.py:86-89`); they only mutate in the distributed deployment.
 
@@ -119,7 +119,7 @@ Two filter languages run alongside each other:
 - **`where`** — operates on metadata. Boolean composition via `$and` / `$or`, scalar comparators, set membership via `$in` / `$nin`, list-element containment via `$contains` / `$not_contains`.
 - **`where_document`** — operates on the document text. Substring (`$contains`), regex (`$regex`), and their negations, also composable with `$and` / `$or`.
 
-These are passed to `Collection.get(where=, where_document=)` and `Collection.query(where=, where_document=)` (`chromadb/api/models/Collection.py:129-279`). Both filter languages are evaluated as **pre-filters** in the SQLite metadata segment: SQL `WHERE` clauses get generated via pypika (`chromadb/segment/impl/metadata/sqlite.py:30-40`), and the surviving `id` set is then handed to HNSW as an `allowed_ids` list for the ANN traversal (`chromadb/types.py:287-295`, `VectorQuery.allowed_ids`). The cost model is the usual one: if the filter is highly selective, recall is fine; if it is very narrow vs. the over-fetch budget, you can get empty results from HNSW and need a higher `n_results` or `search_ef`. [[Profile__Qdrant]]'s filter-push-down-into-HNSW story is the direct contrast.
+These are passed to `Collection.get(where=, where_document=)` and `Collection.query(where=, where_document=)` (`chromadb/api/models/Collection.py:147-297`). Both filter languages are evaluated as **pre-filters** in the SQLite metadata segment: SQL `WHERE` clauses get generated via pypika (`chromadb/segment/impl/metadata/sqlite.py:30-40`), and the surviving `id` set is then handed to HNSW as an `allowed_ids` list for the ANN traversal (`chromadb/types.py:287-295`, `VectorQuery.allowed_ids`). The cost model is the usual one: if the filter is highly selective, recall is fine; if it is very narrow vs. the over-fetch budget, you can get empty results from HNSW and need a higher `n_results` or `search_ef`. [[Profile__Qdrant]]'s filter-push-down-into-HNSW story is the direct contrast.
 
 ## Indexes — HNSW, SPANN, FTS, inverted
 
@@ -136,9 +136,9 @@ hnsw:batch_size       int                   (default: 100)
 hnsw:sync_threshold   int                   (default: 1000)
 ```
 
-The Rust core duplicates these in `HnswIndexConfig` (`rust/index/src/hnsw.rs:21-29`) and adds **SPANN** (`rust/index/src/spann/`) — the disk-friendly partitioned ANN index Chroma Cloud uses for collections too large to keep fully resident — exposed in the Python API as `SpannIndexConfig` (`chromadb/api/types.py:1641-1675`) with knobs like `search_nprobe`, `split_threshold`, `merge_threshold`, `quantize`. SPANN is **not** available in single-node OSS, but the type exists so the same client code targets either.
+The Rust core duplicates these in `HnswIndexConfig` (`rust/index/src/hnsw.rs:21-29`) and adds **SPANN** (`rust/index/src/spann/`) — the disk-friendly partitioned ANN index Chroma Cloud uses for collections too large to keep fully resident — exposed in the Python API as `SpannIndexConfig` (`chromadb/api/types.py:1649-1683`) with knobs like `search_nprobe`, `split_threshold`, `merge_threshold`, `quantize`. SPANN is **not** available in single-node OSS, but the type exists so the same client code targets either.
 
-The other index types live in the Schema system (`chromadb/api/types.py:1607-1813`):
+The other index types live in the Schema system (`chromadb/api/types.py:1615-1821`):
 
 - `FtsIndexConfig` — full-text search over the `#document` key (FTS5 in single-node)
 - `SparseVectorIndexConfig` — for BM25 / SPLADE-style sparse embeddings stored as `SparseVector` payloads
@@ -148,7 +148,7 @@ Distance functions are L2 / Cosine / Inner Product. The Rust SIMD implementation
 
 ## The query and search APIs — two surfaces
 
-`Collection.query()` (`chromadb/api/models/Collection.py:194-279`) is the legacy four-function path most users know:
+`Collection.query()` (`chromadb/api/models/Collection.py:212-297`) is the legacy four-function path most users know:
 
 ```python
 collection.query(
@@ -162,7 +162,7 @@ collection.query(
 
 It returns a `QueryResult` (`chromadb/api/types.py:619-…`) — column-major arrays of `ids`, `documents`, `metadatas`, `distances`, optionally `embeddings`.
 
-`Collection.search()` (`chromadb/api/models/Collection.py:350-439`) is the new hybrid surface. The `Search` payload composes four operators (`chromadb/execution/expression/plan.py:39-…`):
+`Collection.search()` (`chromadb/api/models/Collection.py:368-457`) is the new hybrid surface. The `Search` payload composes four operators (`chromadb/execution/expression/plan.py:39-…`):
 
 ```python
 search = (Search()
@@ -172,13 +172,13 @@ search = (Search()
     .select(K.DOCUMENT, K.SCORE, "title"))
 ```
 
-Rank expressions are a small algebra — `Knn` (`operator.py:1043-1110`), `Rrf` for Reciprocal Rank Fusion across multiple Knns (`operator.py:1145-1185`), and arithmetic combinators `Sum`/`Sub`/`Val` (`operator.py:1113-1141`) — so you can fuse a dense vector search + a sparse vector search + a constant prior into one ranked result list without leaving the DB. **Chroma's docstring is explicit that `search()` currently only works against distributed and hosted Chroma** (`chromadb/api/models/Collection.py:355-356`), with `NotImplementedError` for local segment API. This is the single biggest API-surface gap between local OSS and Cloud as of 1.5.x.
+Rank expressions are a small algebra — `Knn` (`operator.py:1043-1110`), `Rrf` for Reciprocal Rank Fusion across multiple Knns (`operator.py:1145-1185`), and arithmetic combinators `Sum`/`Sub`/`Val` (`operator.py:1113-1141`) — so you can fuse a dense vector search + a sparse vector search + a constant prior into one ranked result list without leaving the DB. **Chroma's docstring is explicit that `search()` currently only works against distributed and hosted Chroma** (`chromadb/api/models/Collection.py:373-374`), with `NotImplementedError` for local segment API. Local Chroma's Rust-backed API raises `NotImplementedError("Search is not implemented for Local Chroma")` (`chromadb/api/rust.py:393`). This is the single biggest API-surface gap between local OSS and Cloud, and it is unchanged at 1.6.0.
 
 The contrast with [[Profile__Weaviate]]'s GraphQL-first hybrid search is informative: Weaviate puts hybrid retrieval in the schema, Chroma puts it in a query algebra layered above an unchanged storage schema.
 
 ## Write policy — append + WAL + segment catch-up
 
-Writes are columnar (`Collection.add(ids=, embeddings=, metadatas=, documents=)`, `chromadb/api/models/Collection.py:78-127`). Internally each row becomes an `OperationRecord` with `operation: ADD | UPDATE | UPSERT | DELETE` (`chromadb/types.py:237-260`) appended to `embeddings_queue`. The metadata segment (`chromadb/segment/impl/metadata/sqlite.py:58-67`) and vector segment subscribe to the queue and reconcile asynchronously. `count()`'s `read_level` parameter is the user-visible knob for that asynchrony.
+Writes are columnar (`Collection.add(ids=, embeddings=, metadatas=, documents=)`, `chromadb/api/models/Collection.py:96-145`). Internally each row becomes an `OperationRecord` with `operation: ADD | UPDATE | UPSERT | DELETE` (`chromadb/types.py:237-260`) appended to `embeddings_queue`. The metadata segment (`chromadb/segment/impl/metadata/sqlite.py:58-67`) and vector segment subscribe to the queue and reconcile asynchronously. `count()`'s `read_level` parameter is the user-visible knob for that asynchrony.
 
 There is **no LLM in the write path** — Chroma is a pure store, embeddings are computed by the caller (or by an `EmbeddingFunction` registered on the collection at create time). The closest thing to "writes do something smart" is `upsert()` which dedupes on `id`; supersession, merging, and extraction are the caller's problem. Compare to [[Mem0]] in the sibling study which calls an LLM on every `add()`.
 
@@ -198,7 +198,7 @@ The scoping primitives, in order of containment:
 2. **Database** (string, default `"default_database"` — same migration, line 24)
 3. **Collection** (UUID + human name, unique per database)
 
-Every API call carries `(tenant, database, collection_id)` (`chromadb/api/models/Collection.py:55-60`, etc.). For a single-tenant local deployment you ignore the first two; for Chroma Cloud the tenant is your account.
+Every API call carries `(tenant, database, collection_id)` (`chromadb/api/models/Collection.py:73-78`, etc.). For a single-tenant local deployment you ignore the first two; for Chroma Cloud the tenant is your account.
 
 Within a collection, there is **no further partitioning** — no namespace-like sub-indexes, no per-user shards. If you need that, you create more collections. This is the cheapest scoping primitive in the study (Lossless's `ai-labs/context-vigilance-kit/` runs four collections for the four content classes, which is exactly the intended pattern), and the most painful one if you need per-user isolation across millions of users — that's a "one collection per user" anti-pattern that Chroma will let you do, but [[Profile__Qdrant]]'s per-point payload filtering or [[Profile__Weaviate]]'s multi-tenancy module is more honest about the cost.
 
@@ -208,7 +208,7 @@ Three deployment modes, one API:
 
 1. **Embedded.** `PersistentClient(path=...)` or `EphemeralClient()` — pure in-process, SQLite + HNSW files in a directory. This is what `ai-labs/context-vigilance-kit/` uses and what every prototype starts with.
 2. **Self-hosted server.** `chroma run --path /chroma_db_path` (`README.md:23-27`, `chromadb/cli/cli.py`) — wraps the Rust core, exposes HTTP at `:8000`. The Docker recipe is short (`docker-compose.yml:1-40`) — one service, one volume, OTEL env vars, no Postgres, no Neo4j. The Dockerfile (`Dockerfile`, `rust/Dockerfile`) builds the Rust CLI binary.
-3. **Chroma Cloud.** `CloudClient(api_key=...)` (`chromadb/__init__.py:373-443`) — the hosted serverless tier with SPANN + Search + tenant management.
+3. **Chroma Cloud.** `CloudClient(api_key=...)` (`chromadb/__init__.py:375-445`) — the hosted serverless tier with SPANN + Search + tenant management.
 
 Clients exist in Python (`clients/python/` and `chromadb/` itself), JS/TS (`clients/js/`, `clients/new-js/`), Rust (`rust/chroma/src/client/chroma_http_client.rs`), and Go (`go/`). The Rust CLI is the daemon; the Python `chroma` command-line tool just delegates to it (`chromadb/cli/cli.py:48-56`). Mem0 supports Chroma as one of ~30 vector backends (`studies/memory-layers-for-agents/mem0/mem0/vector_stores/chroma.py`); the bigger external use case in our study is MemPalace (`studies/memory-layers-for-agents/mempalace/pyproject.toml:30` — `chromadb>=1.5.4,<2`) which has dedicated Chroma backends for both its `mempalace_drawers` and `mempalace_closets` palaces.
 
@@ -227,7 +227,7 @@ Clients exist in Python (`clients/python/` and `chromadb/` itself), JS/TS (`clie
 | `go/` | Go client and server bits |
 | `idl/` | gRPC / Protobuf definitions |
 | `k8s/`, `deployments/` | Kubernetes manifests for the distributed deployment |
-| `bin/chroma`, `chromadb/cli/cli.py` | The `chroma` CLI (Rust binding under the hood) |
+| `chromadb/cli/cli.py`, `rust/cli/` | The `chroma` CLI (Rust binding under the hood), plus the local HNSW integrity check and config repair commands added before 1.6.0 |
 | `examples/`, `sample_apps/` | Cookbooks |
 | `docs/` | Wordmarks and assets (real docs live at docs.trychroma.com) |
 
@@ -238,7 +238,7 @@ If you only read three files: `chromadb/__init__.py` (the public surface), `chro
 - **Treat the collection as the unit of everything.** Namespace, index, schema, embedding function, distance metric. If you need different settings, you need a different collection. Don't try to be clever with metadata-based tenancy until you've outgrown the per-collection model.
 - **Stay below ~10M vectors per collection on single-node.** Above that, the HNSW resident-memory cost and the WAL/segment catch-up window both bite. The MemPalace operational issues cluster on bulk-mine flows that push past this.
 - **Pre-filter selectivity matters.** Where-filters generate SQL against `embedding_metadata` before the HNSW traversal. Highly selective filters with low `n_results` can produce empty results — bump `search_ef` or `n_results` rather than retrying blindly.
-- **Don't depend on `search()` if you're on OSS single-node.** It currently raises `NotImplementedError` outside distributed / Cloud (`chromadb/api/models/Collection.py:382`). For hybrid retrieval on single-node, run two `query()` calls and fuse client-side.
+- **Don't depend on `search()` if you're on OSS single-node.** It currently raises `NotImplementedError` outside distributed / Cloud (`chromadb/api/models/Collection.py:400`). For hybrid retrieval on single-node, run two `query()` calls and fuse client-side.
 - **Back up the persist directory whole.** The HNSW pickle files and the SQLite are mutually dependent. Atomic snapshot of the directory or nothing.
 - **Mind the embedding function identity.** Chroma persists the EF's `name()` but not its config — opening a collection with a different EF instance silently binds the default (`mempalace CHANGELOG.md` re: SIGSEGV from EF mismatch). Always pass `embedding_function=` explicitly when reopening.
 
@@ -249,7 +249,7 @@ If you only read three files: `chromadb/__init__.py` (the public surface), `chro
 - **Vectors are a small part of your data and you already run Postgres.** [[Profile__pgvector]] inherits transactions, joins, backups, and ACL unchanged; the marginal cost of vector search is `CREATE EXTENSION vector`.
 - **You need GraphQL or schema-on-write.** [[Profile__Weaviate]].
 - **You need distributed-by-default with multiple ANN backends per collection.** [[Profile__Milvus]].
-- **You need first-class hybrid search on single-node OSS *today*.** Chroma is shipping the Schema + Search API, but `Collection.search()` is Cloud-only at 1.5.x.
+- **You need first-class hybrid search on single-node OSS *today*.** Chroma is shipping the Schema + Search API, but `Collection.search()` is still Cloud-only at 1.6.0.
 
 ## How this compares to the rest of the study
 
@@ -264,6 +264,19 @@ If you only read three files: `chromadb/__init__.py` (the public surface), `chro
 | **Hybrid search** | `Search()` + Rrf + Knn algebra (Cloud) | Sparse + dense + RRF | Modules | Sparse + dense | FTS + vector | `pgvector` + pg_trgm |
 | **Scoping** | tenant / db / collection | collection + payload filter | class + tenant module | collection + partition | dataset / table | schema / table |
 | **Migration cost off** | Re-export via SQLite + re-embed | Re-export via REST | Re-export via GraphQL | Re-export via SDK | `.lance` files portable | `pg_dump` |
+
+## Changes since the previous pin (2026-05-26 → 2026-11-06)
+
+Pin moved from `4513514acd7d` to `1a3ac2c7c623`: 282 commits. One release in range, **1.6.0** (commit `fd725c5cd`, 2026-10-13), which the release commit describes as a bug-fix release with backwards compatibility. `chromadb/__init__.py:3` now reads `__version__ = "1.6.0"`. Chroma stopped cutting semver git tags after `1.5.9`; later builds are tracked on `rc/*` and `release/*` branches and a moving `latest` tag. All file:line citations above were re-checked at the new pin and shifted where needed.
+
+What matters for this profile:
+
+- **Local HNSW integrity work.** A run of `[BUG](local)` and `[BUG](segment)` fixes targets the failure class this profile describes under Eviction & compaction: deleted collections now reclaim their HNSW files transactionally (#7767), concurrent native writers can no longer share the same persistent index files (#7765), persisted dimensions are checked before load (#7763), writes to an index with invalid persisted settings are rejected before they grow the log (#7770), and idle HNSW files are closed (#7869, a Windows stream-limit fix). A read-only `hnsw-integrity-check` command and an `hnsw-config-repair` command that writes a repaired copy were added to the Rust CLI (`rust/cli/src/lib.rs:37-43`, `rust/cli/src/hnsw_integrity_check.rs`). Single-node still has no automatic compaction or TTL.
+- **Conditional (optimistic) transactions.** `Collection.conditional()` (`chromadb/api/models/Collection.py:47-59`) returns a `ConditionalCollectionTransaction` that reads from a snapshot, buffers writes, and commits with conflict detection; Python, JS, and Rust clients all gained it. It is collection-scoped, and embedded mode refuses it: the Rust bindings raise `NotImplementedError` (`chromadb/api/rust.py:644-649`), and the server frontend gates it behind `enable_transactions`, which defaults to `false` (`rust/frontend/src/config.rs:85-86, 113`). For the Lossless tree's embedded collections this changes nothing yet.
+- **Multiple sparse vector indexes per collection.** The Schema no longer enforces one sparse vector index per collection (#7306, removed `_validate_single_sparse_vector_index` from `chromadb/api/types.py`). This matters for hybrid setups that want BM25 and SPLADE side by side, but the hybrid `search()` path is still unavailable locally (`chromadb/api/rust.py:393`).
+- **Filter nesting is bounded.** `where` and `where_document` filters deeper than 64 levels are now rejected before parsing (#7761). The operator grammar in `chromadb/base_types.py` is unchanged.
+- **Embedding-function hardening.** `trust_remote_code` is blocked in `SentenceTransformerEmbeddingFunction` kwargs (#7237), and stored embedding-function configs are validated on load (`config_validation.validate_embedding_function_config_is_safe` in `chromadb/api/types.py`).
+- **Most volume went to hosted features.** The majority of the 282 commits are Cloud-side: the function consumer and work queue for attached functions, the `wal3` log, sysdb pagination, and the "Foundation" hosted memory product (`rust/foundation-api/`, new `rust/agent/` and `rust/mdac-service/` crates). The BYOC deployment option was removed from the Cloud docs (#7945).
 
 ## One-line summary
 
