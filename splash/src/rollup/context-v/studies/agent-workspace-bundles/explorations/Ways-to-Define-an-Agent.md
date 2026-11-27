@@ -1,15 +1,15 @@
 ---
 title: "Ways to Define an Agent"
-lede: "Skills have one spec with real reach. Agents don't: from the outside, A2A's Agent Card has backing; from the inside (prompt, model, tools, subagents, control flow), fourteen formats compete and none leads."
+lede: "Skills have one spec with real reach. Agents don't: from the outside, A2A's Agent Card has backing; from the inside (prompt, model, tools, subagents, control flow), sixteen formats compete and none leads."
 date_created: 2026-11-22
-date_modified: 2026-11-22
+date_modified: 2026-11-26
 date_authored_initial_draft: 2026-11-22
-date_authored_current_draft: 2026-11-22
+date_authored_current_draft: 2026-11-26
 authors:
   - Michael Staton
 augmented_with:
   - Claude Code on Claude Opus 5.5
-at_semantic_version: 0.0.0.1
+at_semantic_version: 0.0.0.3
 status: Open
 site_uuid: 273e5e90-daaf-49df-befb-4237b25761f9
 hex_code: 9ag7o7
@@ -17,9 +17,10 @@ summary: >-
   A survey, taken 2026-11-22, of the formats that define an agent as a file
   the way the Agent Skills spec defines a skill. Separates the layers that
   have settled (Agent Skills, AGENTS.md, MCP, the A2A Agent Card) from the one
-  that hasn't: defining an agent from the inside. Lists six cross-framework
+  that hasn't: defining an agent from the inside. Lists seven cross-framework
   specs (Oracle's Agent Spec, Next Moca's ADL, Agent Format, prime-vector's
-  Open Agent Spec, AgentSPEX, Letta's Agent File) and eight formats tied to one
+  Open Agent Spec, AgentSPEX, Letta's Agent File, Paperclip's Agent
+  Companies spec) and nine formats tied to one
   framework or harness. Sits in this study because a bundle has to describe
   the agent that produced it, and Letta's Agent File is already pinned here.
 publish: true
@@ -91,6 +92,7 @@ never its prompts, memory, or tools. It is the OpenAPI of agents, not the
 | **Open Agent Spec** | prime-vector | YAML + CLI | Generates agents for different model providers | Spec at v1.6.1 ([GitHub](https://github.com/prime-vector/open-agent-spec)). Not the same as Oracle's despite the name. |
 | **AgentSPEX** | Academic ([arXiv:2604.13346](https://arxiv.org/pdf/2604.13346)) | A language for specifying agents and how they run | Research only so far | |
 | **Agent File (`.af`)** | Letta | JSON | Memory, tools, prompts, model settings | An export format, secrets nulled on export. Pinned in this study as [`agent-file`](../../agent-file). |
+| **Agent Companies spec** (`agentcompanies/v1-draft`) | Paperclip | Markdown + YAML frontmatter (`COMPANY.md`, `TEAM.md`, `AGENTS.md`, `PROJECT.md`, `TASK.md`) | Agents, the org chart above them, starter projects and tasks; skills by shortname | An extension of Agent Skills, not a rival to it. Commit-pinned `sources[]` and secrets exported as declared inputs without values. Draft; Paperclip is the only implementer so far. [Spec](https://github.com/paperclipai/paperclip/blob/dadbc495b3cbdc171fddc40d09aafcc3e9206305/docs/companies/companies-spec.md); pinned as [`paperclip`](../../paperclip), profiled in [`Profile__Paperclip.md`](../profiles/Profile__Paperclip.md). Added 2026-11-26. |
 
 ### Formats tied to one framework or harness
 
@@ -104,6 +106,7 @@ never its prompts, memory, or tools. It is the OpenAPI of agents, not the
 | **Agent Config** | Google ADK | YAML agent config. *Not confirmed in the 2026-11-22 survey.* |
 | **cagent** | Docker | YAML agent definitions. *Not confirmed in the 2026-11-22 survey.* |
 | **`langgraph.json`** | LangGraph | Deployment config pointing at Python code; the graph itself lives in code |
+| **`Agent` class on a Durable Object** | [Cloudflare Agents SDK](https://github.com/cloudflare/agents) (MIT, `agents@0.34.1`, 2026-11-25) | No definition file: the agent is a TypeScript class whose state persists in its own Durable Object, with scheduling, WebSockets, and sleep when idle. A tool defined without an `execute` function waits for human approval ([workshop](https://labs.cloudflare.dev/agents/), [docs](https://developers.cloudflare.com/agents/)). The opposite of a file-defined agent: the definition is code and the state lives on the platform. Whether that state can be exported as a bundle is unchecked. Added 2026-11-26; not pinned (listed as a candidate in `memory-layers-for-agents/README.md`). |
 
 ***
 
@@ -120,8 +123,10 @@ never its prompts, memory, or tools. It is the OpenAPI of agents, not the
 - **For an agent running as a service** (MemoPop, event-hog), the A2A Agent
   Card is the standard with backing for saying what it does.
 - **For this study's question,** a bundle that records the agent that produced
-  it has two candidates: Letta's Agent File (already pinned) and Oracle's Agent
-  Spec (worth pinning next).
+  it has three candidates: Letta's Agent File and Paperclip's Agent Companies
+  spec (both pinned) and Oracle's Agent Spec (worth pinning next). The
+  Agent Companies spec is the only one built on `SKILL.md`, so it matches the
+  de facto subagent Markdown shape.
 
 Most sources here are vendor docs or self-published write-ups. Treat adoption
 claims as unverified, and check a format's own repo before relying on version
@@ -136,8 +141,10 @@ details.
 - [Agent Format](https://agentformat.org/)
 - [prime-vector/open-agent-spec](https://github.com/prime-vector/open-agent-spec)
 - [AgentSPEX, arXiv:2604.13346](https://arxiv.org/pdf/2604.13346)
+- [Agent Companies Specification (Paperclip, pinned at `dadbc49`)](https://github.com/paperclipai/paperclip/blob/dadbc495b3cbdc171fddc40d09aafcc3e9206305/docs/companies/companies-spec.md)
 - [Microsoft Agent Framework: Declarative Agents](https://learn.microsoft.com/en-us/agent-framework/agents/declarative)
 - [Microsoft Agent Framework: Declarative Workflows](https://learn.microsoft.com/en-us/agent-framework/workflows/declarative)
+- [Cloudflare Agents SDK](https://github.com/cloudflare/agents), [docs](https://developers.cloudflare.com/agents/), [workshop](https://labs.cloudflare.dev/agents/)
 - [AIGNE: Defining Agents with YAML](https://www.arcblock.io/docs/aigne-framework/developer-guide-advanced-topics-defining-agents-with-yaml-9dc03e)
 - [Declarative Agent Specification survey (Zylos)](https://zylos.ai/research/2026-04-22-declarative-agent-specification-configuration-languages/)
 - [Agent Configuration as Code (Zylos)](https://zylos.ai/research/2026-05-18-agent-configuration-as-code-declarative-definitions/)

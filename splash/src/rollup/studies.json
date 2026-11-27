@@ -226,6 +226,12 @@
         "name": "mcpb"
       },
       {
+        "slug": "paperclip",
+        "url": "https://github.com/paperclipai/paperclip",
+        "owner": "paperclipai",
+        "name": "paperclip"
+      },
+      {
         "slug": "podman",
         "url": "https://github.com/podman-container-tools/podman",
         "owner": "podman-container-tools",
@@ -308,6 +314,12 @@
         "url": "https://github.com/livebook-dev/livebook",
         "owner": "livebook-dev",
         "name": "livebook"
+      },
+      {
+        "slug": "llmwiki",
+        "url": "https://github.com/lucasastorian/llmwiki",
+        "owner": "lucasastorian",
+        "name": "llmwiki"
       },
       {
         "slug": "logseq",
